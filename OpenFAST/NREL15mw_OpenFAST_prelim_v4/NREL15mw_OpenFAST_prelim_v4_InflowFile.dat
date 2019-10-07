@@ -2,16 +2,16 @@
 AeroElasticSE FAST driver
 ---------------------------------------------------------------------------------------------------------------
 False                  Echo        - Echo input data to <RootName>.ech (flag)
-3                      WindType    - switch for wind file type (1=steady; 2=uniform; 3=binary TurbSim FF; 4=binary Bladed-style FF; 5=HAWC format; 6=User defined)
+1                      WindType    - switch for wind file type (1=steady; 2=uniform; 3=binary TurbSim FF; 4=binary Bladed-style FF; 5=HAWC format; 6=User defined)
 0.0                    PropagationDir - Direction of wind propagation (meteoroligical rotation from aligned with X (positive rotates towards -Y) -- degrees)
 1                      NWindVel    - Number of points to output the wind velocity    (0 to 9)
 0.0                    WindVxiList - List of coordinates in the inertial X direction (m)
 0.0                    WindVyiList - List of coordinates in the inertial Y direction (m)
 90.0                   WindVziList - List of coordinates in the inertial Z direction (m)
 ================== Parameters for Steady Wind Conditions [used only for WindType = 1] =========================
-14.0                   HWindSpeed  - Horizontal windspeed                            (m/s)
+8.0                    HWindSpeed  - Horizontal windspeed                            (m/s)
 150.0                  RefHt       - Reference height for horizontal wind speed      (m)
-0.0                    PLexp       - Power law exponent                              (-)
+0.12                    PLexp       - Power law exponent                              (-)
 ================== Parameters for Uniform wind file   [used only for WindType = 2] ============================
 "/Users/nabbas/openfast_dev/reg_tests/r-test/glue-codes/openfast/5MW_Baseline/Wind/90m_12mps_twr.bts" Filename    - Filename of time series data for uniform wind field.      (-)
 150.0                  RefHt       - Reference height for horizontal wind speed                (m)
