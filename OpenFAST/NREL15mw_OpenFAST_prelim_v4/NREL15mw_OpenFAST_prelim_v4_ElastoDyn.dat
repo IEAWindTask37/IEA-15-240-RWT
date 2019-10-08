@@ -8,7 +8,7 @@ False                  Echo        - Echo input data to "<RootName>.ech" (flag)
 9.80665                Gravity     - Gravitational acceleration (m/s^2)
 ---------------------- DEGREES OF FREEDOM --------------------------------------
 True                   FlapDOF1    - First flapwise blade mode DOF (flag)
-True                   FlapDOF2    - Second flapwise blade mode DOF (flag)
+False                   FlapDOF2    - Second flapwise blade mode DOF (flag)
 True                   EdgeDOF     - First edgewise blade mode DOF (flag)
 False                  TeetDOF     - Rotor-teeter DOF (flag) [unused for 3 blades]
 False                  DrTrDOF     - Drivetrain rotational-flexibility DOF (flag)
@@ -32,7 +32,7 @@ False                  PtfmYDOF    - Platform yaw rotation DOF (flag)
 0.0                    BlPitch(3)  - Blade 3 initial pitch (degrees) [unused for 2 blades]
 0.0                    TeetDefl    - Initial or fixed teeter angle (degrees) [unused for 3 blades]
 0.0                    Azimuth     - Initial azimuth angle for blade 1 (degrees)
-7.49                   RotSpeed    - Initial or fixed rotor speed (rpm)
+1.49                   RotSpeed    - Initial or fixed rotor speed (rpm)
 0.0                    NacYaw      - Initial or fixed nacelle-yaw angle (degrees)
 0.0                    TTDspFA     - Initial fore-aft tower-top displacement (meters)
 0.0                    TTDspSS     - Initial side-to-side tower-top displacement (meters)
