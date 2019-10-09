@@ -19,8 +19,8 @@ generated
 *.xcodeproj
 
 # C extensions
-*.so
-*.dSYM
+#*.so
+#*.dSYM
 
 # Packages
 *.egg
