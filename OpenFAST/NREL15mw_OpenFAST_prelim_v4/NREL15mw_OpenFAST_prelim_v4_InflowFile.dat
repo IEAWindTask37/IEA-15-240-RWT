@@ -2,22 +2,22 @@
 AeroElasticSE FAST driver
 ---------------------------------------------------------------------------------------------------------------
 False                  Echo        - Echo input data to <RootName>.ech (flag)
-1                      WindType    - switch for wind file type (1=steady; 2=uniform; 3=binary TurbSim FF; 4=binary Bladed-style FF; 5=HAWC format; 6=User defined)
+3                      WindType    - switch for wind file type (1=steady; 2=uniform; 3=binary TurbSim FF; 4=binary Bladed-style FF; 5=HAWC format; 6=User defined)
 0.0                    PropagationDir - Direction of wind propagation (meteoroligical rotation from aligned with X (positive rotates towards -Y) -- degrees)
 1                      NWindVel    - Number of points to output the wind velocity    (0 to 9)
 0.0                    WindVxiList - List of coordinates in the inertial X direction (m)
 0.0                    WindVyiList - List of coordinates in the inertial Y direction (m)
 90.0                   WindVziList - List of coordinates in the inertial Z direction (m)
 ================== Parameters for Steady Wind Conditions [used only for WindType = 1] =========================
-8.0                    HWindSpeed  - Horizontal windspeed                            (m/s)
-150.0                  RefHt       - Reference height for horizontal wind speed      (m)
+14.0                    HWindSpeed  - Horizontal windspeed                            (m/s)
+145.0                  RefHt       - Reference height for horizontal wind speed      (m)
 0.12                    PLexp       - Power law exponent                              (-)
 ================== Parameters for Uniform wind file   [used only for WindType = 2] ============================
-"/mnt/c/Users/egaertne/WT_Codes/models/openfast-dev/r-test/glue-codes/openfast/5MW_Baseline/Wind/90m_12mps_twr.bts" Filename    - Filename of time series data for uniform wind field.      (-)
+"Wind/NoShr_9-14_Inc1_50s.wnd" Filename    - Filename of time series data for uniform wind field.      (-)
 150.0                  RefHt       - Reference height for horizontal wind speed                (m)
 125.88                 RefLength   - Reference length for linear horizontal and vertical sheer (-)
 ================== Parameters for Binary TurbSim Full-Field files   [used only for WindType = 3] ==============
-"/mnt/c/Users/egaertne/WT_Codes/models/openfast-dev/r-test/glue-codes/openfast/5MW_Baseline/Wind/90m_12mps_twr.bts" Filename    - Name of the Full field wind file to use (.bts)
+"Wind/145m_10mps.bts" Filename    - Name of the Full field wind file to use (.bts)
 ================== Parameters for Binary Bladed-style Full-Field files   [used only for WindType = 4] =========
 "Wind/90m_12mps_twr"   FilenameRoot - Rootname of the full-field wind file to use (.wnd, .sum)
 False                  TowerFile   - Have tower file (.twr) (flag)
@@ -48,5 +48,6 @@ False                  TowerFile   - Have tower file (.twr) (flag)
 ====================== OUTPUT ==================================================
 False                  SumPrint    - Print summary data to <RootName>.IfW.sum (flag)
 OutList      - The next line(s) contains a list of output parameters.  See OutListParameters.xlsx for a listing of available output channels, (-)
+"Wind1VelX"
 END of input file (the word "END" must appear in the first 3 columns of this last OutList line)
 ---------------------------------------------------------------------------------------

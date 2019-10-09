@@ -4,7 +4,7 @@ AeroElasticSE FAST driver
 False                  Echo        - Echo input data to <RootName>.ech (flag)
 "default"              DT          - Communication interval for controllers (s) (or "default")
 ---------------------- PITCH CONTROL -------------------------------------------
-0                      PCMode      - Pitch control mode {0: none, 3: user-defined from routine PitchCntrl, 4: user-defined from Simulink/Labview, 5: user-defined from Bladed-style DLL} (switch)
+5                      PCMode      - Pitch control mode {0: none, 3: user-defined from routine PitchCntrl, 4: user-defined from Simulink/Labview, 5: user-defined from Bladed-style DLL} (switch)
 0.0                    TPCOn       - Time to enable active pitch control (s) [unused when PCMode=0]
 9999.9                 TPitManS(1) - Time to start override pitch maneuver for blade 1 and end standard pitch control (s)
 9999.9                 TPitManS(2) - Time to start override pitch maneuver for blade 2 and end standard pitch control (s)
@@ -16,7 +16,7 @@ False                  Echo        - Echo input data to <RootName>.ech (flag)
 0.0                    BlPitchF(2) - Blade 2 final pitch for pitch maneuvers (degrees)
 0.0                    BlPitchF(3) - Blade 3 final pitch for pitch maneuvers (degrees) [unused for 2 blades]
 ---------------------- GENERATOR AND TORQUE CONTROL ----------------------------
-0                      VSContrl    - Variable-speed control mode {0: none, 1: simple VS, 3: user-defined from routine UserVSCont, 4: user-defined from Simulink/Labview, 5: user-defined from Bladed-style DLL} (switch)
+5                      VSContrl    - Variable-speed control mode {0: none, 1: simple VS, 3: user-defined from routine UserVSCont, 4: user-defined from Simulink/Labview, 5: user-defined from Bladed-style DLL} (switch)
 2                      GenModel    - Generator model {1: simple, 2: Thevenin, 3: user-defined from routine UserGen} (switch) [used only when VSContrl=0]
 93.0                   GenEff      - Generator efficiency [ignored by the Thevenin and user-defined generator models] (%)
 True                   GenTiStr    - Method to start the generator {T: timed using TimGenOn, F: generator speed using SpdGenOn} (flag)
@@ -63,7 +63,7 @@ False                  CompNTMD    - Compute nacelle tuned mass damper {true/fal
 False                  CompTTMD    - Compute tower tuned mass damper {true/false} (flag)
 "unused"               TTMDfile    - Name of the file for tower tuned mass damper (quoted string) [unused when CompTTMD is false]
 ---------------------- BLADED INTERFACE ---------------------------------------- [used only with Bladed Interface]
-"/mnt/c/Users/egaertne/WT_Codes/models/openfast-dev/r-test/glue-codes/openfast/5MW_Baseline/ServoData/DISCON.dll" DLL_FileName - Name/location of the dynamic library {.dll [Windows] or .so [Linux]} in the Bladed-DLL format (-) [used only with Bladed Interface]
+"./ServoData/DISCON_glin64.so" DLL_FileName - Name/location of the dynamic library {.dll [Windows] or .so [Linux]} in the Bladed-DLL format (-) [used only with Bladed Interface]
 "DISCON.IN"            DLL_InFile  - Name of input file sent to the DLL (-) [used only with Bladed Interface]
 "DISCON"               DLL_ProcName - Name of procedure in DLL to be called (-) [case sensitive; used only with DLL Interface]
 "default"              DLL_DT      - Communication interval for dynamic library (s) (or "default") [used only with Bladed Interface]
