@@ -5,6 +5,11 @@
 *.outb
 *.sum
 *.ech
+*.bts
+
+# HAWC2
+HAWC2/bodyeig/*
+HAWC2/res/*
 
 # OpenMDAO
 openmdao_log.txt
