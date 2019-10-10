@@ -116,7 +116,7 @@ begin new_htc_structure;
     type        timoschenko ;
     nbodies     10 ;
     node_distribution    c2_def;
-	damping_aniso_v2  0.0 0.0 0.0 2.55e-3 1.53e-3 3.3e-4 ; TODO tune blade damping
+    damping_aniso_v2  0.0 0.0 0.0 2.55e-3 1.53e-3 3.3e-4 ; TODO tune blade damping
     begin timoschenko_input ;
       filename ./data/IEA_15MW_RWT_Blade_st.dat;
       FPM 1;  using fully populated matrix from BECAS
@@ -316,7 +316,7 @@ begin aero ;
   link 1 mbdy_c2_def blade1;
   link 2 mbdy_c2_def blade2;
   link 3 mbdy_c2_def blade3;
-  ae_filename        ./data/IEA_15MW_RWT_ae.dat ;  TODO make this file
+  ae_filename        ./data/DTU_10MW_RWT_ae.dat ;  TODO update this file
   pc_filename        ./data/IEA_15MW_RWT_pc.dat ;
   induction_method   1 ;     0=none, 1=normal
   aerocalc_method    1 ;     0=ingen aerodynamic, 1=med aerodynamic
@@ -327,4 +327,20 @@ begin aero ;
 ;  
 end aero ;
 ;---------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+begin hawcstab2 ;
+  begin ground_fixed_substructure ;
+    main_body tower ;
+    main_body towertop ;
+    main_body connector ;
+  end ground_fixed_substructure ;
+  begin rotating_axissym_substructure ;
+    main_body shaft ;
+  end rotating_axissym_substructure ;
+  begin rotating_threebladed_substructure ;
+    main_body hub1 ;
+    main_body blade1 ;
+    second_order_actuator pitch1  1 0.7 ;
+  end rotating_threebladed_substructure ;
+end hawcstab2 ;
+;
 exit;
