@@ -1,5 +1,5 @@
-! Controller parameter input file for the NREL15mw_OpenFAST_prelim_v4 wind turbine
-!    - File written using NREL Baseline Controller tuning logic on 10/08/19
+! Controller parameter input file for the IEA15mw_OpenFAST_prelim_v4 wind turbine
+!    - File written using NREL Baseline Controller tuning logic on 10/11/19
 
 !------- DEBUG ------------------------------------------------------------
 1					! LoggingLevel		- {0: write no debug files, 1: write standard output .dbg-file, 2: write standard output .dbg-file and complete avrSWAP-array .dbg2-file

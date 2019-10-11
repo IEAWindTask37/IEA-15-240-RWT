@@ -85,9 +85,9 @@ False                  PtfmYDOF    - Platform yaw rotation DOF (flag)
 0.0                    PtfmYIner   - Platform inertia for yaw rotation about the platform CM (kg m^2)
 ---------------------- BLADE ---------------------------------------------------
 17                     BldNodes    - Number of blade nodes (per blade) used for analysis (-)
-"NREL15mw_OpenFAST_prelim_v4_ElastoDyn_blade.dat" BldFile1    - Name of file containing properties for blade 1 (quoted string)
-"NREL15mw_OpenFAST_prelim_v4_ElastoDyn_blade.dat" BldFile2    - Name of file containing properties for blade 2 (quoted string)
-"NREL15mw_OpenFAST_prelim_v4_ElastoDyn_blade.dat" BldFile3    - Name of file containing properties for blade 3 (quoted string) [unused for 2 blades]
+"IEA-15-240-RWT_ElastoDyn_blade.dat" BldFile1    - Name of file containing properties for blade 1 (quoted string)
+"IEA-15-240-RWT_ElastoDyn_blade.dat" BldFile2    - Name of file containing properties for blade 2 (quoted string)
+"IEA-15-240-RWT_ElastoDyn_blade.dat" BldFile3    - Name of file containing properties for blade 3 (quoted string) [unused for 2 blades]
 ---------------------- ROTOR-TEETER --------------------------------------------
 0                      TeetMod     - Rotor-teeter spring/damper model {0: none, 1: standard, 2: user-defined from routine UserTeet} (switch) [unused for 3 blades]
 0.0                    TeetDmpP    - Rotor-teeter damper position (degrees) [used only for 2 blades and when TeetMod=1]
@@ -107,7 +107,7 @@ False                  Furling     - Read in additional model properties for fur
 "unused"               FurlFile    - Name of file containing furling properties (quoted string) [unused when Furling=False]
 ---------------------- TOWER ---------------------------------------------------
 20                     TwrNodes    - Number of tower nodes used for analysis (-)
-"NREL15mw_OpenFAST_prelim_v4_ElastoDyn_tower.dat" TwrFile     - Name of file containing tower properties (quoted string)
+"IEA-15-240-RWT_ElastoDyn_tower.dat" TwrFile     - Name of file containing tower properties (quoted string)
 ---------------------- OUTPUT --------------------------------------------------
 True                   SumPrint    - Print summary data to "<RootName>.sum" (flag)
 1                      OutFile     - Switch to determine where output will be placed: {1: in module output file only; 2: in glue code output file only; 3: both} (currently unused)
@@ -116,9 +116,9 @@ True                   TabDelim    - Use tab delimiters in text tabular output f
 0.0                    TStart      - Time to begin tabular output (s) (currently unused)
 1                      DecFact     - Decimation factor for tabular output {1: output every time step} (-) (currently unused)
 1                      NTwGages    - Number of tower nodes that have strain gages for output [0 to 9] (-)
-         20   TwrGagNd    - List of tower nodes that have strain gages [1 to TwrNodes] (-) [unused if NTwGages=0] TwrGagNd    - List of tower nodes that have strain gages [1 to TwrNodes] (-) [unused if NTwGages=0]
+         20   TwrGagNd    - List of tower nodes that have strain gages [1 to TwrNodes] (-) [unused if NTwGages=0] TwrGagNd    - List of tower nodes that have strain gages [1 to TwrNodes] (-) [unused if NTwGages=0] TwrGagNd    - List of tower nodes that have strain gages [1 to TwrNodes] (-) [unused if NTwGages=0]
 3                      NBlGages    - Number of blade nodes that have strain gages for output [0 to 9] (-)
-          5,           9,          13    BldGagNd    - List of blade nodes that have strain gages [1 to BldNodes] (-) [unused if NBlGages=0] BldGagNd    - List of blade nodes that have strain gages [1 to BldNodes] (-) [unused if NBlGages=0]
+          5,            9,           13    BldGagNd    - List of blade nodes that have strain gages [1 to BldNodes] (-) [unused if NBlGages=0] BldGagNd    - List of blade nodes that have strain gages [1 to BldNodes] (-) [unused if NBlGages=0] BldGagNd    - List of blade nodes that have strain gages [1 to BldNodes] (-) [unused if NBlGages=0]
                    OutList             - The next line(s) contains a list of output parameters.  See OutListParameters.xlsx for a listing of available output channels, (-)
 "Azimuth"
 "BldPitch1"
