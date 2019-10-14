@@ -84,7 +84,7 @@ False                  PtfmYDOF    - Platform yaw rotation DOF (flag)
 0.0                    PtfmPIner   - Platform inertia for pitch tilt rotation about the platform CM (kg m^2)
 0.0                    PtfmYIner   - Platform inertia for yaw rotation about the platform CM (kg m^2)
 ---------------------- BLADE ---------------------------------------------------
-17                     BldNodes    - Number of blade nodes (per blade) used for analysis (-)
+30                     BldNodes    - Number of blade nodes (per blade) used for analysis (-)
 "IEA-15-240-RWT_ElastoDyn_blade.dat" BldFile1    - Name of file containing properties for blade 1 (quoted string)
 "IEA-15-240-RWT_ElastoDyn_blade.dat" BldFile2    - Name of file containing properties for blade 2 (quoted string)
 "IEA-15-240-RWT_ElastoDyn_blade.dat" BldFile3    - Name of file containing properties for blade 3 (quoted string) [unused for 2 blades]
