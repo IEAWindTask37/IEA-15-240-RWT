@@ -14,8 +14,8 @@ True                   Echo        - Echo input data to <RootName>.ech (flag)
 1                      CompInflow  - 
 2                      CompAero    - 
 1                      CompServo   - 
-0                      CompHydro   - 
-0                      CompSub     - 
+1                      CompHydro   - 
+1                      CompSub     - 
 0                      CompMooring - 
 0                      CompIce     - 
 ---------------------- INPUT FILES ---------------------------------------------
@@ -26,8 +26,8 @@ True                   Echo        - Echo input data to <RootName>.ech (flag)
 "IEA-15-240-RWT_InflowFile.dat" InflowFile  - Name of file containing inflow wind input parameters (quoted string)
 "IEA-15-240-RWT_AeroDyn15.dat" AeroFile    - Name of file containing aerodynamic input parameters (quoted string)
 "IEA-15-240-RWT_ServoDyn.dat" ServoFile   - Name of file containing control and electrical-drive input parameters (quoted string)
-""                     HydroFile   - Name of file containing hydrodynamic input parameters (quoted string)
-""                     SubFile     - Name of file containing sub-structural input parameters (quoted string)
+"IEA-15-240-RWT_HydroDyn.dat" HydroFile   - Name of file containing hydrodynamic input parameters (quoted string)
+"IEA-15-240-RWT_SubDyn.dat" SubFile     - Name of file containing sub-structural input parameters (quoted string)
 "unused"               MooringFile - Name of file containing mooring system input parameters (quoted string)
 "unused"               IceFile     - Name of file containing ice input parameters (quoted string)
 ---------------------- OUTPUT --------------------------------------------------
