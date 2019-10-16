@@ -23,10 +23,6 @@ generated
 # XCode
 *.xcodeproj
 
-# C extensions
-#*.so
-#*.dSYM
-
 # Packages
 *.egg
 *.egg-info
@@ -39,6 +35,7 @@ var
 sdist
 develop-eggs
 .installed.cfg
+
 # lib
 lib64
 __pycache__
@@ -64,10 +61,11 @@ nosetests.xml
 ###################
 *.com
 *.class
-*.dll
-*.exe
+# *.dll
+# *.exe
 *.o
-*.so
+# *.so
+# *.dSYM
 
 # Packages #
 ############

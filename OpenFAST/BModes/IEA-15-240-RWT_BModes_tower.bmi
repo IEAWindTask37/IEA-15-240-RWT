@@ -1,0 +1,54 @@
+======================   BModes v1.03 Main Input File  ==================
+Modes of a 82.4m tower with tip mass (output is space-delimited)
+
+--------- General parameters ---------------------------------------------------------------------
+False     Echo        Echo input file contents to *.echo file if true.
+2         beam_type   1: blade, 2: tower (-)
+0.        romg:       rotor speed (rpm), automatically set to zero for tower modal analysis
+1.0       romg_mult:  rotor speed muliplicative factor (-)
+150.      radius:     rotor tip radius measured along coned blade axis OR tower height (m)
+15.       hub_rad:    hub radius measured along coned blade axis OR tower rigid-base height (m)
+0.        precone:    built-in precone angle (deg), automatically set to zero for a tower
+0.        bl_thp:     blade pitch setting (deg), automatically set to zero for a tower
+1         hub_conn:   hub-to-blade connection [1: cantilevered; other options not yet available]
+20        modepr:     number of modes to be printed (-)
+f         TabDelim    (true: tab-delimited output tables; false: space-delimited tables)
+f         mid_node_tw  (true: output twist at mid-node of elements; false: no mid-node outputs)
+
+--------- Blade-tip or tower-top mass properties --------------------------------------------
+1639877.  tip_mass    blade-tip or tower-top mass (see users' manual) (kg)
+-6.97     cm_loc      tip-mass c.m. offset from the tower axis measured along the tower-tip x reference axis (m)
+3.89258526e+08   ixx_tip     blade lag or tower s-s mass moment of inertia about the tip-section x reference axis (kg-m^2)
+2.29364247e+08   iyy_tip     blade flap or tower f-a mass moment of inertia about the tip-section y reference axis (kg-m^2)
+1.86875391e+08   izz_tip     torsion mass moment of inertia about the tip-section z reference axis (kg-m^2)
+0.               ixy_tip     cross product of inertia about x and y reference axes(kg-m^2)
+-7199394.0784606 izx_tip     cross product of inertia about z and x reference axes(kg-m^2)
+0.               iyz_tip     cross product of inertia about y and z reference axes(kg-m^2)
+
+--------- Distributed-property identifiers --------------------------------------------------------
+1         id_mat:     material_type [1: isotropic; non-isotropic composites option not yet available]
+'IEA-15-240-RWT_BModes_tower_prop.dat' sec_props_file   name of beam section properties file (-)
+
+Property scaling factors..............................
+1.0       sec_mass_mult:   mass density multiplier (-)
+1.0       flp_iner_mult:   blade flap or tower f-a inertia multiplier (-)
+1.0       lag_iner_mult:   blade lag or tower s-s inertia multiplier (-)
+1.0       flp_stff_mult:   blade flap or tower f-a bending stiffness multiplier (-)
+1.0       edge_stff_mult:  blade lag or tower s-s bending stiffness multiplier (-)
+1.0       tor_stff_mult:   torsion stiffness multiplier (-)
+1.0       axial_stff_mult: axial stiffness multiplier (-)
+1.0       cg_offst_mult:   cg offset multiplier (-)
+1.0       sc_offst_mult:   shear center multiplier (-)
+1.0       tc_offst_mult:   tension center multiplier (-)
+
+--------- Finite element discretization --------------------------------------------------
+12        nselt:     no of blade or tower elements (-)
+Distance of element boundary nodes from blade or flexible-tower root (normalized wrt blade or tower length), el_loc()
+0.  0.08  0.16  0.24  0.32  0.40  0.48  0.56  0.64  0.72  0.80  0.90   1.0
+
+--------- Properties of tension wires suporting the tower --------------------------------
+0         n_attachments: no of wire-attachment locations on tower, maxm allowable is 2; 0: no tension-wire support (-)
+3 3       n_wires:       no of wires attached at each location (must be 3 or higher) (-)
+6 9       node_attach:   node numbers of attacments location (node number must be more than 1 and less than nselt+2) (-)
+0.e0 0.e0 wire_stfness:  wire sifnness in each set (see users' manual) (N/m)
+0. 0.     th_wire:       angle of tension wires wrt the tower axis at each attachment point (deg)

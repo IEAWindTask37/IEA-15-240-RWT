@@ -6,11 +6,20 @@ This repository is the home for the dissemination of files related to the in-dev
  
 ## Upcoming features:
 
-* Include next version of OpenFAST files to fix twist and spar cap rotation bug
 * Finalized generator and drivetrain design
 * Industry review of generator design
-* Include monopile foundation
 * Industry review of monopile design
+* Include controller source code?
+
+## Update 10/15/2019:
+
+* First upload of monopile foundation in OpenFAST model
+* First upload of yaml file for use with multiple repos
+
+## Update 10/13/2019:
+
+* OpenFAST controller in place thanks to Nikhar Abbas
+* Include next version of OpenFAST files to fix twist and spar cap rotation bug
 
 ## Update 10/9/2019:
 
