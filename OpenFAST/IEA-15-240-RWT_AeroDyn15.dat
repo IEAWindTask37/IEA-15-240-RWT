@@ -40,56 +40,55 @@ True                   FLookup     Flag to indicate whether a lookup for f' will
 4                      InCol_Cm    - The column in the airfoil tables that contains the pitching-moment coefficient; use zero if there is no Cm column (-)
 0                      InCol_Cpmin - The column in the airfoil tables that contains the Cpmin coefficient; use zero if there is no Cpmin column (-)
 30                     NumAFfiles  - Number of airfoil files used (-)
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_00.dat"    AFNames            - Airfoil file names (NumAFfiles lines) (quoted strings)
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_01.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_02.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_03.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_04.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_05.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_06.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_07.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_08.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_09.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_10.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_11.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_12.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_13.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_14.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_15.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_16.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_17.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_18.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_19.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_20.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_21.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_22.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_23.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_24.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_25.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_26.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_27.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_28.dat"
-"Airfoils/NREL15mw_OpenFAST_prelim_v4_AeroDyn15_Polar_29.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_00.dat"    AFNames            - Airfoil file names (NumAFfiles lines) (quoted strings)
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_01.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_02.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_03.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_04.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_05.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_06.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_07.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_08.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_09.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_10.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_11.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_12.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_13.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_14.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_15.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_16.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_17.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_18.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_19.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_20.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_21.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_22.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_23.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_24.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_25.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_26.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_27.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_28.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_29.dat"
 ======  Rotor/Blade Properties  =====================================================================
 True                   UseBlCm     - Include aerodynamic pitching moment in calculations?  (flag)
-"NREL15mw_OpenFAST_prelim_v4_AeroDyn15_blade.dat" ADBlFile(1) - Name of file containing distributed aerodynamic properties for Blade #1 (-)
-"NREL15mw_OpenFAST_prelim_v4_AeroDyn15_blade.dat" ADBlFile(2) - Name of file containing distributed aerodynamic properties for Blade #2 (-) [unused if NumBl < 2]
-"NREL15mw_OpenFAST_prelim_v4_AeroDyn15_blade.dat" ADBlFile(3) - Name of file containing distributed aerodynamic properties for Blade #3 (-) [unused if NumBl < 3]
+"IEA-15-240-RWT_AeroDyn15_blade.dat" ADBlFile(1) - Name of file containing distributed aerodynamic properties for Blade #1 (-)
+"IEA-15-240-RWT_AeroDyn15_blade.dat" ADBlFile(2) - Name of file containing distributed aerodynamic properties for Blade #2 (-) [unused if NumBl < 2]
+"IEA-15-240-RWT_AeroDyn15_blade.dat" ADBlFile(3) - Name of file containing distributed aerodynamic properties for Blade #3 (-) [unused if NumBl < 3]
 ======  Tower Influence and Aerodynamics ============================================================= [used only when TwrPotent/=0, TwrShadow=True, or TwrAero=True]
-11                     NumTwrNds   - Number of tower nodes used in the analysis  (-) [used only when TwrPotent/=0, TwrShadow=True, or TwrAero=True]
+10                     NumTwrNds   - Number of tower nodes used in the analysis  (-) [used only when TwrPotent/=0, TwrShadow=True, or TwrAero=True]
 TwrElev        TwrDiam        TwrCd
 (m)              (m)           (-)
- 0.     10.         1.
- 15.     9.999994   1.
- 30.     9.893298   1.
- 45.     9.501227   1.
- 60.     9.073816   1.
- 75.     8.733734   1.
- 90.     8.481259   1.
-105.     8.254697   1.
-120.     8.087231   1.
-135.     7.512527   1.
-145.00   6.717548   1.
+ 1.500000000000000e+01  9.999993999999999e+00  1.000000000000000e+00 
+ 3.000000000000000e+01  9.893298000000000e+00  1.000000000000000e+00 
+ 4.500000000000000e+01  9.501227000000000e+00  1.000000000000000e+00 
+ 6.000000000000000e+01  9.073816000000001e+00  1.000000000000000e+00 
+ 7.500000000000000e+01  8.733734000000000e+00  1.000000000000000e+00 
+ 9.000000000000000e+01  8.481259000000000e+00  1.000000000000000e+00 
+ 1.050000000000000e+02  8.254697000000000e+00  1.000000000000000e+00 
+ 1.200000000000000e+02  8.087230999999999e+00  1.000000000000000e+00 
+ 1.350000000000000e+02  7.512527000000000e+00  1.000000000000000e+00 
+ 1.450000000000000e+02  6.717548000000000e+00  1.000000000000000e+00 
 ======  Tower Influence and Aerodynamics ============================================================= [used only when TwrPotent/=0, TwrShadow=True, or TwrAero=True]
 True                   SumPrint    - Generate a summary file listing input options and interpolated properties to "<rootname>.AD.sum"?  (flag)
 9                      NBlOuts     - Number of blade node outputs [0 - 9] (-)

@@ -16,7 +16,6 @@
 0                   ! PS_Mode           - Peak shaving mode {0: no peak shaving, 1: implement peak shaving}
 
 !------- FILTERS ----------------------------------------------------------
-0.801		        ! F_LPFCornerFreq	- Corner frequency (-3dB point) in the low-pass filters, [Hz]
 0					! F_LPFDamping		- Damping coefficient [used only when F_FilterType = 2]
 0					! F_NotchCornerFreq	- Natural frequency of the notch filter, [rad/s]
 0	0				! F_NotchBetaNumDen	- Two notch damping values (numerator and denominator, resp) - determines the width and depth of the notch, [-]
@@ -24,12 +23,6 @@
 
 !------- BLADE PITCH CONTROL ----------------------------------------------
 28                  ! PC_GS_n			- Amount of gain-scheduling table entries
-0.07029721 0.0981197  0.12047695 0.139826   0.15715378 0.17302983 0.18782493 0.20179873 0.21505823 0.22777946 0.23999008 0.25181508 0.26327883 0.27441927 0.28529578 0.29592958 0.30633505 0.31652999 0.32654246 0.33638317 0.34606174 0.35559835 0.36498397 0.37424458 0.38338145 0.39239903 0.40130466 0.41009683                  ! PC_GS_angles	    - Gain-schedule table: pitch angles
--1.40207183e+00 -1.20316461e+00 -1.04193800e+00 -9.08611216e-01 -7.96518982e-01 -7.00962533e-01 -6.18534192e-01 -5.46702432e-01 -4.83547298e-01 -4.27586241e-01 -3.77656272e-01 -3.32832260e-01 -2.92369083e-01 -2.55659877e-01 -2.22205390e-01 -1.91591138e-01 -1.63470155e-01 -1.37549773e-01 -1.13581409e-01 -9.13525588e-02 -7.06804854e-02 -5.14071804e-02 -3.33953192e-02 -1.65249832e-02 -6.90987049e-04  1.41993166e-02  2.82278514e-02  4.14673250e-02                  ! PC_GS_KP		- Gain-schedule table: pitch controller kp gains
--0.12868388 -0.11521975 -0.10430624 -0.09528129 -0.08769371 -0.08122545 -0.07564583 -0.0707835  -0.0665085  -0.06272047 -0.05934068 -0.05630652 -0.05356755 -0.05108269 -0.04881814 -0.04674584 -0.04484232 -0.04308775 -0.04146532 -0.03996064 -0.03856134 -0.03725672 -0.03603749 -0.03489553 -0.03382372 -0.03281578 -0.03186618 -0.03097                     ! PC_GS_KI		- Gain-schedule table: pitch controller ki gains
-0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.                  ! PC_GS_KD			- Gain-schedule table: pitch controller kd gains
-0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.                  ! PC_GS_TF			- Gain-schedule table: pitch controller tf gains (derivative filter)
-1.5707				    ! PC_MaxPit			- Maximum physical pitch limit, [rad].
 0.0			        ! PC_MinPit			- Minimum physical pitch limit, [rad].
 0.0349				! PC_MaxRat			- Maximum pitch rate (in absolute value) in pitch controller, [rad/s].
 -0.0349			    ! PC_MinRat			- Minimum pitch rate (in absolute value) in pitch controller, [rad/s].
