@@ -30,7 +30,7 @@
 -0.12868388 -0.11521975 -0.10430624 -0.09528129 -0.08769371 -0.08122545 -0.07564583 -0.0707835  -0.0665085  -0.06272047 -0.05934068 -0.05630652 -0.05356755 -0.05108269 -0.04881814 -0.04674584 -0.04484232 -0.04308775 -0.04146532 -0.03996064 -0.03856134 -0.03725672 -0.03603749 -0.03489553 -0.03382372 -0.03281578 -0.03186618 -0.03097                     ! PC_GS_KI		- Gain-schedule table: pitch controller ki gains
 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.                  ! PC_GS_KD			- Gain-schedule table: pitch controller kd gains
 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.                  ! PC_GS_TF			- Gain-schedule table: pitch controller tf gains (derivative filter)
-1.5707				    ! PC_MaxPit			- Maximum physical pitch limit, [rad].
+1.5707				! PC_MaxPit			- Maximum physical pitch limit, [rad].
 0.0			        ! PC_MinPit			- Minimum physical pitch limit, [rad].
 0.0349				! PC_MaxRat			- Maximum pitch rate (in absolute value) in pitch controller, [rad/s].
 -0.0349			    ! PC_MinRat			- Minimum pitch rate (in absolute value) in pitch controller, [rad/s].
