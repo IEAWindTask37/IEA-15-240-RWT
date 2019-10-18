@@ -5,6 +5,7 @@
 *.outb
 *.sum
 *.ech
+*.dbg
 
 # OpenMDAO
 openmdao_log.txt
@@ -19,8 +20,8 @@ generated
 *.xcodeproj
 
 # C extensions
-*.so
-*.dSYM
+#*.so
+#*.dSYM
 
 # Packages
 *.egg
