@@ -5,6 +5,7 @@
 *.outb
 *.sum
 *.ech
+*.dbg
 
 # OpenMDAO
 openmdao_log.txt
