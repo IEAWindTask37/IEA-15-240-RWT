@@ -716,11 +716,11 @@ assembly:
         tilt_angle: 6.0
         number_of_blades: 3
         hub_height: 150.0
-        hubD: 8.0
+        hubD: 6.0
     control:
         Vin: 3.0
         Vout: 25.0
-        minOmega: 3.0
+        minOmega: 4.8
         maxOmega: 7.56
         tsr: 9.0
         pitch: 0.
