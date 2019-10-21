@@ -214,9 +214,6 @@ if __name__ == "__main__":
 
     prob_ref.setup()
     prob_ref = Init_MonopileTurbine(prob_ref, blade, Nsection_Tow = Nsection_Tow, Analysis_Level = Analysis_Level, fst_vt = fst_vt)
-    prob_ref['tower_section_height']           = (prob_ref['hub_height'] - prob_ref['foundation_height']) / Nsection_Tow * np.ones(Nsection_Tow)
-    # prob_ref['tower_outer_diameter']           = np.linspace(10.0, 7.00, Nsection_Tow+1)
-    # prob_ref['tower_wall_thickness']           = np.linspace(0.055, 0.04, Nsection_Tow)
     prob_ref['drive.shaft_angle']              = np.radians(6.)
     prob_ref['overhang']                       = 8.5
     prob_ref['drive.distance_hub2mb']          = 3.5
@@ -225,9 +222,9 @@ if __name__ == "__main__":
     prob_ref['water_depth']                    = 30.
     prob_ref['wind_reference_height']          = 150.
     prob_ref['hub_height']                     = 150.
-    prob_ref['tower_outer_diameter']           = np.array([10., 10., 10., 10., 9.692655, 9.312475, 8.911586, 8.532367, 8.082239, 7.621554, 7.286144, 6.727136, 6.3])
-    prob_ref['tower_section_height']           = (prob_ref['hub_height'] - prob_ref['foundation_height']) / Nsection_Tow * np.ones(Nsection_Tow)
-    prob_ref['tower_wall_thickness']           = np.array([4.792850E-02, 4.792850E-02, 4.792850E-02, 4.460872E-02, 4.266279E-02, 4.076820E-02, 3.864107E-02, 3.610352E-02, 3.345527E-02, 3.032904E-02, 2.663196E-02, 2.940373E-02])
+    prob_ref['tower_section_height']           = np.array([15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 10.])
+    prob_ref['tower_outer_diameter']           = array([10., 10., 10., 9.999994, 9.893298, 9.501227, 9.073816, 8.733734, 8.481259, 8.254697, 8.087231, 7.512527, 6.717548])
+    prob_ref['tower_wall_thickness']           = np.array([0.04922689, 0.04922689, 0.04922689, 0.04581482, 0.04301337, 0.04129422, 0.03939618, 0.03675472, 0.03345327, 0.02984231, 0.02622864, 0.03062863])
 
     prob_ref.model.nonlinear_solver = NonlinearRunOnce()
     prob_ref.model.linear_solver    = DirectSolver()
