@@ -5,11 +5,15 @@
 *.outb
 *.sum
 *.ech
+*.dbg
 *.bts
 
 # HAWC2
 HAWC2/bodyeig/*
 HAWC2/res/*
+
+
+
 
 # OpenMDAO
 openmdao_log.txt
@@ -23,10 +27,6 @@ generated
 # XCode
 *.xcodeproj
 
-# C extensions
-#*.so
-#*.dSYM
-
 # Packages
 *.egg
 *.egg-info
@@ -39,6 +39,7 @@ var
 sdist
 develop-eggs
 .installed.cfg
+
 # lib
 lib64
 __pycache__
@@ -64,10 +65,11 @@ nosetests.xml
 ###################
 *.com
 *.class
-*.dll
-*.exe
+# *.dll
+# *.exe
 *.o
-*.so
+# *.so
+# *.dSYM
 
 # Packages #
 ############
