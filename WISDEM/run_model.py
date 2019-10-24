@@ -359,10 +359,6 @@ if __name__ == "__main__":
         prob.run_driver()
         # ----------------------
 
-        # --- Save output .yaml ---
-        refBlade.write_ontology('optimization_out.yaml', prob['blade_out'], refBlade.wt_ref)
-        shutil.copyfile(fname_input,  folder_output + os.sep + WT_input)
-
         # ----------------------
         # --- Outputs plotting ---
         print('AEP:         \t\t\t %f\t%f GWh \t Difference: %f %%' % (prob_ref['AEP']*1e-6, prob['AEP']*1e-6, (prob['AEP']-prob_ref['AEP'])/prob_ref['AEP']*100.))
