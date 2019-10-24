@@ -150,6 +150,7 @@ if __name__ == "__main__":
     
     fname_schema  = 'IEAontology_schema.yaml'
     fname_input   = 'IEA-15-240-RWT.yaml'
+    fname_output  = 'IEA-15-240-RWT_out.yaml'
     folder_output = os.getcwd() + os.sep + 'outputs'
     
     if not os.path.isdir(folder_output):
@@ -217,20 +218,23 @@ if __name__ == "__main__":
     prob_ref['drive.shaft_angle']              = np.radians(6.)
     prob_ref['overhang']                       = 8.5
     prob_ref['drive.distance_hub2mb']          = 3.5
-
+    prob_ref['significant_wave_height']        = 4.52
+    prob_ref['significant_wave_period']        = 9.45
+    prob_ref['monopile']                       = True
     prob_ref['foundation_height']              = -30.
     prob_ref['water_depth']                    = 30.
+    prob_ref['suctionpile_depth']              = 45.
     prob_ref['wind_reference_height']          = 150.
     prob_ref['hub_height']                     = 150.
     prob_ref['tower_section_height']           = np.array([15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 10.])
-    prob_ref['tower_outer_diameter']           = array([10., 10., 10., 9.999994, 9.893298, 9.501227, 9.073816, 8.733734, 8.481259, 8.254697, 8.087231, 7.512527, 6.717548])
+    prob_ref['tower_outer_diameter']           = np.array([10., 10., 10., 9.999994, 9.893298, 9.501227, 9.073816, 8.733734, 8.481259, 8.254697, 8.087231, 7.512527, 6.717548])
     prob_ref['tower_wall_thickness']           = np.array([0.04922689, 0.04922689, 0.04922689, 0.04581482, 0.04301337, 0.04129422, 0.03939618, 0.03675472, 0.03345327, 0.02984231, 0.02622864, 0.03062863])
 
     prob_ref.model.nonlinear_solver = NonlinearRunOnce()
     prob_ref.model.linear_solver    = DirectSolver()
     print('Running at Initial Position:')
     prob_ref.run_driver()
-    
+    #prob_ref.model.list_inputs(units=True)
     #refBlade.write_ontology(fname_output, prob_ref['blade_out'], refBlade.wt_ref)
     
     print(prob_ref['hub_height'])
@@ -241,6 +245,9 @@ if __name__ == "__main__":
     print('mIxy', prob_ref['tow.pre.mIxy'])
     print('mIxz', prob_ref['tow.pre.mIxz'])
     print('mIyz', prob_ref['tow.pre.mIyz'])
+    print('frequencies', prob_ref['tow.post.structural_frequencies'])
+    #prob_ref.model.list_inputs(units=True)#values = False, hierarchical=False)
+    #prob_ref.model.list_outputs(units=True)#values = False, hierarchical=False)    
 
 
     
@@ -316,14 +323,20 @@ if __name__ == "__main__":
         # --- Run ---
         prob.setup()
         prob = Init_MonopileTurbine(prob, blade, Nsection_Tow = Nsection_Tow)
-        prob['foundation_height']              = -30.
-        prob['water_depth']                    = 30.
-        prob['tower_outer_diameter']           = np.array([10., 10., 10., 10., 9.692655, 9.312475, 8.911586, 8.532367, 8.082239, 7.621554, 7.286144, 6.727136, 6.3])
-        prob['tower_section_height']           = (prob['hub_height'] - prob['foundation_height']) / Nsection_Tow * np.ones(Nsection_Tow)
-        prob['tower_wall_thickness']           = np.array([4.792850E-02, 4.792850E-02, 4.792850E-02, 4.460872E-02, 4.266279E-02, 4.076820E-02, 3.864107E-02, 3.610352E-02, 3.345527E-02, 3.032904E-02, 2.663196E-02, 2.940373E-02])
         prob['drive.shaft_angle']              = np.radians(6.)
         prob['overhang']                       = 8.5
         prob['drive.distance_hub2mb']          = 3.5
+        prob['significant_wave_height']        = 4.52
+        prob['significant_wave_period']        = 9.45
+        prob['monopile']                       = True
+        prob['foundation_height']              = -30.
+        prob['water_depth']                    = 30.
+        prob['suctionpile_depth']              = 45.
+        prob['wind_reference_height']          = 150.
+        prob['hub_height']                     = 150.
+        prob['tower_section_height']           = np.array([15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 10.])
+        prob['tower_outer_diameter']           = np.array([10., 10., 10., 9.999994, 9.893298, 9.501227, 9.073816, 8.733734, 8.481259, 8.254697, 8.087231, 7.512527, 6.717548])
+        prob['tower_wall_thickness']           = np.array([0.04922689, 0.04922689, 0.04922689, 0.04581482, 0.04301337, 0.04129422, 0.03939618, 0.03675472, 0.03345327, 0.02984231, 0.02622864, 0.03062863])
         prob.model.nonlinear_solver = NonlinearRunOnce()
         prob.model.linear_solver = DirectSolver()
         print('Running Optimization:')
@@ -332,9 +345,7 @@ if __name__ == "__main__":
         prob.run_driver()
         # ----------------------
 
-        # --- Save output .yaml ---
-        refBlade.write_ontology(fname_output, prob['blade_out'], refBlade.wt_ref)
-        shutil.copyfile(fname_input,  folder_output + os.sep + WT_input)
+        
         # ----------------------
         # --- Outputs plotting ---
         print('AEP:         \t\t\t %f\t%f GWh \t Difference: %f %%' % (prob_ref['AEP']*1e-6, prob['AEP']*1e-6, (prob['AEP']-prob_ref['AEP'])/prob_ref['AEP']*100.))
@@ -348,10 +359,14 @@ if __name__ == "__main__":
         # If not optimizing, plot current design
         prob = prob_ref
         
-    generate_plots        = True
     show_plots            = True
     flag_write_out        = True
-
+    
+    if flag_write_out:
+        # --- Save output .yaml ---
+        refBlade.write_ontology(fname_output, prob['blade_out'], refBlade.wt_ref)
+        shutil.copyfile(fname_input,  folder_output + os.sep + fname_output)
+    
     # Problem initialization
     var_y           = ['chord','theta','rthick','p_le','precurve','presweep']
     label_y         = ['Chord [m]', 'Twist [deg]', 'Relative Thickness [%]', 'Pitch Axis Location [%]', 'Prebend [m]', 'Sweep [m]']
@@ -457,7 +472,6 @@ if __name__ == "__main__":
     plt.subplots_adjust(bottom = 0.15, left = 0.15)
     fig_name = 'torque.png'
     fq.savefig(folder_output + os.sep + fig_name)
-    print(folder_output + os.sep + fig_name)
 
     # Tabular output
     temp = np.c_[blade['pf']['s'], blade['pf']['r']]
