@@ -6,6 +6,7 @@
 *.sum
 *.ech
 *.bts
+*.dbg
 
 # HAWC2
 HAWC2/bodyeig/*

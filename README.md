@@ -11,6 +11,11 @@ This repository is the home for the dissemination of files related to the in-dev
 * Industry review of monopile design
 * Include controller source code?
 
+## Update 10/17/2019:
+
+* Adding some documentation on generator design
+* Fixed mismatch between tower and monopile
+
 ## Update 10/15/2019:
 
 * First upload of monopile foundation in OpenFAST model
