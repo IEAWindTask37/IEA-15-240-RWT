@@ -228,6 +228,9 @@ if __name__ == "__main__":
     prob_ref['tower_section_height']           = np.array([15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 10.])
     prob_ref['tower_outer_diameter']           = np.array([10., 10., 10., 9.999994, 9.893298, 9.501227, 9.073816, 8.733734, 8.481259, 8.254697, 8.087231, 7.512527, 6.717548])
     prob_ref['tower_wall_thickness']           = np.array([0.04922689, 0.04922689, 0.04922689, 0.04581482, 0.04301337, 0.04129422, 0.03939618, 0.03675472, 0.03345327, 0.02984231, 0.02622864, 0.03062863])
+    # From SNOPT with better loading information:
+    #prob_ref['tower_outer_diameter']           = np.array([10., 10., 9.07841266, 8.94626364, 8.2388643, 8.00406996, 7.4747645, 7.16117877, 6.7801444, 6.40652604, 6.14951031, 5.73067083, 5.57747088])
+    #prob_ref['tower_wall_thickness']           = np.array([0.06470247, 0.05743258, 0.05558765, 0.05632417, 0.05654073, 0.05566434, 0.0556487, 0.05363243, 0.05230072, 0.05033409, 0.04682933, 0.04711726])
 
     prob_ref.model.nonlinear_solver = NonlinearRunOnce()
     prob_ref.model.linear_solver    = DirectSolver()
@@ -244,7 +247,15 @@ if __name__ == "__main__":
     print('mIxy', prob_ref['tow.pre.mIxy'])
     print('mIxz', prob_ref['tow.pre.mIxz'])
     print('mIyz', prob_ref['tow.pre.mIyz'])
+    print('rna_F', prob_ref['tow.pre.rna_F'])
+    print('rna_M', prob_ref['tow.pre.rna_M'])
+    print('rna_cg', prob_ref['rna_cg'])
+    print('Uref', prob_ref['tow.wind.Uref'])
     print('frequencies', prob_ref['tow.post.structural_frequencies'])
+    print('stress', prob_ref['tow.post.stress'])
+    print('local buckling', prob_ref['tow.post.shell_buckling'])
+    print('shell buckling', prob_ref['tow.post.global_buckling'])
+
     #prob_ref.model.list_inputs(units=True)#values = False, hierarchical=False)
     #prob_ref.model.list_outputs(units=True)#values = False, hierarchical=False)    
 
@@ -306,7 +317,7 @@ if __name__ == "__main__":
         # prob.model.add_constraint('tow.manufacturability',    lower=0.0)
         # prob.model.add_constraint('frequencyNP_margin',       upper=0.)
         # prob.model.add_constraint('frequency1P_margin',       upper=0.)
-        # # prob.model.add_constraint('ground_clearance',         lower=20.0)
+        # prob.model.add_constraint('ground_clearance',         lower=20.0)
         # ----------------------
         
         # --- Recorder ---
@@ -336,6 +347,9 @@ if __name__ == "__main__":
         prob['tower_section_height']           = np.array([15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 10.])
         prob['tower_outer_diameter']           = np.array([10., 10., 10., 9.999994, 9.893298, 9.501227, 9.073816, 8.733734, 8.481259, 8.254697, 8.087231, 7.512527, 6.717548])
         prob['tower_wall_thickness']           = np.array([0.04922689, 0.04922689, 0.04922689, 0.04581482, 0.04301337, 0.04129422, 0.03939618, 0.03675472, 0.03345327, 0.02984231, 0.02622864, 0.03062863])
+        # From SNOPT with better loading information:
+        #prob['tower_outer_diameter']           = np.array([10., 10., 9.07841266, 8.94626364, 8.2388643, 8.00406996, 7.4747645, 7.16117877, 6.7801444, 6.40652604, 6.14951031, 5.73067083, 5.57747088])
+        #prob['tower_wall_thickness']           = np.array([0.06470247, 0.05743258, 0.05558765, 0.05632417, 0.05654073, 0.05566434, 0.0556487, 0.05363243, 0.05230072, 0.05033409, 0.04682933, 0.04711726])
         prob.model.nonlinear_solver = NonlinearRunOnce()
         prob.model.linear_solver = DirectSolver()
         print('Running Optimization:')
@@ -345,7 +359,7 @@ if __name__ == "__main__":
         # ----------------------
 
         # --- Save output .yaml ---
-        refBlade.write_ontology(fname_output, prob['blade_out'], refBlade.wt_ref)
+        refBlade.write_ontology('optimization_out.yaml', prob['blade_out'], refBlade.wt_ref)
         shutil.copyfile(fname_input,  folder_output + os.sep + WT_input)
         # ----------------------
         # --- Outputs plotting ---
