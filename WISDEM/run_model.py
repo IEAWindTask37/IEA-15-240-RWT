@@ -150,6 +150,7 @@ if __name__ == "__main__":
     
     fname_schema  = 'IEAontology_schema.yaml'
     fname_input   = 'IEA-15-240-RWT.yaml'
+    fname_output  = 'IEA-15-240-RWT_out.yaml'
     folder_output = os.getcwd() + os.sep + 'outputs'
     
     if not os.path.isdir(folder_output):
@@ -361,6 +362,7 @@ if __name__ == "__main__":
         # --- Save output .yaml ---
         refBlade.write_ontology('optimization_out.yaml', prob['blade_out'], refBlade.wt_ref)
         shutil.copyfile(fname_input,  folder_output + os.sep + WT_input)
+
         # ----------------------
         # --- Outputs plotting ---
         print('AEP:         \t\t\t %f\t%f GWh \t Difference: %f %%' % (prob_ref['AEP']*1e-6, prob['AEP']*1e-6, (prob['AEP']-prob_ref['AEP'])/prob_ref['AEP']*100.))
@@ -376,7 +378,12 @@ if __name__ == "__main__":
         
     show_plots            = True
     flag_write_out        = True
-
+    
+    if flag_write_out:
+        # --- Save output .yaml ---
+        refBlade.write_ontology(fname_output, prob['blade_out'], refBlade.wt_ref)
+        shutil.copyfile(fname_input,  folder_output + os.sep + fname_output)
+    
     # Problem initialization
     var_y           = ['chord','theta','rthick','p_le','precurve','presweep']
     label_y         = ['Chord [m]', 'Twist [deg]', 'Relative Thickness [%]', 'Pitch Axis Location [%]', 'Prebend [m]', 'Sweep [m]']
