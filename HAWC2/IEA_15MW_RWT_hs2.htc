@@ -332,7 +332,7 @@ begin hawcstab2 ;
     second_order_actuator pitch1  100 0.7 ;  TODO drop this back down
   end rotating_threebladed_substructure ;
 ;  path to the operational data
-  operational_data_filename ./data/operation_nomin.dat ;  TODO update this to include min genspeed
+  operational_data_filename ./data/operation.dat ;
 ;
 end hawcstab2 ;
 ;
