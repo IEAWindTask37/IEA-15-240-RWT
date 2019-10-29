@@ -1,5 +1,8 @@
-begin new_htc_structure;
+; IEA 15 MW Reference Wind Turbine.
+; 
 ;-------------------------------------------------------------------------------------------------------------------------------
+begin new_htc_structure;
+;
   begin main_body;  tower
     name        tower ; 
     type        timoschenko ;
@@ -107,7 +110,7 @@ begin new_htc_structure;
     copy_main_body hub1 ;
   end main_body;
 ;
-  begin main_body;
+  begin main_body; blade
     name        blade1 ;        
     type        timoschenko ;
     nbodies     10 ;
@@ -289,30 +292,30 @@ end new_htc_structure;
 ;---------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 begin wind ;
   density                 1.225 ;
-  wsp                     8   ;
-  tint                    0.0   ;
-  horizontal_input        1     ;  0=false, 1=true
+  wsp                     8 ;
+  tint                    0.0 ;
+  horizontal_input        1 ;  0=false, 1=true
   windfield_rotations     0 0.0 0.0 ;    yaw, tilt, rotation
   center_pos0             0.0 0.0 -150 ;  center of turb box
   shear_format            1  0.14 ;  0=none,1=constant,2=log,3=power,4=linear
-  turb_format             0     ;  0=none, 1=mann,2=flex
-  tower_shadow_method     0     ;  0=none, 1=potential flow, 2=jet
+  turb_format             0 ;  0=none, 1=mann,2=flex
+  tower_shadow_method     0 ;  0=none, 1=potential flow, 2=jet
 end wind;
 ;
 begin aero ;
   nblades  3;
-  hub_vec shaft -3 ;  rotor rotation vector (normally shaft composant directed from pressure to sustion side)
+  hub_vec shaft -3 ;  rotor rotation vector wrt. shaft coor sys (z upwind)
   link 1 mbdy_c2_def blade1;
   link 2 mbdy_c2_def blade2;
   link 3 mbdy_c2_def blade3;
   ae_filename        ./data/IEA_15MW_RWT_ae.dat ;
   pc_filename        ./data/IEA_15MW_RWT_pc.dat ;
-  induction_method   1 ;     0=none, 1=normal
-  aerocalc_method    1 ;     0=ingen aerodynamic, 1=med aerodynamic
-  aerosections       50 ;  TODO right number of sections?
+  induction_method   1 ;  0=none, 1=normal
+  aerocalc_method    1 ;  0=aerodynamics disabled, 1=with aerodynamics
+  aerosections       50 ;
   ae_sets            1 1 1;
-  tiploss_method     1 ;     0=none, 1=prandtl
-  dynstall_method    2 ;     0=none, 1=stig øye method,2=mhh method
+  tiploss_method     1 ;  0=none, 1=prandtl
+  dynstall_method    2 ;  0=none, 1=stig øye method,2=mhh method
 ;  
 end aero ;
 ;---------------------------------------------------------------------------------------------------------------------------------------------------------------- 
