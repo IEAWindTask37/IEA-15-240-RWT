@@ -112,7 +112,7 @@ begin new_htc_structure;
     type        timoschenko ;
     nbodies     10 ;
     node_distribution    c2_def;
-    damping_aniso_v2  0.0 0.0 0.0 3.26e-3 2.82e-3 1.3e-4 ; blade damping tuned to 3% log dec flap/edge, torsion as low as possible
+    damping_aniso_v2  0.0 0.0 0.0 3.23e-3 2.85e-3 1.0e-4 ; blade damping tuned to 3% log dec flap/edge, torsion as low as possible
     begin timoschenko_input ;
       filename ./data/IEA_15MW_RWT_Blade_st.dat;
       FPM 1;  using fully populated matrix from BECAS
