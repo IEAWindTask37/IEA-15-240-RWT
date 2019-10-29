@@ -2,7 +2,7 @@ begin new_htc_structure;
     body_output_file_name ./bodyeig/IEA_15MW_RWT_body.dat;  body locations correct?
     body_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_body_eigen.dat;  damping correct?
     struct_inertia_output_file_name ./bodyeig/IEA_15MW_RWT_struc_inertia.dat;  CM locations correct?
-    structure_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_struc_eigen.dat;  full-system frequencies?
+    ;structure_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_struc_eigen.dat;  full-system frequencies?
 ;-------------------------------------------------------------------------------------------------------------------------------
   begin main_body;  tower
     name        tower ; 
@@ -24,8 +24,7 @@ begin new_htc_structure;
       sec	6	0	0	-75.0	0	;
       sec	7	0	0	-90.0	0	;
       sec	8	0	0	-105.0	0	;
-      sec	9	0	0	-120.0	0	 ;
-      sec	9	0	0	-120.0	0	 ;
+      sec	9	0	0	-120.0	0	;
       sec	10	0	0	-135.0	0	;
       sec	11	0	0	-145.0	0	;	  
      end c2_def ;
@@ -117,7 +116,7 @@ begin new_htc_structure;
     type        timoschenko ;
     nbodies     10 ;
     node_distribution    c2_def;
-    damping_aniso  0.0 0.0 0.0 2.55e-3 1.53e-3 3.3e-4 ; TODO tune blade damping; long-term: update to damping_aniso_v2
+    damping_aniso  0.0 0.0 0.0 3.26e-3 2.82e-3 1.3e-4 ; blade damping tuned to 3% log dec flap/edge, torsion as low as possible
     begin timoschenko_input ;
       filename ./data/IEA_15MW_RWT_Blade_st.dat;
       FPM 1;  using fully populated matrix from BECAS
@@ -317,7 +316,7 @@ begin aero ;
   aerosections       50 ;  TODO right number of sections?
   ae_sets            1 1 1;
   tiploss_method     1 ;     0=none, 1=prandtl
-  dynstall_method    2 ;     0=none, 1=stig øye method,2=mhh method
+  dynstall_method    2 ;     0=none, 1=stig Ã¸ye method,2=mhh method
 ;  
 end aero ;
 ;---------------------------------------------------------------------------------------------------------------------------------------------------------------- 
