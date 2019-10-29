@@ -46,9 +46,9 @@ False                  PtfmYDOF    - Platform yaw rotation DOF (flag)
 3                      NumBl       - Number of blades (-)
 120.0                  TipRad      - The distance from the rotor apex to the blade tip (meters)
 3.0                    HubRad      - The distance from the rotor apex to the blade root (meters)
--4.                    PreCone1    - Blade 1 cone angle (degrees)
--4.                    PreCone2    - Blade 2 cone angle (degrees)
--4.                    PreCone3    - Blade 3 cone angle (degrees) [unused for 2 blades]
+-4.0                   PreCone(1)  - Blade 1 cone angle (degrees)
+-4.0                   PreCone(2)  - Blade 2 cone angle (degrees)
+-4.0                   PreCone(3)  - Blade 3 cone angle (degrees) [unused for 2 blades]
 0.0                    HubCM       - Distance from rotor apex to hub mass [positive downwind] (meters)
 0.0                    UndSling    - Undersling length [distance from teeter pin to the rotor apex] (meters) [unused for 3 blades]
 0.0                    Delta3      - Delta-3 angle for teetering rotors (degrees) [unused for 3 blades]
@@ -70,10 +70,10 @@ False                  PtfmYDOF    - Platform yaw rotation DOF (flag)
 0.                     PtfmCMzt    - Vertical distance from the ground level [onshore] or MSL [offshore] to the platform CM (meters)
 0.                     PtfmRefzt   - Vertical distance from the ground level [onshore] or MSL [offshore] to the platform reference point (meters)
 ---------------------- MASS AND INERTIA ----------------------------------------
-0.0                    TipMass1    - Tip-brake mass, blade 1 (kg)
-0.0                    TipMass2    - Tip-brake mass, blade 2 (kg)
-0.0                    TipMass3    - Tip-brake mass, blade 3 (kg) [unused for 2 blades]
-178832                 HubMass     - Hub mass (kg)
+0.0                    TipMass(1)  - Tip-brake mass, blade 1 (kg)
+0.0                    TipMass(2)  - Tip-brake mass, blade 2 (kg)
+0.0                    TipMass(3)  - Tip-brake mass, blade 3 (kg) [unused for 2 blades]
+178832.0               HubMass     - Hub mass (kg)
 727794.9               HubIner     - Hub inertia about rotor axis [3 blades] or teeter axis [2 blades] (kg m^2)
 17159301.77            GenIner     - Generator inertia about HSS (kg m^2)
 1070000                NacMass     - Nacelle mass (kg)
