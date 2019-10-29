@@ -1,8 +1,7 @@
 ; IEA 15 MW Reference Wind Turbine.
 ; 
 begin simulation ;
-  time_stop    10.0 ;  test
-  ;time_stop    1000.0 ;
+  time_stop    1000.0 ;
   solvertype   1 ;    (newmark)
   on_no_convergence continue ;
   convergence_limits 1E3 1.0 1E-7 ;
@@ -642,7 +641,7 @@ begin output;
   ; Moments:
   mbdy momentvec tower  1 1  tower # tower base ;
   mbdy momentvec tower  10 2 tower # tower yaw bearing ;
-  mbdy momentvec shaft  4 1  shaft # main bearing ;
+  mbdy momentvec shaft  1 1  shaft # main bearing ;
   mbdy momentvec blade1 2  2 blade1 # blade 1 root ;
   mbdy momentvec blade2 2  2 blade2 # blade 2 root ;
   mbdy momentvec blade3 2  2 blade3 # blade 3 root ;
