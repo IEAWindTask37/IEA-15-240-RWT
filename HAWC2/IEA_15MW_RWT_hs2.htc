@@ -74,7 +74,7 @@ begin new_htc_structure;
     concentrated_mass	2  0.0	0.0	0.0	1.78832E+05	0.0	0.0	7.277949E+05	;	hub mass/inertia;
 	begin timoschenko_input;
       filename ./data/IEA_15MW_RWT_Shaft_st.dat ;
-      set 1 1 ;           
+      set 1 1 ;
     end timoschenko_input;
     begin c2_def;
       nsec 2;
