@@ -1,11 +1,11 @@
 ; IEA 15 MW Reference Wind Turbine.
 ; 
 begin simulation ;
-  time_stop    1000.0 ;
+  time_stop    700.0 ;
   solvertype   1 ;    (newmark)
   on_no_convergence continue ;
   convergence_limits 1E3 1.0 1E-7 ;
-  logfile ./log/IEA_15MW_RWT_step.log ;
+  logfile ./log/IEA_15MW_RWT_turb.log ;
   begin newmark;
     deltat    0.01;  
   end newmark;
@@ -307,39 +307,27 @@ end new_htc_structure;
 ;---------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 begin wind ;
   density                 1.225 ;
-  wsp                     3 ;
-  tint                    0.0 ;
+  wsp                     12 ;
+  tint                    0.17 ;
   horizontal_input        1 ;  0=false, 1=true
   windfield_rotations     0 0.0 0.0 ;    yaw, tilt, rotation
   center_pos0             0.0 0.0 -150 ;  center of turb box
-  shear_format            1  0.14 ;  0=none,1=constant,2=log,3=power,4=linear
-  turb_format             0 ;  0=none, 1=mann,2=flex
-  tower_shadow_method     0 ;  0=none, 1=potential flow, 2=jet
-  scale_time_start       0.0 ; 
+  shear_format            2  0.20 ;  0=none,1=constant,2=log,3=power,4=linear
+  turb_format             1 ;  0=none, 1=mann,2=flex
+  tower_shadow_method     3 ;  0=none, 1=potential flow, 2=jet, 3=potential 2
+  scale_time_start       0.0 ;
   wind_ramp_factor   0.0 40.0 0.6 1.0 ;  tstart, tstop, % start, % stop
-; Steps ;
-    wind_ramp_abs  140.0  141.0  0.0   1.0 ;   wsp. after the step:  4.0 
-    wind_ramp_abs  181.0  182.0  0.0   1.0 ;   wsp. after the step:  5.0 
-    wind_ramp_abs  222.0  223.0  0.0   1.0 ;   wsp. after the step:  6.0 
-    wind_ramp_abs  263.0  264.0  0.0   1.0 ;   wsp. after the step:  7.0 
-    wind_ramp_abs  304.0  305.0  0.0   1.0 ;   wsp. after the step:  8.0 
-    wind_ramp_abs  345.0  346.0  0.0   1.0 ;   wsp. after the step:  9.0 
-    wind_ramp_abs  386.0  387.0  0.0   1.0 ;   wsp. after the step: 10.0 
-    wind_ramp_abs  427.0  428.0  0.0   1.0 ;   wsp. after the step: 11.0 
-    wind_ramp_abs  468.0  469.0  0.0   1.0 ;   wsp. after the step: 12.0 
-    wind_ramp_abs  509.0  510.0  0.0   1.0 ;   wsp. after the step: 13.0 
-    wind_ramp_abs  550.0  551.0  0.0   1.0 ;   wsp. after the step: 14.0 
-    wind_ramp_abs  591.0  592.0  0.0   1.0 ;   wsp. after the step: 15.0 
-    wind_ramp_abs  632.0  633.0  0.0   1.0 ;   wsp. after the step: 16.0 
-    wind_ramp_abs  673.0  674.0  0.0   1.0 ;   wsp. after the step: 17.0 
-    wind_ramp_abs  714.0  715.0  0.0   1.0 ;   wsp. after the step: 18.0 
-    wind_ramp_abs  755.0  756.0  0.0   1.0 ;   wsp. after the step: 19.0 
-    wind_ramp_abs  796.0  797.0  0.0   1.0 ;   wsp. after the step: 20.0 
-    wind_ramp_abs  837.0  838.0  0.0   1.0 ;   wsp. after the step: 21.0 
-    wind_ramp_abs  878.0  879.0  0.0   1.0 ;   wsp. after the step: 22.0 
-    wind_ramp_abs  919.0  920.0  0.0   1.0 ;   wsp. after the step: 23.0 
-    wind_ramp_abs  960.0  961.0  0.0   1.0 ;   wsp. after the step: 24.0 
 ; 
+  begin mann;
+    create_turb_parameters 29.4 1.0 3.9 1001 0 ;
+    filename_u ./turb/IEA_15MW_RWT_turb_u.bin ;
+    filename_v ./turb/IEA_15MW_RWT_turb_v.bin ;
+    filename_w ./turb/IEA_15MW_RWT_turb_w.bin ;
+    box_dim_u 8192 0.878906 ; U*T/n_u
+    box_dim_v 32 8.12903 ; wid/(n_v-1), wid = rotdiam + 5%
+    box_dim_w 32 8.12903 ; ht/(n_w-1), ht = rotdiam + 5%
+  end mann;
+;
   begin tower_shadow_potential_2;
     tower_mbdy_link tower;
     nsec  2;
@@ -624,9 +612,10 @@ end dll;
 ;---------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 ;
 begin output;
-  filename ./res/IEA_15MW_RWT_step ;
+  filename ./res/IEA_15MW_RWT_turb ;
   data_format  hawc_binary;
   buffer 1 ;
+  time 100 700;
 ;
   general time;  
   constraint bearing1 shaft_rot 2; angle and angle velocity 
