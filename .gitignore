@@ -11,6 +11,7 @@
 # HAWC2
 HAWC2/bodyeig/*
 HAWC2/res/*
+HAWC2/turb/*
 
 # OpenMDAO
 openmdao_log.txt
