@@ -12,7 +12,7 @@ False                  FrozenWake  - Assume frozen wake during linearization? (f
 False                  CavitCheck  - Perform cavitation check? (flag) TRUE will turn off unsteady aerodynamics
 ======  Environmental Conditions  ===================================================================
  1.225000000000000e+00 AirDens     - Air density (kg/m^3)
- 1.812060000000000e-05 KinVisc     - Kinematic air viscosity (m^2/s)
+ 1.479232653061225e-05 KinVisc     - Kinematic air viscosity (m^2/s)
  3.350000000000000e+02 SpdSound    - Speed of sound (m/s)
  1.035000000000000e+05 Patm        - Atmospheric pressure (Pa) [used only when CavitCheck=True]
  1.700000000000000e+03 Pvap        - Vapour pressure of fluid (Pa) [used only when CavitCheck=True]
