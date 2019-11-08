@@ -1,0 +1,5 @@
+# drivetrain configuration parameters for HAWC2 (rink)
+GenCMHor -6.23  # downwind horizontal distance, yaw axis to GenCM [m]
+NacInerFA 7558513.42  # fore-aft non-rotating nacelle inertia about [NacCMxn, NacCMyn, NacCMzn] [kg-m^2]
+NacInerSS 7900628.83  # side-side non-rotating nacelle inertia about [NacCMxn, NacCMyn, NacCMzn] [kg-m^2]
+NacInerZ 10134783.38  # side-side non-rotating nacelle inertia about [NacCMxn, NacCMyn, NacCMzn] [kg-m^2]
