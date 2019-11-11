@@ -1,5 +1,5 @@
 ! Controller parameter input file for the IEA-15-240-RWT wind turbine
-!    - File written using NREL Reference OpenSource Controller tuning logic on 11/07/19
+!    - File written using NREL Reference OpenSource Controller tuning logic on 11/11/19
 
 !------- DEBUG ------------------------------------------------------------
 1                   ! LoggingLevel		- {0: write no debug files, 1: write standard output .dbg-file, 2: write standard output .dbg-file and complete avrSWAP-array .dbg2-file}
@@ -8,12 +8,13 @@
 2                   ! F_LPFType			- {1: first-order low-pass filter, 2: second-order low-pass filter}, [rad/s] (currently filters generator speed and pitch control signals
 0                   ! F_NotchType		- Notch on the measured generator speed {0: disable, 1: enable}
 0                   ! IPC_ControlMode	- Turn Individual Pitch Control (IPC) for fatigue load reductions (pitch contribution) {0: off, 1: 1P reductions, 2: 1P+2P reductions}
-1                   ! VS_ControlMode	- Generator torque control mode in above rated conditions {0: constant torque, 1: constant power, 2: TSR tracking PI control}
+2                   ! VS_ControlMode	- Generator torque control mode in above rated conditions {0: constant torque, 1: constant power, 2: TSR tracking PI control}
 1                   ! PC_ControlMode    - Blade pitch control mode {0: No pitch, fix to fine pitch, 1: active PI blade pitch control}
 0                   ! Y_ControlMode		- Yaw control mode {0: no yaw control, 1: yaw rate control, 2: yaw-by-IPC}
 1                   ! SS_Mode           - Setpoint Smoother mode {0: no setpoint smoothing, 1: introduce setpoint smoothing}
 2                   ! WE_Mode           - Wind speed estimator mode {0: One-second low pass filtered hub height wind speed, 1: Immersion and Invariance Estimator, 2: Extended Kalman Filter}
 0                   ! PS_Mode           - Peak shaving mode {0: no peak shaving, 1: implement peak shaving}
+0                   ! SD_Mode           - Shutdown mode {0: no shutdown procedure, 1: pitch to max pitch at shutdown}
 
 !------- FILTERS ----------------------------------------------------------
 0.85                ! F_LPFCornerFreq	- Corner frequency (-3dB point) in the low-pass filters, [rad/s]
@@ -102,3 +103,7 @@
 44                  ! PS_BldPitchMin_N  - Number of values in minimum blade pitch lookup table (should equal number of values in PS_WindSpeeds and PS_BldPitchMin)
 3.00 3.50 4.00 4.50 5.00 5.50 6.00 6.50 7.00 7.50 8.00 8.50 9.00 9.50 10.00 10.50 11.20 11.70 12.20 12.70 13.20 13.70 14.20 14.70 15.20 15.70 16.20 16.70 17.20 17.70 18.20 18.70 19.20 19.70 20.20 20.70 21.20 21.70 22.20 22.70 23.20 23.70 24.20 24.70               ! PS_WindSpeeds       - Wind speeds corresponding to minimum blade pitch angles [m/s]
 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.00636653 0.02375196 0.04640148 0.06455777 0.07631998 0.08713215 0.09760887 0.10780839 0.11780039 0.12760432 0.13724933 0.14675543 0.15614649 0.16545391 0.17455359 0.18358457 0.19260414 0.20142771 0.21021228 0.21896842 0.22754168 0.23618802 0.24460419 0.25308762 0.26143972 0.26969809 0.27814403 0.28611180 0.29431006 0.30249705 0.31032376 0.31837339               ! PS_BldPitchMin          - Minimum blade pitch angles [rad]
+
+!------- SHUTDOWN -------------------------------------------
+0.395340000000      ! SD_MaxPit         - Maximum blade pitch angle to initiate shutdown, [rad]
+0.418880000000      ! SD_CornerFreq     - Cutoff Frequency for first order low-pass filter for blade pitch angle, [rad/s]
