@@ -1,5 +1,5 @@
 ! Controller parameter input file for the IEA-15-240-RWT wind turbine
-!    - File written using ROSCO Controller tuning logic on 11/14/19
+
 
 !------- DEBUG ------------------------------------------------------------
 1                   ! LoggingLevel		- {0: write no debug files, 1: write standard output .dbg-file, 2: write standard output .dbg-file and complete avrSWAP-array .dbg2-file}
@@ -77,9 +77,9 @@
 1.225               ! WE_RhoAir			- Air density, [kg m^-3]
 "Cp_Ct_Cq.IEA15MW.txt"      ! PerfFileName      - File containing rotor performance tables (Cp,Ct,Cq)
 104     48          ! PerfTableSize     - Size of rotor performance tables, first number refers to number of blade pitch angles, second number referse to number of tip-speed ratios
-40                  ! WE_FOPoles_N      - Number of first-order system poles used in EKF
-5.00 5.50 6.00 6.50 7.00 7.50 8.00 8.50 9.00 9.50 10.00 10.50 11.20 11.70 12.20 12.70 13.20 13.70 14.20 14.70 15.20 15.70 16.20 16.70 17.20 17.70 18.20 18.70 19.20 19.70 20.20 20.70 21.20 21.70 22.20 22.70 23.20 23.70 24.20 24.70               ! WE_FOPoles_v      - Wind speeds corresponding to first-order system poles [m/s]
--0.02754091 -0.03029500 -0.03304909 -0.03580318 -0.03855727 -0.04131136 -0.04406545 -0.04681955 -0.04957364 -0.05232773 -0.05508182 -0.05783591 -0.03839496 -0.04208232 -0.04920271 -0.05806176 -0.06804687 -0.07884353 -0.09027971 -0.10224776 -0.11469131 -0.12761248 -0.14067971 -0.15415367 -0.16815889 -0.18221582 -0.19667817 -0.21157533 -0.22645645 -0.24201891 -0.25739043 -0.27341165 -0.28948686 -0.30571797 -0.32294693 -0.33909947 -0.35640507 -0.37404429 -0.39090433 -0.40892667               ! WE_FOPoles        - First order system poles
+44                  ! WE_FOPoles_N      - Number of first-order system poles used in EKF
+3.00 3.50 4.00 4.50 5.00 5.50 6.00 6.50 7.00 7.50 8.00 8.50 9.00 9.50 10.00 10.50 11.20 11.70 12.20 12.70 13.20 13.70 14.20 14.70 15.20 15.70 16.20 16.70 17.20 17.70 18.20 18.70 19.20 19.70 20.20 20.70 21.20 21.70 22.20 22.70 23.20 23.70 24.20 24.70               ! WE_FOPoles_v      - Wind speeds corresponding to first-order system poles [m/s]
+-0.01652455 -0.01927864 -0.02203273 -0.02478682 -0.02754091 -0.03029500 -0.03304909 -0.03580318 -0.03855727 -0.04131136 -0.04406545 -0.04681955 -0.04957364 -0.05232773 -0.05508182 -0.05783591 -0.03839496 -0.04208232 -0.04920271 -0.05806176 -0.06804687 -0.07884353 -0.09027971 -0.10224776 -0.11469131 -0.12761248 -0.14067971 -0.15415367 -0.16815889 -0.18221582 -0.19667817 -0.21157533 -0.22645645 -0.24201891 -0.25739043 -0.27341165 -0.28948686 -0.30571797 -0.32294693 -0.33909947 -0.35640507 -0.37404429 -0.39090433 -0.40892667               ! WE_FOPoles        - First order system poles
 
 !------- YAW CONTROL ------------------------------------------------------
 0.0                 ! Y_ErrThresh		- Yaw error threshold. Turbine begins to yaw when it passes this. [rad^2 s]
@@ -100,9 +100,9 @@
 0.0                 ! FA_IntSat			- Integrator saturation (maximum signal amplitude contribution to pitch from FA damper), [rad]
 
 !------- PEAK SHAVING -------------------------------------------
-40                  ! PS_BldPitchMin_N  - Number of values in minimum blade pitch lookup table (should equal number of values in PS_WindSpeeds and PS_BldPitchMin)
-5.00 5.50 6.00 6.50 7.00 7.50 8.00 8.50 9.00 9.50 10.00 10.50 11.20 11.70 12.20 12.70 13.20 13.70 14.20 14.70 15.20 15.70 16.20 16.70 17.20 17.70 18.20 18.70 19.20 19.70 20.20 20.70 21.20 21.70 22.20 22.70 23.20 23.70 24.20 24.70               ! PS_WindSpeeds       - Wind speeds corresponding to minimum blade pitch angles [m/s]
--0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.00636653 0.02375196 0.04640148 0.06455777 0.07631998 0.08713215 0.09760887 0.10780839 0.11780039 0.12760432 0.13724933 0.14675543 0.15614649 0.16545391 0.17455359 0.18358457 0.19260414 0.20142771 0.21021228 0.21896842 0.22754168 0.23618802 0.24460419 0.25308762 0.26143972 0.26969809 0.27814403 0.28611180 0.29431006 0.30249705 0.31032376 0.31837339               ! PS_BldPitchMin          - Minimum blade pitch angles [rad]
+44                  ! PS_BldPitchMin_N  - Number of values in minimum blade pitch lookup table (should equal number of values in PS_WindSpeeds and PS_BldPitchMin)
+3.00 3.50 4.00 4.50 5.00 5.50 6.00 6.50 7.00 7.50 8.00 8.50 9.00 9.50 10.00 10.50 11.20 11.70 12.20 12.70 13.20 13.70 14.20 14.70 15.20 15.70 16.20 16.70 17.20 17.70 18.20 18.70 19.20 19.70 20.20 20.70 21.20 21.70 22.20 22.70 23.20 23.70 24.20 24.70               ! PS_WindSpeeds       - Wind speeds corresponding to minimum blade pitch angles [m/s]
+-0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.00636653 0.02375196 0.04640148 0.06455777 0.07631998 0.08713215 0.09760887 0.10780839 0.11780039 0.12760432 0.13724933 0.14675543 0.15614649 0.16545391 0.17455359 0.18358457 0.19260414 0.20142771 0.21021228 0.21896842 0.22754168 0.23618802 0.24460419 0.25308762 0.26143972 0.26969809 0.27814403 0.28611180 0.29431006 0.30249705 0.31032376 0.31837339               ! PS_BldPitchMin          - Minimum blade pitch angles [rad]
 
 !------- SHUTDOWN -------------------------------------------
 0.395340000000      ! SD_MaxPit         - Maximum blade pitch angle to initiate shutdown, [rad]
