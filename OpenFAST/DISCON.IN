@@ -1,5 +1,5 @@
 ! Controller parameter input file for the IEA-15-240-RWT wind turbine
-!    - File written using ROSCO Controller tuning logic on 11/14/19
+!    - File written using ROSCO Controller tuning logic on 11/18/19
 
 !------- DEBUG ------------------------------------------------------------
 1                   ! LoggingLevel		- {0: write no debug files, 1: write standard output .dbg-file, 2: write standard output .dbg-file and complete avrSWAP-array .dbg2-file}
@@ -13,7 +13,7 @@
 0                   ! Y_ControlMode		- Yaw control mode {0: no yaw control, 1: yaw rate control, 2: yaw-by-IPC}
 1                   ! SS_Mode           - Setpoint Smoother mode {0: no setpoint smoothing, 1: introduce setpoint smoothing}
 2                   ! WE_Mode           - Wind speed estimator mode {0: One-second low pass filtered hub height wind speed, 1: Immersion and Invariance Estimator, 2: Extended Kalman Filter}
-0                   ! PS_Mode           - Peak shaving mode {0: no peak shaving, 1: implement peak shaving}
+1                   ! PS_Mode           - Pitch saturation mode {0: no pitch saturation, 1: implement pitch saturation}
 0                   ! SD_Mode           - Shutdown mode {0: no shutdown procedure, 1: pitch to max pitch at shutdown}
 
 !------- FILTERS ----------------------------------------------------------
@@ -26,14 +26,14 @@
 !------- BLADE PITCH CONTROL ----------------------------------------------
 28                  ! PC_GS_n			- Amount of gain-scheduling table entries
 0.061023  0.088728  0.110709  0.129568  0.146445  0.161934  0.176370  0.190004  0.203003  0.215506  0.227434  0.239015  0.250364  0.261283  0.271993  0.282525  0.292717  0.302879  0.312675  0.322456  0.332012  0.341376  0.350893  0.359802  0.368910  0.377960  0.386550  0.395338                ! PC_GS_angles	    - Gain-schedule table: pitch angles
--1.406318  -1.211538  -1.052921  -0.921251  -0.810199  -0.715274  -0.633201  -0.561535  -0.498414  -0.442397  -0.392348  -0.347361  -0.306706  -0.269785  -0.236107  -0.205262  -0.176908  -0.150754  -0.126553  -0.104096  -0.083199  -0.063707  -0.045481  -0.028402  -0.012366  0.002721  0.016940  0.030364                ! PC_GS_KP		- Gain-schedule table: pitch controller kp gains
--0.130136  -0.116819  -0.105975  -0.096973  -0.089380  -0.082891  -0.077279  -0.072380  -0.068064  -0.064235  -0.060813  -0.057737  -0.054958  -0.052433  -0.050131  -0.048022  -0.046084  -0.044296  -0.042641  -0.041106  -0.039677  -0.038344  -0.037098  -0.035931  -0.034834  -0.033803  -0.032831  -0.031913                ! PC_GS_KI		- Gain-schedule table: pitch controller ki gains
+-0.924333  -0.778874  -0.660422  -0.562093  -0.479161  -0.408272  -0.346981  -0.293461  -0.246324  -0.204491  -0.167115  -0.133520  -0.103159  -0.075587  -0.050437  -0.027402  -0.006228  0.013304  0.031376  0.048147  0.063753  0.078310  0.091920  0.104674  0.116650  0.127917  0.138535  0.148560                ! PC_GS_KP		- Gain-schedule table: pitch controller kp gains
+-0.057838  -0.051920  -0.047100  -0.043099  -0.039725  -0.036840  -0.034346  -0.032169  -0.030251  -0.028549  -0.027028  -0.025661  -0.024426  -0.023304  -0.022280  -0.021343  -0.020482  -0.019687  -0.018952  -0.018269  -0.017634  -0.017042  -0.016488  -0.015969  -0.015482  -0.015023  -0.014591  -0.014184                ! PC_GS_KI		- Gain-schedule table: pitch controller ki gains
 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0                ! PC_GS_KD			- Gain-schedule table: pitch controller kd gains
 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0                ! PC_GS_TF			- Gain-schedule table: pitch controller tf gains (derivative filter)
 1.570800000000      ! PC_MaxPit			- Maximum physical pitch limit, [rad].
 0.000000000000      ! PC_MinPit			- Minimum physical pitch limit, [rad].
-0.087270000000      ! PC_MaxRat			- Maximum pitch rate (in absolute value) in pitch controller, [rad/s].
--0.08727000000      ! PC_MinRat			- Minimum pitch rate (in absolute value) in pitch controller, [rad/s].
+0.087260000000      ! PC_MaxRat			- Maximum pitch rate (in absolute value) in pitch controller, [rad/s].
+-0.08726000000      ! PC_MinRat			- Minimum pitch rate (in absolute value) in pitch controller, [rad/s].
 0.785000000000      ! PC_RefSpd			- Desired (reference) HSS speed for pitch controller, [rad/s].
 0.000000000000      ! PC_FinePit		- Record 5: Below-rated pitch angle set-point, [rad]
 0.017450000000      ! PC_Switch			- Angle above lowest minimum pitch angle for switch, [rad]
@@ -48,18 +48,18 @@
 0.0                 ! IPC_CornerFreqAct - Corner frequency of the first-order actuators model, to induce a phase lag in the IPC signal {0: Disable}, [rad/s]
 
 !------- VS TORQUE CONTROL ------------------------------------------------
-93.00000000000      ! VS_GenEff			- Generator efficiency mechanical power -> electrical power, [should match the efficiency defined in the generator properties!], [-]
+93.00000000000      ! VS_GenEff			- Generator efficiency mechanical power -> electrical power, [should match the efficiency defined in the generator properties!], [%]
 20546537.90836      ! VS_ArSatTq		- Above rated generator torque PI control saturation, [Nm]
 4500000.000000      ! VS_MaxRat			- Maximum torque rate (in absolute value) in torque controller, [Nm/s].
 22601191.69920      ! VS_MaxTq			- Maximum generator torque in Region 3 (HSS side), [Nm].
 0.000000000000      ! VS_MinTq			- Minimum generator (HSS side), [Nm].
-0.481700000000      ! VS_MinOMSpd		- Optimal mode minimum speed, cut-in speed towards optimal mode gain path, [rad/s]
+0.232380000000      ! VS_MinOMSpd		- Optimal mode minimum speed, cut-in speed towards optimal mode gain path, [rad/s]
 27839605.65993      ! VS_Rgn2K			- Generator torque constant in Region 2 (HSS side), [N-m/(rad/s)^2]
 15000000.00000      ! VS_RtPwr			- Wind turbine rated power [W]
 20546537.90836      ! VS_RtTq			- Rated torque, [Nm].
 0.785000000000      ! VS_RefSpd			- Rated generator speed [rad/s]
 1                   ! VS_n				- Number of generator PI torque controller gains
--39998132.14484      ! VS_KP				- Proportional gain for generator PI torque controller [1/(rad/s) Nm]. (Only used in the transitional 2.5 region if VS_ControlMode =/ 2)
+-52526411.04948      ! VS_KP				- Proportional gain for generator PI torque controller [1/(rad/s) Nm]. (Only used in the transitional 2.5 region if VS_ControlMode =/ 2)
 -2505655.78093      ! VS_KI				- Integral gain for generator PI torque controller [1/rad Nm]. (Only used in the transitional 2.5 region if VS_ControlMode =/ 2)
 9.30                ! VS_TSRopt			- Power-maximizing region 2 tip-speed-ratio [rad].
 
@@ -99,10 +99,10 @@
 0.0                 ! FA_HPF_CornerFreq	- Corner frequency (-3dB point) in the high-pass filter on the fore-aft acceleration signal [rad/s]
 0.0                 ! FA_IntSat			- Integrator saturation (maximum signal amplitude contribution to pitch from FA damper), [rad]
 
-!------- PEAK SHAVING -------------------------------------------
+!------- MINIMUM PITCH SATURATION -------------------------------------------
 44                  ! PS_BldPitchMin_N  - Number of values in minimum blade pitch lookup table (should equal number of values in PS_WindSpeeds and PS_BldPitchMin)
 3.00 3.50 4.00 4.50 5.00 5.50 6.00 6.50 7.00 7.50 8.00 8.50 9.00 9.50 10.00 10.50 11.20 11.70 12.20 12.70 13.20 13.70 14.20 14.70 15.20 15.70 16.20 16.70 17.20 17.70 18.20 18.70 19.20 19.70 20.20 20.70 21.20 21.70 22.20 22.70 23.20 23.70 24.20 24.70               ! PS_WindSpeeds       - Wind speeds corresponding to minimum blade pitch angles [m/s]
--0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.01745329 -0.00636653 0.02375196 0.04640148 0.06455777 0.07631998 0.08713215 0.09760887 0.10780839 0.11780039 0.12760432 0.13724933 0.14675543 0.15614649 0.16545391 0.17455359 0.18358457 0.19260414 0.20142771 0.21021228 0.21896842 0.22754168 0.23618802 0.24460419 0.25308762 0.26143972 0.26969809 0.27814403 0.28611180 0.29431006 0.30249705 0.31032376 0.31837339               ! PS_BldPitchMin          - Minimum blade pitch angles [rad]
+0.05235988 0.05235988 0.05235988 0.04363323 0.03490659 0.02181662 0.00436332 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000               ! PS_BldPitchMin          - Minimum blade pitch angles [rad]
 
 !------- SHUTDOWN -------------------------------------------
 0.395340000000      ! SD_MaxPit         - Maximum blade pitch angle to initiate shutdown, [rad]
