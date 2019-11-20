@@ -1,5 +1,5 @@
 ------- AERODYN v15.03.* INPUT FILE ------------------------------------------------
-AeroElasticSE FAST driver
+IEA 15 MW Offshore Reference Turbine
 ======  General Options  ============================================================================
 False                  Echo        - Echo the input to "<rootname>.AD.ech"?  (flag)
 "default"              DTAero      - Time interval for aerodynamic calculations {or "default"} (s)
@@ -23,10 +23,10 @@ False                  CavitCheck  - Perform cavitation check? (flag) TRUE will 
 True                   TipLoss     - Use the Prandtl tip-loss model? (flag) [used only when WakeMod=1]
 True                   HubLoss     - Use the Prandtl hub-loss model? (flag) [used only when WakeMod=1]
 True                   TanInd      - Include tangential induction in BEMT calculations? (flag) [used only when WakeMod=1]
-False                  AIDrag      - Include the drag term in the axial-induction calculation? (flag) [used only when WakeMod=1]
-False                  TIDrag      - Include the drag term in the tangential-induction calculation? (flag) [used only when WakeMod=1 and TanInd=TRUE]
+True                   AIDrag      - Include the drag term in the axial-induction calculation? (flag) [used only when WakeMod=1]
+True                   TIDrag      - Include the drag term in the tangential-induction calculation? (flag) [used only when WakeMod=1 and TanInd=TRUE]
 "Default"              IndToler    - Convergence tolerance for BEMT nonlinear solve residual equation {or "default"} (-) [used only when WakeMod=1]
-100                    MaxIter     - Maximum number of iteration steps (-) [used only when WakeMod=1]
+500                    MaxIter     - Maximum number of iteration steps (-) [used only when WakeMod=1]
 ======  Dynamic Blade-Element/Momentum Theory Options  ====================================================== [used only when WakeMod=1]
 2                      DBEMT_Mod   - Type of dynamic BEMT (DBEMT) model {1=constant tau1, 2=time-dependent tau1} (-) [used only when WakeMod=2]
 2                      tau1_const  - Time constant for DBEMT (s) [used only when WakeMod=2 and DBEMT_Mod=1]
@@ -76,19 +76,20 @@ True                   UseBlCm     - Include aerodynamic pitching moment in calc
 "IEA-15-240-RWT_AeroDyn15_blade.dat" ADBlFile(2) - Name of file containing distributed aerodynamic properties for Blade #2 (-) [unused if NumBl < 2]
 "IEA-15-240-RWT_AeroDyn15_blade.dat" ADBlFile(3) - Name of file containing distributed aerodynamic properties for Blade #3 (-) [unused if NumBl < 3]
 ======  Tower Influence and Aerodynamics ============================================================= [used only when TwrPotent/=0, TwrShadow=True, or TwrAero=True]
-10                     NumTwrNds   - Number of tower nodes used in the analysis  (-) [used only when TwrPotent/=0, TwrShadow=True, or TwrAero=True]
+11                     NumTwrNds   - Number of tower nodes used in the analysis  (-) [used only when TwrPotent/=0, TwrShadow=True, or TwrAero=True]
 TwrElev        TwrDiam        TwrCd
 (m)              (m)           (-)
- 1.500000000000000e+01  9.999993999999999e+00  1.000000000000000e+00 
- 3.000000000000000e+01  9.893298000000000e+00  1.000000000000000e+00 
- 4.500000000000000e+01  9.501227000000000e+00  1.000000000000000e+00 
- 6.000000000000000e+01  9.073816000000001e+00  1.000000000000000e+00 
- 7.500000000000000e+01  8.733734000000000e+00  1.000000000000000e+00 
- 9.000000000000000e+01  8.481259000000000e+00  1.000000000000000e+00 
- 1.050000000000000e+02  8.254697000000000e+00  1.000000000000000e+00 
- 1.200000000000000e+02  8.087230999999999e+00  1.000000000000000e+00 
- 1.350000000000000e+02  7.512527000000000e+00  1.000000000000000e+00 
- 1.450000000000000e+02  6.717548000000000e+00  1.000000000000000e+00 
+20             10.000           1.
+32.5           9.8457           1.
+45             9.4700           1.
+57.5           9.0410           1.
+70             8.5638           1.
+82.5           8.1838           1.
+95             8.0589           1.
+107.5          7.9213           1.
+120            7.8171           1.
+132.5          7.3356           1.
+146.168        6.5000           1.
 ======  Tower Influence and Aerodynamics ============================================================= [used only when TwrPotent/=0, TwrShadow=True, or TwrAero=True]
 True                   SumPrint    - Generate a summary file listing input options and interpolated properties to "<rootname>.AD.sum"?  (flag)
 9                      NBlOuts     - Number of blade node outputs [0 - 9] (-)

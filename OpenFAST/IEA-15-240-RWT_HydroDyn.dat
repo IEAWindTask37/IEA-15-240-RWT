@@ -1,5 +1,5 @@
 ------- HydroDyn v2.03.* Input File --------------------------------------------
-NREL 5.0 MW offshore baseline floating platform input properties for the OC3 Monopile.
+IEA 15 MW Offshore Reference Turbine, Monopile configuration
 False            Echo           - Echo the input file data (flag)
 ---------------------- ENVIRONMENTAL CONDITIONS --------------------------------
           1027   WtrDens        - Water density (kg/m^3)
@@ -28,8 +28,8 @@ TRUE             WaveNDAmp      - Flag for normally distributed amplitudes      
              0   WaveElevxi     - List of xi-coordinates for points where the incident wave elevations can be output (meters) [NWaveElev points, separated by commas or white space; usused if NWaveElev = 0]
              0   WaveElevyi     - List of yi-coordinates for points where the incident wave elevations can be output (meters) [NWaveElev points, separated by commas or white space; usused if NWaveElev = 0]
 ---------------------- 2ND-ORDER WAVES ----------------------------------------- [unused with WaveMod=0 or 6]
-True             WvDiffQTF      - Full difference-frequency 2nd-order wave kinematics (flag)
-True             WvSumQTF       - Full summation-frequency  2nd-order wave kinematics (flag)
+False            WvDiffQTF      - Full difference-frequency 2nd-order wave kinematics (flag)
+False            WvSumQTF       - Full summation-frequency  2nd-order wave kinematics (flag)
              0   WvLowCOffD     - Low  frequency cutoff used in the difference-frequencies (rad/s) [Only used with a difference-frequency method]
        3.04292   WvHiCOffD      - High frequency cutoff used in the difference-frequencies (rad/s) [Only used with a difference-frequency method]
       0.314159   WvLowCOffS     - Low  frequency cutoff used in the summation-frequencies  (rad/s) [Only used with a summation-frequency  method]
@@ -59,12 +59,12 @@ True             WvSumQTF       - Full summation-frequency  2nd-order wave kinem
              0   DiffQTF        - Full difference-frequency 2nd-order forces computed with full QTF          {0: None; [10, 11, or 12]: WAMIT file to use}          [Only one of MnDrift, NewmanApp, or DiffQTF can be non-zero]
              0   SumQTF         - Full summation -frequency 2nd-order forces computed with full QTF          {0: None; [10, 11, or 12]: WAMIT file to use}
 ---------------------- FLOATING PLATFORM FORCE FLAGS  -------------------------- [unused with WaveMod=6]
-False             PtfmSgF        - Platform horizontal surge translation force (flag) or DEFAULT
-False             PtfmSwF        - Platform horizontal sway translation force (flag) or DEFAULT
-False             PtfmHvF        - Platform vertical heave translation force (flag) or DEFAULT
-False             PtfmRF         - Platform roll tilt rotation force (flag) or DEFAULT
-False             PtfmPF         - Platform pitch tilt rotation force (flag) or DEFAULT
-False             PtfmYF         - Platform yaw rotation force (flag) or DEFAULT
+True             PtfmSgF        - Platform horizontal surge translation force (flag) or DEFAULT
+True             PtfmSwF        - Platform horizontal sway translation force (flag) or DEFAULT
+True             PtfmHvF        - Platform vertical heave translation force (flag) or DEFAULT
+True             PtfmRF         - Platform roll tilt rotation force (flag) or DEFAULT
+True             PtfmPF         - Platform pitch tilt rotation force (flag) or DEFAULT
+True             PtfmYF         - Platform yaw rotation force (flag) or DEFAULT
 ---------------------- PLATFORM ADDITIONAL STIFFNESS AND DAMPING  --------------
              0             0             0             0             0             0   AddF0    - Additional preload (N, N-m)
              0             0             0             0             0             0   AddCLin  - Additional linear stiffness (N/m, N/rad, N-m/m, N-m/rad)
@@ -75,7 +75,7 @@ False             PtfmYF         - Platform yaw rotation force (flag) or DEFAULT
              0             0             0             0             0             0
              0             0             0             0             0             0   AddBLin  - Additional linear damping(N/(m/s), N/(rad/s), N-m/(m/s), N-m/(rad/s))
              0             0             0             0             0             0
-             0             0       1462500             0             0             0
+             0             0       4389794.6           0             0             0
              0             0             0             0             0             0
              0             0             0             0             0             0
              0             0             0             0             0             0
@@ -95,12 +95,12 @@ AxCoefID  AxCd     AxCa     AxCp
 JointID   Jointxi     Jointyi     Jointzi  JointAxID   JointOvrlp   [JointOvrlp= 0: do nothing at joint, 1: eliminate overlaps by calculating super member]
    (-)     (m)         (m)         (m)        (-)       (switch)
     1     0.00000     0.00000   -30.00010      1            0
-    2     0.00000     0.00000    15.00000      1            0
+    2     0.00000     0.00000    20.00000      1            0
 ---------------------- MEMBER CROSS-SECTION PROPERTIES -------------------------
              1   NPropSets      - Number of member property sets (-)
 PropSetID    PropD         PropThck
    (-)        (m)            (m)
-    1        10.00000        0.0479285
+    1        9.500          0.07
 ---------------------- SIMPLE HYDRODYNAMIC COEFFICIENTS (model 1) --------------
      SimplCd    SimplCdMG    SimplCa    SimplCaMG    SimplCp    SimplCpMG   SimplAxCa  SimplAxCaMG  SimplAxCp   SimplAxCpMG
        (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)
