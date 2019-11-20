@@ -6,10 +6,16 @@ This repository is the home for the dissemination of files related to the in-dev
  
 ## Upcoming features:
 
-* Finalized generator and drivetrain design
-* Industry review of generator design
+* Design refinements: nacelle bedplate, yaw bearing and drive, airfoil polar data
+* OpenFAST features: yaw system spring and damping constant
 * Industry review of monopile design
-* Include controller source code?
+
+## Update 11/20/2019:
+
+* Generator and nacelle redesign based on industry feedback
+* Monopile and tower redesign for updated RNA mass, minimum rotor speed increased to 5 RPM to avoid tower 3P excitation
+* Updated contoller with shutdown and minimum rotor speed, source code available at https://github.com/NREL/ROSCO_toolbox
+* Updated tower documentation and new spreadsheet with RNA high level modeling (OpenFAST, Hawc2, and WISDEM) properties (mass, intertia, geometry)
 
 ## Update 10/17/2019:
 
