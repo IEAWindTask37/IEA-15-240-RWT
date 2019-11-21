@@ -105,7 +105,7 @@ class Optimize_MonopileTurbine(Group):
         self.options.declare('RefBlade')
         self.options.declare('folder_output' ,  default='')
         self.options.declare('FASTpref',        default={})
-        self.options.declare('Nsection_Tow',    default = 6)
+        self.options.declare('Nsection_Tow',    default = 15)
         self.options.declare('VerbosityCosts',  default = False)
         self.options.declare('user_update_routine',     default=None)
         
@@ -161,7 +161,7 @@ if __name__ == "__main__":
     refBlade = ReferenceBlade()
     refBlade.verbose  = True
     refBlade.NINPUT       = 8
-    Nsection_Tow          = 12
+    Nsection_Tow          = 15
     refBlade.NPTS         = 30
     refBlade.spar_var     = ['Spar_cap_ss', 'Spar_cap_ps'] # SS, then PS
     refBlade.te_var       = 'TE_reinforcement'
@@ -226,12 +226,9 @@ if __name__ == "__main__":
     prob_ref['suctionpile_depth']              = 45.
     prob_ref['wind_reference_height']          = 150.
     prob_ref['hub_height']                     = 150.
-    prob_ref['tower_section_height']           = np.array([15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 10.])
-    prob_ref['tower_outer_diameter']           = np.array([10., 10., 10., 9.999994, 9.893298, 9.501227, 9.073816, 8.733734, 8.481259, 8.254697, 8.087231, 7.512527, 6.717548])
-    prob_ref['tower_wall_thickness']           = np.array([0.04922689, 0.04922689, 0.04922689, 0.04581482, 0.04301337, 0.04129422, 0.03939618, 0.03675472, 0.03345327, 0.02984231, 0.02622864, 0.03062863])
-    # From SNOPT with better loading information:
-    #prob_ref['tower_outer_diameter']           = np.array([10., 10., 9.07841266, 8.94626364, 8.2388643, 8.00406996, 7.4747645, 7.16117877, 6.7801444, 6.40652604, 6.14951031, 5.73067083, 5.57747088])
-    #prob_ref['tower_wall_thickness']           = np.array([0.06470247, 0.05743258, 0.05558765, 0.05632417, 0.05654073, 0.05566434, 0.0556487, 0.05363243, 0.05230072, 0.05033409, 0.04682933, 0.04711726])
+    prob_ref['tower_section_height']           = np.array([10., 10., 10., 10., 10., 12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5, 13.6679])
+    prob_ref['tower_outer_diameter']           = np.array([10., 10., 10., 10., 10., 10., 9.8457, 9.47, 9.041, 8.5638, 8.1838, 8.0589, 7.9213, 7.8171, 7.3356, 6.5])
+    prob_ref['tower_wall_thickness']           = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.0431, 0.041, 0.0397, 0.0384, 0.037, 0.0348, 0.0313, 0.0279, 0.0248, 0.0299])
 
     prob_ref.model.nonlinear_solver = NonlinearRunOnce()
     prob_ref.model.linear_solver    = DirectSolver()
@@ -253,9 +250,9 @@ if __name__ == "__main__":
     print('rna_cg', prob_ref['rna_cg'])
     print('Uref', prob_ref['tow.wind.Uref'])
     print('frequencies', prob_ref['tow.post.structural_frequencies'])
-    print('stress', prob_ref['tow.post.stress'])
-    print('local buckling', prob_ref['tow.post.shell_buckling'])
-    print('shell buckling', prob_ref['tow.post.global_buckling'])
+    #print('stress', prob_ref['tow.post.stress'])
+    #print('local buckling', prob_ref['tow.post.shell_buckling'])
+    #print('shell buckling', prob_ref['tow.post.global_buckling'])
 
     #prob_ref.model.list_inputs(units=True)#values = False, hierarchical=False)
     #prob_ref.model.list_outputs(units=True)#values = False, hierarchical=False)    
@@ -345,12 +342,9 @@ if __name__ == "__main__":
         prob['suctionpile_depth']              = 45.
         prob['wind_reference_height']          = 150.
         prob['hub_height']                     = 150.
-        prob['tower_section_height']           = np.array([15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 10.])
-        prob['tower_outer_diameter']           = np.array([10., 10., 10., 9.999994, 9.893298, 9.501227, 9.073816, 8.733734, 8.481259, 8.254697, 8.087231, 7.512527, 6.717548])
-        prob['tower_wall_thickness']           = np.array([0.04922689, 0.04922689, 0.04922689, 0.04581482, 0.04301337, 0.04129422, 0.03939618, 0.03675472, 0.03345327, 0.02984231, 0.02622864, 0.03062863])
-        # From SNOPT with better loading information:
-        #prob['tower_outer_diameter']           = np.array([10., 10., 9.07841266, 8.94626364, 8.2388643, 8.00406996, 7.4747645, 7.16117877, 6.7801444, 6.40652604, 6.14951031, 5.73067083, 5.57747088])
-        #prob['tower_wall_thickness']           = np.array([0.06470247, 0.05743258, 0.05558765, 0.05632417, 0.05654073, 0.05566434, 0.0556487, 0.05363243, 0.05230072, 0.05033409, 0.04682933, 0.04711726])
+        prob['tower_section_height']           = np.array([10., 10., 10., 10., 10., 12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5, 13.6679])
+        prob['tower_outer_diameter']           = np.array([10., 10., 10., 10., 10., 10., 9.8457, 9.47, 9.041, 8.5638, 8.1838, 8.0589, 7.9213, 7.8171, 7.3356, 6.5])
+        prob['tower_wall_thickness']           = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.0431, 0.041, 0.0397, 0.0384, 0.037, 0.0348, 0.0313, 0.0279, 0.0248, 0.0299])
         prob.model.nonlinear_solver = NonlinearRunOnce()
         prob.model.linear_solver = DirectSolver()
         print('Running Optimization:')
@@ -373,7 +367,7 @@ if __name__ == "__main__":
         prob = prob_ref
         
     show_plots            = True
-    flag_write_out        = True
+    flag_write_out        = False
     
     if flag_write_out:
         # --- Save output .yaml ---
@@ -495,23 +489,31 @@ if __name__ == "__main__":
     perfDF = pd.DataFrame(data=np.c_[prob['V'],prob['pitch'], prob['P']*1e-6, prob['Omega'], prob['Omega']*prob['r'][-1]*np.pi/30., prob['T']*1e-6, prob['Q']*1e-6],
                          columns=['Wind [m/s]','Pitch [deg]','Power [MW]','Rotor Speed [rpm]','Tip Speed [m/s]','Thrust [MN]','Torque [MNm]'])
 
-    wb = openpyxl.Workbook()
-    sheetstr = ['Blade Design','Rotor Regulation Trajectory']
-    for idf, df in enumerate([bladeDF, perfDF]):
-        wb.create_sheet(sheetstr[idf])
-        wb.active = wb.sheetnames.index(sheetstr[idf])
-        ws = wb.active
-        for r in dataframe_to_rows(df, index=False, header=True):
-            ws.append(r)
-        for cell in ws["1:1"]:
-            cell.style = 'Headline 2'
-        ws.freeze_panes = ws['A2']
-
-    # Remove empty sheet and write out
-    wb.active = 0
-    ws = wb.active
-    wb.remove(ws)
-    wb.save('IEA-15-240-RWT_rotor.xlsx')
-
-    if show_plots == True:
-        plt.show()
+    
+    htow = np.cumsum(np.r_[0.0, prob['suctionpile_depth'], prob['tower_section_height']]) - (prob['water_depth']+prob['suctionpile_depth'])
+    towdata = np.c_[htow,
+                    np.r_[prob['tower_outer_diameter'][0], prob['tower_outer_diameter']],
+                    np.r_[prob['tower_wall_thickness'][0], prob['tower_wall_thickness'][0], prob['tower_wall_thickness']]]
+    rowadd = []
+    for k in range(towdata.shape[0]):
+        if k==0: continue
+        if k+1 < towdata.shape[0]:
+            rowadd.append([towdata[k,0]+1e-3, towdata[k,1], towdata[k+1,2]])
+    towdata = np.vstack((towdata, rowadd))
+    towdata[:,-1] *= 1e3
+    towdata = np.round( towdata[towdata[:,0].argsort(),], 3)
+    colstr = ['Height [m]','OD [m]', 'Thickness [mm]']
+    towDF = pd.DataFrame(data=towdata, columns=colstr)
+    mycomments = ['']*towdata.shape[0]
+    mycomments[0] = 'Monopile start'
+    mycomments[np.where(htow == -prob['water_depth'])[0][0]] = 'Mud line'
+    mycomments[np.where(htow == 0.0)[0][0]] = 'Water line'
+    mycomments[np.where(htow == 20.0)[0][0]] = 'Tower start'
+    mycomments[-1] = 'Tower top'
+    towDF['Location'] = mycomments
+    towDF = towDF[['Location']+colstr]
+    print(towDF)
+    with open('tow.tbl','w') as f:
+        towDF.to_latex(f, index=False)
+    
+    
