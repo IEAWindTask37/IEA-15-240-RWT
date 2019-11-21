@@ -14,7 +14,7 @@ This repository is the home for the dissemination of files related to the in-dev
 
 * Generator and nacelle redesign based on industry feedback
 * Monopile and tower redesign for updated RNA mass, minimum rotor speed increased to 5 RPM to avoid tower 3P excitation
-* Updated contoller with shutdown and minimum rotor speed, source code available at https://github.com/NREL/ROSCO_toolbox
+* Updated contoller with shutdown and minimum rotor speed, source code available at: https://github.com/NREL/ROSCO
 * Updated tower documentation and new spreadsheet with RNA high level modeling (OpenFAST, Hawc2, and WISDEM) properties (mass, intertia, geometry)
 
 ## Update 10/17/2019:

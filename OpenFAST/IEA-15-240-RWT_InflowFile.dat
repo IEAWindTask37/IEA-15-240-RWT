@@ -7,7 +7,7 @@ False                  Echo        - Echo input data to <RootName>.ech (flag)
 1                      NWindVel    - Number of points to output the wind velocity    (0 to 9)
 0.0                    WindVxiList - List of coordinates in the inertial X direction (m)
 0.0                    WindVyiList - List of coordinates in the inertial Y direction (m)
-90.0                   WindVziList - List of coordinates in the inertial Z direction (m)
+150.0                   WindVziList - List of coordinates in the inertial Z direction (m)
 ================== Parameters for Steady Wind Conditions [used only for WindType = 1] =========================
 10.0                   HWindSpeed  - Horizontal windspeed                            (m/s)
 150.0                  RefHt       - Reference height for horizontal wind speed      (m)
@@ -48,8 +48,6 @@ False                  TowerFile   - Have tower file (.twr) (flag)
 ====================== OUTPUT ==================================================
 False                  SumPrint    - Print summary data to <RootName>.IfW.sum (flag)
 OutList      - The next line(s) contains a list of output parameters.  See OutListParameters.xlsx for a listing of available output channels, (-)
-"uWind"
-"vWind"
-"wWind"
+Wind1VelX
 END of input file (the word "END" must appear in the first 3 columns of this last OutList line)
 ---------------------------------------------------------------------------------------
