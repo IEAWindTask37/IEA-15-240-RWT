@@ -1,23 +1,31 @@
-import yaml
+import os
+try:
+    import ruamel.yaml as yaml
+except:
+    try:
+        import ruamel_yaml as yaml
+    except:
+        raise ImportError('No YAML package found')
 import pandas as pd
 import numpy as np
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 
-# Ontology file as input
-fontology = 'IEA-15-240-RWT.yaml'
-
-# Output filename
-fxlsx = 'IEA-15-240-RWT_tabular.xlsx'
-
 class RWT_Tabular(object):
-    def __init__(self, finput, foutput):
+    def __init__(self, finput, towDF=None, rotDF=None):
         
         # Read ontology file into dictionary-like data structure
-        self.yaml = yaml.load( open(finput, 'r') )
-
+        f = open(finput, 'r')
+        self.yaml = yaml.safe_load( f )
+        f.close()
+        
         # Store output file name
-        self.fout = foutput
+        froot, _ = os.path.splitext( finput )
+        self.fout = froot + '_tabular.xlsx'
+
+        # If provided, store tower and rotor data
+        self.towDF = towDF
+        self.rotDF = rotDF
 
         # Initialize workbook object
         self.wb   = Workbook()
@@ -311,12 +319,23 @@ class RWT_Tabular(object):
         for r in dataframe_to_rows(geomDF, index=False, header=True):
             ws.append(r)
 
+        # Header row style formatting
+        #for cell in ws["1:1"]:
+        #    cell.style = 'Headline 2'
     
     def write_blade_inner(self):
         pass
     
     def write_tower_monopile(self):
-        pass
+        if not self.towDF is None:
+            ws = self.wb.create_sheet(title = 'Tower Properties')
+            for r in dataframe_to_rows(self.towDF, index=False, header=True):
+                ws.append(r)
+        
+            # Header row style formatting
+            for cell in ws["1:1"]:
+                cell.style = 'Headline 2'
+            
     
     def write_materials(self):
         # Sheet name
@@ -358,7 +377,15 @@ class RWT_Tabular(object):
             
     
     def write_rotor_performance(self):
-        pass
+        if not self.rotDF is None:
+            ws = self.wb.create_sheet(title = 'Rotor Performance')
+            for r in dataframe_to_rows(self.rotDF, index=False, header=True):
+                ws.append(r)
+        
+            # Header row style formatting
+            for cell in ws["1:1"]:
+                cell.style = 'Headline 2'
+
                 
     def cleanup(self):
         # Remove empty sheet
@@ -371,5 +398,9 @@ class RWT_Tabular(object):
 
         
 if __name__ == '__main__':
+    
+    # Ontology file as input
+    fontology = 'IEA-15-240-RWT.yaml'
+    
     myobj = RWT_Tabular(fontology, fxlsx)
     myobj.write_all()

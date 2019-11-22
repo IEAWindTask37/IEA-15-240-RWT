@@ -586,6 +586,13 @@ materials:
       Xt: 74
       Xc: 87
 
+   -  name: Steel
+      orth: 0
+      rho: 7850.0
+      E: 2.0e+011
+      G: 7.93e+010
+      nu: 0.265
+      
    -  name: glass_uni
       description: Vectorply E-LT-5500, Epikote MGS RIMR 135/Epicure MGS RIMH 1366 epoxy
       source: MSU composites database 3D property tests, Engineering Mechanics of Composite Materials, Daniel, I & Ishai, O., 1994, pg. 34

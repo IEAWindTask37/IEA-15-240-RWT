@@ -21,6 +21,7 @@ from wisdem.assemblies.fixed_bottom.monopile_assembly_turbine2 import MonopileTu
 from wisdem.aeroelasticse.FAST_reader import InputReader_Common, InputReader_OpenFAST, InputReader_FAST7
 #from wisdem.rotorse.rotor_visualization import plot_lofted
 
+from generateTables import RWT_Tabular, fxlsx
 
 
 # Class to print outputs on screen
@@ -480,16 +481,17 @@ if __name__ == "__main__":
     fig_name = 'torque.png'
     fq.savefig(folder_output + os.sep + fig_name)
 
-    # Tabular output
+    # Tabular output: Blade
     temp = np.c_[blade['pf']['s'], blade['pf']['r']]
     for iy,y in enumerate(var_y):
         temp = np.c_[temp, blade['pf'][y]*scaling_factor[iy]]
     bladeDF = pd.DataFrame(data=temp, columns=['Blade Span','Rotor Coordinate [m]'] + label_y)
     
+    # Tabular output: Rotor Performance
     perfDF = pd.DataFrame(data=np.c_[prob['V'],prob['pitch'], prob['P']*1e-6, prob['Omega'], prob['Omega']*prob['r'][-1]*np.pi/30., prob['T']*1e-6, prob['Q']*1e-6],
                          columns=['Wind [m/s]','Pitch [deg]','Power [MW]','Rotor Speed [rpm]','Tip Speed [m/s]','Thrust [MN]','Torque [MNm]'])
 
-    
+    # Tabular output: Tower 
     htow = np.cumsum(np.r_[0.0, prob['suctionpile_depth'], prob['tower_section_height']]) - (prob['water_depth']+prob['suctionpile_depth'])
     towdata = np.c_[htow,
                     np.r_[prob['tower_outer_diameter'][0], prob['tower_outer_diameter']],
@@ -512,8 +514,10 @@ if __name__ == "__main__":
     mycomments[-1] = 'Tower top'
     towDF['Location'] = mycomments
     towDF = towDF[['Location']+colstr]
-    print(towDF)
     with open('tow.tbl','w') as f:
         towDF.to_latex(f, index=False)
     
+    # Write tabular data to xlsx
+    myobj = RWT_Tabular(fname_input, fxlsx, towDF=towDF, rotDF=perfDF)
+    myobj.write_all()
     
