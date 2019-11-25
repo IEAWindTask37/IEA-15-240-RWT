@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
+import matplotlib.pyplot as plt
 
 class RWT_Tabular(object):
     def __init__(self, finput, towDF=None, rotDF=None):
@@ -29,6 +30,9 @@ class RWT_Tabular(object):
 
         # Initialize workbook object
         self.wb   = Workbook()
+
+        # Keep track of which airfoils to print out
+        self.airfoil_list = []
 
         
     def write_all(self):
@@ -235,8 +239,20 @@ class RWT_Tabular(object):
  
         
     def write_airfoils(self):
-        # Airfoil csv files
+        # Airfoil tables with plotting
+        figsize = (6.5, 4)
+        figCLA  = plt.figure(figsize=figsize)
+        figLDA  = plt.figure(figsize=figsize)
+        figCLCD = plt.figure(figsize=figsize)
+        axCLA   = figCLA.add_subplot(111)
+        axLDA   = figLDA.add_subplot(111)
+        axCLCD  = figCLCD.add_subplot(111)
+        labels  = []
+        
+        # Loop over airfoils, one tab per airfoil, append to plots
         for iaf in range(len(self.yaml['airfoils'])):
+            if not self.yaml['airfoils'][iaf]['name'] in self.airfoil_list: continue
+            
             # Sheet name will be airfoil name
             ws = self.wb.create_sheet(title = 'Airfoil '+self.yaml['airfoils'][iaf]['name'])
 
@@ -282,6 +298,35 @@ class RWT_Tabular(object):
                 # Prep for next polar
                 row_start += polmat.shape[0]+1
 
+                # Make plots with this airfoil
+                ReStr = np.format_float_scientific(self.yaml['airfoils'][iaf]['polars'][ipol]['re'], exp_digits=1, trim='-', sign=False)
+                labels.append(self.yaml['airfoils'][iaf]['name']+' Re='+ReStr.replace('+',''))
+                alpha = np.rad2deg(polDF['alpha [rad]'])
+                ind = np.where(np.abs(alpha) <= 20.0)[0]
+                axCLA.plot(alpha[ind], polDF['c_l'][ind], linewidth=1)
+                axLDA.plot(alpha[ind], polDF['c_l'][ind]/polDF['c_d'][ind], linewidth=1)
+                axCLCD.plot(polDF['c_d'][ind], polDF['c_l'][ind], linewidth=1)
+
+        # Polish off plots
+        axCLA.set_xlabel('Angle of Attack [deg]', fontsize=14, fontweight='bold')
+        axCLA.set_ylabel('Lift coefficient, $c_l$', fontsize=14, fontweight='bold')
+        axLDA.set_xlabel('Angle of Attack [deg]', fontsize=14, fontweight='bold')
+        axLDA.set_ylabel('Lift over drag, $c_l/c_d$', fontsize=14, fontweight='bold')
+        axCLCD.set_xlabel('Drag coefficient, $c_d$', fontsize=14, fontweight='bold')
+        axCLCD.set_ylabel('Lift coefficient, $c_l$', fontsize=14, fontweight='bold')
+        for ax in [axCLA, axLDA, axCLCD]:
+            plt.sca(ax)
+            plt.xticks(fontsize=12)
+            plt.yticks(fontsize=12)
+            ax.grid(color=[0.8,0.8,0.8], linestyle='--')
+            ax.legend(labels, loc='upper center', bbox_to_anchor=(1.25, 0.9), shadow=True, ncol=1)
+        figCLA.subplots_adjust(bottom = 0.15, left = 0.15)
+        figLDA.subplots_adjust(bottom = 0.15, left = 0.15)
+        figCLCD.subplots_adjust(bottom = 0.15, left = 0.15)
+        figCLA.savefig('outputs' + os.sep + 'airfoil_data-cl_alpha.pdf', pad_inches=0.1, bbox_inches='tight')
+        figLDA.savefig('outputs' + os.sep + 'airfoil_data-clcd_alpha.pdf', pad_inches=0.1, bbox_inches='tight')
+        figCLCD.savefig('outputs' + os.sep + 'airfoil_data-cl_cd.pdf', pad_inches=0.1, bbox_inches='tight')
+        
                 
     def write_blade_outer(self):
         # Sheet name
@@ -294,6 +339,7 @@ class RWT_Tabular(object):
         for k in range(npts):
             ws.cell(row=k+2, column=1, value=self.yaml['components']['blade']['outer_shape_bem']['airfoil_position']['grid'][k])
             ws.cell(row=k+2, column=2, value=self.yaml['components']['blade']['outer_shape_bem']['airfoil_position']['labels'][k])
+            self.airfoil_list.append( self.yaml['components']['blade']['outer_shape_bem']['airfoil_position']['labels'][k] )
 
         ws.cell(row=npts+3, column=1, value='Profile')
         # Create blade geometry array in pandas
@@ -402,5 +448,5 @@ if __name__ == '__main__':
     # Ontology file as input
     fontology = 'IEA-15-240-RWT.yaml'
     
-    myobj = RWT_Tabular(fontology, fxlsx)
+    myobj = RWT_Tabular(fontology)
     myobj.write_all()
