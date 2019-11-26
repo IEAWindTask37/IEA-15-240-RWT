@@ -21,6 +21,7 @@ from wisdem.assemblies.fixed_bottom.monopile_assembly_turbine2 import MonopileTu
 from wisdem.aeroelasticse.FAST_reader import InputReader_Common, InputReader_OpenFAST, InputReader_FAST7
 #from wisdem.rotorse.rotor_visualization import plot_lofted
 
+from generateTables import RWT_Tabular
 
 
 # Class to print outputs on screen
@@ -94,7 +95,7 @@ class Convergence_Trends_Opt(ExplicitComponent):
                 fig, ax = plt.subplots(1,1,figsize=(5.3, 4))
                 ax.plot(iterations, rec_data[param])
                 ax.set(xlabel='Number of Iterations' , ylabel=param)
-                fig_name = 'Convergence_trend_' + param + '.png'
+                fig_name = 'Convergence_trend_' + param + '.pdf'
                 fig.savefig(folder_output + fig_name)
                 plt.close(fig)
 
@@ -105,7 +106,7 @@ class Optimize_MonopileTurbine(Group):
         self.options.declare('RefBlade')
         self.options.declare('folder_output' ,  default='')
         self.options.declare('FASTpref',        default={})
-        self.options.declare('Nsection_Tow',    default = 6)
+        self.options.declare('Nsection_Tow',    default = 15)
         self.options.declare('VerbosityCosts',  default = False)
         self.options.declare('user_update_routine',     default=None)
         
@@ -161,7 +162,7 @@ if __name__ == "__main__":
     refBlade = ReferenceBlade()
     refBlade.verbose  = True
     refBlade.NINPUT       = 8
-    Nsection_Tow          = 12
+    Nsection_Tow          = 15
     refBlade.NPTS         = 30
     refBlade.spar_var     = ['Spar_cap_ss', 'Spar_cap_ps'] # SS, then PS
     refBlade.te_var       = 'TE_reinforcement'
@@ -226,12 +227,9 @@ if __name__ == "__main__":
     prob_ref['suctionpile_depth']              = 45.
     prob_ref['wind_reference_height']          = 150.
     prob_ref['hub_height']                     = 150.
-    prob_ref['tower_section_height']           = np.array([15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 10.])
-    prob_ref['tower_outer_diameter']           = np.array([10., 10., 10., 9.999994, 9.893298, 9.501227, 9.073816, 8.733734, 8.481259, 8.254697, 8.087231, 7.512527, 6.717548])
-    prob_ref['tower_wall_thickness']           = np.array([0.04922689, 0.04922689, 0.04922689, 0.04581482, 0.04301337, 0.04129422, 0.03939618, 0.03675472, 0.03345327, 0.02984231, 0.02622864, 0.03062863])
-    # From SNOPT with better loading information:
-    #prob_ref['tower_outer_diameter']           = np.array([10., 10., 9.07841266, 8.94626364, 8.2388643, 8.00406996, 7.4747645, 7.16117877, 6.7801444, 6.40652604, 6.14951031, 5.73067083, 5.57747088])
-    #prob_ref['tower_wall_thickness']           = np.array([0.06470247, 0.05743258, 0.05558765, 0.05632417, 0.05654073, 0.05566434, 0.0556487, 0.05363243, 0.05230072, 0.05033409, 0.04682933, 0.04711726])
+    prob_ref['tower_section_height']           = np.array([10., 10., 10., 10., 10., 12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5, 13.6679])
+    prob_ref['tower_outer_diameter']           = np.array([10., 10., 10., 10., 10., 10., 9.8457, 9.47, 9.041, 8.5638, 8.1838, 8.0589, 7.9213, 7.8171, 7.3356, 6.5])
+    prob_ref['tower_wall_thickness']           = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.0431, 0.041, 0.0397, 0.0384, 0.037, 0.0348, 0.0313, 0.0279, 0.0248, 0.0299])
 
     prob_ref.model.nonlinear_solver = NonlinearRunOnce()
     prob_ref.model.linear_solver    = DirectSolver()
@@ -253,9 +251,9 @@ if __name__ == "__main__":
     print('rna_cg', prob_ref['rna_cg'])
     print('Uref', prob_ref['tow.wind.Uref'])
     print('frequencies', prob_ref['tow.post.structural_frequencies'])
-    print('stress', prob_ref['tow.post.stress'])
-    print('local buckling', prob_ref['tow.post.shell_buckling'])
-    print('shell buckling', prob_ref['tow.post.global_buckling'])
+    #print('stress', prob_ref['tow.post.stress'])
+    #print('local buckling', prob_ref['tow.post.shell_buckling'])
+    #print('shell buckling', prob_ref['tow.post.global_buckling'])
 
     #prob_ref.model.list_inputs(units=True)#values = False, hierarchical=False)
     #prob_ref.model.list_outputs(units=True)#values = False, hierarchical=False)    
@@ -345,12 +343,9 @@ if __name__ == "__main__":
         prob['suctionpile_depth']              = 45.
         prob['wind_reference_height']          = 150.
         prob['hub_height']                     = 150.
-        prob['tower_section_height']           = np.array([15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 10.])
-        prob['tower_outer_diameter']           = np.array([10., 10., 10., 9.999994, 9.893298, 9.501227, 9.073816, 8.733734, 8.481259, 8.254697, 8.087231, 7.512527, 6.717548])
-        prob['tower_wall_thickness']           = np.array([0.04922689, 0.04922689, 0.04922689, 0.04581482, 0.04301337, 0.04129422, 0.03939618, 0.03675472, 0.03345327, 0.02984231, 0.02622864, 0.03062863])
-        # From SNOPT with better loading information:
-        #prob['tower_outer_diameter']           = np.array([10., 10., 9.07841266, 8.94626364, 8.2388643, 8.00406996, 7.4747645, 7.16117877, 6.7801444, 6.40652604, 6.14951031, 5.73067083, 5.57747088])
-        #prob['tower_wall_thickness']           = np.array([0.06470247, 0.05743258, 0.05558765, 0.05632417, 0.05654073, 0.05566434, 0.0556487, 0.05363243, 0.05230072, 0.05033409, 0.04682933, 0.04711726])
+        prob['tower_section_height']           = np.array([10., 10., 10., 10., 10., 12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5, 13.6679])
+        prob['tower_outer_diameter']           = np.array([10., 10., 10., 10., 10., 10., 9.8457, 9.47, 9.041, 8.5638, 8.1838, 8.0589, 7.9213, 7.8171, 7.3356, 6.5])
+        prob['tower_wall_thickness']           = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.0431, 0.041, 0.0397, 0.0384, 0.037, 0.0348, 0.0313, 0.0279, 0.0248, 0.0299])
         prob.model.nonlinear_solver = NonlinearRunOnce()
         prob.model.linear_solver = DirectSolver()
         print('Running Optimization:')
@@ -373,145 +368,256 @@ if __name__ == "__main__":
         prob = prob_ref
         
     show_plots            = True
-    flag_write_out        = True
+    flag_write_out        = False
     
     if flag_write_out:
         # --- Save output .yaml ---
         refBlade.write_ontology(fname_output, prob['blade_out'], refBlade.wt_ref)
         shutil.copyfile(fname_input,  folder_output + os.sep + fname_output)
-    
+
+    def format_save(fig, fig_name):
+        plt.xticks(fontsize=12)
+        plt.yticks(fontsize=12)
+        plt.grid(color=[0.8,0.8,0.8], linestyle='--')
+        plt.subplots_adjust(bottom = 0.15, left = 0.15)
+        fig.savefig(folder_output + os.sep + fig_name+'.pdf', pad_inches=0.1, bbox_inches='tight')
+        fig.savefig(folder_output + os.sep + fig_name+'.png', pad_inches=0.1, bbox_inches='tight')
+        
     # Problem initialization
     var_y           = ['chord','theta','rthick','p_le','precurve','presweep']
-    label_y         = ['Chord [m]', 'Twist [deg]', 'Relative Thickness [%]', 'Pitch Axis Location [%]', 'Prebend [m]', 'Sweep [m]']
+    label_y         = ['Chord [m]', 'Twist [deg]', 'Relative Thickness [%]', 'Pitch Axis Chord Location [%]', 'Prebend [m]', 'Sweep [m]']
     scaling_factor  = [1. , 1. , 100. , 100., 1., 1.]
 
+    figsize=(5.3, 4)
+    fig = plt.figure(figsize=figsize)
     for i in range(len(var_y)):
-        f1, ax1 = plt.subplots(1,1,figsize=(5.3, 4))
-        ax1.plot(blade['pf']['r'], blade['pf'][var_y[i]] * scaling_factor[i])
-        plt.xlabel('Rotor Coordinate [m]', fontsize=14, fontweight='bold')
+        fig.clf()
+        ax = fig.add_subplot(111)
+        ax.plot(blade['pf']['r'], blade['pf'][var_y[i]] * scaling_factor[i], linewidth=2)
+        plt.xlabel('Blade Span [m]', fontsize=14, fontweight='bold')
         plt.ylabel(label_y[i], fontsize=14, fontweight='bold')
-        plt.xticks(fontsize=12)
-        plt.yticks(fontsize=12)
-        plt.grid(color=[0.8,0.8,0.8], linestyle='--')
-        plt.subplots_adjust(bottom = 0.15, left = 0.15)
-        fig_name = var_y[i] + '_dimensional.png'
-        f1.savefig(folder_output + os.sep + fig_name)
+        fig_name = var_y[i] + '_dimensional'
+        format_save(fig, fig_name)
 
-        f2, ax2 = plt.subplots(1,1,figsize=(5.3, 4))
-        ax2.plot(blade['pf']['s'], blade['pf'][var_y[i]] * scaling_factor[i])
-        plt.xlabel('Nondimensional Blade Span [-]', fontsize=14, fontweight='bold')
+        fig.clf()
+        ax = fig.add_subplot(111)
+        ax.plot(blade['pf']['s'], blade['pf'][var_y[i]] * scaling_factor[i], linewidth=2)
+        plt.xlabel('Nondimensional Blade Span', fontsize=14, fontweight='bold')
         plt.ylabel(label_y[i], fontsize=14, fontweight='bold')
-        plt.xticks(fontsize=12)
-        plt.yticks(fontsize=12)
-        plt.grid(color=[0.8,0.8,0.8], linestyle='--')
-        plt.subplots_adjust(bottom = 0.15, left = 0.15)
-        fig_name = var_y[i] + '_nondimensional.png'
-        f2.savefig(folder_output + os.sep + fig_name)
+        fig_name = var_y[i] + '_nondimensional'
+        format_save(fig, fig_name)
 
     # Pitch
-    fp, axp  = plt.subplots(1,1,figsize=(5.3, 4))
-    axp.plot(prob['V'], prob['pitch'])
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(prob['V'], prob['pitch'], linewidth=2)
     plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
     plt.ylabel('Pitch Angle [deg]', fontsize=14, fontweight='bold')
-    #axp.legend(fontsize=12)
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
-    plt.grid(color=[0.8,0.8,0.8], linestyle='--')
-    plt.subplots_adjust(bottom = 0.15, left = 0.15)
-    fig_name = 'pitch.png'
-    fp.savefig(folder_output + os.sep + fig_name)
+    fig_name = 'pitch'
+    format_save(fig, fig_name)
 
-    # Power
-    fpw, axpw  = plt.subplots(1,1,figsize=(5.3, 4))
-    axpw.plot(prob['V'], prob['P'] * 1.00e-006)
+    # Power curve
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(prob['V'], prob['P'] * 1.00e-006, linewidth=2)
     plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
     plt.ylabel('Electrical Power [MW]', fontsize=14, fontweight='bold')
-    #axpw.legend(fontsize=12)
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
-    plt.grid(color=[0.8,0.8,0.8], linestyle='--')
-    plt.subplots_adjust(bottom = 0.15, left = 0.15)
-    fig_name = 'power.png'
-    fpw.savefig(folder_output + os.sep + fig_name)
+    plt.yticks(np.arange(16))
+    fig_name = 'power'
+    format_save(fig, fig_name)
+
+    # ELEC Coefficient of Power curve
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(prob['V'], prob['Cp'], linewidth=2)
+    plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
+    plt.ylabel('Power Coefficient', fontsize=14, fontweight='bold')
+    plt.yticks(1e-2*np.arange(0, 51, 5))
+    fig_name = 'coefficient_power'
+    format_save(fig, fig_name)
+
+    # AERO Coefficient of Power curve
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(prob['V'], prob['Cp_aero'], linewidth=2)
+    plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
+    plt.ylabel('Power Coefficient', fontsize=14, fontweight='bold')
+    plt.yticks(1e-2*np.arange(0, 51, 5))
+    fig_name = 'coefficient_power_aero'
+    format_save(fig, fig_name)
 
     # Omega
-    fo, axo  = plt.subplots(1,1,figsize=(5.3, 4))
-    axo.plot(prob['V'], prob['Omega'])
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(prob['V'], prob['Omega'], linewidth=2)
     plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
     plt.ylabel('Rotor Speed [rpm]', fontsize=14, fontweight='bold')
-    #axo.legend(fontsize=12)
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
-    plt.grid(color=[0.8,0.8,0.8], linestyle='--')
-    plt.subplots_adjust(bottom = 0.15, left = 0.15)
-    fig_name = 'omega.png'
-    fo.savefig(folder_output + os.sep + fig_name)
+    fig_name = 'omega'
+    format_save(fig, fig_name)
 
     # Tip speed
-    fts, axts  = plt.subplots(1,1,figsize=(5.3, 4))
-    axts.plot(prob['V'], prob['Omega'] * np.pi / 30. * prob['r'][-1])
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(prob['V'], prob['Omega'] * np.pi / 30. * prob['r'][-1], linewidth=2)
     plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
     plt.ylabel('Blade Tip Speed [m/s]', fontsize=14, fontweight='bold')
-    #axts.legend(fontsize=12)
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
-    plt.grid(color=[0.8,0.8,0.8], linestyle='--')
-    plt.subplots_adjust(bottom = 0.15, left = 0.15)
-    fig_name = 'tip_speed.png'
-    fts.savefig(folder_output + os.sep + fig_name)
+    fig_name = 'tip_speed'
+    format_save(fig, fig_name)
 
     # Thrust
-    ft, axt  = plt.subplots(1,1,figsize=(5.3, 4))
-    axt.plot(prob['V'], prob['T'] * 1.00e-006)
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(prob['V'], prob['T'] * 1.00e-006, linewidth=2)
     plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
     plt.ylabel('Rotor Thrust [MN]', fontsize=14, fontweight='bold')
-    #axt.legend(fontsize=12)
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
-    plt.grid(color=[0.8,0.8,0.8], linestyle='--')
-    plt.subplots_adjust(bottom = 0.17, left = 0.15)
-    fig_name = 'thrust.png'
-    ft.savefig(folder_output + os.sep + fig_name)
+    fig_name = 'thrust'
+    format_save(fig, fig_name)
+
+    # Coefficient Thrust
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(prob['V'], prob['Ct_aero'], linewidth=2)
+    plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
+    plt.ylabel('Thrust Coefficient', fontsize=14, fontweight='bold')
+    plt.yticks(1e-1*np.arange(0, 8.1))
+    fig_name = 'coefficient_thrust'
+    format_save(fig, fig_name)
 
     # Torque
-    fq, axq  = plt.subplots(1,1,figsize=(5.3, 4))
-    axq.plot(prob['V'], prob['Q'] * 1.00e-006)
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(prob['V'], prob['Q'] * 1.00e-006, linewidth=2)
     plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
     plt.ylabel('Rotor Torque [MNm]', fontsize=14, fontweight='bold')
-    #axq.legend(fontsize=12)
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
-    plt.grid(color=[0.8,0.8,0.8], linestyle='--')
-    plt.subplots_adjust(bottom = 0.15, left = 0.15)
-    fig_name = 'torque.png'
-    fq.savefig(folder_output + os.sep + fig_name)
+    fig_name = 'torque'
+    format_save(fig, fig_name)
 
-    # Tabular output
+    # Tabular output: Blade
     temp = np.c_[blade['pf']['s'], blade['pf']['r']]
     for iy,y in enumerate(var_y):
         temp = np.c_[temp, blade['pf'][y]*scaling_factor[iy]]
     bladeDF = pd.DataFrame(data=temp, columns=['Blade Span','Rotor Coordinate [m]'] + label_y)
     
+    # Tabular output: Rotor Performance
     perfDF = pd.DataFrame(data=np.c_[prob['V'],prob['pitch'], prob['P']*1e-6, prob['Omega'], prob['Omega']*prob['r'][-1]*np.pi/30., prob['T']*1e-6, prob['Q']*1e-6],
                          columns=['Wind [m/s]','Pitch [deg]','Power [MW]','Rotor Speed [rpm]','Tip Speed [m/s]','Thrust [MN]','Torque [MNm]'])
 
-    wb = openpyxl.Workbook()
-    sheetstr = ['Blade Design','Rotor Regulation Trajectory']
-    for idf, df in enumerate([bladeDF, perfDF]):
-        wb.create_sheet(sheetstr[idf])
-        wb.active = wb.sheetnames.index(sheetstr[idf])
-        ws = wb.active
-        for r in dataframe_to_rows(df, index=False, header=True):
-            ws.append(r)
-        for cell in ws["1:1"]:
-            cell.style = 'Headline 2'
-        ws.freeze_panes = ws['A2']
+    # Tabular output: Tower 
+    htow = np.cumsum(np.r_[0.0, prob['suctionpile_depth'], prob['tower_section_height']]) - (prob['water_depth']+prob['suctionpile_depth'])
+    towdata = np.c_[htow,
+                    np.r_[prob['tower_outer_diameter'][0], prob['tower_outer_diameter']],
+                    np.r_[prob['tower_wall_thickness'][0], prob['tower_wall_thickness'][0], prob['tower_wall_thickness']]]
+    rowadd = []
+    for k in range(towdata.shape[0]):
+        if k==0: continue
+        if k+1 < towdata.shape[0]:
+            rowadd.append([towdata[k,0]+1e-3, towdata[k,1], towdata[k+1,2]])
+    towdata = np.vstack((towdata, rowadd))
+    towdata[:,-1] *= 1e3
+    towdata = np.round( towdata[towdata[:,0].argsort(),], 3)
+    colstr = ['Height [m]','OD [m]', 'Thickness [mm]']
+    towDF = pd.DataFrame(data=towdata, columns=colstr)
+    mycomments = ['']*towdata.shape[0]
+    mycomments[0] = 'Monopile start'
+    mycomments[np.where(towdata[:,0] == -prob['water_depth'])[0][0]] = 'Mud line'
+    mycomments[np.where(towdata[:,0] == 0.0)[0][0]] = 'Water line'
+    mycomments[np.where(towdata[:,0] == 20.0)[0][0]] = 'Tower start'
+    mycomments[-1] = 'Tower top'
+    towDF['Location'] = mycomments
+    towDF = towDF[['Location']+colstr]
+    A = 0.25*np.pi*(towDF['OD [m]']**2 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**2)
+    I = (1/64.)*np.pi*(towDF['OD [m]']**4 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**4)
+    towDF['Mass Density [kg/m]'] = 7850 * A
+    towDF['Flapwise inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
+    towDF['Edgewise inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
+    towDF['Flapwise stiffness [N.m^2]'] = 2e11 * I
+    towDF['Edgewise stiffness [N.m^2]'] = 2e11 * I
+    towDF['Torsional stiffness [N.m^2]'] = 7.93e10 * 2*I
+    towDF['Axial stiffness [N]'] = 2e11 * A
+    with open('tow.tbl','w') as f:
+        towDF.to_latex(f, index=False)
 
-    # Remove empty sheet and write out
-    wb.active = 0
-    ws = wb.active
-    wb.remove(ws)
-    wb.save('IEA-15-240-RWT_rotor.xlsx')
+    # Tower stiffness plots
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(towDF['Height [m]'], towDF['Mass Density [kg/m]'], linewidth=2)
+    plt.xlabel('Location [m]', fontsize=14, fontweight='bold')
+    plt.ylabel('Mass Density [kg/m]', fontsize=14, fontweight='bold')
+    fig_name = 'tower_massdens'
+    format_save(fig, fig_name)
 
-    if show_plots == True:
-        plt.show()
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(towDF['Height [m]'], towDF['Flapwise inertia [kg.m]'], linewidth=2)
+    plt.xlabel('Location [m]', fontsize=14, fontweight='bold')
+    plt.ylabel('Flap/Edge inertia [kg.m]', fontsize=14, fontweight='bold')
+    fig_name = 'tower_flapedge-inertia'
+    format_save(fig, fig_name)
+
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(towDF['Height [m]'], towDF['Flapwise stiffness [N.m^2]'], linewidth=2)
+    ax.plot(towDF['Height [m]'], towDF['Torsional stiffness [N.m^2]'], linewidth=2)
+    ax.legend(('Flap/edge','Torsional'), loc='best')
+    plt.xlabel('Location [m]', fontsize=14, fontweight='bold')
+    plt.ylabel('Stiffness [N.m^2]', fontsize=14, fontweight='bold')
+    fig_name = 'tower_sitffness'
+    format_save(fig, fig_name)
+
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(towDF['Height [m]'], towDF['Axial stiffness [N]'], linewidth=2)
+    plt.xlabel('Location [m]', fontsize=14, fontweight='bold')
+    plt.ylabel('Axial Stiffness [N]', fontsize=14, fontweight='bold')
+    fig_name = 'tower_axial_sitffness'
+    format_save(fig, fig_name)
+        
+    # Tower plot
+    brown = np.array([150., 75., 0.])/256.
+    #fig, ax = plt.subplots(1,1,figsize=(11,4))
+    fig = plt.figure(figsize=(11,4))
+    ax1 = fig.add_subplot(121)
+    lab1 = ax1.plot(towdata[:,1], towdata[:,0], 'k', linewidth=2)
+    vx = ax1.get_xlim()
+    lab2 = ax1.plot(vx, np.zeros(2), color='b', linestyle='--')
+    lab3 = ax1.plot(vx, -prob['water_depth']*np.ones(2), color=brown, linestyle='--')
+    lab4 = ax1.plot(vx, 20*np.ones(2), color='g', linestyle='--')
+    ax1.text(vx[0]+0.02*np.diff(vx), 2, 'Water line', color='b', fontsize=12)
+    ax1.text(vx[0]+0.02*np.diff(vx), -prob['water_depth']+2, 'Mud line', color=brown, fontsize=12)
+    ax1.text(vx[0]+0.02*np.diff(vx), 20+2, 'Tower transition', color='g', fontsize=12)
+    ax1.set_xlim(vx)
+    plt.xlabel('Outer Diameter [m]', fontsize=14, fontweight='bold')
+    plt.ylabel('Tower Height [m]', fontsize=14, fontweight='bold')
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
+    plt.grid(color=[0.8,0.8,0.8], linestyle='--')
+    #fig_name = 'tower_diameter'
+    #fig.savefig(folder_output + os.sep + fig_name, pad_inches=0.1, bbox_inches='tight')
+
+    #fig.clf()
+    #ax = fig.add_subplot(111)
+    ax2 = fig.add_subplot(122)
+    lab1 = ax2.plot(towdata[:,2], towdata[:,0], 'k', linewidth=2)
+    vx = ax2.get_xlim()
+    lab2 = ax2.plot(vx, np.zeros(2), color='b', linestyle='--')
+    lab3 = ax2.plot(vx, -prob['water_depth']*np.ones(2), color=brown, linestyle='--')
+    lab4 = ax2.plot(vx, 20*np.ones(2), color='g', linestyle='--')
+    ax2.set_xlim(vx)
+    plt.xlabel('Wall Thickness [mm]', fontsize=14, fontweight='bold')
+    #plt.ylabel('Tower Height [m]', fontsize=14, fontweight='bold')
+    plt.xticks(fontsize=12)
+    #plt.yticks(fontsize=12)
+    plt.setp( ax2.get_yticklabels(), visible=False)
+    plt.grid(color=[0.8,0.8,0.8], linestyle='--')
+    plt.subplots_adjust(bottom = 0.15, left = 0.15)
+    #fig_name = 'tower_thickness'
+    fig_name = 'tower_geometry'
+    fig.subplots_adjust(hspace=0.02, wspace=0.02, bottom = 0.15, left = 0.15)
+    fig.savefig(folder_output + os.sep + fig_name+'.pdf', pad_inches=0.1, bbox_inches='tight')
+    fig.savefig(folder_output + os.sep + fig_name+'.png', pad_inches=0.1, bbox_inches='tight')
+    
+        
+    # Write tabular data to xlsx
+    myobj = RWT_Tabular(fname_input, towDF=towDF, rotDF=perfDF)
+    myobj.write_all()
+    
