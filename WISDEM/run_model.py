@@ -380,7 +380,8 @@ if __name__ == "__main__":
         plt.yticks(fontsize=12)
         plt.grid(color=[0.8,0.8,0.8], linestyle='--')
         plt.subplots_adjust(bottom = 0.15, left = 0.15)
-        fig.savefig(folder_output + os.sep + fig_name, pad_inches=0.1, bbox_inches='tight')
+        fig.savefig(folder_output + os.sep + fig_name+'.pdf', pad_inches=0.1, bbox_inches='tight')
+        fig.savefig(folder_output + os.sep + fig_name+'.png', pad_inches=0.1, bbox_inches='tight')
         
     # Problem initialization
     var_y           = ['chord','theta','rthick','p_le','precurve','presweep']
@@ -392,103 +393,103 @@ if __name__ == "__main__":
     for i in range(len(var_y)):
         fig.clf()
         ax = fig.add_subplot(111)
-        ax.plot(blade['pf']['r'], blade['pf'][var_y[i]] * scaling_factor[i])
+        ax.plot(blade['pf']['r'], blade['pf'][var_y[i]] * scaling_factor[i], linewidth=2)
         plt.xlabel('Blade Span [m]', fontsize=14, fontweight='bold')
         plt.ylabel(label_y[i], fontsize=14, fontweight='bold')
-        fig_name = var_y[i] + '_dimensional.pdf'
+        fig_name = var_y[i] + '_dimensional'
         format_save(fig, fig_name)
 
         fig.clf()
         ax = fig.add_subplot(111)
-        ax.plot(blade['pf']['s'], blade['pf'][var_y[i]] * scaling_factor[i])
+        ax.plot(blade['pf']['s'], blade['pf'][var_y[i]] * scaling_factor[i], linewidth=2)
         plt.xlabel('Nondimensional Blade Span', fontsize=14, fontweight='bold')
         plt.ylabel(label_y[i], fontsize=14, fontweight='bold')
-        fig_name = var_y[i] + '_nondimensional.pdf'
+        fig_name = var_y[i] + '_nondimensional'
         format_save(fig, fig_name)
 
     # Pitch
     fig.clf()
     ax = fig.add_subplot(111)
-    ax.plot(prob['V'], prob['pitch'])
+    ax.plot(prob['V'], prob['pitch'], linewidth=2)
     plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
     plt.ylabel('Pitch Angle [deg]', fontsize=14, fontweight='bold')
-    fig_name = 'pitch.pdf'
+    fig_name = 'pitch'
     format_save(fig, fig_name)
 
     # Power curve
     fig.clf()
     ax = fig.add_subplot(111)
-    ax.plot(prob['V'], prob['P'] * 1.00e-006)
+    ax.plot(prob['V'], prob['P'] * 1.00e-006, linewidth=2)
     plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
     plt.ylabel('Electrical Power [MW]', fontsize=14, fontweight='bold')
     plt.yticks(np.arange(16))
-    fig_name = 'power.pdf'
+    fig_name = 'power'
     format_save(fig, fig_name)
 
     # ELEC Coefficient of Power curve
     fig.clf()
     ax = fig.add_subplot(111)
-    ax.plot(prob['V'], prob['Cp'])
+    ax.plot(prob['V'], prob['Cp'], linewidth=2)
     plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
     plt.ylabel('Power Coefficient', fontsize=14, fontweight='bold')
     plt.yticks(1e-2*np.arange(0, 51, 5))
-    fig_name = 'coefficient_power.pdf'
+    fig_name = 'coefficient_power'
     format_save(fig, fig_name)
 
     # AERO Coefficient of Power curve
     fig.clf()
     ax = fig.add_subplot(111)
-    ax.plot(prob['V'], prob['Cp_aero'])
+    ax.plot(prob['V'], prob['Cp_aero'], linewidth=2)
     plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
     plt.ylabel('Power Coefficient', fontsize=14, fontweight='bold')
     plt.yticks(1e-2*np.arange(0, 51, 5))
-    fig_name = 'coefficient_power_aero.pdf'
+    fig_name = 'coefficient_power_aero'
     format_save(fig, fig_name)
 
     # Omega
     fig.clf()
     ax = fig.add_subplot(111)
-    ax.plot(prob['V'], prob['Omega'])
+    ax.plot(prob['V'], prob['Omega'], linewidth=2)
     plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
     plt.ylabel('Rotor Speed [rpm]', fontsize=14, fontweight='bold')
-    fig_name = 'omega.pdf'
+    fig_name = 'omega'
     format_save(fig, fig_name)
 
     # Tip speed
     fig.clf()
     ax = fig.add_subplot(111)
-    ax.plot(prob['V'], prob['Omega'] * np.pi / 30. * prob['r'][-1])
+    ax.plot(prob['V'], prob['Omega'] * np.pi / 30. * prob['r'][-1], linewidth=2)
     plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
     plt.ylabel('Blade Tip Speed [m/s]', fontsize=14, fontweight='bold')
-    fig_name = 'tip_speed.pdf'
+    fig_name = 'tip_speed'
     format_save(fig, fig_name)
 
     # Thrust
     fig.clf()
     ax = fig.add_subplot(111)
-    ax.plot(prob['V'], prob['T'] * 1.00e-006)
+    ax.plot(prob['V'], prob['T'] * 1.00e-006, linewidth=2)
     plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
     plt.ylabel('Rotor Thrust [MN]', fontsize=14, fontweight='bold')
-    fig_name = 'thrust.pdf'
+    fig_name = 'thrust'
     format_save(fig, fig_name)
 
     # Coefficient Thrust
     fig.clf()
     ax = fig.add_subplot(111)
-    ax.plot(prob['V'], prob['Ct_aero'])
+    ax.plot(prob['V'], prob['Ct_aero'], linewidth=2)
     plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
     plt.ylabel('Thrust Coefficient', fontsize=14, fontweight='bold')
     plt.yticks(1e-1*np.arange(0, 8.1))
-    fig_name = 'coefficient_thrust.pdf'
+    fig_name = 'coefficient_thrust'
     format_save(fig, fig_name)
 
     # Torque
     fig.clf()
     ax = fig.add_subplot(111)
-    ax.plot(prob['V'], prob['Q'] * 1.00e-006)
+    ax.plot(prob['V'], prob['Q'] * 1.00e-006, linewidth=2)
     plt.xlabel('Wind [m/s]', fontsize=14, fontweight='bold')
     plt.ylabel('Rotor Torque [MNm]', fontsize=14, fontweight='bold')
-    fig_name = 'torque.pdf'
+    fig_name = 'torque'
     format_save(fig, fig_name)
 
     # Tabular output: Blade
@@ -518,44 +519,89 @@ if __name__ == "__main__":
     towDF = pd.DataFrame(data=towdata, columns=colstr)
     mycomments = ['']*towdata.shape[0]
     mycomments[0] = 'Monopile start'
-    mycomments[np.where(htow == -prob['water_depth'])[0][0]] = 'Mud line'
-    mycomments[np.where(htow == 0.0)[0][0]] = 'Water line'
-    mycomments[np.where(htow == 20.0)[0][0]] = 'Tower start'
+    mycomments[np.where(towdata[:,0] == -prob['water_depth'])[0][0]] = 'Mud line'
+    mycomments[np.where(towdata[:,0] == 0.0)[0][0]] = 'Water line'
+    mycomments[np.where(towdata[:,0] == 20.0)[0][0]] = 'Tower start'
     mycomments[-1] = 'Tower top'
     towDF['Location'] = mycomments
     towDF = towDF[['Location']+colstr]
+    A = 0.25*np.pi*(towDF['OD [m]']**2 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**2)
+    I = (1/64.)*np.pi*(towDF['OD [m]']**4 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**4)
+    towDF['Mass Density [kg/m]'] = 7850 * A
+    towDF['Flapwise inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
+    towDF['Edgewise inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
+    towDF['Flapwise stiffness [N.m^2]'] = 2e11 * I
+    towDF['Edgewise stiffness [N.m^2]'] = 2e11 * I
+    towDF['Torsional stiffness [N.m^2]'] = 7.93e10 * 2*I
+    towDF['Axial stiffness [N]'] = 2e11 * A
     with open('tow.tbl','w') as f:
         towDF.to_latex(f, index=False)
 
+    # Tower stiffness plots
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(towDF['Height [m]'], towDF['Mass Density [kg/m]'], linewidth=2)
+    plt.xlabel('Location [m]', fontsize=14, fontweight='bold')
+    plt.ylabel('Mass Density [kg/m]', fontsize=14, fontweight='bold')
+    fig_name = 'tower_massdens'
+    format_save(fig, fig_name)
+
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(towDF['Height [m]'], towDF['Flapwise inertia [kg.m]'], linewidth=2)
+    plt.xlabel('Location [m]', fontsize=14, fontweight='bold')
+    plt.ylabel('Flap/Edge inertia [kg.m]', fontsize=14, fontweight='bold')
+    fig_name = 'tower_flapedge-inertia'
+    format_save(fig, fig_name)
+
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(towDF['Height [m]'], towDF['Flapwise stiffness [N.m^2]'], linewidth=2)
+    ax.plot(towDF['Height [m]'], towDF['Torsional stiffness [N.m^2]'], linewidth=2)
+    ax.legend(('Flap/edge','Torsional'), loc='best')
+    plt.xlabel('Location [m]', fontsize=14, fontweight='bold')
+    plt.ylabel('Stiffness [N.m^2]', fontsize=14, fontweight='bold')
+    fig_name = 'tower_sitffness'
+    format_save(fig, fig_name)
+
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(towDF['Height [m]'], towDF['Axial stiffness [N]'], linewidth=2)
+    plt.xlabel('Location [m]', fontsize=14, fontweight='bold')
+    plt.ylabel('Axial Stiffness [N]', fontsize=14, fontweight='bold')
+    fig_name = 'tower_axial_sitffness'
+    format_save(fig, fig_name)
+        
     # Tower plot
     brown = np.array([150., 75., 0.])/256.
     #fig, ax = plt.subplots(1,1,figsize=(11,4))
     fig = plt.figure(figsize=(11,4))
     ax1 = fig.add_subplot(121)
-    lab1 = ax1.plot(towdata[:,1], towdata[:,0], 'k')
+    lab1 = ax1.plot(towdata[:,1], towdata[:,0], 'k', linewidth=2)
     vx = ax1.get_xlim()
     lab2 = ax1.plot(vx, np.zeros(2), color='b', linestyle='--')
     lab3 = ax1.plot(vx, -prob['water_depth']*np.ones(2), color=brown, linestyle='--')
+    lab4 = ax1.plot(vx, 20*np.ones(2), color='g', linestyle='--')
     ax1.text(vx[0]+0.02*np.diff(vx), 2, 'Water line', color='b', fontsize=12)
     ax1.text(vx[0]+0.02*np.diff(vx), -prob['water_depth']+2, 'Mud line', color=brown, fontsize=12)
+    ax1.text(vx[0]+0.02*np.diff(vx), 20+2, 'Tower transition', color='g', fontsize=12)
     ax1.set_xlim(vx)
     plt.xlabel('Outer Diameter [m]', fontsize=14, fontweight='bold')
     plt.ylabel('Tower Height [m]', fontsize=14, fontweight='bold')
     plt.xticks(fontsize=12)
     plt.yticks(fontsize=12)
     plt.grid(color=[0.8,0.8,0.8], linestyle='--')
-    #fig_name = 'tower_diameter.pdf'
+    #fig_name = 'tower_diameter'
     #fig.savefig(folder_output + os.sep + fig_name, pad_inches=0.1, bbox_inches='tight')
 
     #fig.clf()
     #ax = fig.add_subplot(111)
     ax2 = fig.add_subplot(122)
-    lab1 = ax2.plot(towdata[:,2], towdata[:,0], 'k')
+    lab1 = ax2.plot(towdata[:,2], towdata[:,0], 'k', linewidth=2)
     vx = ax2.get_xlim()
     lab2 = ax2.plot(vx, np.zeros(2), color='b', linestyle='--')
     lab3 = ax2.plot(vx, -prob['water_depth']*np.ones(2), color=brown, linestyle='--')
-    #ax2.text(vx[0]+0.02*np.diff(vx), 2, 'Water line', color='b', fontsize=12)
-    #ax2.text(vx[0]+0.02*np.diff(vx), -prob['water_depth']+2, 'Mud line', color=brown, fontsize=12)
+    lab4 = ax2.plot(vx, 20*np.ones(2), color='g', linestyle='--')
     ax2.set_xlim(vx)
     plt.xlabel('Wall Thickness [mm]', fontsize=14, fontweight='bold')
     #plt.ylabel('Tower Height [m]', fontsize=14, fontweight='bold')
@@ -564,11 +610,11 @@ if __name__ == "__main__":
     plt.setp( ax2.get_yticklabels(), visible=False)
     plt.grid(color=[0.8,0.8,0.8], linestyle='--')
     plt.subplots_adjust(bottom = 0.15, left = 0.15)
-    #fig_name = 'tower_thickness.pdf'
-    fig_name = 'tower_geometry.pdf'
+    #fig_name = 'tower_thickness'
+    fig_name = 'tower_geometry'
     fig.subplots_adjust(hspace=0.02, wspace=0.02, bottom = 0.15, left = 0.15)
-    fig.savefig(folder_output + os.sep + fig_name, pad_inches=0.1, bbox_inches='tight')
-    
+    fig.savefig(folder_output + os.sep + fig_name+'.pdf', pad_inches=0.1, bbox_inches='tight')
+    fig.savefig(folder_output + os.sep + fig_name+'.png', pad_inches=0.1, bbox_inches='tight')
     
         
     # Write tabular data to xlsx
