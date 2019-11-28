@@ -592,6 +592,8 @@ materials:
       E: 2.0e+011
       G: 7.93e+010
       nu: 0.265
+      Xt: 1.12e+009
+      Xc: 2.16e+009
       
    -  name: glass_uni
       description: Vectorply E-LT-5500, Epikote MGS RIMR 135/Epicure MGS RIMH 1366 epoxy
@@ -642,6 +644,14 @@ materials:
       S: [32.9e+006, 30.0e+006, 22.9e+006]
       fvf: 0.57
 
+   -  name: balsa
+      source: M.Ashby 2011 Materials Selection in Mech Design (4th Ed) and K.E.Easterling 1982 On the mechanics of balsa and other woods
+      rho: 110.0
+      E: [0.05e+009, 0.05e+009, 2.73e+009]
+      G: [0.01667e+009, 0.15e+009, 0.15e+009]
+      nu: [0.5, 0.013, 0.013]
+      orth: 1
+
    -  name: medium_density_foam
       description: Airex C70.130 PVC Foam
       source: https://www.3accorematerials.com/uploads/documents/TDS-AIREX-C70-E_1106.pdf
@@ -653,7 +663,6 @@ materials:
       Xt: 4.0e+006
       Xc: 3.0e+006
       S: 2.4e+006
-
       G: 48946969.696969695
 
 assembly:

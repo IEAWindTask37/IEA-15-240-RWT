@@ -369,7 +369,7 @@ if __name__ == "__main__":
         
     show_plots            = True
     flag_write_out        = False
-    
+
     if flag_write_out:
         # --- Save output .yaml ---
         refBlade.write_ontology(fname_output, prob['blade_out'], refBlade.wt_ref)
@@ -571,7 +571,57 @@ if __name__ == "__main__":
     plt.ylabel('Axial Stiffness [N]', fontsize=14, fontweight='bold')
     fig_name = 'tower_axial_sitffness'
     format_save(fig, fig_name)
-        
+
+    # Blade stiffness plots
+    bladeStiff   = np.c_[prob['z'], prob['EA'], prob['EIxx'], prob['EIyy'], prob['EIxy'], prob['GJ'], prob['rhoA'], prob['rhoJ'], 1e3*prob['x_ec'], 1e3*prob['y_ec']]
+    bladeStiffDF = pd.DataFrame(data=bladeStiff, columns=['Blade curve [m]',
+                                                          'Axial stiffness [N]',
+                                                          'Edgewise stiffness [Nm^2]',
+                                                          'Flapwise stiffness [Nm^2]',
+                                                          'Flap-edge coupled stiffness [Nm^2]',
+                                                          'Torsional stiffness [Nm^2]',
+                                                          'Mass density [kg/m]',
+                                                          'Polar moment of intertia density [kg/m]',
+                                                          'X-distance to elastic center [mm]',
+                                                          'Y-distance to elastic center [mm]'])
+    
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(prob['z'], prob['rhoA'], linewidth=2)
+    plt.xlabel('Blade Curve [m]', fontsize=14, fontweight='bold')
+    plt.ylabel('Mass density [kg/m]', fontsize=14, fontweight='bold')
+    fig_name = 'blade_mass'
+    format_save(fig, fig_name)
+
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(prob['z'], prob['EIxx'], linewidth=2)
+    ax.plot(prob['z'], prob['EIyy'], linewidth=2)
+    ax.plot(prob['z'], prob['GJ'], linewidth=2)
+    ax.legend(('Edge','Flap','Torsional'), loc='best')
+    plt.xlabel('Blade Curve [m]', fontsize=14, fontweight='bold')
+    plt.ylabel('Stiffness [N.m^2]', fontsize=14, fontweight='bold')
+    fig_name = 'blade_sitffness'
+    format_save(fig, fig_name)
+
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(prob['z'], prob['EA'], linewidth=2)
+    plt.xlabel('Blade Curve [m]', fontsize=14, fontweight='bold')
+    plt.ylabel('Axial Stiffness [N]', fontsize=14, fontweight='bold')
+    fig_name = 'blade_axial_sitffness'
+    format_save(fig, fig_name)
+    
+    fig.clf()
+    ax = fig.add_subplot(111)
+    ax.plot(prob['z'], 1e3*prob['x_ec'], linewidth=2)
+    ax.plot(prob['z'], 1e3*prob['y_ec'], linewidth=2)
+    ax.legend(('x-distance','y-distance'), loc='best')
+    plt.xlabel('Blade Curve [m]', fontsize=14, fontweight='bold')
+    plt.ylabel('Distance to elastic center [mm]', fontsize=14, fontweight='bold')
+    fig_name = 'blade_ec'
+    format_save(fig, fig_name)
+    
     # Tower plot
     brown = np.array([150., 75., 0.])/256.
     #fig, ax = plt.subplots(1,1,figsize=(11,4))
@@ -618,6 +668,6 @@ if __name__ == "__main__":
     
         
     # Write tabular data to xlsx
-    myobj = RWT_Tabular(fname_input, towDF=towDF, rotDF=perfDF)
+    myobj = RWT_Tabular(fname_input, towDF=towDF, rotDF=perfDF, bladeDF=bladeStiffDF)
     myobj.write_all()
     
