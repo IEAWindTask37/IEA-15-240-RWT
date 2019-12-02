@@ -11,7 +11,12 @@ import numpy as np
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+from matplotlib.patches import Polygon, Rectangle
 from scipy.interpolate import interp1d
+
+def find_nearest(array, value):
+    return (np.abs(array - value)).argmin() 
 
 class RWT_Tabular(object):
     def __init__(self, finput, towDF=None, rotDF=None, bladeDF=None):
@@ -35,6 +40,7 @@ class RWT_Tabular(object):
 
         # Keep track of which airfoils to print out
         self.airfoil_list = []
+        self.airfoil_span = []
 
         
     def write_all(self):
@@ -357,6 +363,7 @@ class RWT_Tabular(object):
             ws.cell(row=k+2, column=1, value=self.yaml['components']['blade']['outer_shape_bem']['airfoil_position']['grid'][k])
             ws.cell(row=k+2, column=2, value=self.yaml['components']['blade']['outer_shape_bem']['airfoil_position']['labels'][k])
             self.airfoil_list.append( self.yaml['components']['blade']['outer_shape_bem']['airfoil_position']['labels'][k] )
+            self.airfoil_span.append( self.yaml['components']['blade']['outer_shape_bem']['airfoil_position']['grid'][k] )
 
         ws.cell(row=npts+3, column=1, value='Profile')
         # Create blade geometry array in pandas
@@ -392,11 +399,173 @@ class RWT_Tabular(object):
 
         
     def write_blade_inner(self):
-        # Sheet name
-        ws = self.wb.create_sheet(title = 'Blade Support Structure')
-
-        # Grab shear web data
+        # Set number of entries
+        naf  = len(self.airfoil_span)
         nweb = len(self.yaml['components']['blade']['internal_structure_2d_fem']['webs'])
+        nlay = len(self.yaml['components']['blade']['internal_structure_2d_fem']['layers'])
+
+        # Pre-loop to set grid, names, materials, etc
+        mygrid  = np.array(self.airfoil_span)
+        matlist = []
+        weblist = []
+        for k in range(nweb):
+            for ikey in self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k].keys():
+                if ikey in ['name']:
+                    weblist.append( self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k][ikey] )
+                elif ikey == 'material':
+                    matlist.append( self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k][ikey] )
+                else:
+                    mygrid = np.r_[mygrid, self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k][ikey]['grid']]
+
+        for k in range(nlay):
+            for ikey in self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k].keys():
+                if ikey in ['name', 'midpoint_nd_arc','side','web']:
+                    continue
+                elif ikey == 'material':
+                    matlist.append( self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k][ikey] )
+                else:
+                    mygrid = np.r_[mygrid, self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k][ikey]['grid']]
+        mygrid  = np.unique( mygrid )
+
+        # Get unique list of materials and associate with unique color
+        matlist = sorted(list(set(matlist)))
+        colors = cm.Dark2( np.linspace(0, 1, len(matlist)) ).tolist()
+        matcolor = dict(zip(matlist, colors))
+        matcolor['CarbonUD'] = [0.0, 0.0, 0.0, 1.0]
+        leglist = [Rectangle((0, 0), 1, 1, color=matcolor[m]) for m in matlist]
+        
+        # Interpolation function for arbitraty layers and webs
+        def myinterp(xgrid, val):
+            return interp1d(xgrid, val, kind='cubic', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
+        
+        # Loop over layers and store layup data in master tables for plotting and writing to Excel table
+        afstack  = [[] for m in range(naf)]
+        webstack = [[] for m in range(naf)]
+        for k in range(nlay):
+            lname = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name']
+            lmat  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['material']
+            
+            ithick = myinterp(self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['grid'],
+                              self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values'])
+            idir   = myinterp(self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['fiber_orientation']['grid'],
+                              self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['fiber_orientation']['values'])
+
+            if lname.lower().find('web') >= 0:
+                iweb   = weblist.index( self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['web'] )
+
+                for iaf in range(naf):
+                    ind = np.where(mygrid == self.airfoil_span[iaf])[0][0]
+                    webstack[iaf].append([lname, lmat, iweb, 1e3*ithick[ind], idir[ind]] )
+                    
+            else:
+                lay_beg = myinterp(self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['grid'],
+                                   self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['values'])
+                lay_end = myinterp(self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['grid'],
+                                   self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['values'])
+
+                for iaf in range(naf):
+                    ind = np.where(mygrid == self.airfoil_span[iaf])[0][0]
+                    afstack[iaf].append( [lname, lmat, lay_beg[ind], lay_end[ind], 1e3*ithick[ind], idir[ind]] )
+
+        # Area plot for web.  Could probably do a bar chart, but will do fill_between for consistency
+        # Initialize the plotting
+        x     = np.linspace(0.0, float(nweb+1), 1000)
+        fig   = plt.figure(figsize=(8,4))
+        ax    = fig.add_subplot(111)
+        yBase = np.zeros( x.shape )
+        # Mirror the stack
+        for iaf in range(naf):
+            temp    = webstack[iaf][:]
+            temp.reverse()
+            webstack[iaf].extend( temp )
+            nstack = len(webstack[iaf])
+
+            for k in range(nstack):
+                # Skip if no thickness
+                if webstack[iaf][k][3] == 0.0: continue
+
+                # Thickness adder for area plot
+                ywhere = np.array( [False]*x.size )
+                iweb   = webstack[iaf][k][2]
+                ywhere[np.logical_and(x >= np.round(iweb+0.1*iaf+0.6,1), x < np.round(iweb+0.1*iaf+0.7,1))] = True
+                yadd   = np.zeros( x.shape )
+                yadd[ywhere] = webstack[iaf][k][3]
+                yPlot  = yBase + yadd
+                
+                # Fill in the area and remember the color and label
+                ax.fill_between(x, yBase, yPlot, where=ywhere, step='mid', fc=matcolor[ webstack[iaf][k][1] ], ec='face')
+
+                # Increment the baseline for the next layer
+                yBase = yPlot 
+
+        # Clean-up the plotting
+        vy = ax.get_ylim()
+        ax.axis([0.4, nweb+0.6, 0.0, vy[1]+30])
+        leg = ax.legend(leglist, matlist, loc = 'upper left', ncol=3, bbox_to_anchor = (0.0, 1.0))
+        ax.set_xlabel(weblist[0]+'             '+weblist[1]+'             '+weblist[2], size=14, weight='bold')
+        ax.set_ylabel('Thickness [mm]', size=14, weight='bold')
+        vy = ax.get_ylim()
+        xtick = np.arange(0.6,1.31,0.1)+0.05
+        labs  = [self.airfoil_list[m]+'_'+str(int(np.round(1e2*self.airfoil_span[m])))+'%' for m in range(naf)]
+        ax.set_xticks( np.r_[xtick, xtick+1, xtick+2] )
+        ax.set_xticklabels( labs+labs+labs, rotation='vertical' )
+        fig.subplots_adjust(bottom = 0.15, left = 0.15)
+        fig.savefig('outputs' + os.sep + 'web_layup.pdf', pad_inches=0.1, bbox_inches='tight')
+                
+            
+        # Area plots for airfoil skin
+        x = np.linspace(0.0, 1.0, 1000)
+        for iaf in range(naf):
+            # Initialize the plotting
+            fig    = plt.figure(figsize=(12,4))
+            ax     = fig.add_subplot(111)
+            yBase  = np.zeros( x.shape )
+            nstack = len(afstack[iaf])
+
+            for k in range(nstack):
+                # Skip if no thickness
+                if afstack[iaf][k][4] == 0.0: continue
+                
+                # S-coord region for this layer
+                ibeg = find_nearest(x, afstack[iaf][k][2])
+                iend = find_nearest(x, afstack[iaf][k][3])
+
+                # Thickness adder for area plot
+                ywhere = np.array( [False]*x.size )
+                if ibeg < iend:
+                    ywhere[ibeg:iend] = True
+                elif ibeg > iend:
+                    ywhere[ibeg:] = True
+                    ywhere[:iend] = True
+                else:
+                    ywhere[ibeg] = True
+                    
+                yadd  = np.zeros( x.shape )
+                yadd[ywhere] = afstack[iaf][k][4]
+                yPlot = yBase + yadd
+
+                # Fill in the area and remember the color and label
+                ax.fill_between(x, yBase, yPlot, where=ywhere, step='mid', fc=matcolor[ afstack[iaf][k][1] ], ec='face')
+
+                # Increment the baseline for the next layer
+                yBase = yPlot 
+                
+            # Clean-up the plotting
+            vy = ax.get_ylim()
+            ax.axis([0.0, 1.0, 0.0, vy[1]+30])
+            leg = ax.legend(leglist, matlist, loc = 'upper left', ncol=3, bbox_to_anchor = (0.0, 1.0))
+            ax.set_xlabel('Airfoil s-coordinate [-]', size=14, weight='bold')
+            ax.set_ylabel('Thickness [mm]', size=14, weight='bold')
+            vy = ax.get_ylim()
+            ax.text(0.6, 0.95*np.diff(vy), self.airfoil_list[iaf]+' airfoil, '+str(int(np.round(1e2*self.airfoil_span[iaf])))+'% span',
+                    size=12, weight='bold')
+            ax.set_xticks([0.0, 0.25, 0.5, 0.75, 1.0])
+            ax.set_xticklabels(['TE','Suction Side', 'LE','Pressure Side','TE'])
+            fig.subplots_adjust(bottom = 0.15, left = 0.15)
+            fig.savefig('outputs' + os.sep + 'layers_'+self.airfoil_list[iaf]+'_'+str(int(np.round(1e2*self.airfoil_span[iaf])))+'.pdf',
+                        pad_inches=0.1, bbox_inches='tight')
+            
+        # Grab shear web data for excel sheet
         for k in range(nweb):
             if self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['name'] == 'fore_web':
                 web1_grid = self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['start_nd_arc']['grid']
@@ -413,8 +582,7 @@ class RWT_Tabular(object):
             else:
                 print('Unknown web, ',self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['name'])
 
-        # Grab spar cap and LE/TE reinforcement data
-        nlay = len(self.yaml['components']['blade']['internal_structure_2d_fem']['layers'])
+        # Grab spar cap and LE/TE reinforcement data for excel sheet
         for k in range(nlay):
             if self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'] == 'Spar_cap_ss':
                 sparcap_ss_grid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['grid']
@@ -445,14 +613,7 @@ class RWT_Tabular(object):
             else:
                 continue
 
-        # Put everything on a master grid for tabular simplicity
-        mygrid = np.r_[web1_grid, web2_grid, web3_grid, sparcap_ss_grid, sparcap_ps_grid, reinf_le_wgrid, reinf_le_thgrid, reinf_te_wgrid, reinf_te_thgrid]
-        mygrid = np.unique(mygrid)
-
-        # Fill out our desired table
-        def myinterp(xgrid, val):
-            return interp1d(xgrid, val, kind='cubic', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
-        
+        # Put structural overview in a DF
         crossDF = pd.DataFrame()
         crossDF['Span position'] = mygrid
         crossDF['Shear web-1 SS s-coord'] = myinterp(web1_grid, web1_ss)
@@ -472,14 +633,67 @@ class RWT_Tabular(object):
         crossDF['TE reinf width [m]']        = myinterp(reinf_te_wgrid, reinf_te_wid)
         crossDF['TE reinf thick [m]']        = myinterp(reinf_te_thgrid, reinf_te_th )
 
-        # Write to sheet
+        # Cross section over-view sheet
+        ws = self.wb.create_sheet(title = 'Blade Support Structure')
         for r in dataframe_to_rows(crossDF, index=False, header=True):
             ws.append(r)
-        
-        # Header row style formatting
         for cell in ws["1:1"]:
             cell.style = 'Headline 2'
 
+        # Lay-up sheet for airfoil skin 
+        ws = self.wb.create_sheet(title = 'Blade Shell Layup')
+        irow = 1
+        for iaf in range(naf):
+            icell = ws.cell(row=irow, column=1, value='Airfoil')
+            icell.style = 'Headline 1'
+            icell = ws.cell(row=irow+1, column=1, value='Pct Span')
+            icell.style = 'Headline 1'
+            icell = ws.cell(row=irow, column=2, value=self.airfoil_list[iaf])
+            icell = ws.cell(row=irow+1, column=2, value=str(1e2*self.airfoil_span[iaf]))
+            icell.style = 'Percent'
+
+            myDF = pd.DataFrame( data=afstack[iaf], columns=['Layer Name',
+                                                             'Material',
+                                                             'S-coord start',
+                                                             'S-coord end',
+                                                             'Thickness [mm]',
+                                                             'Fiber direction [?]'])
+            nstack = len(afstack[iaf])
+            for r in dataframe_to_rows(myDF, index=False, header=True):
+                ws.append(r)
+            for cell in ws[str(irow+2)+':'+str(irow+2)]:
+                cell.style = 'Headline 2'
+            irow += nstack+5
+                         
+        # Lay-up sheet for shear webs
+        ws = self.wb.create_sheet(title = 'Shear Web Layup')
+        irow = 1
+        for iaf in range(naf):
+            icell = ws.cell(row=irow, column=1, value='Airfoil')
+            icell.style = 'Headline 1'
+            icell = ws.cell(row=irow+1, column=1, value='Pct Span')
+            icell.style = 'Headline 1'
+            icell = ws.cell(row=irow, column=2, value=self.airfoil_list[iaf])
+            icell = ws.cell(row=irow+1, column=2, value=str(1e2*self.airfoil_span[iaf]))
+            icell.style = 'Percent'
+
+            myDF = pd.DataFrame( data=webstack[iaf], columns=['Layer Name',
+                                                             'Material',
+                                                             'iweb',
+                                                             'Thickness [mm]',
+                                                             'Fiber direction [?]'])
+            myDF.sort_values('iweb', inplace=True)
+            myDF['Shear web'] = [weblist[m] for m in myDF['iweb']]
+            myDF = myDF[['Shear web','Layer Name','Material','Thickness [mm]','Fiber direction [?]']]
+            myDF = myDF.loc[myDF['Thickness [mm]'] > 0.0].copy()
+            
+            nstack = len(myDF.index)
+            for r in dataframe_to_rows(myDF, index=False, header=True):
+                ws.append(r)
+            for cell in ws[str(irow+2)+':'+str(irow+2)]:
+                cell.style = 'Headline 2'
+            irow += nstack+5
+                         
             
     def write_blade_struct(self):
         if not self.bladeDF is None:
@@ -517,15 +731,22 @@ class RWT_Tabular(object):
         Xt      = np.zeros( (nmat,3) )
         Xc      = np.zeros( (nmat,3) )
         fvf     = np.zeros( (nmat,)  )
+        desc    = [''] * nmat
+        srcs    = [''] * nmat
 
         # Loop over all materials and append
         for k in range(len(self.yaml['materials'])):
             matname[k] = self.yaml['materials'][k]['name']
-
-            rho[k] = self.yaml['materials'][k]['rho']
+            rho[k]     = self.yaml['materials'][k]['rho']
 
             if 'fvf' in self.yaml['materials'][k].keys():
                 fvf[k] = self.yaml['materials'][k]['fvf']
+
+            if 'source' in self.yaml['materials'][k].keys():
+                srcs[k] = self.yaml['materials'][k]['source']
+
+            if 'description' in self.yaml['materials'][k].keys():
+                desc[k] = self.yaml['materials'][k]['description']
 
             if 'E' in self.yaml['materials'][k].keys():
                 temp = self.yaml['materials'][k]['E']
@@ -585,6 +806,8 @@ class RWT_Tabular(object):
         matDF['Compressive failure Xc_1 [MPa]'] = 1e-6*Xc[:,0]
         matDF['Compressive failure Xc_2 [MPa]'] = 1e-6*Xc[:,1]
         matDF['Compressive failure Xc_3 [MPa]'] = 1e-6*Xc[:,2]
+        matDF['Description'] = desc
+        matDF['Reference']   = srcs
 
         # Write it out
         for r in dataframe_to_rows(matDF, index=False, header=True):
