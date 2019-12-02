@@ -645,6 +645,7 @@ materials:
       fvf: 0.57
 
    -  name: balsa
+      description: 1-2-3 are radial, tangential, axial, G12 calculated from assumed isotropy
       source: M.Ashby 2011 Materials Selection in Mech Design (4th Ed) and K.E.Easterling 1982 On the mechanics of balsa and other woods
       rho: 110.0
       E: [0.05e+009, 0.05e+009, 2.73e+009]
