@@ -571,15 +571,15 @@ class RWT_Tabular(object):
             
         # Grab shear web data for excel sheet
         for k in range(nweb):
-            if self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['name'] == 'fore_web':
+            if self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['name'] == 'web0':
                 web1_grid = self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['start_nd_arc']['grid']
                 web1_ss   = self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['start_nd_arc']['values']
                 web1_ps   = self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['end_nd_arc']['values']
-            elif self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['name'] == 'rear_web':
+            elif self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['name'] == 'web1':
                 web2_grid = self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['start_nd_arc']['grid']
                 web2_ss   = self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['start_nd_arc']['values']
                 web2_ps   = self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['end_nd_arc']['values']
-            elif self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['name'] == 'third_web':
+            elif self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['name'] == 'web2':
                 web3_grid = self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['start_nd_arc']['grid']
                 web3_ss   = self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['start_nd_arc']['values']
                 web3_ps   = self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['end_nd_arc']['values']
@@ -600,7 +600,7 @@ class RWT_Tabular(object):
                 sparcap_ps_wid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['values']
                 sparcap_ps_beg  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['values']
                 sparcap_ps_end  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['values']
-            elif self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'] == 'LE_reinf':
+            elif self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'] == 'LE_reinforcement':
                 reinf_le_thgrid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['grid']
                 reinf_le_th     = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values']
                 reinf_le_wgrid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['grid']
