@@ -62,11 +62,13 @@ class RWT_Tabular(object):
 
         irow = 2
         ws.cell(row=irow, column=1, value='Power rating [MW]')
-        ws.cell(row=irow, column=2, value=15.0)
+        ws.cell(row=irow, column=2, value=1e-6*self.yaml['assembly']['global']['rating'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Turbine class')
-        ws.cell(row=irow, column=2, value='IEC Class 1B')
+        ws.cell(row=irow, column=2, value='IEC Class '+
+                self.yaml['assembly']['global']['turbine_class']+
+                self.yaml['assembly']['global']['turbulence_class'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Specific rating [W/m^2]')
@@ -74,11 +76,11 @@ class RWT_Tabular(object):
         irow += 1
         
         ws.cell(row=irow, column=1, value='Rotor orientation')
-        ws.cell(row=irow, column=2, value='Upwind')
+        ws.cell(row=irow, column=2, value=str(self.yaml['assembly']['global']['orientation']).title())
         irow += 1
         
         ws.cell(row=irow, column=1, value='Number of blades')
-        ws.cell(row=irow, column=2, value=3)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['number_of_blades'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Control')
@@ -86,19 +88,19 @@ class RWT_Tabular(object):
         irow += 1
         
         ws.cell(row=irow, column=1, value='Cut-in wind speed [m/s]')
-        ws.cell(row=irow, column=2, value=3.0)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['Vin'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Rated wind speed [m/s]')
-        ws.cell(row=irow, column=2, value=10.56)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['Vrated'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Cut-out wind speed [m/s]')
-        ws.cell(row=irow, column=2, value=25.0)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['Vout'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Rotor diameter [m]')
-        ws.cell(row=irow, column=2, value=240.0)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['rotor_diameter'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Airfoil series')
@@ -106,15 +108,15 @@ class RWT_Tabular(object):
         irow += 1
         
         ws.cell(row=irow, column=1, value='Hub height [m]')
-        ws.cell(row=irow, column=2, value=150.0)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['hub_height'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Hub diameter [m]')
-        ws.cell(row=irow, column=2, value=6.0)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['hubD'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Hub Overhang [m]')
-        ws.cell(row=irow, column=2, value='TODO??')
+        ws.cell(row=irow, column=2, value=-self.yaml['assembly']['global']['overhang'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Drive train')
@@ -122,127 +124,126 @@ class RWT_Tabular(object):
         irow += 1
 
         ws.cell(row=irow, column=1, value='Design tip speed ratio')
-        ws.cell(row=irow, column=2, value=9.0)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['tsr'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Minimum rotor speed [rpm]')
-        ws.cell(row=irow, column=2, value=4.6)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['minOmega'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Maximum rotor speed [rpm]')
-        ws.cell(row=irow, column=2, value=7.6)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['maxOmega'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Maximum tip speed [m/s]')
-        ws.cell(row=irow, column=2, value=95.0)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['maxTS'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Shaft tilt angle [deg]')
-        ws.cell(row=irow, column=2, value=6.0)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['tilt_angle'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Rotor pre-cone angle [deg]')
-        ws.cell(row=irow, column=2, value=-4.0)
+        ws.cell(row=irow, column=2, value=-self.yaml['assembly']['global']['cone_angle'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Tower top to nacelle (yaw bearing height) [m]')
-        ws.cell(row=irow, column=2, value=0.385)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['tower_top_to_nacelle'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Tower top to shaft distance [m]')
-        ws.cell(row=irow, column=2, value=2.927)
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Overhang [m]')
-        ws.cell(row=irow, column=2, value=-10.454)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['tower_top_to_shaft'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Generator efficiency [%]')
-        ws.cell(row=irow, column=2, value=96.55)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['gen_eff'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Blade pre-bend [m]')
-        ws.cell(row=irow, column=2, value=4.0)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['tip_prebend'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Blade mass [t]')
-        ws.cell(row=irow, column=2, value=68.0)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['blade'])
         irow += 1
 
         ws.cell(row=irow, column=1, value='Hub mass [t]')
-        ws.cell(row=irow, column=2, value=188.0)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['hub'])
         irow += 1
 
         ws.cell(row=irow, column=1, value='Generator mass [t]')
-        ws.cell(row=irow, column=2, value=371.950)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['generator'])
         irow += 1
 
         ws.cell(row=irow, column=1, value='Nose mass [t]')
-        ws.cell(row=irow, column=2, value=12.947)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['nose'])
         irow += 1
 
         ws.cell(row=irow, column=1, value='Bedplate mass [t]')
-        ws.cell(row=irow, column=2, value=49.999)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['bedplate'])
         irow += 1
 
         ws.cell(row=irow, column=1, value='Shaft mass [t]')
-        ws.cell(row=irow, column=2, value=19.504)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['shaft'])
         irow += 1
 
         ws.cell(row=irow, column=1, value='Shaft bearing mass [t]')
-        ws.cell(row=irow, column=2, value=4.699)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['main_bearing'])
         irow += 1
 
         ws.cell(row=irow, column=1, value='Flange mass [t]')
-        ws.cell(row=irow, column=2, value=1.739)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['flange'])
         irow += 1
 
         ws.cell(row=irow, column=1, value='Yaw system mass [t]')
-        ws.cell(row=irow, column=2, value=100.0)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['yaw_system'])
         irow += 1
 
         ws.cell(row=irow, column=1, value='Other nacelle mass (electronics, thermal system, etc) [t]')
-        ws.cell(row=irow, column=2, value=50.0)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['nacelle_other'])
         irow += 1
 
         ws.cell(row=irow, column=1, value='Nacelle mass [t]')
-        ws.cell(row=irow, column=2, value=615.537)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['nacelle'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='RNA mass [t]')
-        ws.cell(row=irow, column=2, value=1007.537)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['rna'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Nacelle center of mass from tower top [m]')
-        ws.cell(row=irow, column=2, value='[-5.019, 0.0, 3.161]')
+        ws.cell(row=irow, column=2, value=str(self.yaml['assembly']['mass']['rna_center_of_mass']))
         irow += 1
 
         if not self.towDF is None:
-            z    = self.towDF['Height [m]']
-            rho  = self.towDF['Mass Density [kg/m]']
-            indM = z <= 20.0
-            indT = z >= 20.0
-            mtow = np.trapz(z[indT], rho[indT])
-            mmon = np.trapz(z[indM], rho[indM])
+            z    = np.array( self.towDF['Height [m]'] )
+            rho  = np.array( self.towDF['Mass Density [kg/m]'] )
+            indM = np.where(z <= 20.0)[0]
+            indT = np.where(z >= 20.0)[0]
+            mtow = 1e-3*np.trapz(rho[indT], z[indT])
+            mmon = 1e-3*np.trapz(rho[indM], z[indM])
+        else:
+            mtow=self.yaml['assembly']['mass']['tower']
+            mmon=self.yaml['assembly']['mass']['monopile']
             
         ws.cell(row=irow, column=1, value='Tower mass [t]')
         ws.cell(row=irow, column=2, value=mtow)
         irow += 1
         
         ws.cell(row=irow, column=1, value='Tower base diameter [m]')
-        ws.cell(row=irow, column=2, value=10.0)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['tower_baseD'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Transition piece height [m]')
-        ws.cell(row=irow, column=2, value=20.0)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['transition_height'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Monopile embedment depth [m]')
-        ws.cell(row=irow, column=2, value=45)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['monopile_embedment'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Monopile base diameter [m]')
-        ws.cell(row=irow, column=2, value=10.0)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['monopile_baseD'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Monopile mass [t]')
