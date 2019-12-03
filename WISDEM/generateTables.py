@@ -149,7 +149,7 @@ class RWT_Tabular(object):
         ws.cell(row=irow, column=2, value=0.385)
         irow += 1
         
-        ws.cell(row=irow, column=1, value='Tower top to shaft distnace [m]')
+        ws.cell(row=irow, column=1, value='Tower top to shaft distance [m]')
         ws.cell(row=irow, column=2, value=2.927)
         irow += 1
         
@@ -213,12 +213,20 @@ class RWT_Tabular(object):
         ws.cell(row=irow, column=2, value=1007.537)
         irow += 1
         
-        ws.cell(row=irow, column=1, value='Nacellem center of mass from tower top [m]')
+        ws.cell(row=irow, column=1, value='Nacelle center of mass from tower top [m]')
         ws.cell(row=irow, column=2, value='[-5.019, 0.0, 3.161]')
         irow += 1
-        
+
+        if not self.towDF is None:
+            z    = self.towDF['Height [m]']
+            rho  = self.towDF['Mass Density [kg/m]']
+            indM = z <= 20.0
+            indT = z >= 20.0
+            mtow = np.trapz(z[indT], rho[indT])
+            mmon = np.trapz(z[indM], rho[indM])
+            
         ws.cell(row=irow, column=1, value='Tower mass [t]')
-        ws.cell(row=irow, column=2, value='TODO??')
+        ws.cell(row=irow, column=2, value=mtow)
         irow += 1
         
         ws.cell(row=irow, column=1, value='Tower base diameter [m]')
@@ -226,11 +234,11 @@ class RWT_Tabular(object):
         irow += 1
         
         ws.cell(row=irow, column=1, value='Transition piece height [m]')
-        ws.cell(row=irow, column=2, value=10.0)
+        ws.cell(row=irow, column=2, value=20.0)
         irow += 1
         
         ws.cell(row=irow, column=1, value='Monopile embedment depth [m]')
-        ws.cell(row=irow, column=2, value='TODO??')
+        ws.cell(row=irow, column=2, value=45)
         irow += 1
         
         ws.cell(row=irow, column=1, value='Monopile base diameter [m]')
@@ -238,7 +246,7 @@ class RWT_Tabular(object):
         irow += 1
         
         ws.cell(row=irow, column=1, value='Monopile mass [t]')
-        ws.cell(row=irow, column=2, value='TODO??')
+        ws.cell(row=irow, column=2, value=mmon)
         irow += 1
         
         # Header row style formatting
@@ -473,11 +481,7 @@ class RWT_Tabular(object):
         fig   = plt.figure(figsize=(8,4))
         ax    = fig.add_subplot(111)
         yBase = np.zeros( x.shape )
-        # Mirror the stack
         for iaf in range(naf):
-            temp    = webstack[iaf][:]
-            temp.reverse()
-            webstack[iaf].extend( temp )
             nstack = len(webstack[iaf])
 
             for k in range(nstack):

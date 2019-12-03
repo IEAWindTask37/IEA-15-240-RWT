@@ -671,20 +671,36 @@ assembly:
         rating: 15.e6
         turbine_class: I
         turbulence_class: B
+        rotor_diameter: 240.0
         drivetrain: PM_DIRECT_DRIVE
         cone_angle: 4.0
         tilt_angle: 6.0
         number_of_blades: 3
+        overhang: 10.454
         hub_height: 150.0
         hubD: 6.0
+        gen_eff: 0.9655
+        number_bearings: 2
+    mass:
+        generator: 371.95
+        nose: 12.947
+        bedplate: 50.0
+        shaft: 19.504
+        main_bearing: 4.699
+        flange: 1.739
+        yaw_system: 100.0
+        other: 50.0
+        blade: 68.0
+        hub: 188.0
     control:
         Vin: 3.0
         Vout: 25.0
-        minOmega: 4.8
-        maxOmega: 7.56
+        minOmega: 5.0
+        maxOmega: 7.6
         tsr: 9.0
         pitch: 0.
         maxTS: 95.
+        Vrated: 10.56
 
 
 
