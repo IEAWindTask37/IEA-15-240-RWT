@@ -7,6 +7,7 @@ except:
     except:
         raise ImportError('No YAML package found')
 import pandas as pd
+import csv
 import numpy as np
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
@@ -17,6 +18,36 @@ from scipy.interpolate import interp1d
 
 def find_nearest(array, value):
     return (np.abs(array - value)).argmin() 
+
+def vabs_load(fname):
+    with open(fname, 'r') as f:
+        Alist = list( csv.reader(f) )
+
+    A  = np.zeros( (6,6,1) )
+    Ai = np.zeros( (6,6) )
+    r  = np.array( [] )
+    k  = 0
+    for line in Alist:
+        if len(line) == 0 or line[0].strip()=='': continue
+
+        elif line[0].find('section') >= 0:
+            if k > 0:
+                # Finish last section
+                A  = np.concatenate((A, Ai[:,:,np.newaxis]), axis=2)
+
+            # Starting new section
+            r  = np.r_[r, float(line[1])]
+            Ai = np.zeros( (6,6) )
+            k  = 0
+
+        else:
+            Ai[k,:] = np.array(line, dtype=np.float)
+            k += 1
+            
+    # Remove empty starting frame
+    A = A[:,:,1:]
+    return A, r
+
 
 class RWT_Tabular(object):
     def __init__(self, finput, towDF=None, rotDF=None, bladeDF=None):
@@ -113,6 +144,10 @@ class RWT_Tabular(object):
         
         ws.cell(row=irow, column=1, value='Hub diameter [m]')
         ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['hubD'])
+        irow += 1
+        
+        ws.cell(row=irow, column=1, value='Hub distance from center to blades [m]')
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['hub_blade_distance'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Hub Overhang [m]')
@@ -253,8 +288,7 @@ class RWT_Tabular(object):
         # Header row style formatting
         for cell in ws["1:1"]:
             cell.style = 'Headline 2'
- 
- 
+
         
     def write_airfoils(self):
         # Airfoil tables with plotting
@@ -701,16 +735,77 @@ class RWT_Tabular(object):
                          
             
     def write_blade_struct(self):
-        if not self.bladeDF is None:
-            ws = self.wb.create_sheet(title = 'Blade Structural Properties')
-            for r in dataframe_to_rows(self.bladeDF, index=False, header=True):
-                ws.append(r)
         
-            # Header row style formatting
-            for cell in ws["1:1"]:
-                cell.style = 'Headline 2'
+        # Load in VABS data
+        froot  = '..' + os.sep + 'OpenFAST' + os.sep + 'VABS' + os.sep + 'IEA-15-240-RWT_V3_vabs_beam_properties_'
+        fnames = ['mass_matrices.csv','stiff_matrices.csv','general.csv']
+        M, Mr  = vabs_load(froot+fnames[0])
+        K, Kr  = vabs_load(froot+fnames[1])
+        tempDF = pd.read_csv(froot+fnames[2], header=1, index_col=0)
+        mydata = np.c_[M[0,0,:], M[0,1,:], M[0,2,:], M[0,3,:], M[0,4,:], M[0,5,:], 
+                       M[1,1,:], M[1,2,:], M[1,3,:], M[1,4,:], M[1,5,:], 
+                       M[2,2,:], M[2,3,:], M[2,4,:], M[2,5,:], 
+                       M[3,3,:], M[3,4,:], M[3,5,:], 
+                       M[4,4,:], M[4,5,:], 
+                       M[5,5,:], 
+                       K[0,0,:], K[0,1,:], K[0,2,:], K[0,3,:], K[0,4,:], K[0,5,:], 
+                       K[1,1,:], K[1,2,:], K[1,3,:], K[1,4,:], K[1,5,:], 
+                       K[2,2,:], K[2,3,:], K[2,4,:], K[2,5,:], 
+                       K[3,3,:], K[3,4,:], K[3,5,:], 
+                       K[4,4,:], K[4,5,:], 
+                       K[5,5,:]]
 
-                
+        labels = ['M_11','M_12','M_13','M_14','M_15','M_16',
+                  'M_22','M_23','M_24','M_25','M_26',
+                  'M_33','M_34','M_35','M_36',
+                  'M_44','M_45','M_46',
+                  'M_55','M_56',
+                  'M_66',
+                  'K_11','K_12','K_13','K_14','K_15','K_16',
+                  'K_22','K_23','K_24','K_25','K_26',
+                  'K_33','K_34','K_35','K_36',
+                  'K_44','K_45','K_46',
+                  'K_55','K_56',
+                  'K_66']
+
+        bladeStructDF = pd.DataFrame(data=mydata, columns=labels)
+        bladeStructDF = pd.concat([tempDF, bladeStructDF], axis=1)
+        
+        # Write to sheet
+        ws = self.wb.create_sheet(title = 'Blade Structural Properties')
+        ws['A1'] = 'BeamDyn Coordinate System (see https://wind.nrel.gov/nwtc/docs/BeamDyn_Manual.pdf)'
+        for r in dataframe_to_rows(bladeStructDF, index=True, header=True):
+            ws.append(r)
+        
+        # Header row style formatting
+        for cell in ws["2:2"]:
+            cell.style = 'Headline 2'
+
+        # Make plot
+        blade_x  = np.array(self.yaml['components']['blade']['outer_shape_bem']['chord']['grid'])
+        blade_le = (np.array(self.yaml['components']['blade']['outer_shape_bem']['chord']['values']) *
+                    np.array(self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values']))
+        blade_te = (np.array(self.yaml['components']['blade']['outer_shape_bem']['chord']['values']) *
+                    (1.-np.array(self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values'])))
+        xx      = bladeStructDF.index 
+        y_mass  = bladeStructDF['Mass center (chordwise), m']
+        y_neut  = bladeStructDF['Neutral axes (chordwise), m']
+        y_geo   = bladeStructDF['Geometric center (chordwise), m']
+        y_shear = bladeStructDF['Shear center (chordwise), m']
+        fig = plt.figure(figsize=(8,4))
+        ax  = fig.add_subplot(111)
+        ax.plot(blade_x, np.zeros(blade_x.shape), 'k:')
+        ax.plot(xx, y_mass,
+                xx, y_neut,
+                xx, y_geo,
+                xx, y_shear, linewidth=2)
+        ax.plot(blade_x, blade_le, 'k', blade_x, -blade_te, 'k', linewidth=2.5)
+        ax.legend(['Pitch axis','Mass center','Neutral center','Geometric center','Shear center'])
+        ax.set_xlabel('Blade span r/R', size=14, weight='bold')
+        ax.set_ylabel('Chordwise [m]', size=14, weight='bold')
+        fig.savefig('outputs' + os.sep + 'planform.pdf', pad_inches=0.1, bbox_inches='tight')
+
+        
     def write_tower_monopile(self):
         if not self.towDF is None:
             ws = self.wb.create_sheet(title = 'Tower Properties')
