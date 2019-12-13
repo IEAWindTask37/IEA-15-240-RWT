@@ -5,7 +5,7 @@ False         Echo            - Echo input data to "<RootName>.ech" (flag)
 True          QuasiStaticInit - Use quasistatic pre-conditioning with centripetal accelerations in initialization (flag) [dynamic solve only]
  0            rhoinf          - Numerical damping parameter for generalized-alpha integrator
  2            quadrature      - Quadrature method: 1=Gaussian; 2=Trapezoidal (switch)
-DEFAULT       refine          - Refinement factor for trapezoidal quadrature (-). DEFAULT = 1 [used only when quadrature=2]
+ 3            refine          - Refinement factor for trapezoidal quadrature (-). DEFAULT = 1 [used only when quadrature=2]
 DEFAULT       n_fact          - Factorization frequency (-). DEFAULT = 5
 DEFAULT       DTBeam          - Time step size (s).
 DEFAULT       load_retries    - Number of factored load retries before quitting the aimulation
