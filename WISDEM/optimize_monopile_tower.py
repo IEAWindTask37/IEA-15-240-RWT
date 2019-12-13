@@ -124,7 +124,7 @@ prob.model.add_constraint('post.global_buckling', upper=1.0)
 prob.model.add_constraint('post.shell_buckling',  upper=1.0)
 prob.model.add_constraint('weldability',          upper=0.0)
 prob.model.add_constraint('manufacturability',    lower=0.0)
-prob.model.add_constraint('slope',    upper=0.0)
+prob.model.add_constraint('slope',    upper=1.0)
 prob.model.add_constraint('tower.f1',    lower=0.15)
 prob.model.add_constraint('tower.f1',    upper=0.2)
 # ----------------------

@@ -572,7 +572,7 @@ if __name__ == "__main__":
     fig_name = 'tower_axial_sitffness'
     format_save(fig, fig_name)
 
-    # Blade stiffness plots
+    # Blade stiffness plots- superceded by SONATA/VABS 6x6 outputs
     bladeStiff   = np.c_[prob['z'], prob['EA'], prob['EIxx'], prob['EIyy'], prob['EIxy'], prob['GJ'], prob['rhoA'], prob['rhoJ'], 1e3*prob['x_ec'], 1e3*prob['y_ec']]
     bladeStiffDF = pd.DataFrame(data=bladeStiff, columns=['Blade curve [m]',
                                                           'Axial stiffness [N]',
@@ -668,6 +668,6 @@ if __name__ == "__main__":
     
         
     # Write tabular data to xlsx
-    myobj = RWT_Tabular(fname_input, towDF=towDF, rotDF=perfDF, bladeDF=bladeStiffDF)
+    myobj = RWT_Tabular(fname_input, towDF=towDF, rotDF=perfDF)
     myobj.write_all()
     

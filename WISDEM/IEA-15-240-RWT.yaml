@@ -682,7 +682,8 @@ assembly:
         number_of_blades: 3
         overhang: 10.454
         hub_height: 150.0
-        hubD: 6.0
+        hubD: 7.94
+        hub_blade_distance: 3.0
         gen_eff: 0.9655
         number_bearings: 2
         tower_baseD: 10
