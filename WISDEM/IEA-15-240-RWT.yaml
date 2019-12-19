@@ -687,26 +687,26 @@ assembly:
         gen_eff: 0.9655
         number_bearings: 2
         tower_baseD: 10
-        tower_top_to_shaft: 2.927
-        tower_top_to_nacelle: 0.385
+        tower_top_to_shaft: 4.993
+        tower_top_to_nacelle: 0.380
         monopile_baseD: 10
         monopile_embedment: 45
         transition_height: 20
     mass:
         generator: 371.95
-        nose: 12.947
-        bedplate: 50.0
+        turret: 13.362
+        bedplate: 39.434
         shaft: 19.504
         main_bearing: 4.699
-        flange: 1.739
+        flange: 3.627
         yaw_system: 100.0
         other: 50.0
         blade: 68.0
-        hub: 188.0
+        hub: 190.0
         nacelle_other: 100.0
-        nacelle: 615.537
-        rna: 1189.82
-        rna_center_of_mass: [-1.06144039, 0.0, 0.8916053]
+        nacelle: 797.275
+        rna: 100.128
+        rna_center_of_mass: [-6.730, 0.0, 4.338]
         tower: 922.58745611328
         monopile: 2319.41429420043
     control:

@@ -83,6 +83,7 @@ class RWT_Tabular(object):
         self.write_tower_monopile()
         self.write_materials()
         self.write_rotor_performance()
+        self.write_nacelle()
         self.cleanup()
 
     def write_overview(self):
@@ -210,8 +211,8 @@ class RWT_Tabular(object):
         ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['generator'])
         irow += 1
 
-        ws.cell(row=irow, column=1, value='Nose mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['nose'])
+        ws.cell(row=irow, column=1, value='Turret/Nose mass [t]')
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['turret'])
         irow += 1
 
         ws.cell(row=irow, column=1, value='Bedplate mass [t]')
@@ -929,7 +930,41 @@ class RWT_Tabular(object):
             for cell in ws["1:1"]:
                 cell.style = 'Headline 2'
 
-                
+
+    def write_nacelle(self):
+        # Nacelle data
+        fnac  =  '..'+os.sep+'Documentation'+os.sep+'drivetrain'+os.sep+'Nacelle_Mass_Properties.xlsx'
+        nacDF = pd.read_excel(fnac)
+        nacDF.set_index('Name', inplace=True)
+
+        # Put units in column name
+        colnames = []
+        for k in range(len(nacDF.columns)):
+            colnames.append( nacDF.columns[k] + ' ['+nacDF[ nacDF.columns[k] ].loc['Units']+']' )
+        nacDF.rename(columns=dict(zip(nacDF.columns, colnames)), inplace=True)
+        nacDF.drop(index='Units', inplace=True)
+        nacDF = nacDF.astype('float64') 
+
+        # Round off big numbers for appearances
+        for k in nacDF.columns:
+            if k in ['X_TT','Z_TT','Mass']: continue
+            for i in nacDF.index:
+                nacDF[k].loc[i] = np.round( nacDF[k].loc[i] )
+
+        # Write it out to sheet
+        ws = self.wb.create_sheet(title = 'Nacelle Mass Properties')
+        for r in dataframe_to_rows(nacDF, index=True, header=True):
+            ws.append(r)
+        
+        # Header row style formatting
+        for cell in ws["1:1"]:
+            cell.style = 'Headline 2'
+
+        # Dump to latex file
+        with open('nac.tbl','w') as f:
+            nacDF.to_latex(f, index=True)
+        
+        
     def cleanup(self):
         # Remove empty sheet
         self.wb.active = 0
@@ -937,7 +972,7 @@ class RWT_Tabular(object):
         self.wb.remove(ws)
         
         # Save workbook to file
-        self.wb.save(filename=self.fout)
+        self.wb.save(self.fout)
 
         
 if __name__ == '__main__':

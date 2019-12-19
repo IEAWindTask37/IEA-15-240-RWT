@@ -1,33 +1,33 @@
 from __future__ import print_function
+
+import os
+import shutil
+
 import numpy as np
 from scipy.interpolate import PchipInterpolator
-import os, shutil, copy, time, sys
 import matplotlib.pyplot as plt
 import pandas as pd
-import openpyxl
-from openpyxl.utils.dataframe import dataframe_to_rows
-from pprint import pprint
-from openmdao.api import IndepVarComp, ExplicitComponent, Group, Problem, ScipyOptimizeDriver, SqliteRecorder, NonlinearRunOnce, DirectSolver, CaseReader
-try:
-    from openmdao.api import pyOptSparseDriver
-except:
-    pass
+
+import openmdao.api as om
 from wisdem.rotorse.rotor import RotorSE, Init_RotorSE_wRefBlade
 from wisdem.rotorse.rotor_geometry_yaml import ReferenceBlade
 from wisdem.commonse.turbine_constraints import TurbineConstraints
-from wisdem.assemblies.fixed_bottom.monopile_assembly_turbine2 import MonopileTurbine, Init_MonopileTurbine
-#from wisdem.commonse.mpi_tools import MPI
-
+from wisdem.assemblies.fixed_bottom.monopile_assembly_turbine_nodrive import MonopileTurbine, Init_MonopileTurbine
 from wisdem.aeroelasticse.FAST_reader import InputReader_Common, InputReader_OpenFAST, InputReader_FAST7
-#from wisdem.rotorse.rotor_visualization import plot_lofted
 
 from generateTables import RWT_Tabular
 
 
+# Global inputs and outputs
+fname_schema  = 'IEAontology_schema.yaml'
+fname_input   = 'IEA-15-240-RWT.yaml'
+fname_output  = 'IEA-15-240-RWT_out.yaml'
+folder_output = os.getcwd() + os.sep + 'outputs'
+
+
 # Class to print outputs on screen
-class Outputs_2_Screen(ExplicitComponent):
+class Outputs_2_Screen(om.ExplicitComponent):
     def setup(self):
-        
         # self.add_input('chord',                val=np.zeros(NPTS))
         # self.add_input('theta',                val=np.zeros(NPTS))
         self.add_input('bladeLength',          val=0.0, units = 'm')
@@ -63,7 +63,8 @@ class Outputs_2_Screen(ExplicitComponent):
         print('LCoE:        {:8.3f} $/MWh'.format(inputs['lcoe'][0]))
         print('########################################')
 
-class Convergence_Trends_Opt(ExplicitComponent):
+        
+class Convergence_Trends_Opt(om.ExplicitComponent):
     def initialize(self):
         
         self.options.declare('folder_output')
@@ -99,8 +100,9 @@ class Convergence_Trends_Opt(ExplicitComponent):
                 fig.savefig(folder_output + fig_name)
                 plt.close(fig)
 
+                
 # Group to link the openmdao components
-class Optimize_MonopileTurbine(Group):
+class Optimize_MonopileTurbine(om.Group):
 
     def initialize(self):
         self.options.declare('RefBlade')
@@ -118,7 +120,7 @@ class Optimize_MonopileTurbine(Group):
         user_update_routine  = self.options['user_update_routine']
         FASTpref             = self.options['FASTpref']
     
-        self.add_subsystem('lb_wt', MonopileTurbine(RefBlade=blade, Nsection_Tow = Nsection_Tow, VerbosityCosts = VerbosityCosts, user_update_routine=user_update_routine, FASTpref=FASTpref), promotes=['*'])
+        self.add_subsystem('lb_wt', MonopileTurbine(RefBlade=RefBlade, Nsection_Tow = Nsection_Tow, VerbosityCosts = VerbosityCosts, user_update_routine=user_update_routine, FASTpref=FASTpref), promotes=['*'])
         # Post-processing
         self.add_subsystem('outputs_2_screen',  Outputs_2_Screen(), promotes=['*'])
         self.add_subsystem('conv_plots',        Convergence_Trends_Opt(folder_output = folder_output, optimization_log = 'log_opt_' + RefBlade['config']['name']))
@@ -146,18 +148,9 @@ def set_web3_offset(blade):
 
     return blade
 
-if __name__ == "__main__":
-    optFlag       = False
-    
-    fname_schema  = 'IEAontology_schema.yaml'
-    fname_input   = 'IEA-15-240-RWT.yaml'
-    fname_output  = 'IEA-15-240-RWT_out.yaml'
-    folder_output = os.getcwd() + os.sep + 'outputs'
-    
-    if not os.path.isdir(folder_output):
-        os.mkdir(folder_output)
 
-    Analysis_Level        = 0 # 0: Run CCBlade; 1: Update FAST model at each iteration but do not run; 2: Run FAST w/ ElastoDyn; 3: (Not implemented) Run FAST w/ BeamDyn
+def initialize_problem(Analysis_Level, optFlag=False):
+    
     # Initialize blade design
     refBlade = ReferenceBlade()
     refBlade.verbose  = True
@@ -206,83 +199,16 @@ if __name__ == "__main__":
         fst_vt = fast.fst_vt
     else:
         fst_vt = {}
-    
-    
-    
-    
-    # Initialize and execute OpenMDAO problem with input data
-    prob_ref = Problem()
-    prob_ref.model=Optimize_MonopileTurbine(RefBlade=blade, Nsection_Tow = Nsection_Tow, VerbosityCosts = False, folder_output = folder_output, FASTpref = FASTpref)
 
-    prob_ref.setup()
-    prob_ref = Init_MonopileTurbine(prob_ref, blade, Nsection_Tow = Nsection_Tow, Analysis_Level = Analysis_Level, fst_vt = fst_vt)
-    prob_ref['drive.shaft_angle']              = np.radians(6.)
-    prob_ref['overhang']                       = 8.5
-    prob_ref['drive.distance_hub2mb']          = 3.5
-    prob_ref['significant_wave_height']        = 4.52
-    prob_ref['significant_wave_period']        = 9.45
-    prob_ref['monopile']                       = True
-    prob_ref['foundation_height']              = -30.
-    prob_ref['water_depth']                    = 30.
-    prob_ref['suctionpile_depth']              = 45.
-    prob_ref['wind_reference_height']          = 150.
-    prob_ref['hub_height']                     = 150.
-    prob_ref['tower_section_height']           = np.array([10., 10., 10., 10., 10., 12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5, 13.6679])
-    prob_ref['tower_outer_diameter']           = np.array([10., 10., 10., 10., 10., 10., 9.8457, 9.47, 9.041, 8.5638, 8.1838, 8.0589, 7.9213, 7.8171, 7.3356, 6.5])
-    prob_ref['tower_wall_thickness']           = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.0431, 0.041, 0.0397, 0.0384, 0.037, 0.0348, 0.0313, 0.0279, 0.0248, 0.0299])
+    prob = om.Problem()
+    #prob.model=Optimize_MonopileTurbine(RefBlade=blade, Nsection_Tow=Nsection_Tow, folder_output=folder_output, user_update_routine=set_web3_offset, FASTpref=FASTpref)
+    prob.model=Optimize_MonopileTurbine(RefBlade=blade, Nsection_Tow=Nsection_Tow, folder_output=folder_output, FASTpref=FASTpref)
+    prob.model.nonlinear_solver = om.NonlinearRunOnce()
+    prob.model.linear_solver    = om.DirectSolver()
 
-    prob_ref.model.nonlinear_solver = NonlinearRunOnce()
-    prob_ref.model.linear_solver    = DirectSolver()
-    print('Running at Initial Position:')
-    prob_ref.run_driver()
-    #prob_ref.model.list_inputs(units=True)
-    #refBlade.write_ontology(fname_output, prob_ref['blade_out'], refBlade.wt_ref)
-    
-    print(prob_ref['hub_height'])
-    print(prob_ref['rna_mass'])
-    print('mIxx', prob_ref['tow.pre.mIxx'])
-    print('mIyy', prob_ref['tow.pre.mIyy'])
-    print('mIzz', prob_ref['tow.pre.mIzz'])
-    print('mIxy', prob_ref['tow.pre.mIxy'])
-    print('mIxz', prob_ref['tow.pre.mIxz'])
-    print('mIyz', prob_ref['tow.pre.mIyz'])
-    print('rna_F', prob_ref['tow.pre.rna_F'])
-    print('rna_M', prob_ref['tow.pre.rna_M'])
-    print('rna_cg', prob_ref['rna_cg'])
-    print('Uref', prob_ref['tow.wind.Uref'])
-    print('frequencies', prob_ref['tow.post.structural_frequencies'])
-    #print('stress', prob_ref['tow.post.stress'])
-    #print('local buckling', prob_ref['tow.post.shell_buckling'])
-    #print('shell buckling', prob_ref['tow.post.global_buckling'])
-
-    #prob_ref.model.list_inputs(units=True)#values = False, hierarchical=False)
-    #prob_ref.model.list_outputs(units=True)#values = False, hierarchical=False)    
-
-
-    
-    print('AEP =',                      prob_ref['AEP'])
-    print('diameter =',                 prob_ref['diameter'])
-    print('ratedConditions.V =',        prob_ref['rated_V'])
-    print('ratedConditions.Omega =',    prob_ref['rated_Omega'])
-    print('ratedConditions.pitch =',    prob_ref['rated_pitch'])
-    print('ratedConditions.T =',        prob_ref['rated_T'])
-    print('ratedConditions.Q =',        prob_ref['rated_Q'])
-    print('mass_one_blade =',           prob_ref['mass_one_blade'])
-    print('mass_all_blades =',          prob_ref['mass_all_blades'])
-    print('I_all_blades =',             prob_ref['I_all_blades'])
-    print('freq =',                     prob_ref['freq_pbeam'])
-    print('tip_deflection =',           prob_ref['tip_deflection'])
-    print('root_bending_moment =',      prob_ref['root_bending_moment'])
-    print('moments at the hub =',       prob_ref['Mxyz_total'])
-    print('blade cost =',               prob_ref['total_blade_cost'])
-
-    # Run an optimization
     if optFlag:
-        prob = Problem()
-        prob.model=Optimize_MonopileTurbine(RefBlade=blade, Nsection_Tow = Nsection_Tow, folder_output = folder_output, user_update_routine=set_web3_offset)
-        
         # --- Driver ---
-        prob.driver = pyOptSparseDriver()
+        prob.driver = om.pyOptSparseDriver()
         prob.driver.options['optimizer'] = 'CONMIN'
         # prob.driver.opt_settings['ITMAX']     = 2
         # ----------------------
@@ -306,7 +232,7 @@ if __name__ == "__main__":
         # --- Constraints ---
         # Rotor
         prob.model.add_constraint('tip_deflection_ratio',     upper=1.0)  
-        prob.model.add_constraint('AEP',                      lower=prob_ref['AEP'])
+        #prob.model.add_constraint('AEP',                      lower=prob_ref['AEP'])
         # Tower
         # prob.model.add_constraint('tow.height_constraint',    lower=-1e-2,upper=1.e-2)
         # prob.model.add_constraint('tow.post.stress',          upper=1.0)
@@ -322,37 +248,109 @@ if __name__ == "__main__":
         # --- Recorder ---
         filename_opt_log = folder_output + os.sep + 'log_opt_' + blade['config']['name']
         
-        prob.driver.add_recorder(SqliteRecorder(filename_opt_log))
+        prob.driver.add_recorder(om.SqliteRecorder(filename_opt_log))
         prob.driver.recording_options['includes'] = ['AEP','total_blade_cost','lcoe','tip_deflection_ratio']
         prob.driver.recording_options['record_objectives']  = True
         prob.driver.recording_options['record_constraints'] = True
         prob.driver.recording_options['record_desvars']     = True
         # ----------------------
-        
-        # --- Run ---
-        prob.setup()
-        prob = Init_MonopileTurbine(prob, blade, Nsection_Tow = Nsection_Tow)
-        prob['drive.shaft_angle']              = np.radians(6.)
-        prob['overhang']                       = 8.5
-        prob['drive.distance_hub2mb']          = 3.5
-        prob['significant_wave_height']        = 4.52
-        prob['significant_wave_period']        = 9.45
-        prob['monopile']                       = True
-        prob['foundation_height']              = -30.
-        prob['water_depth']                    = 30.
-        prob['suctionpile_depth']              = 45.
-        prob['wind_reference_height']          = 150.
-        prob['hub_height']                     = 150.
-        prob['tower_section_height']           = np.array([10., 10., 10., 10., 10., 12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5, 13.6679])
-        prob['tower_outer_diameter']           = np.array([10., 10., 10., 10., 10., 10., 9.8457, 9.47, 9.041, 8.5638, 8.1838, 8.0589, 7.9213, 7.8171, 7.3356, 6.5])
-        prob['tower_wall_thickness']           = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.0431, 0.041, 0.0397, 0.0384, 0.037, 0.0348, 0.0313, 0.0279, 0.0248, 0.0299])
-        prob.model.nonlinear_solver = NonlinearRunOnce()
-        prob.model.linear_solver = DirectSolver()
+
+    # Initialize variable inputs
+    prob.setup()
+    prob = Init_MonopileTurbine(prob, blade, Nsection_Tow = Nsection_Tow, Analysis_Level = Analysis_Level, fst_vt = fst_vt)
+
+    prob['tilt']                           = 6.
+    prob['overhang']                       = 10.454
+    prob['hub_cm'] = np.array([-10.685, 0.0, 5.471])
+    prob['nac_cm'] = np.array([-5.718, 0.0, 4.048])
+    prob['hub_I'] = np.array([1382171.187, 2169261.099, 2160636.794, 0.0, 0.0, 0.0])
+    prob['nac_I'] = np.array([13442265.552, 21116729.439, 18382414.385, 0.0, 0.0, 0.0])
+    prob['hub_mass'] = 140e3
+    prob['nac_mass'] = 797.275e3
+    prob['hss_mass'] = 0.0
+    prob['lss_mass'] = 19.504e3
+    prob['cover_mass'] = 0.0
+    prob['pitch_system_mass'] = 50e3
+    prob['platforms_mass'] = 0.0
+    prob['spinner_mass'] = 0.0
+    prob['transformer_mass'] = 0.0
+    prob['vs_electronics_mass'] = 0.0
+    prob['yaw_mass'] = 100e3
+    prob['gearbox_mass'] = 0.0
+    prob['generator_mass'] = 226.7e3+145.25e3
+    prob['bedplate_mass'] = 39.434e3
+    prob['main_bearing_mass'] = 4.699e3
+    prob['significant_wave_height']        = 4.52
+    prob['significant_wave_period']        = 9.45
+    prob['monopile']                       = True
+    prob['foundation_height']              = -30.
+    prob['water_depth']                    = 30.
+    prob['suctionpile_depth']              = 45.
+    prob['wind_reference_height']          = 150.
+    prob['hub_height']                     = 150.
+    prob['tower_section_height']           = np.array([10., 10., 10., 10., 10., 12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5, 13.6679-1.58545691])
+    prob['tower_outer_diameter']           = np.array([10., 10., 10., 10., 10., 10., 9.8457, 9.47, 9.041, 8.5638, 8.1838, 8.0589, 7.9213, 7.8171, 7.3356, 6.5])
+    prob['tower_wall_thickness']           = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.0431, 0.041, 0.0397, 0.0384, 0.037, 0.0348, 0.0313, 0.0279, 0.0248, 0.0299])
+
+
+    return prob, blade
+
+
+def run_problem(prob, optFlag=False):
+
+    # Run initial condition no matter what
+    print('Running at Initial Position:')
+    prob.run_model()
+
+    # Screen outputs
+    print(prob['hub_height'])
+    print(prob['rna_mass'])
+    print('mIxx', prob['tow.pre.mIxx'])
+    print('mIyy', prob['tow.pre.mIyy'])
+    print('mIzz', prob['tow.pre.mIzz'])
+    print('mIxy', prob['tow.pre.mIxy'])
+    print('mIxz', prob['tow.pre.mIxz'])
+    print('mIyz', prob['tow.pre.mIyz'])
+    print('rna_F', prob['tow.pre.rna_F'])
+    print('rna_M', prob['tow.pre.rna_M'])
+    print('rna_cg', prob['rna_cg'])
+    print('Uref', prob['tow.wind.Uref'])
+    print('frequencies', prob['tow.post.structural_frequencies'])
+    #print('stress', prob['tow.post.stress'])
+    #print('local buckling', prob['tow.post.shell_buckling'])
+    #print('shell buckling', prob['tow.post.global_buckling'])
+
+    print('AEP =',                      prob['AEP'])
+    print('diameter =',                 prob['diameter'])
+    print('ratedConditions.V =',        prob['rated_V'])
+    print('ratedConditions.Omega =',    prob['rated_Omega'])
+    print('ratedConditions.pitch =',    prob['rated_pitch'])
+    print('ratedConditions.T =',        prob['rated_T'])
+    print('ratedConditions.Q =',        prob['rated_Q'])
+    print('mass_one_blade =',           prob['mass_one_blade'])
+    print('mass_all_blades =',          prob['mass_all_blades'])
+    print('I_all_blades =',             prob['I_all_blades'])
+    print('freq =',                     prob['freq_pbeam'])
+    print('tip_deflection =',           prob['tip_deflection'])
+    print('root_bending_moment =',      prob['root_bending_moment'])
+    print('moments at the hub =',       prob['Mxyz_total'])
+    print('blade cost =',               prob['total_blade_cost'])
+
+    # Complete data dump
+    #prob.model.list_inputs(units=True)
+    #prob.model.list_outputs(units=True)
+    
+    
+    if optFlag:
+        prob_ref = copy.deepcopy(prob)
         print('Running Optimization:')
         print('N design var: ', 2*len(indices_no_root_no_tip) + len(indices_no_root) + 1)
         prob.model.approx_totals()
         prob.run_driver()
-        # ----------------------
+
+        # --- Save output .yaml ---
+        refBlade.write_ontology(fname_output, prob['blade_out'], refBlade.wt_ref)
+        shutil.copyfile(fname_input,  folder_output + os.sep + fname_output)
 
         # ----------------------
         # --- Outputs plotting ---
@@ -363,17 +361,11 @@ if __name__ == "__main__":
         print('Tower cost:  \t\t\t %f\t%f USD \t Difference: %f %%' % (prob_ref['tower_cost'], prob['tower_cost'], (prob['tower_cost']-prob_ref['tower_cost'])/prob_ref['tower_cost']*100.))
         print('Tower mass:  \t\t\t %f\t%f kg  \t Difference: %f %%' % (prob_ref['tower_mass'], prob['tower_mass'], (prob['tower_mass']-prob_ref['tower_mass'])/prob_ref['tower_mass']*100.))
         # ----------------------
-    else:
-        # If not optimizing, plot current design
-        prob = prob_ref
-        
-    show_plots            = True
-    flag_write_out        = False
+    
+    return prob
 
-    if flag_write_out:
-        # --- Save output .yaml ---
-        refBlade.write_ontology(fname_output, prob['blade_out'], refBlade.wt_ref)
-        shutil.copyfile(fname_input,  folder_output + os.sep + fname_output)
+
+def postprocess(prob, blade):
 
     def format_save(fig, fig_name):
         plt.xticks(fontsize=12)
@@ -393,7 +385,7 @@ if __name__ == "__main__":
     for i in range(len(var_y)):
         fig.clf()
         ax = fig.add_subplot(111)
-        ax.plot(blade['pf']['r'], blade['pf'][var_y[i]] * scaling_factor[i], linewidth=2)
+        ax.plot(blade['pf']['r'], blade['pf'][var_y[i]] * scaling_factor[i], 'k', linewidth=2)
         plt.xlabel('Blade Span [m]', fontsize=14, fontweight='bold')
         plt.ylabel(label_y[i], fontsize=14, fontweight='bold')
         fig_name = var_y[i] + '_dimensional'
@@ -401,8 +393,8 @@ if __name__ == "__main__":
 
         fig.clf()
         ax = fig.add_subplot(111)
-        ax.plot(blade['pf']['s'], blade['pf'][var_y[i]] * scaling_factor[i], linewidth=2)
-        plt.xlabel('Nondimensional Blade Span', fontsize=14, fontweight='bold')
+        ax.plot(blade['pf']['s'], blade['pf'][var_y[i]] * scaling_factor[i], 'k', linewidth=2)
+        plt.xlabel('Nondimensional Blade Span (r/R)', fontsize=14, fontweight='bold')
         plt.ylabel(label_y[i], fontsize=14, fontweight='bold')
         fig_name = var_y[i] + '_nondimensional'
         format_save(fig, fig_name)
@@ -574,7 +566,7 @@ if __name__ == "__main__":
 
     # Blade stiffness plots- superceded by SONATA/VABS 6x6 outputs
     bladeStiff   = np.c_[prob['z'], prob['EA'], prob['EIxx'], prob['EIyy'], prob['EIxy'], prob['GJ'], prob['rhoA'], prob['rhoJ'], 1e3*prob['x_ec'], 1e3*prob['y_ec']]
-    bladeStiffDF = pd.DataFrame(data=bladeStiff, columns=['Blade curve [m]',
+    bladeStiffDF = pd.DataFrame(data=bladeStiff, columns=['Blade z-coordinate [m]',
                                                           'Axial stiffness [N]',
                                                           'Edgewise stiffness [Nm^2]',
                                                           'Flapwise stiffness [Nm^2]',
@@ -584,40 +576,41 @@ if __name__ == "__main__":
                                                           'Polar moment of intertia density [kg/m]',
                                                           'X-distance to elastic center [mm]',
                                                           'Y-distance to elastic center [mm]'])
-    
+
+    xx = prob['z'] / prob['z'].max()
     fig.clf()
     ax = fig.add_subplot(111)
-    ax.plot(prob['z'], prob['rhoA'], linewidth=2)
-    plt.xlabel('Blade Curve [m]', fontsize=14, fontweight='bold')
+    ax.plot(xx, prob['rhoA'], linewidth=2)
+    plt.xlabel('Nondimensional Blade Span (r/R)', fontsize=14, fontweight='bold')
     plt.ylabel('Mass density [kg/m]', fontsize=14, fontweight='bold')
     fig_name = 'blade_mass'
     format_save(fig, fig_name)
 
     fig.clf()
     ax = fig.add_subplot(111)
-    ax.plot(prob['z'], prob['EIxx'], linewidth=2)
-    ax.plot(prob['z'], prob['EIyy'], linewidth=2)
-    ax.plot(prob['z'], prob['GJ'], linewidth=2)
+    ax.plot(xx, prob['EIxx'], linewidth=2)
+    ax.plot(xx, prob['EIyy'], linewidth=2)
+    ax.plot(xx, prob['GJ'], linewidth=2)
     ax.legend(('Edge','Flap','Torsional'), loc='best')
-    plt.xlabel('Blade Curve [m]', fontsize=14, fontweight='bold')
+    plt.xlabel('Nondimensional Blade Span (r/R)', fontsize=14, fontweight='bold')
     plt.ylabel('Stiffness [N.m^2]', fontsize=14, fontweight='bold')
     fig_name = 'blade_sitffness'
     format_save(fig, fig_name)
 
     fig.clf()
     ax = fig.add_subplot(111)
-    ax.plot(prob['z'], prob['EA'], linewidth=2)
-    plt.xlabel('Blade Curve [m]', fontsize=14, fontweight='bold')
+    ax.plot(xx, prob['EA'], linewidth=2)
+    plt.xlabel('Nondimensional Blade Span (r/R)', fontsize=14, fontweight='bold')
     plt.ylabel('Axial Stiffness [N]', fontsize=14, fontweight='bold')
     fig_name = 'blade_axial_sitffness'
     format_save(fig, fig_name)
     
     fig.clf()
     ax = fig.add_subplot(111)
-    ax.plot(prob['z'], 1e3*prob['x_ec'], linewidth=2)
-    ax.plot(prob['z'], 1e3*prob['y_ec'], linewidth=2)
+    ax.plot(xx, 1e3*prob['x_ec'], linewidth=2)
+    ax.plot(xx, 1e3*prob['y_ec'], linewidth=2)
     ax.legend(('x-distance','y-distance'), loc='best')
-    plt.xlabel('Blade Curve [m]', fontsize=14, fontweight='bold')
+    plt.xlabel('Nondimensional Blade Span (r/R)', fontsize=14, fontweight='bold')
     plt.ylabel('Distance to elastic center [mm]', fontsize=14, fontweight='bold')
     fig_name = 'blade_ec'
     format_save(fig, fig_name)
@@ -670,4 +663,25 @@ if __name__ == "__main__":
     # Write tabular data to xlsx
     myobj = RWT_Tabular(fname_input, towDF=towDF, rotDF=perfDF)
     myobj.write_all()
-    
+
+
+if __name__ == "__main__":
+    # Set optimization
+    optFlag = False
+
+    # Initialize output container
+    if not os.path.isdir(folder_output):
+        os.mkdir(folder_output)
+
+    # Set FAST integration
+    # 0: Run CCBlade; 1: Update FAST model at each iteration but do not run; 2: Run FAST w/ ElastoDyn; 3: (Not implemented) Run FAST w/ BeamDyn
+    Analysis_Level = 0
+
+    # Seed inputs
+    prob, blade = initialize_problem(Analysis_Level, optFlag=optFlag)
+
+    # Run the analysis
+    prob = run_problem(prob, optFlag=False)    
+
+    # Generate output plots, tables, and Excel sheet
+    postprocess(prob, blade)
