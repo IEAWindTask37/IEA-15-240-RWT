@@ -947,7 +947,7 @@ class RWT_Tabular(object):
 
         # Round off big numbers for appearances
         for k in nacDF.columns:
-            if k in ['X_TT','Z_TT','Mass']: continue
+            if k in ['X_TT [m]','Z_TT [m]']: continue
             for i in nacDF.index:
                 nacDF[k].loc[i] = np.round( nacDF[k].loc[i] )
 
