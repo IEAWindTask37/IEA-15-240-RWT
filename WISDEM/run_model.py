@@ -259,38 +259,40 @@ def initialize_problem(Analysis_Level, optFlag=False):
     prob.setup()
     prob = Init_MonopileTurbine(prob, blade, Nsection_Tow = Nsection_Tow, Analysis_Level = Analysis_Level, fst_vt = fst_vt)
 
-    prob['tilt']                           = 6.
-    prob['overhang']                       = 10.454
-    prob['hub_cm'] = np.array([-10.685, 0.0, 5.471])
-    prob['nac_cm'] = np.array([-5.718, 0.0, 4.048])
-    prob['hub_I'] = np.array([1382171.187, 2169261.099, 2160636.794, 0.0, 0.0, 0.0])
-    prob['nac_I'] = np.array([13442265.552, 21116729.439, 18382414.385, 0.0, 0.0, 0.0])
-    prob['hub_mass'] = 140e3
-    prob['nac_mass'] = 797.275e3
-    prob['hss_mass'] = 0.0
-    prob['lss_mass'] = 19.504e3
-    prob['cover_mass'] = 0.0
-    prob['pitch_system_mass'] = 50e3
-    prob['platforms_mass'] = 0.0
-    prob['spinner_mass'] = 0.0
-    prob['transformer_mass'] = 0.0
-    prob['vs_electronics_mass'] = 0.0
-    prob['yaw_mass'] = 100e3
-    prob['gearbox_mass'] = 0.0
-    prob['generator_mass'] = 226.7e3+145.25e3
-    prob['bedplate_mass'] = 39.434e3
-    prob['main_bearing_mass'] = 4.699e3
-    prob['significant_wave_height']        = 4.52
-    prob['significant_wave_period']        = 9.45
-    prob['monopile']                       = True
-    prob['foundation_height']              = -30.
-    prob['water_depth']                    = 30.
-    prob['suctionpile_depth']              = 45.
-    prob['wind_reference_height']          = 150.
-    prob['hub_height']                     = 150.
-    prob['tower_section_height']           = np.array([10., 10., 10., 10., 10., 12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5, 13.6679-1.58545691])
-    prob['tower_outer_diameter']           = np.array([10., 10., 10., 10., 10., 10., 9.8457, 9.47, 9.041, 8.5638, 8.1838, 8.0589, 7.9213, 7.8171, 7.3356, 6.5])
-    prob['tower_wall_thickness']           = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.0431, 0.041, 0.0397, 0.0384, 0.037, 0.0348, 0.0313, 0.0279, 0.0248, 0.0299])
+    prob['tilt']                    = 6.
+    prob['overhang']                = 10.454
+    prob['hub_cm']                  = np.array([-10.685, 0.0, 5.471])
+    prob['nac_cm']                  = np.array([-5.718, 0.0, 4.048])
+    prob['hub_I']                   = np.array([1382171.187, 2169261.099, 2160636.794, 0.0, 0.0, 0.0])
+    prob['nac_I']                   = np.array([13442265.552, 21116729.439, 18382414.385, 0.0, 0.0, 0.0])
+    prob['hub_mass']                = 140e3
+    prob['nac_mass']                = 797.275e3
+    prob['hss_mass']                = 0.0
+    prob['lss_mass']                = 19.504e3
+    prob['cover_mass']              = 0.0
+    prob['pitch_system_mass']       = 50e3
+    prob['platforms_mass']          = 0.0
+    prob['spinner_mass']            = 0.0
+    prob['transformer_mass']        = 0.0
+    prob['vs_electronics_mass']     = 0.0
+    prob['yaw_mass']                = 100e3
+    prob['gearbox_mass']            = 0.0
+    prob['generator_mass']          = 226.7e3+145.25e3
+    prob['bedplate_mass']           = 39.434e3
+    prob['main_bearing_mass']       = 4.699e3
+    prob['significant_wave_height'] = 4.52
+    prob['significant_wave_period'] = 9.45
+    prob['monopile']                = True
+    prob['foundation_height']       = -30.
+    prob['water_depth']             = 30.
+    prob['suctionpile_depth']       = 45.
+    prob['wind_reference_height']   = 150.
+    prob['hub_height']              = 150.
+    prob['tower_section_height']    = np.array([10., 10., 10., 10., 10., 12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5, 13.6679-1.58545691])
+    prob['tower_outer_diameter']    = np.array([10., 10., 10., 10., 10., 10., 9.8457, 9.47, 9.041, 8.5638, 8.1838, 8.0589, 7.9213, 7.8171, 7.3356, 6.5])
+    prob['tower_wall_thickness']    = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.0431, 0.041, 0.0397, 0.0384, 0.037, 0.0348, 0.0313, 0.0279, 0.0248, 0.0299])
+    prob['transition_piece_mass']   = 100e3
+    prob['transition_piece_height'] = 20.0
 
 
     return prob, blade
@@ -303,14 +305,8 @@ def run_problem(prob, optFlag=False):
     prob.run_model()
 
     # Screen outputs
-    print(prob['hub_height'])
-    print(prob['rna_mass'])
-    print('mIxx', prob['tow.pre.mIxx'])
-    print('mIyy', prob['tow.pre.mIyy'])
-    print('mIzz', prob['tow.pre.mIzz'])
-    print('mIxy', prob['tow.pre.mIxy'])
-    print('mIxz', prob['tow.pre.mIxz'])
-    print('mIyz', prob['tow.pre.mIyz'])
+    print('rna_mass', prob['tow.pre.mass'])
+    print('rna_I', prob['tow.pre.mI'])
     print('rna_F', prob['tow.pre.rna_F'])
     print('rna_M', prob['tow.pre.rna_M'])
     print('rna_cg', prob['rna_cg'])

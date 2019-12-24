@@ -10,11 +10,9 @@ from wisdem.commonse.environment import PowerWind
 from wisdem.commonse.environment import LogWind
 
 # --- geometry ----
-h_param = np.array([15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 10.])
-#d_param = np.array([10., 10., 10., 9.999994, 9.893298, 9.501227, 9.073816, 8.733734, 8.481259, 8.254697, 8.087231, 7.512527, 6.717548])
-#t_param = np.array([0.04922689, 0.04922689, 0.04922689, 0.04581482, 0.04301337, 0.04129422, 0.03939618, 0.03675472, 0.03345327, 0.02984231, 0.02622864, 0.03062863])
-d_param = np.array([10., 10., 9.07841266, 8.94626364, 8.2388643, 8.00406996, 7.4747645, 7.16117877, 6.7801444, 6.40652604, 6.14951031, 5.73067083, 5.57747088])
-t_param = np.array([0.06470247, 0.05743258, 0.05558765, 0.05632417, 0.05654073, 0.05566434, 0.0556487, 0.05363243, 0.05230072, 0.05033409, 0.04682933, 0.04711726])
+h_param = np.array([10., 10., 10., 10., 10., 12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5, 13.6679-1.58545691])
+d_param = np.array([10., 10., 10., 10., 10., 10., 9.8457, 9.47, 9.041, 8.5638, 8.1838, 8.0589, 7.9213, 7.8171, 7.3356, 6.5])
+t_param = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.0431, 0.041, 0.0397, 0.0384, 0.037, 0.0348, 0.0313, 0.0279, 0.0248, 0.0299])
 
 z_foundation = -30.0
 L_reinforced = 30.0  # [m] buckling length
@@ -30,15 +28,17 @@ rho = 7850.0 #8500.0
 sigma_y = 345.0e6 #450.0e6
 
 # --- extra mass ----
-m = np.array([1189821.77086906])
-mIxx = 3.79640227e+08
-mIyy = 2.24477294e+08
-mIzz = 1.82971949e+08
+m = 1141316.5884164
+mIxx = 4.10974879e+08
+mIyy = 2.73852641e+08
+mIzz = 2.10770543e+08
 mIxy = 0.0
-mIxz = 7259625.38388042
+mIxz = 3.85659547e+07
 mIyz = 0.0
 mI = np.array([mIxx, mIyy, mIzz, mIxy, mIxz, mIyz])
-mrho = np.array([-1.06144039, 0.0, 0.8916053])
+mrho = np.array([-7.21526604, 0., 4.47695301])
+mtrans = 100e3
+trans_z= 20.0
 # -----------
 
 # --- wind ---
@@ -64,12 +64,12 @@ foundation = -30.0
 
 # # --- loading case 1: max Thrust ---
 wind_Uref1 = 20.00138038
-Fx1 = 3850904.21819388
-Fy1 = -30033.97914658
-Fz1 = -11693223.90464621
-Mxx1 = 73975385.79607527
-Myy1 = 23162187.41183158
-Mzz1 = 8170205.14882855
+Fx1 = 3796670.10819044    
+Fy1 = -37378.11861823
+Fz1 = -11615856.8796076
+Mxx1 = 75135954.50089163 
+Myy1 = -61189104.43958881
+Mzz1 = 661646.93272768
 # # ---------------
 
 # --- safety factors ---
@@ -125,8 +125,7 @@ prob.model.add_constraint('post.shell_buckling',  upper=1.0)
 prob.model.add_constraint('weldability',          upper=0.0)
 prob.model.add_constraint('manufacturability',    lower=0.0)
 prob.model.add_constraint('slope',    upper=1.0)
-prob.model.add_constraint('tower.f1',    lower=0.15)
-prob.model.add_constraint('tower.f1',    upper=0.2)
+prob.model.add_constraint('tower.f1',    lower=0.13, upper=0.24)
 # ----------------------
 
 prob.setup()
@@ -159,6 +158,9 @@ prob['sigma_y'] = sigma_y
 prob['rna_mass'] = m
 prob['rna_I'] = mI
 prob['rna_cg'] = mrho
+prob['transition_piece_mass'] = mtrans
+prob['transition_piece_height'] = trans_z
+prob['tower_add_gravity'] = False # Don't double count
 # -----------
 
 # --- wind & wave ---
@@ -185,7 +187,7 @@ prob['gamma_fatigue'] = gamma_fatigue
 
 prob['DC'] = 80.0
 prob['shear'] = True
-prob['geom'] = False
+prob['geom'] = True
 prob['tower_force_discretization'] = 5.0
 prob['nM'] = 2
 prob['Mmethod'] = 1
