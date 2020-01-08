@@ -14,97 +14,16 @@ h_param = np.array([10., 10., 10., 10., 10., 12.5,  12.5,  12.5,  12.5,  12.5,  
 d_param = np.array([10., 10., 10., 10., 10., 10., 9.8457, 9.47, 9.041, 8.5638, 8.1838, 8.0589, 7.9213, 7.8171, 7.3356, 6.5])
 t_param = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.0431, 0.041, 0.0397, 0.0384, 0.037, 0.0348, 0.0313, 0.0279, 0.0248, 0.0299])
 
-z_foundation = -30.0
-L_reinforced = 30.0  # [m] buckling length
-theta_stress = 0.0
-yaw = 0.0
-Koutfitting = 1.07
-hub_height = 150.0
+# GB: Optimization results using correct RNA forces on Jan 8
+d_new = [10., 10., 10., 10., 10., 10., 9.84603509, 9.47076546, 9.0419724,  8.56494627, 8.18565418, 8.06162831, 7.92478627, 7.82113907, 7.33825148, 6.49121862]
+t_new = [0.06151846, 0.05619698, 0.05042458, 0.0444563,, 0.04175584, 0.03929218, 0.03697146, 0.03528252, 0.03354286, 0.03162747, 0.02898613, 0.02551408, 0.02239292, 0.02025522, 0.02377017]
 
-# --- material props ---
-E = 210e9
-G = 79.3e9 #80.8e9
-rho = 7850.0 #8500.0
-sigma_y = 345.0e6 #450.0e6
-
-# --- extra mass ----
-m = 1141316.5884164
-mIxx = 4.10974879e+08
-mIyy = 2.73852641e+08
-mIzz = 2.10770543e+08
-mIxy = 0.0
-mIxz = 3.85659547e+07
-mIyz = 0.0
-mI = np.array([mIxx, mIyy, mIzz, mIxy, mIxz, mIyz])
-mrho = np.array([-7.21526604, 0., 4.47695301])
-mtrans = 100e3
-trans_z= 20.0
-# -----------
-
-# --- wind ---
-wind_zref = hub_height
-wind_z0 = 0.0
-shearExp = 0.11
-cd_usr = -1.
-# ---------------
-
-# --- wave ---
-hmax = 4.52
-T = 9.52
-cm = 1.0
-monopile = True
-suction_depth = 45.0
-soilG = 140e6
-soilnu = 0.4
-foundation = -30.0
-# ---------------
-
-
-# two load cases.  TODO: use a case iterator
-
-# # --- loading case 1: max Thrust ---
-wind_Uref1 = 20.00138038
-Fx1 = 3796670.10819044    
-Fy1 = -37378.11861823
-Fz1 = -11615856.8796076
-Mxx1 = 75135954.50089163 
-Myy1 = -61189104.43958881
-Mzz1 = 661646.93272768
-# # ---------------
-
-# --- safety factors ---
-gamma_f = 1.35
-gamma_m = 1.3
-gamma_n = 1.0
-gamma_b = 1.1
-# ---------------
-
-# --- fatigue ---
-z_DEL = None
-M_DEL = None
-nDEL = 0
-gamma_fatigue = 1.35*1.3*1.0
-life = 20.0
-m_SN = 4
-# ---------------
-
-
-# --- constraints ---
-min_d_to_t   = 120.0
-max_taper    = 0.2
-# ---------------
-
-# # V_max = 80.0  # tip speed
-# # D = 126.0
-# # .freq1p = V_max / (D/2) / (2*pi)  # convert to Hz
 
 nPoints = len(d_param)
 nFull   = 5*(nPoints-1) + 1
-wind = 'PowerWind'
-nLC = 1
 
 prob = om.Problem()
-prob.model = TowerSE(nLC=nLC, nPoints=nPoints, nFull=nFull, wind=wind, topLevelFlag=True, monopile=monopile)
+prob.model = TowerSE(nLC=1, nPoints=nPoints, nFull=nFull, wind='PowerWind', topLevelFlag=True, monopile=True)
 prob.driver = om.pyOptSparseDriver() #om.ScipyOptimizeDriver() # #
 prob.driver.options['optimizer'] = 'SNOPT' #'SLSQP' #'CONMIN'
 
@@ -124,67 +43,71 @@ prob.model.add_constraint('post.global_buckling', upper=1.0)
 prob.model.add_constraint('post.shell_buckling',  upper=1.0)
 prob.model.add_constraint('weldability',          upper=0.0)
 prob.model.add_constraint('manufacturability',    lower=0.0)
-prob.model.add_constraint('slope',    upper=1.0)
-prob.model.add_constraint('tower.f1',    lower=0.13, upper=0.24)
+prob.model.add_constraint('slope',                upper=1.0)
+prob.model.add_constraint('tower.f1',             lower=0.13, upper=0.24)
 # ----------------------
 
 prob.setup()
 
-if wind=='PowerWind':
-    prob['shearExp'] = shearExp
 
 # assign values to params
 
 # --- geometry ----
-prob['hub_height'] = hub_height
-prob['foundation_height'] = foundation
+prob['hub_height'] = prob['wind_reference_height'] = 150.0
+prob['foundation_height'] = -30.0
 prob['tower_section_height'] = h_param
 prob['tower_outer_diameter'] = d_param
 prob['tower_wall_thickness'] = t_param
-prob['tower_buckling_length'] = L_reinforced
-prob['tower_outfitting_factor'] = Koutfitting
-prob['yaw'] = yaw
-# prob['monopile'] = monopile
-prob['suctionpile_depth'] = suction_depth
-prob['soil_G'] = soilG
-prob['soil_nu'] = soilnu
+prob['tower_buckling_length'] = 30.0
+prob['tower_outfitting_factor'] = 1.07
+prob['yaw'] = 0.0
+prob['suctionpile_depth'] = 45.0
+
 # --- material props ---
-prob['E'] = E
-prob['G'] = G
-prob['material_density'] = rho
-prob['sigma_y'] = sigma_y
+prob['E'] = 210e9
+prob['G'] = 79.3e9 #80.8e9
+prob['material_density'] = 7850.0 #8500.0
+prob['sigma_y'] = 345.0e6 #450.0e6
+prob['soil_G'] = 140e6
+prob['soil_nu'] = 0.4
 
 # --- extra mass ----
-prob['rna_mass'] = m
-prob['rna_I'] = mI
-prob['rna_cg'] = mrho
-prob['transition_piece_mass'] = mtrans
-prob['transition_piece_height'] = trans_z
+mIxx = 4.10974879e+08
+mIyy = 2.73852641e+08
+mIzz = 2.10770543e+08
+mIxy = 0.0
+mIxz = 3.85659547e+07
+mIyz = 0.0
+prob['rna_mass'] = 1141316.5884164
+prob['rna_I'] = np.array([mIxx, mIyy, mIzz, mIxy, mIxz, mIyz])
+prob['rna_cg'] = np.array([-7.21526604, 0., 4.47695301])
+prob['transition_piece_mass'] = 100e3
+prob['transition_piece_height'] = 20.0
 prob['tower_add_gravity'] = False # Don't double count
 # -----------
 
 # --- wind & wave ---
-prob['wind_reference_height'] = wind_zref
-prob['wind_z0'] = wind_z0
-prob['cd_usr'] = cd_usr
+prob['wind_z0'] = 0.0
 prob['air_density'] = 1.225
 prob['air_viscosity'] = 1.7934e-5
 prob['water_density'] = 1025.0
 prob['water_viscosity'] = 1.3351e-3
+prob['shearExp'] = 0.11
 prob['wind_beta'] = prob['wave_beta'] = 0.0
-prob['significant_wave_height'] = hmax
-prob['significant_wave_period'] = T
+prob['significant_wave_height'] = 4.52
+prob['significant_wave_period'] = 9.52
 #prob['waveLoads1.U0'] = prob['waveLoads1.A0'] = prob['waveLoads1.beta0'] = prob['waveLoads2.U0'] = prob['waveLoads2.A0'] = prob['waveLoads2.beta0'] = 0.0
 # ---------------
 
 # --- safety factors ---
-prob['gamma_f'] = gamma_f
-prob['gamma_m'] = gamma_m
-prob['gamma_n'] = gamma_n
-prob['gamma_b'] = gamma_b
-prob['gamma_fatigue'] = gamma_fatigue
+prob['gamma_f'] = 1.35
+prob['gamma_m'] = 1.3
+prob['gamma_n'] = 1.0
+prob['gamma_b'] = 1.1
+prob['gamma_fatigue'] = 1.35*1.3*1.0
 # ---------------
 
+# --- frame3dd knobs ---
 prob['DC'] = 80.0
 prob['shear'] = True
 prob['geom'] = True
@@ -194,26 +117,28 @@ prob['Mmethod'] = 1
 prob['lump'] = 0
 prob['tol'] = 1e-9
 prob['shift'] = 0.0
+# ---------------
 
-
-# --- fatigue ---
+# --- fatigue (not used) ---
 #prob['tower_z_DEL'] = z_DEL
 #prob['tower_M_DEL'] = M_DEL
-prob['life'] = life
-prob['m_SN'] = m_SN
+prob['life'] = 20.0
+prob['m_SN'] = 4.0
 # ---------------
 
 # --- constraints ---
-prob['min_d_to_t'] = min_d_to_t
-prob['max_taper'] = max_taper
+prob['min_d_to_t'] = 120.0
+prob['max_taper']  = 0.2
 # ---------------
 
-
 # # --- loading case 1: max Thrust ---
-prob['wind.Uref'] = wind_Uref1
-
-prob['pre.rna_F'] = np.array([Fx1, Fy1, Fz1])
-prob['pre.rna_M'] = np.array([Mxx1, Myy1, Mzz1])
+prob['wind.Uref'] = 20.00138038
+prob['pre.rna_F'] = np.array([3796670.10819044,
+                              -37378.11861823,
+                              -11615856.8796076])
+prob['pre.rna_M'] = np.array([75135954.50089163,
+                              -61189104.43958881,
+                              661646.93272768])
 # # ---------------
 
 # # --- run ---
