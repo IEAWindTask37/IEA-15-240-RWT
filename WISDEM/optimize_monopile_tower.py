@@ -32,7 +32,7 @@ prob.model.add_objective('tower_mass', scaler=1e-6)
 # ----------------------
 
 # --- Design Variables ---
-prob.model.add_design_var('tower_outer_diameter', lower=3.87, upper=9.0)
+prob.model.add_design_var('tower_outer_diameter', lower=3.87, upper=10.0)
 prob.model.add_design_var('tower_wall_thickness', lower=4e-3, upper=2e-1)
 # ----------------------
 
