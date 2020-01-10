@@ -108,7 +108,7 @@ class Optimize_MonopileTurbine(om.Group):
         self.options.declare('RefBlade')
         self.options.declare('folder_output' ,  default='')
         self.options.declare('FASTpref',        default={})
-        self.options.declare('Nsection_Tow',    default = 15)
+        self.options.declare('Nsection_Tow',    default = 19)
         self.options.declare('VerbosityCosts',  default = False)
         self.options.declare('user_update_routine',     default=None)
         
@@ -155,7 +155,7 @@ def initialize_problem(Analysis_Level, optFlag=False):
     refBlade = ReferenceBlade()
     refBlade.verbose  = True
     refBlade.NINPUT       = 8
-    Nsection_Tow          = 15
+    Nsection_Tow          = 19
     refBlade.NPTS         = 30
     refBlade.spar_var     = ['Spar_cap_ss', 'Spar_cap_ps'] # SS, then PS
     refBlade.te_var       = 'TE_reinforcement'
@@ -288,12 +288,12 @@ def initialize_problem(Analysis_Level, optFlag=False):
     prob['suctionpile_depth']       = 45.
     prob['wind_reference_height']   = 150.
     prob['hub_height']              = 150.
-    prob['tower_section_height']    = np.array([10., 10., 10., 10., 10., 12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5,  12.5, 13.6679-1.58545691])
-    prob['tower_outer_diameter']    = np.array([10., 10., 10., 10., 10., 10., 9.8457, 9.47, 9.041, 8.5638, 8.1838, 8.0589, 7.9213, 7.8171, 7.3356, 6.5])
-    prob['tower_wall_thickness']    = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.0431, 0.041, 0.0397, 0.0384, 0.037, 0.0348, 0.0313, 0.0279, 0.0248, 0.0299])
+    prob['tower_section_height']    = np.array([5., 5., 5., 5., 5., 5., 5., 5., 5., 13.,  13.,  13.,  13.,  13.,  13.,  13.,  13.,  13., 12.58244309])
+    prob['tower_outer_diameter']    = np.array([10., 9.86825264, 9.86911476, 9.86825264, 9.86911476, 9.86825264, 9.86911476, 9.86825264, 9.4022364, 9., 9., 9., 9., 9., 9., 9., 9., 9., 7.28602076, 6.5])
+    prob['tower_wall_thickness']    = np.array([0.05663942, 0.05532156, 0.05340554, 0.05146051, 0.04948683, 0.05356181, 0.05003754, 0.04678877, 0.04671201, 0.075, 0.06938931, 0.06102308, 0.05249128, 0.0438327, 0.03514112, 0.02844383, 0.02447982, 0.02349068, 0.02922751])
+    prob['tower_buckling_length']   = 15.0
     prob['transition_piece_mass']   = 100e3
-    prob['transition_piece_height'] = 20.0
-
+    prob['transition_piece_height'] = 15.0
 
     return prob, blade
 
@@ -509,7 +509,7 @@ def postprocess(prob, blade):
     mycomments[0] = 'Monopile start'
     mycomments[np.where(towdata[:,0] == -prob['water_depth'])[0][0]] = 'Mud line'
     mycomments[np.where(towdata[:,0] == 0.0)[0][0]] = 'Water line'
-    mycomments[np.where(towdata[:,0] == 20.0)[0][0]] = 'Tower start'
+    mycomments[np.where(towdata[:,0] == prob['transition_piece_height'])[0][0]] = 'Tower start'
     mycomments[-1] = 'Tower top'
     towDF['Location'] = mycomments
     towDF = towDF[['Location']+colstr]
@@ -620,10 +620,10 @@ def postprocess(prob, blade):
     vx = ax1.get_xlim()
     lab2 = ax1.plot(vx, np.zeros(2), color='b', linestyle='--')
     lab3 = ax1.plot(vx, -prob['water_depth']*np.ones(2), color=brown, linestyle='--')
-    lab4 = ax1.plot(vx, 20*np.ones(2), color='g', linestyle='--')
+    lab4 = ax1.plot(vx, prob['transition_piece_height']*np.ones(2), color='g', linestyle='--')
     ax1.text(vx[0]+0.02*np.diff(vx), 2, 'Water line', color='b', fontsize=12)
     ax1.text(vx[0]+0.02*np.diff(vx), -prob['water_depth']+2, 'Mud line', color=brown, fontsize=12)
-    ax1.text(vx[0]+0.02*np.diff(vx), 20+2, 'Tower transition', color='g', fontsize=12)
+    ax1.text(vx[0]+0.02*np.diff(vx), prob['transition_piece_height']+2, 'Tower transition', color='g', fontsize=12)
     ax1.set_xlim(vx)
     plt.xlabel('Outer Diameter [m]', fontsize=14, fontweight='bold')
     plt.ylabel('Tower Height [m]', fontsize=14, fontweight='bold')
