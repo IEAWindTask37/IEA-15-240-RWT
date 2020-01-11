@@ -289,13 +289,14 @@ def initialize_problem(Analysis_Level, optFlag=False):
     prob['wind_reference_height']   = 150.
     prob['hub_height']              = 150.
     prob['tower_section_height']    = np.array([5., 5., 5., 5., 5., 5., 5., 5., 5., 13.,  13.,  13.,  13.,  13.,  13.,  13.,  13.,  13., 12.58244309])
-    prob['tower_outer_diameter']    = np.array([10., 9.86825264, 9.86911476, 9.86825264, 9.86911476, 9.86825264, 9.86911476, 9.86825264, 9.4022364, 9., 9., 9., 9., 9., 9., 9., 9., 9., 7.28602076, 6.5])
-    prob['tower_wall_thickness']    = np.array([0.05663942, 0.05532156, 0.05340554, 0.05146051, 0.04948683, 0.05356181, 0.05003754, 0.04678877, 0.04671201, 0.075, 0.06938931, 0.06102308, 0.05249128, 0.0438327, 0.03514112, 0.02844383, 0.02447982, 0.02349068, 0.02922751])
+    prob['tower_outer_diameter'] = np.array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 9.99400056, 9.50548548, 8.91773579, 8.24337795, 7.48200766, 6.93764838, 6.77937865, 6.5738731, 6.5])
+    prob['tower_wall_thickness'] = np.array([0.05615285, 0.05426376, 0.05232961, 0.05035596, 0.04835708, 0.0463695, 0.04439552, 0.04309169, 0.04188253, 0.04028849, 0.03715785, 0.03422847, 0.03264807, 0.0310973, 0.02948056, 0.02764022, 0.02463918, 0.02135272, 0.02436626])
     prob['tower_buckling_length']   = 15.0
     prob['transition_piece_mass']   = 100e3
     prob['transition_piece_height'] = 15.0
 
     return prob, blade
+
 
 
 def run_problem(prob, optFlag=False):
@@ -331,6 +332,7 @@ def run_problem(prob, optFlag=False):
     print('root_bending_moment =',      prob['root_bending_moment'])
     print('moments at the hub =',       prob['Mxyz_total'])
     print('blade cost =',               prob['total_blade_cost'])
+    print('tower freq =',               prob['tow.tower.f1'])
 
     # Complete data dump
     #prob.model.list_inputs(units=True)
@@ -549,7 +551,7 @@ def postprocess(prob, blade):
     ax.legend(('Flap/edge','Torsional'), loc='best')
     plt.xlabel('Location [m]', fontsize=14, fontweight='bold')
     plt.ylabel('Stiffness [N.m^2]', fontsize=14, fontweight='bold')
-    fig_name = 'tower_sitffness'
+    fig_name = 'tower_stiffness'
     format_save(fig, fig_name)
 
     fig.clf()
@@ -557,7 +559,7 @@ def postprocess(prob, blade):
     ax.plot(towDF['Height [m]'], towDF['Axial stiffness [N]'], linewidth=2)
     plt.xlabel('Location [m]', fontsize=14, fontweight='bold')
     plt.ylabel('Axial Stiffness [N]', fontsize=14, fontweight='bold')
-    fig_name = 'tower_axial_sitffness'
+    fig_name = 'tower_axial_stiffness'
     format_save(fig, fig_name)
 
     # Blade stiffness plots- superceded by SONATA/VABS 6x6 outputs
@@ -611,7 +613,7 @@ def postprocess(prob, blade):
     fig_name = 'blade_ec'
     format_save(fig, fig_name)
     
-    # Tower plot
+    # Tower plot- geometry
     brown = np.array([150., 75., 0.])/256.
     #fig, ax = plt.subplots(1,1,figsize=(11,4))
     fig = plt.figure(figsize=(11,4))
@@ -654,9 +656,75 @@ def postprocess(prob, blade):
     fig.subplots_adjust(hspace=0.02, wspace=0.02, bottom = 0.15, left = 0.15)
     fig.savefig(folder_output + os.sep + fig_name+'.pdf', pad_inches=0.1, bbox_inches='tight')
     fig.savefig(folder_output + os.sep + fig_name+'.png', pad_inches=0.1, bbox_inches='tight')
-    
-        
-    # Write tabular data to xlsx
+
+    # Frequency plot
+    fn_tower = [prob['tow.tower.f1'], prob['tow.tower.f2']]
+    f        = np.linspace(0., 0.5, num=1000)[1:]
+    omega    = f*(2.*np.pi)
+
+    Omega_rot_min = prob['control_minOmega']/60. #5./60
+    Omega_rot_max = prob['control_maxOmega']/60. #7.56/60
+
+    f_1P = [0, Omega_rot_min, Omega_rot_min, Omega_rot_max, Omega_rot_max, f[-1]]
+    f_3P = [0, 3.*Omega_rot_min, 3.*Omega_rot_min, 3.*Omega_rot_max, 3.*Omega_rot_max, f[-1]]
+    NP_y = [0., 0., 1., 1., 0., 0.]
+
+    # f_1P_marg_low  = Omega_rot_min/1.1
+    # f_1P_marg_high = Omega_rot_min*1.1
+    # f_3P_marg_low  = Omega_rot_min*3./1.1
+    # f_3P_marg_high = Omega_rot_min*3.*1.1
+
+    f_tower = [fn_tower[0], fn_tower[0]]
+    y_tower = [0., 1.]
+
+    # Kaimal
+    Sigma1 = 42
+    V_hub  = 10.
+    L_k = 8.1*Sigma1
+    Sk = np.zeros_like(f)
+    for i, fi in enumerate(f):
+        Sk[i] = 4*fi*L_k/V_hub/(1+6*fi*L_k/V_hub)**(5./3.)/fi
+    Sk /= max(Sk)
+
+    # Pierson-Moskowitz
+    F = 500000
+    g = 9.81
+    U10 = 10.
+
+    U19     = U10*1.17
+    alpha   = 8.1e-3
+    Beta    = 0.74
+    omega_0 = g/U19
+    omega_p = 0.877*g/U19
+
+    S = np.zeros_like(f)
+    for i, omega_i in enumerate(omega):
+        S[i] = alpha*g**2./omega_i**5.*np.exp(-Beta*(omega_0/omega_i)**4.)
+    S /= max(S)
+
+    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6., 2.5))
+    fig.subplots_adjust(bottom=0.36, top=0.975,  left=0.12, right=0.975)#, right=0.8, hspace=0.3, wspace=0.3)
+
+    ax.fill(f_1P, NP_y, color=[0.5,0.5,0.5], label='1P')
+    ax.fill(f_3P, NP_y, color=[0.75,0.75,0.75], label='3P')
+    ax.plot(f, Sk, color='r', label='Wind,\nKaimal Spect.', linewidth=1.5)
+    ax.plot(f, S,  color='b', label="Waves,\nJONSWAP Spect.", linewidth=1.5)
+    ax.plot(f_tower, y_tower, color='k', label="Tower,\n1st Nat. Freq.", linewidth=1.5)
+    ax.grid(color=[0.8,0.8,0.8], linestyle='--')
+    ax.set_ylabel('Normalized PSD')
+    ax.set_xlabel('Frequency [Hz]')
+    ax.set_xlim((0.,max(f)))
+
+    ax.set_axisbelow(True)
+
+    handles, labels = ax.get_legend_handles_labels()
+    fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 0.2), ncol=5, prop={'size':9})
+    fig_name = 'tower_fn'
+    fig.savefig(folder_output + os.sep + fig_name+'.pdf', pad_inches=0.1, bbox_inches='tight')
+    fig.savefig(folder_output + os.sep + fig_name+'.png', pad_inches=0.1, bbox_inches='tight')
+
+
+    # Write all tabular data to xlsx
     myobj = RWT_Tabular(fname_input, towDF=towDF, rotDF=perfDF)
     myobj.write_all()
 

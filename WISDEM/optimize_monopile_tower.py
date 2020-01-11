@@ -10,9 +10,13 @@ from wisdem.commonse.environment import PowerWind
 from wisdem.commonse.environment import LogWind
 
 h_param = np.array([5., 5., 5., 5., 5., 5., 5., 5., 5., 13.,  13.,  13.,  13.,  13.,  13.,  13.,  13.,  13., 12.58244309])
-d_param = np.array([10., 9.86825264, 9.86911476, 9.86825264, 9.86911476, 9.86825264, 9.86911476, 9.86825264, 9.4022364, 9., 9., 9., 9., 9., 9., 9., 9., 9., 7.28602076, 6.5])
-t_param = np.array([0.05663942, 0.05532156, 0.05340554, 0.05146051, 0.04948683, 0.05356181, 0.05003754, 0.04678877, 0.04671201, 0.075, 0.06938931, 0.06102308, 0.05249128, 0.0438327, 0.03514112, 0.02844383, 0.02447982, 0.02349068, 0.02922751])
+d_param = np.array([10., 9.8030784, 9.79874123, 9.8030784, 9.79874123, 9.8030784, 9.68185956, 9.44717576, 9.22513042, 9., 9., 9., 9., 9., 9., 9., 9., 9., 7.28693747, 6.5])
+t_param = np.array([0.05664958, 0.05562889, 0.05373922, 0.05177922, 0.04983506, 0.04793076, 0.04676483, 0.04677619, 0.04678032, 0.075, 0.06877404, 0.06040807, 0.05194785, 0.04336537, 0.0347967, 0.02639276, 0.02241118, 0.02142537, 0.02633759])
+
 itow = 9
+
+
+
 
 def set_common_params(prob):
     # --- geometry ----
@@ -110,38 +114,30 @@ def postprocess(prob):
     print('stress1 =', prob['post.stress'])
     print('GL buckling =', prob['post.global_buckling'])
     print('Shell buckling =', prob['post.shell_buckling'])
+    print(prob['tower.base_F'])
+    print(prob['tower.base_M'])
 
-
+    '''
     stress1 = np.copy( prob['post.stress'] )
     shellBuckle1 = np.copy( prob['post.shell_buckling'] )
     globalBuckle1 = np.copy( prob['post.global_buckling'] )
-    #damage1 = np.copy( prob['post.damage'] )
 
     import matplotlib.pyplot as plt
-    plt.figure(figsize=(5.0, 3.5))
-    plt.subplot2grid((3, 3), (0, 0), colspan=2, rowspan=3)
-    plt.plot(stress1, z, label='stress 1')
-    plt.plot(shellBuckle1, z, label='shell buckling 1')
-    plt.plot(globalBuckle1, z, label='global buckling 1')
-    #plt.plot(damage1, z, label='damage 1')
-    plt.legend(bbox_to_anchor=(1.05, 1.0), loc=2)
-    plt.xlabel('utilization')
-    plt.ylabel('height along tower (m)')
+    fig = plt.figure(1)
+    ax1 = fig.add_subplot(121)
+    ax2 = fig.add_subplot(122)
+    ax1.plot(stress1, z, label='stress 1')
+    ax1.plot(shellBuckle1, z, label='shell buckling 1')
+    ax1.plot(globalBuckle1, z, label='global buckling 1')
+    ax1.legend(bbox_to_anchor=(1.05, 1.0), loc=2)
+    ax1.set_xlabel('utilization')
+    ax1.set_ylabel('height along tower (m)')
 
-    #plt.figure(2)
-    #plt.plot(prob['d_full']/2.+max(prob['d_full']), z, 'ok')
-    #plt.plot(prob['d_full']/-2.+max(prob['d_full']), z, 'ok')
-
-    #fig = plt.figure(3)
-    #ax1 = fig.add_subplot(121)
-    #ax2 = fig.add_subplot(122)
-
-    #plt.tight_layout()
+    ax2.plot(prob['d_full']/2.+max(prob['d_full']), prob['z_full'], 'ok')
+    ax2.plot(prob['d_full']/-2.+max(prob['d_full']), prob['z_full'], 'ok')
     plt.show()
+    '''
 
-    print(prob['tower.base_F'])
-    print(prob['tower.base_M'])
-    # ------------
 
     
 def design_floating_tower():
@@ -190,8 +186,9 @@ def design_floating_tower():
     prob['soil_G'] = 1e30
     prob['soil_nu'] = 0.0
     # Floating will have higher loading
-    prob['pre.rna_F'] *= 1.4 #np.r_[1.4*prob['pre.rna_F'][:2], prob['pre.rna_F'][2]]
-    prob['pre.rna_M'] *= 1.4
+    coeff = 1.25
+    prob['pre.rna_F'][:2] *= coeff
+    prob['pre.rna_M'] *= coeff
 
     # Run optimization
     prob.model.approx_totals()
@@ -203,7 +200,7 @@ def design_floating_tower():
 
 
 
-def design_monopile_tower():
+def design_monopile_tower(floating_tower=True):
 
     nPoints = len(d_param)
     nFull   = 5*(nPoints-1) + 1
@@ -218,8 +215,12 @@ def design_monopile_tower():
     # ----------------------
 
     # --- Design Variables ---
-    prob.model.add_design_var('tower_outer_diameter', lower=3.87, upper=10.0, indices=[0, 1, 2, 3, 4])
-    prob.model.add_design_var('tower_wall_thickness', lower=4e-3, upper=2e-1, indices=[0, 1, 2, 3, 4])
+    if floating_tower:
+        prob.model.add_design_var('tower_outer_diameter', lower=3.87, upper=10.0, indices=[m for m in range(itow)])
+        prob.model.add_design_var('tower_wall_thickness', lower=4e-3, upper=2e-1, indices=[m for m in range(itow)])
+    else:
+        prob.model.add_design_var('tower_outer_diameter', lower=3.87, upper=10.0, indices=[m for m in range(nPoints-1)])
+        prob.model.add_design_var('tower_wall_thickness', lower=4e-3, upper=2e-1)
     # ----------------------
 
     # --- Constraints ---
@@ -253,9 +254,16 @@ def design_monopile_tower():
     prob['significant_wave_period'] = 9.52
 
     # Keep tower suitable for floating as static design
-    prob0 = design_floating_tower()
-    d_param[itow:] = prob0['tower_outer_diameter']
-    t_param[itow:] = prob0['tower_wall_thickness']
+    if floating_tower:
+        prob0 = design_floating_tower()
+        prob['tower_outer_diameter'][itow:] = prob0['tower_outer_diameter']
+        prob['tower_wall_thickness'][itow:] = prob0['tower_wall_thickness']
+    else:
+        # Make the optimizer work a little less hard by using a better starting point
+        prob['tower_outer_diameter'] = np.array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 9.99400056, 9.50548548, 8.91773579, 8.24337795, 7.48200766, 6.93764838, 6.77937865, 6.5738731, 6.5])
+        prob['tower_wall_thickness'] = np.array([0.05615285, 0.05426376, 0.05232961, 0.05035596, 0.04835708, 0.0463695, 0.04439552, 0.04309169, 0.04188253, 0.04028849, 0.03715785, 0.03422847, 0.03264807, 0.0310973, 0.02948056, 0.02764022, 0.02463918, 0.02135272, 0.02436626])
+
+
 
     # Run optimization
     prob.model.approx_totals()
@@ -267,4 +275,7 @@ def design_monopile_tower():
 
 
 if __name__ == '__main__':
-    prob = design_monopile_tower()
+    prob_float = design_monopile_tower(floating_tower=True)
+    # Determine the penalty for using a single tower as opposed to two different ones
+    prob_mono  = design_monopile_tower(floating_tower=False)
+    print(prob_mono['tower_mass'] - prob_float['tower_mass'])
