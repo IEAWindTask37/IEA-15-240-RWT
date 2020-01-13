@@ -289,8 +289,8 @@ def initialize_problem(Analysis_Level, optFlag=False):
     prob['wind_reference_height']   = 150.
     prob['hub_height']              = 150.
     prob['tower_section_height']    = np.array([5., 5., 5., 5., 5., 5., 5., 5., 5., 13.,  13.,  13.,  13.,  13.,  13.,  13.,  13.,  13., 12.58244309])
-    prob['tower_outer_diameter'] = np.array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 9.99400056, 9.50548548, 8.91773579, 8.24337795, 7.48200766, 6.93764838, 6.77937865, 6.5738731, 6.5])
-    prob['tower_wall_thickness'] = np.array([0.05615285, 0.05426376, 0.05232961, 0.05035596, 0.04835708, 0.0463695, 0.04439552, 0.04309169, 0.04188253, 0.04028849, 0.03715785, 0.03422847, 0.03264807, 0.0310973, 0.02948056, 0.02764022, 0.02463918, 0.02135272, 0.02436626])
+    prob['tower_outer_diameter'] = np.array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 9.92647687, 9.44319282, 8.83283769, 8.15148167, 7.38976138, 6.90908962, 6.74803581, 6.57231775, 6.5])
+    prob['tower_wall_thickness'] = np.array([0.05534138, 0.05344902, 0.05150928, 0.04952705, 0.04751736, 0.04551709, 0.0435267, 0.04224176, 0.04105759, 0.0394965, 0.03645589, 0.03377851, 0.03219233, 0.03070819, 0.02910109, 0.02721289, 0.02400931, 0.0208264, 0.02399756])
     prob['tower_buckling_length']   = 15.0
     prob['transition_piece_mass']   = 100e3
     prob['transition_piece_height'] = 15.0
@@ -592,7 +592,7 @@ def postprocess(prob, blade):
     ax.legend(('Edge','Flap','Torsional'), loc='best')
     plt.xlabel('Nondimensional Blade Span (r/R)', fontsize=14, fontweight='bold')
     plt.ylabel('Stiffness [N.m^2]', fontsize=14, fontweight='bold')
-    fig_name = 'blade_sitffness'
+    fig_name = 'blade_stiffness'
     format_save(fig, fig_name)
 
     fig.clf()
@@ -600,7 +600,7 @@ def postprocess(prob, blade):
     ax.plot(xx, prob['EA'], linewidth=2)
     plt.xlabel('Nondimensional Blade Span (r/R)', fontsize=14, fontweight='bold')
     plt.ylabel('Axial Stiffness [N]', fontsize=14, fontweight='bold')
-    fig_name = 'blade_axial_sitffness'
+    fig_name = 'blade_axial_stiffness'
     format_save(fig, fig_name)
     
     fig.clf()

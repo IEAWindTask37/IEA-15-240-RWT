@@ -253,11 +253,14 @@ class RWT_Tabular(object):
 
         if not self.towDF is None:
             z    = np.array( self.towDF['Height [m]'] )
+            D    = np.array( self.towDF['OD [m]'] )
+            t    = 1e-3*np.array( self.towDF['Thickness [mm]'] )
             rho  = np.array( self.towDF['Mass Density [kg/m]'] )
-            indM = np.where(z <= 20.0)[0]
-            indT = np.where(z >= 20.0)[0]
+            indM = np.where(z <= 15.0)[0]
+            indT = np.where(z >= 15.0)[0]
             mtow = 1e-3*np.trapz(rho[indT], z[indT])
             mmon = 1e-3*np.trapz(rho[indM], z[indM])
+            mtot = 1e-3*np.trapz(rho, z)
         else:
             mtow=self.yaml['assembly']['mass']['tower']
             mmon=self.yaml['assembly']['mass']['monopile']
@@ -297,9 +300,12 @@ class RWT_Tabular(object):
         figCLA  = plt.figure(figsize=figsize)
         figLDA  = plt.figure(figsize=figsize)
         figCLCD = plt.figure(figsize=figsize)
+        figAIR  = plt.figure(figsize=(8,4))
         axCLA   = figCLA.add_subplot(111)
         axLDA   = figLDA.add_subplot(111)
         axCLCD  = figCLCD.add_subplot(111)
+        axAIR   = figAIR.add_subplot(111)
+        labels0 = []
         labels  = []
         
         # Loop over airfoils, one tab per airfoil, append to plots
@@ -326,6 +332,11 @@ class RWT_Tabular(object):
             for k in range(nxy):
                 ws.cell(row=k+6, column=1, value=self.yaml['airfoils'][iaf]['coordinates']['x'][k])
                 ws.cell(row=k+6, column=2, value=self.yaml['airfoils'][iaf]['coordinates']['y'][k])
+
+            if not self.yaml['airfoils'][iaf]['name'].lower() == 'circular':
+                axAIR.plot(self.yaml['airfoils'][iaf]['coordinates']['x'],
+                           self.yaml['airfoils'][iaf]['coordinates']['y'])
+                labels0.append(self.yaml['airfoils'][iaf]['name'])
 
             # Write airfoil polars
             row_start = 6+nxy+2
@@ -381,19 +392,22 @@ class RWT_Tabular(object):
         axLDA.set_ylabel('Lift over drag, $c_l/c_d$', fontsize=14, fontweight='bold')
         axCLCD.set_xlabel('Drag coefficient, $c_d$', fontsize=14, fontweight='bold')
         axCLCD.set_ylabel('Lift coefficient, $c_l$', fontsize=14, fontweight='bold')
-        for ax in [axCLA, axLDA, axCLCD]:
+        for ax in [axCLA, axLDA, axCLCD, axAIR]:
             plt.sca(ax)
             plt.xticks(fontsize=12)
             plt.yticks(fontsize=12)
             ax.grid(color=[0.8,0.8,0.8], linestyle='--')
             ax.legend(labels, loc='upper center', bbox_to_anchor=(1.25, 0.9), shadow=True, ncol=1)
+        axAIR.legend(labels0, loc='lower left', bbox_to_anchor=(-0.1, -0.3), shadow=True, ncol=4)
+        axAIR.axis('equal')
         figCLA.subplots_adjust(bottom = 0.15, left = 0.15)
         figLDA.subplots_adjust(bottom = 0.15, left = 0.15)
         figCLCD.subplots_adjust(bottom = 0.15, left = 0.15)
+        figAIR.subplots_adjust(bottom = 0.15, left = 0.15)
         figCLA.savefig('outputs' + os.sep + 'airfoil_data-cl_alpha.pdf', pad_inches=0.1, bbox_inches='tight')
         figLDA.savefig('outputs' + os.sep + 'airfoil_data-clcd_alpha.pdf', pad_inches=0.1, bbox_inches='tight')
         figCLCD.savefig('outputs' + os.sep + 'airfoil_data-cl_cd.pdf', pad_inches=0.1, bbox_inches='tight')
-
+        figAIR.savefig('outputs' + os.sep + 'airfoil_family.pdf', pad_inches=0.1, bbox_inches='tight')
                 
     def write_blade_outer(self):
         # Sheet name
@@ -527,7 +541,7 @@ class RWT_Tabular(object):
                 # Thickness adder for area plot
                 ywhere = np.array( [False]*x.size )
                 iweb   = webstack[iaf][k][2]
-                ywhere[np.logical_and(x >= np.round(iweb+0.1*iaf+0.6,1), x < np.round(iweb+0.1*iaf+0.7,1))] = True
+                ywhere[np.logical_and(x >= np.round(iweb*1.1+0.1*iaf+0.5,1), x < np.round(iweb*1.1+0.1*iaf+0.6,1))] = True
                 yadd   = np.zeros( x.shape )
                 yadd[ywhere] = webstack[iaf][k][3]
                 yPlot  = yBase + yadd
@@ -540,15 +554,18 @@ class RWT_Tabular(object):
 
         # Clean-up the plotting
         vy = ax.get_ylim()
-        ax.axis([0.4, nweb+0.6, 0.0, vy[1]+30])
+        ax.axis([0.4, 1.1*nweb+0.4, 0.0, vy[1]+20])
         leg = ax.legend(leglist, matlist, loc = 'upper left', ncol=3, bbox_to_anchor = (0.0, 1.0))
-        ax.set_xlabel(weblist[0]+'             '+weblist[1]+'             '+weblist[2], size=14, weight='bold')
+        #ax.set_xlabel(weblist[0]+'             '+weblist[1]+'             '+weblist[2], size=14, weight='bold')
+        ax.set_xlabel(weblist[0]+'                                       '+weblist[1], size=14, weight='bold')
         ax.set_ylabel('Thickness [mm]', size=14, weight='bold')
         vy = ax.get_ylim()
-        xtick = np.arange(0.6,1.31,0.1)+0.05
-        labs  = [self.airfoil_list[m]+'_'+str(int(np.round(1e2*self.airfoil_span[m])))+'%' for m in range(naf)]
-        ax.set_xticks( np.r_[xtick, xtick+1, xtick+2] )
-        ax.set_xticklabels( labs+labs+labs, rotation='vertical' )
+        xtick = 0.5 + 0.1*np.arange(len(self.airfoil_list)) + 0.05
+        labs  = [self.airfoil_list[m]+' '+str(int(np.round(1e2*self.airfoil_span[m])))+'%' for m in range(naf)]
+        #ax.set_xticks( np.r_[xtick, xtick+1, xtick+2] )
+        ax.set_xticks( np.r_[xtick, xtick+1.1] )
+        #ax.set_xticklabels( labs+labs+labs, rotation='vertical' )
+        ax.set_xticklabels( labs+labs, rotation='vertical' )
         fig.subplots_adjust(bottom = 0.15, left = 0.15)
         fig.savefig('outputs' + os.sep + 'web_layup.pdf', pad_inches=0.1, bbox_inches='tight')
                 
@@ -606,6 +623,7 @@ class RWT_Tabular(object):
                         pad_inches=0.1, bbox_inches='tight')
             
         # Grab shear web data for excel sheet
+        web3_grid, web3_ss, web3_ps = None, None, None
         for k in range(nweb):
             if self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['name'] == 'web0':
                 web1_grid = self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['start_nd_arc']['grid']
@@ -660,8 +678,9 @@ class RWT_Tabular(object):
         crossDF['Shear web-1 PS s-coord'] = myinterp(web1_grid, web1_ps)
         crossDF['Shear web-2 SS s-coord'] = myinterp(web2_grid, web2_ss)
         crossDF['Shear web-2 PS s-coord'] = myinterp(web2_grid, web2_ps)
-        crossDF['Shear web-3 SS s-coord'] = myinterp(web3_grid, web3_ss)
-        crossDF['Shear web-3 PS s-coord'] = myinterp(web3_grid, web3_ps)
+        if not web3_grid is None:
+            crossDF['Shear web-3 SS s-coord'] = myinterp(web3_grid, web3_ss)
+            crossDF['Shear web-3 PS s-coord'] = myinterp(web3_grid, web3_ps)
         crossDF['Spar cap SS begin s-coord'] = myinterp(sparcap_ss_grid, sparcap_ss_beg)
         crossDF['Spar cap SS width [m]']     = myinterp(sparcap_ss_grid, sparcap_ss_wid)
         crossDF['Spar cap SS thick [m]']     = myinterp(sparcap_ss_grid, sparcap_ss_th )
