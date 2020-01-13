@@ -518,10 +518,10 @@ def postprocess(prob, blade):
     A = 0.25*np.pi*(towDF['OD [m]']**2 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**2)
     I = (1/64.)*np.pi*(towDF['OD [m]']**4 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**4)
     towDF['Mass Density [kg/m]'] = 7850 * A
-    towDF['Flapwise inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
-    towDF['Edgewise inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
-    towDF['Flapwise stiffness [N.m^2]'] = 2e11 * I
-    towDF['Edgewise stiffness [N.m^2]'] = 2e11 * I
+    towDF['Fore-aft inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
+    towDF['Side-side inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
+    towDF['Fore-aft stiffness [N.m^2]'] = 2e11 * I
+    towDF['Side-side stiffness [N.m^2]'] = 2e11 * I
     towDF['Torsional stiffness [N.m^2]'] = 7.93e10 * 2*I
     towDF['Axial stiffness [N]'] = 2e11 * A
     with open('tow.tbl','w') as f:
@@ -538,17 +538,17 @@ def postprocess(prob, blade):
 
     fig.clf()
     ax = fig.add_subplot(111)
-    ax.plot(towDF['Height [m]'], towDF['Flapwise inertia [kg.m]'], linewidth=2)
+    ax.plot(towDF['Height [m]'], towDF['Fore-aft inertia [kg.m]'], linewidth=2)
     plt.xlabel('Location [m]', fontsize=14, fontweight='bold')
-    plt.ylabel('Flap/Edge inertia [kg.m]', fontsize=14, fontweight='bold')
-    fig_name = 'tower_flapedge-inertia'
+    plt.ylabel('Fore-aft/side-side inertia [kg.m]', fontsize=14, fontweight='bold')
+    fig_name = 'tower_foreaft_sideside-inertia'
     format_save(fig, fig_name)
 
     fig.clf()
     ax = fig.add_subplot(111)
-    ax.plot(towDF['Height [m]'], towDF['Flapwise stiffness [N.m^2]'], linewidth=2)
+    ax.plot(towDF['Height [m]'], towDF['Fore-aft stiffness [N.m^2]'], linewidth=2)
     ax.plot(towDF['Height [m]'], towDF['Torsional stiffness [N.m^2]'], linewidth=2)
-    ax.legend(('Flap/edge','Torsional'), loc='best')
+    ax.legend(('Fore-aft/side-side','Torsional'), loc='best')
     plt.xlabel('Location [m]', fontsize=14, fontweight='bold')
     plt.ylabel('Stiffness [N.m^2]', fontsize=14, fontweight='bold')
     fig_name = 'tower_stiffness'
