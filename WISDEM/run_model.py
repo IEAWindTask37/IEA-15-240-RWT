@@ -260,7 +260,7 @@ def initialize_problem(Analysis_Level, optFlag=False):
     prob = Init_MonopileTurbine(prob, blade, Nsection_Tow = Nsection_Tow, Analysis_Level = Analysis_Level, fst_vt = fst_vt)
 
     prob['tilt']                    = 6.
-    prob['overhang']                = 10.454
+    prob['overhang']                = 11.014
     prob['hub_cm']                  = np.array([-10.685, 0.0, 5.471])
     prob['nac_cm']                  = np.array([-5.718, 0.0, 4.048])
     prob['hub_I']                   = np.array([1382171.187, 2169261.099, 2160636.794, 0.0, 0.0, 0.0])
