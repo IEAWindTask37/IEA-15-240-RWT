@@ -110,7 +110,7 @@ TwrElev        TwrDiam        TwrCd
  106.            6.909          1.
  119.            6.748          1.
  132.            6.572          1.
- 144.582         6.5            1.
+ 144.495         6.5            1.
 ======  Tower Influence and Aerodynamics ============================================================= [used only when TwrPotent/=0, TwrShadow=True, or TwrAero=True]
 True                   SumPrint    - Generate a summary file listing input options and interpolated properties to "<rootname>.AD.sum"?  (flag)
 9                      NBlOuts     - Number of blade node outputs [0 - 9] (-)
