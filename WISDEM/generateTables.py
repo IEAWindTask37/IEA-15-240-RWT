@@ -44,8 +44,6 @@ def vabs_load(fname):
             Ai[k,:] = np.array(line, dtype=np.float)
             k += 1
             
-    # Remove empty starting frame
-    A = A[:,:,1:]
     return A, r
 
 
@@ -757,7 +755,7 @@ class RWT_Tabular(object):
     def write_blade_struct(self):
         
         # Load in VABS data
-        froot  = '..' + os.sep + 'OpenFAST' + os.sep + 'VABS' + os.sep + 'IEA-15-240-RWT_V3_vabs_beam_properties_'
+        froot  = '..' + os.sep + 'OpenFAST' + os.sep + 'VABS' + os.sep + 'IEA-15-240-RWT_V1_vabs_beam_properties_'
         fnames = ['mass_matrices.csv','stiff_matrices.csv','general.csv']
         M, Mr  = vabs_load(froot+fnames[0])
         K, Kr  = vabs_load(froot+fnames[1])
@@ -788,7 +786,7 @@ class RWT_Tabular(object):
                   'K_55','K_56',
                   'K_66']
 
-        bladeStructDF = pd.DataFrame(data=mydata, columns=labels)
+        bladeStructDF = pd.DataFrame(data=mydata, columns=labels, index=Mr)
         bladeStructDF = pd.concat([tempDF, bladeStructDF], axis=1)
         
         # Write to sheet
