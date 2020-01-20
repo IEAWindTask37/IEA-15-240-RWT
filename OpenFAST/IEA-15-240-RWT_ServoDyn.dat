@@ -18,7 +18,7 @@ False                  Echo        - Echo input data to <RootName>.ech (flag)
 ---------------------- GENERATOR AND TORQUE CONTROL ----------------------------
 5                      VSContrl    - Variable-speed control mode {0: none, 1: simple VS, 3: user-defined from routine UserVSCont, 4: user-defined from Simulink/Labview, 5: user-defined from Bladed-style DLL} (switch)
 2                      GenModel    - Generator model {1: simple, 2: Thevenin, 3: user-defined from routine UserGen} (switch) [used only when VSContrl=0]
-93.0                   GenEff      - Generator efficiency [ignored by the Thevenin and user-defined generator models] (%)
+96.55                  GenEff      - Generator efficiency [ignored by the Thevenin and user-defined generator models] (%)
 True                   GenTiStr    - Method to start the generator {T: timed using TimGenOn, F: generator speed using SpdGenOn} (flag)
 True                   GenTiStp    - Method to stop the generator {T: timed using TimGenOf, F: when generator power = 0} (flag)
 9999.9                 SpdGenOn    - Generator speed to turn on the generator for a startup (HSS speed) (rpm) [used only when GenTiStr=False]
