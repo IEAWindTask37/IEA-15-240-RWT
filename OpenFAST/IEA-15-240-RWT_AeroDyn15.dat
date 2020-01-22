@@ -40,7 +40,7 @@ True                   FLookup     Flag to indicate whether a lookup for f' will
 3                      InCol_Cd    - The column in the airfoil tables that contains the drag coefficient (-)
 4                      InCol_Cm    - The column in the airfoil tables that contains the pitching-moment coefficient; use zero if there is no Cm column (-)
 0                      InCol_Cpmin - The column in the airfoil tables that contains the Cpmin coefficient; use zero if there is no Cpmin column (-)
-30                     NumAFfiles  - Number of airfoil files used (-)
+50                     NumAFfiles  - Number of airfoil files used (-)
 "Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_00.dat"    AFNames            - Airfoil file names (NumAFfiles lines) (quoted strings)
 "Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_01.dat"
 "Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_02.dat"
@@ -71,6 +71,26 @@ True                   FLookup     Flag to indicate whether a lookup for f' will
 "Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_27.dat"
 "Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_28.dat"
 "Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_29.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_30.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_31.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_32.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_33.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_34.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_35.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_36.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_37.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_38.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_39.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_40.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_41.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_42.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_43.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_44.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_45.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_46.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_47.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_48.dat"
+"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_49.dat"
 ======  Rotor/Blade Properties  =====================================================================
 True                   UseBlCm     - Include aerodynamic pitching moment in calculations?  (flag)
 "IEA-15-240-RWT_AeroDyn15_blade.dat" ADBlFile(1) - Name of file containing distributed aerodynamic properties for Blade #1 (-)
@@ -80,21 +100,21 @@ True                   UseBlCm     - Include aerodynamic pitching moment in calc
 11                     NumTwrNds   - Number of tower nodes used in the analysis  (-) [used only when TwrPotent/=0, TwrShadow=True, or TwrAero=True]
 TwrElev        TwrDiam        TwrCd
 (m)              (m)           (-)
-20             10.000           1.
-32.5           9.8457           1.
-45             9.4700           1.
-57.5           9.0410           1.
-70             8.5638           1.
-82.5           8.1838           1.
-95             8.0589           1.
-107.5          7.9213           1.
-120            7.8171           1.
-132.5          7.3356           1.
-146.168        6.5000           1.
+  15.           10.             1.
+  28.           10.             1.
+  41.            9.926          1.
+  54.            9.443          1.
+  67.            8.833          1.
+  80.            8.151          1.
+  93.            7.39           1.
+ 106.            6.909          1.
+ 119.            6.748          1.
+ 132.            6.572          1.
+ 144.495         6.5            1.
 ======  Tower Influence and Aerodynamics ============================================================= [used only when TwrPotent/=0, TwrShadow=True, or TwrAero=True]
 True                   SumPrint    - Generate a summary file listing input options and interpolated properties to "<rootname>.AD.sum"?  (flag)
 9                      NBlOuts     - Number of blade node outputs [0 - 9] (-)
-1, 4, 6, 12, 18, 22, 26, 28, 30 BlOutNd     - Blade nodes whose values will be output  (-)
+1, 6, 11, 20, 30, 38, 43, 47, 50 BlOutNd     - Blade nodes whose values will be output  (-)
 0                      NTwOuts     - Number of tower node outputs [0 - 9]  (-)
 1, 2, 3, 4, 5          TwOutNd     - Tower nodes whose values will be output  (-)
                    OutList             - The next line(s) contains a list of output parameters.  See OutListParameters.xlsx for a listing of available output channels, (-)

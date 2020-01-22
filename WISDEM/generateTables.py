@@ -7,6 +7,7 @@ except:
     except:
         raise ImportError('No YAML package found')
 import pandas as pd
+import csv
 import numpy as np
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
@@ -17,6 +18,34 @@ from scipy.interpolate import interp1d
 
 def find_nearest(array, value):
     return (np.abs(array - value)).argmin() 
+
+def vabs_load(fname):
+    with open(fname, 'r') as f:
+        Alist = list( csv.reader(f) )
+
+    A  = np.zeros( (6,6,1) )
+    Ai = np.zeros( (6,6) )
+    r  = np.array( [] )
+    k  = 0
+    for line in Alist:
+        if len(line) == 0 or line[0].strip()=='': continue
+
+        elif line[0].find('section') >= 0:
+            if k > 0:
+                # Finish last section
+                A  = np.concatenate((A, Ai[:,:,np.newaxis]), axis=2)
+
+            # Starting new section
+            r  = np.r_[r, float(line[1])]
+            Ai = np.zeros( (6,6) )
+            k  = 0
+
+        else:
+            Ai[k,:] = np.array(line, dtype=np.float)
+            k += 1
+            
+    return A, r
+
 
 class RWT_Tabular(object):
     def __init__(self, finput, towDF=None, rotDF=None, bladeDF=None):
@@ -52,6 +81,7 @@ class RWT_Tabular(object):
         self.write_tower_monopile()
         self.write_materials()
         self.write_rotor_performance()
+        self.write_nacelle()
         self.cleanup()
 
     def write_overview(self):
@@ -115,6 +145,10 @@ class RWT_Tabular(object):
         ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['hubD'])
         irow += 1
         
+        ws.cell(row=irow, column=1, value='Hub distance from center to blades [m]')
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['hub_blade_distance'])
+        irow += 1
+        
         ws.cell(row=irow, column=1, value='Hub Overhang [m]')
         ws.cell(row=irow, column=2, value=-self.yaml['assembly']['global']['overhang'])
         irow += 1
@@ -175,8 +209,8 @@ class RWT_Tabular(object):
         ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['generator'])
         irow += 1
 
-        ws.cell(row=irow, column=1, value='Nose mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['nose'])
+        ws.cell(row=irow, column=1, value='Turret/Nose mass [t]')
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['turret'])
         irow += 1
 
         ws.cell(row=irow, column=1, value='Bedplate mass [t]')
@@ -217,11 +251,14 @@ class RWT_Tabular(object):
 
         if not self.towDF is None:
             z    = np.array( self.towDF['Height [m]'] )
+            D    = np.array( self.towDF['OD [m]'] )
+            t    = 1e-3*np.array( self.towDF['Thickness [mm]'] )
             rho  = np.array( self.towDF['Mass Density [kg/m]'] )
-            indM = np.where(z <= 20.0)[0]
-            indT = np.where(z >= 20.0)[0]
+            indM = np.where(z <= 15.0)[0]
+            indT = np.where(z >= 15.0)[0]
             mtow = 1e-3*np.trapz(rho[indT], z[indT])
             mmon = 1e-3*np.trapz(rho[indM], z[indM])
+            mtot = 1e-3*np.trapz(rho, z)
         else:
             mtow=self.yaml['assembly']['mass']['tower']
             mmon=self.yaml['assembly']['mass']['monopile']
@@ -253,8 +290,7 @@ class RWT_Tabular(object):
         # Header row style formatting
         for cell in ws["1:1"]:
             cell.style = 'Headline 2'
- 
- 
+
         
     def write_airfoils(self):
         # Airfoil tables with plotting
@@ -262,9 +298,12 @@ class RWT_Tabular(object):
         figCLA  = plt.figure(figsize=figsize)
         figLDA  = plt.figure(figsize=figsize)
         figCLCD = plt.figure(figsize=figsize)
+        figAIR  = plt.figure(figsize=(8,4))
         axCLA   = figCLA.add_subplot(111)
         axLDA   = figLDA.add_subplot(111)
         axCLCD  = figCLCD.add_subplot(111)
+        axAIR   = figAIR.add_subplot(111)
+        labels0 = []
         labels  = []
         
         # Loop over airfoils, one tab per airfoil, append to plots
@@ -291,6 +330,11 @@ class RWT_Tabular(object):
             for k in range(nxy):
                 ws.cell(row=k+6, column=1, value=self.yaml['airfoils'][iaf]['coordinates']['x'][k])
                 ws.cell(row=k+6, column=2, value=self.yaml['airfoils'][iaf]['coordinates']['y'][k])
+
+            if not self.yaml['airfoils'][iaf]['name'].lower() == 'circular':
+                axAIR.plot(self.yaml['airfoils'][iaf]['coordinates']['x'],
+                           self.yaml['airfoils'][iaf]['coordinates']['y'])
+                labels0.append(self.yaml['airfoils'][iaf]['name'])
 
             # Write airfoil polars
             row_start = 6+nxy+2
@@ -346,19 +390,22 @@ class RWT_Tabular(object):
         axLDA.set_ylabel('Lift over drag, $c_l/c_d$', fontsize=14, fontweight='bold')
         axCLCD.set_xlabel('Drag coefficient, $c_d$', fontsize=14, fontweight='bold')
         axCLCD.set_ylabel('Lift coefficient, $c_l$', fontsize=14, fontweight='bold')
-        for ax in [axCLA, axLDA, axCLCD]:
+        for ax in [axCLA, axLDA, axCLCD, axAIR]:
             plt.sca(ax)
             plt.xticks(fontsize=12)
             plt.yticks(fontsize=12)
             ax.grid(color=[0.8,0.8,0.8], linestyle='--')
             ax.legend(labels, loc='upper center', bbox_to_anchor=(1.25, 0.9), shadow=True, ncol=1)
+        axAIR.legend(labels0, loc='lower left', bbox_to_anchor=(-0.1, -0.3), shadow=True, ncol=4)
+        axAIR.axis('equal')
         figCLA.subplots_adjust(bottom = 0.15, left = 0.15)
         figLDA.subplots_adjust(bottom = 0.15, left = 0.15)
         figCLCD.subplots_adjust(bottom = 0.15, left = 0.15)
+        figAIR.subplots_adjust(bottom = 0.15, left = 0.15)
         figCLA.savefig('outputs' + os.sep + 'airfoil_data-cl_alpha.pdf', pad_inches=0.1, bbox_inches='tight')
         figLDA.savefig('outputs' + os.sep + 'airfoil_data-clcd_alpha.pdf', pad_inches=0.1, bbox_inches='tight')
         figCLCD.savefig('outputs' + os.sep + 'airfoil_data-cl_cd.pdf', pad_inches=0.1, bbox_inches='tight')
-
+        figAIR.savefig('outputs' + os.sep + 'airfoil_family.pdf', pad_inches=0.1, bbox_inches='tight')
                 
     def write_blade_outer(self):
         # Sheet name
@@ -492,7 +539,7 @@ class RWT_Tabular(object):
                 # Thickness adder for area plot
                 ywhere = np.array( [False]*x.size )
                 iweb   = webstack[iaf][k][2]
-                ywhere[np.logical_and(x >= np.round(iweb+0.1*iaf+0.6,1), x < np.round(iweb+0.1*iaf+0.7,1))] = True
+                ywhere[np.logical_and(x >= np.round(iweb*1.1+0.1*iaf+0.5,1), x < np.round(iweb*1.1+0.1*iaf+0.6,1))] = True
                 yadd   = np.zeros( x.shape )
                 yadd[ywhere] = webstack[iaf][k][3]
                 yPlot  = yBase + yadd
@@ -505,15 +552,18 @@ class RWT_Tabular(object):
 
         # Clean-up the plotting
         vy = ax.get_ylim()
-        ax.axis([0.4, nweb+0.6, 0.0, vy[1]+30])
+        ax.axis([0.4, 1.1*nweb+0.4, 0.0, vy[1]+20])
         leg = ax.legend(leglist, matlist, loc = 'upper left', ncol=3, bbox_to_anchor = (0.0, 1.0))
-        ax.set_xlabel(weblist[0]+'             '+weblist[1]+'             '+weblist[2], size=14, weight='bold')
+        #ax.set_xlabel(weblist[0]+'             '+weblist[1]+'             '+weblist[2], size=14, weight='bold')
+        ax.set_xlabel(weblist[0]+'                                       '+weblist[1], size=14, weight='bold')
         ax.set_ylabel('Thickness [mm]', size=14, weight='bold')
         vy = ax.get_ylim()
-        xtick = np.arange(0.6,1.31,0.1)+0.05
-        labs  = [self.airfoil_list[m]+'_'+str(int(np.round(1e2*self.airfoil_span[m])))+'%' for m in range(naf)]
-        ax.set_xticks( np.r_[xtick, xtick+1, xtick+2] )
-        ax.set_xticklabels( labs+labs+labs, rotation='vertical' )
+        xtick = 0.5 + 0.1*np.arange(len(self.airfoil_list)) + 0.05
+        labs  = [self.airfoil_list[m]+' '+str(int(np.round(1e2*self.airfoil_span[m])))+'%' for m in range(naf)]
+        #ax.set_xticks( np.r_[xtick, xtick+1, xtick+2] )
+        ax.set_xticks( np.r_[xtick, xtick+1.1] )
+        #ax.set_xticklabels( labs+labs+labs, rotation='vertical' )
+        ax.set_xticklabels( labs+labs, rotation='vertical' )
         fig.subplots_adjust(bottom = 0.15, left = 0.15)
         fig.savefig('outputs' + os.sep + 'web_layup.pdf', pad_inches=0.1, bbox_inches='tight')
                 
@@ -571,6 +621,7 @@ class RWT_Tabular(object):
                         pad_inches=0.1, bbox_inches='tight')
             
         # Grab shear web data for excel sheet
+        web3_grid, web3_ss, web3_ps = None, None, None
         for k in range(nweb):
             if self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['name'] == 'web0':
                 web1_grid = self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k]['start_nd_arc']['grid']
@@ -625,8 +676,9 @@ class RWT_Tabular(object):
         crossDF['Shear web-1 PS s-coord'] = myinterp(web1_grid, web1_ps)
         crossDF['Shear web-2 SS s-coord'] = myinterp(web2_grid, web2_ss)
         crossDF['Shear web-2 PS s-coord'] = myinterp(web2_grid, web2_ps)
-        crossDF['Shear web-3 SS s-coord'] = myinterp(web3_grid, web3_ss)
-        crossDF['Shear web-3 PS s-coord'] = myinterp(web3_grid, web3_ps)
+        if not web3_grid is None:
+            crossDF['Shear web-3 SS s-coord'] = myinterp(web3_grid, web3_ss)
+            crossDF['Shear web-3 PS s-coord'] = myinterp(web3_grid, web3_ps)
         crossDF['Spar cap SS begin s-coord'] = myinterp(sparcap_ss_grid, sparcap_ss_beg)
         crossDF['Spar cap SS width [m]']     = myinterp(sparcap_ss_grid, sparcap_ss_wid)
         crossDF['Spar cap SS thick [m]']     = myinterp(sparcap_ss_grid, sparcap_ss_th )
@@ -701,16 +753,77 @@ class RWT_Tabular(object):
                          
             
     def write_blade_struct(self):
-        if not self.bladeDF is None:
-            ws = self.wb.create_sheet(title = 'Blade Structural Properties')
-            for r in dataframe_to_rows(self.bladeDF, index=False, header=True):
-                ws.append(r)
         
-            # Header row style formatting
-            for cell in ws["1:1"]:
-                cell.style = 'Headline 2'
+        # Load in VABS data
+        froot  = '..' + os.sep + 'OpenFAST' + os.sep + 'VABS' + os.sep + 'IEA-15-240-RWT_vabs_beam_properties_'
+        fnames = ['mass_matrices.csv','stiff_matrices.csv','general.csv']
+        M, Mr  = vabs_load(froot+fnames[0])
+        K, Kr  = vabs_load(froot+fnames[1])
+        tempDF = pd.read_csv(froot+fnames[2], header=1, index_col=0)
+        mydata = np.c_[M[0,0,:], M[0,1,:], M[0,2,:], M[0,3,:], M[0,4,:], M[0,5,:], 
+                       M[1,1,:], M[1,2,:], M[1,3,:], M[1,4,:], M[1,5,:], 
+                       M[2,2,:], M[2,3,:], M[2,4,:], M[2,5,:], 
+                       M[3,3,:], M[3,4,:], M[3,5,:], 
+                       M[4,4,:], M[4,5,:], 
+                       M[5,5,:], 
+                       K[0,0,:], K[0,1,:], K[0,2,:], K[0,3,:], K[0,4,:], K[0,5,:], 
+                       K[1,1,:], K[1,2,:], K[1,3,:], K[1,4,:], K[1,5,:], 
+                       K[2,2,:], K[2,3,:], K[2,4,:], K[2,5,:], 
+                       K[3,3,:], K[3,4,:], K[3,5,:], 
+                       K[4,4,:], K[4,5,:], 
+                       K[5,5,:]]
 
-                
+        labels = ['M_11','M_12','M_13','M_14','M_15','M_16',
+                  'M_22','M_23','M_24','M_25','M_26',
+                  'M_33','M_34','M_35','M_36',
+                  'M_44','M_45','M_46',
+                  'M_55','M_56',
+                  'M_66',
+                  'K_11','K_12','K_13','K_14','K_15','K_16',
+                  'K_22','K_23','K_24','K_25','K_26',
+                  'K_33','K_34','K_35','K_36',
+                  'K_44','K_45','K_46',
+                  'K_55','K_56',
+                  'K_66']
+
+        bladeStructDF = pd.DataFrame(data=mydata, columns=labels, index=Mr)
+        bladeStructDF = pd.concat([tempDF, bladeStructDF], axis=1)
+        
+        # Write to sheet
+        ws = self.wb.create_sheet(title = 'Blade Structural Properties')
+        ws['A1'] = 'BeamDyn Coordinate System (see https://wind.nrel.gov/nwtc/docs/BeamDyn_Manual.pdf)'
+        for r in dataframe_to_rows(bladeStructDF, index=True, header=True):
+            ws.append(r)
+        
+        # Header row style formatting
+        for cell in ws["2:2"]:
+            cell.style = 'Headline 2'
+
+        # Make plot
+        blade_x  = np.array(self.yaml['components']['blade']['outer_shape_bem']['chord']['grid'])
+        blade_le = (np.array(self.yaml['components']['blade']['outer_shape_bem']['chord']['values']) *
+                    np.array(self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values']))
+        blade_te = (np.array(self.yaml['components']['blade']['outer_shape_bem']['chord']['values']) *
+                    (1.-np.array(self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values'])))
+        xx      = bladeStructDF.index 
+        y_mass  = bladeStructDF['Mass center (chordwise), m']
+        y_neut  = bladeStructDF['Neutral axes (chordwise), m']
+        y_geo   = bladeStructDF['Geometric center (chordwise), m']
+        y_shear = bladeStructDF['Shear center (chordwise), m']
+        fig = plt.figure(figsize=(8,4))
+        ax  = fig.add_subplot(111)
+        ax.plot(blade_x, np.zeros(blade_x.shape), 'k:')
+        ax.plot(xx, y_mass,
+                xx, y_neut,
+                xx, y_geo,
+                xx, y_shear, linewidth=2)
+        ax.plot(blade_x, blade_le, 'k', blade_x, -blade_te, 'k', linewidth=2.5)
+        ax.legend(['Pitch axis','Mass center','Neutral center','Geometric center','Shear center'])
+        ax.set_xlabel('Blade span r/R', size=14, weight='bold')
+        ax.set_ylabel('Chordwise [m]', size=14, weight='bold')
+        fig.savefig('outputs' + os.sep + 'planform.pdf', pad_inches=0.1, bbox_inches='tight')
+
+        
     def write_tower_monopile(self):
         if not self.towDF is None:
             ws = self.wb.create_sheet(title = 'Tower Properties')
@@ -834,7 +947,41 @@ class RWT_Tabular(object):
             for cell in ws["1:1"]:
                 cell.style = 'Headline 2'
 
-                
+
+    def write_nacelle(self):
+        # Nacelle data
+        fnac  =  '..'+os.sep+'Documentation'+os.sep+'drivetrain'+os.sep+'Nacelle_Mass_Properties.xlsx'
+        nacDF = pd.read_excel(fnac)
+        nacDF.set_index('Name', inplace=True)
+
+        # Put units in column name
+        colnames = []
+        for k in range(len(nacDF.columns)):
+            colnames.append( nacDF.columns[k] + ' ['+nacDF[ nacDF.columns[k] ].loc['Units']+']' )
+        nacDF.rename(columns=dict(zip(nacDF.columns, colnames)), inplace=True)
+        nacDF.drop(index='Units', inplace=True)
+        nacDF = nacDF.astype('float64') 
+
+        # Round off big numbers for appearances
+        for k in nacDF.columns:
+            if k in ['X_TT [m]','Z_TT [m]']: continue
+            for i in nacDF.index:
+                nacDF[k].loc[i] = np.round( nacDF[k].loc[i] )
+
+        # Write it out to sheet
+        ws = self.wb.create_sheet(title = 'Nacelle Mass Properties')
+        for r in dataframe_to_rows(nacDF, index=True, header=True):
+            ws.append(r)
+        
+        # Header row style formatting
+        for cell in ws["1:1"]:
+            cell.style = 'Headline 2'
+
+        # Dump to latex file
+        with open('nac.tbl','w') as f:
+            nacDF.to_latex(f, index=True)
+        
+        
     def cleanup(self):
         # Remove empty sheet
         self.wb.active = 0
@@ -842,7 +989,7 @@ class RWT_Tabular(object):
         self.wb.remove(ws)
         
         # Save workbook to file
-        self.wb.save(filename=self.fout)
+        self.wb.save(self.fout)
 
         
 if __name__ == '__main__':
