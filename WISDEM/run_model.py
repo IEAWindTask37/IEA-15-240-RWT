@@ -12,7 +12,7 @@ import openmdao.api as om
 from wisdem.rotorse.rotor import RotorSE, Init_RotorSE_wRefBlade
 from wisdem.rotorse.rotor_geometry_yaml import ReferenceBlade
 from wisdem.commonse.turbine_constraints import TurbineConstraints
-from wisdem.assemblies.fixed_bottom.monopile_assembly_turbine_nodrive import MonopileTurbine, Init_MonopileTurbine
+from wisdem.assemblies.fixed_bottom.monopile_assembly_turbine_nodrive import MonopileTurbine
 from wisdem.aeroelasticse.FAST_reader import InputReader_Common, InputReader_OpenFAST, InputReader_FAST7
 
 from generateTables import RWT_Tabular
@@ -23,130 +23,6 @@ fname_schema  = 'IEAontology_schema.yaml'
 fname_input   = 'IEA-15-240-RWT.yaml'
 fname_output  = 'IEA-15-240-RWT_out.yaml'
 folder_output = os.getcwd() + os.sep + 'outputs'
-
-
-# Class to print outputs on screen
-class Outputs_2_Screen(om.ExplicitComponent):
-    def setup(self):
-        # self.add_input('chord',                val=np.zeros(NPTS))
-        # self.add_input('theta',                val=np.zeros(NPTS))
-        self.add_input('bladeLength',          val=0.0, units = 'm')
-        self.add_input('total_blade_cost',     val=0.0, units = 'USD')
-        self.add_input('mass_one_blade',       val=0.0, units = 'kg')
-        self.add_input('tower_mass',           val=0.0, units = 'kg')
-        self.add_input('tower_cost',           val=0.0, units = 'USD')
-        self.add_input('control_tsr',          val=0.0)
-        self.add_input('AEP',                  val=0.0, units = 'GW * h')
-        self.add_input('lcoe',                 val=0.0, units = 'USD/MW/h')
-        self.add_input('rated_T',              val=0.0, units = 'MN')
-        self.add_input('root_bending_moment',  val=0.0, units = 'MN * m')
-        self.add_input('tip_deflection',       val=0.0, units = 'm')
-        self.add_input('tip_deflection_ratio', val=0.0)
-
-        
-    def compute(self, inputs, outputs):
-        print('########################################')
-        print('Optimization variables')
-        # print('Max chord:   {:8.3f} m'.format(max(inputs['chord'])))
-        print('TSR:         {:8.3f} -'.format(inputs['control_tsr'][0]))
-        print('')
-        print('Constraints')
-        print('Max TD:      {:8.3f} m'.format(inputs['tip_deflection'][0]))
-        print('TD ratio:    {:8.10f} -'.format(inputs['tip_deflection_ratio'][0]))
-        print('')
-        print('Objectives')
-        print('AEP:         {:8.10f} GWh'.format(inputs['AEP'][0]))
-        print('Blade mass:  {:8.3f} kg'.format(inputs['mass_one_blade'][0]))
-        print('Blade cost:  {:8.3f} $'.format(inputs['total_blade_cost'][0]))
-        print('Tower mass:  {:8.3f} kg'.format(inputs['tower_mass'][0]))
-        print('Tower cost:  {:8.3f} $'.format(inputs['tower_cost'][0]))
-        print('LCoE:        {:8.3f} $/MWh'.format(inputs['lcoe'][0]))
-        print('########################################')
-
-        
-class Convergence_Trends_Opt(om.ExplicitComponent):
-    def initialize(self):
-        
-        self.options.declare('folder_output')
-        self.options.declare('optimization_log')
-        
-    def compute(self, inputs, outputs):
-        
-        folder_output       = self.options['folder_output']
-        optimization_log    = self.options['folder_output'] + self.options['optimization_log']
-
-        if os.path.exists(optimization_log):
-        
-            cr = CaseReader(optimization_log)
-            cases = cr.list_cases()
-            rec_data = {}
-            iterations = []
-            for i, casei in enumerate(cases):
-                iterations.append(i)
-                it_data = cr.get_case(casei)
-                
-                # parameters = it_data.get_responses()
-                for parameters in [it_data.get_responses(), it_data.get_design_vars()]:
-                    for j, param in enumerate(parameters.keys()):
-                        if i == 0:
-                            rec_data[param] = []
-                        rec_data[param].append(parameters[param])
-
-            for param in rec_data.keys():
-                fig, ax = plt.subplots(1,1,figsize=(5.3, 4))
-                ax.plot(iterations, rec_data[param])
-                ax.set(xlabel='Number of Iterations' , ylabel=param)
-                fig_name = 'Convergence_trend_' + param + '.pdf'
-                fig.savefig(folder_output + fig_name)
-                plt.close(fig)
-
-                
-# Group to link the openmdao components
-class Optimize_MonopileTurbine(om.Group):
-
-    def initialize(self):
-        self.options.declare('RefBlade')
-        self.options.declare('folder_output' ,  default='')
-        self.options.declare('FASTpref',        default={})
-        self.options.declare('Nsection_Tow',    default = 19)
-        self.options.declare('VerbosityCosts',  default = False)
-        self.options.declare('user_update_routine',     default=None)
-        
-    def setup(self):
-        RefBlade             = self.options['RefBlade']
-        folder_output        = self.options['folder_output']
-        Nsection_Tow         = self.options['Nsection_Tow']
-        VerbosityCosts       = self.options['VerbosityCosts']
-        user_update_routine  = self.options['user_update_routine']
-        FASTpref             = self.options['FASTpref']
-    
-        self.add_subsystem('lb_wt', MonopileTurbine(RefBlade=RefBlade, Nsection_Tow = Nsection_Tow, VerbosityCosts = VerbosityCosts, user_update_routine=user_update_routine, FASTpref=FASTpref), promotes=['*'])
-        # Post-processing
-        self.add_subsystem('outputs_2_screen',  Outputs_2_Screen(), promotes=['*'])
-        self.add_subsystem('conv_plots',        Convergence_Trends_Opt(folder_output = folder_output, optimization_log = 'log_opt_' + RefBlade['config']['name']))
-        
-
-def set_web3_offset(blade):
-    # User Routine to set the 3rd web offset to be at 90% chord for the NREL 15MW
-    web_name     = 'third_web'
-    web_position = 0.9
-    # ------------------------
-
-    web_idx  = [idx for idx, web in enumerate(blade['st']['webs']) if web['name']==web_name][0]
-
-    r_in          = blade['ctrl_pts']['r_in']
-    chord_in      = blade['ctrl_pts']['chord_in']
-    p_le_spline   = PchipInterpolator(blade['pf']['s'], blade['pf']['p_le'])
-    p_le_in       = p_le_spline(r_in)
-    
-    offset_in     = [chord_i*(web_position-p_le_i) for p_le_i, chord_i in zip(p_le_in, chord_in)]
-    offset_spline = PchipInterpolator(r_in, offset_in)
-    offset        = offset_spline(blade['pf']['s'])
-
-    blade['st']['webs'][web_idx]['offset_x_pa']['grid']   = blade['pf']['s']
-    blade['st']['webs'][web_idx]['offset_x_pa']['values'] = offset
-
-    return blade
 
 
 def initialize_problem(Analysis_Level, optFlag=False):
@@ -201,8 +77,7 @@ def initialize_problem(Analysis_Level, optFlag=False):
         fst_vt = {}
 
     prob = om.Problem()
-    #prob.model=Optimize_MonopileTurbine(RefBlade=blade, Nsection_Tow=Nsection_Tow, folder_output=folder_output, user_update_routine=set_web3_offset, FASTpref=FASTpref)
-    prob.model=Optimize_MonopileTurbine(RefBlade=blade, Nsection_Tow=Nsection_Tow, folder_output=folder_output, FASTpref=FASTpref)
+    prob.model=MonopileTurbine(RefBlade=blade, Nsection_Tow=Nsection_Tow, VerbosityCosts=False, FASTpref=FASTpref)
     prob.model.nonlinear_solver = om.NonlinearRunOnce()
     prob.model.linear_solver    = om.DirectSolver()
 
@@ -257,9 +132,83 @@ def initialize_problem(Analysis_Level, optFlag=False):
 
     # Initialize variable inputs
     prob.setup()
-    prob = Init_MonopileTurbine(prob, blade, Nsection_Tow = Nsection_Tow, Analysis_Level = Analysis_Level, fst_vt = fst_vt)
 
-    prob['tilt']                    = 6.
+    prob = Init_RotorSE_wRefBlade(prob, blade, Analysis_Level = Analysis_Level, fst_vt = fst_vt)
+
+    # Environmental parameters for the tower
+    prob['significant_wave_height'] = 4.52
+    prob['significant_wave_period'] = 9.45
+    prob['water_depth']             = 30.
+    prob['wind_reference_height'] = prob['hub_height'] = 150.
+    prob['shearExp']                       = 0.11
+    prob['rho']                            = 1.225
+    prob['mu']                             = 1.7934e-5
+    prob['water_density']                  = 1025.0
+    prob['water_viscosity']                = 1.3351e-3
+    prob['wind_beta'] = prob['wave_beta'] = 0.0
+
+    # Steel properties for the tower
+    prob['material_density']               = 7850.0
+    prob['E']                              = 210e9
+    prob['G']                              = 79.3e9
+    prob['yield_stress']                   = 345e6
+    prob['soil_G']                         = 140e6
+    prob['soil_nu']                        = 0.4
+
+    # Design constraints
+    prob['max_taper_ratio']                = 0.4
+    prob['min_diameter_thickness_ratio']   = 120.0
+
+    # Safety factors
+    prob['gamma_fatigue']   = 1.755 # (Float): safety factor for fatigue
+    prob['gamma_f']         = 1.35  # (Float): safety factor for loads/stresses
+    prob['gamma_m']         = 1.3   # (Float): safety factor for materials
+    prob['gamma_freq']      = 1.1   # (Float): safety factor for resonant frequencies
+    prob['gamma_n']         = 1.0
+    prob['gamma_b']         = 1.1
+    
+    # Tower
+    prob['tower_buckling_length']          = 30.0
+    prob['tower_outfitting_factor']        = 1.07
+    prob['foundation_height']       = -30.
+    prob['suctionpile_depth']       = 45.
+    prob['tower_section_height']    = np.array([5., 5., 5., 5., 5., 5., 5., 5., 5., 13.,  13.,  13.,  13.,  13.,  13.,  13.,  13.,  13., 12.58244309])
+    prob['tower_outer_diameter'] = np.array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 9.92647687, 9.44319282, 8.83283769, 8.15148167, 7.38976138, 6.90908962, 6.74803581, 6.57231775, 6.5])
+    prob['tower_wall_thickness'] = np.array([0.05534138, 0.05344902, 0.05150928, 0.04952705, 0.04751736, 0.04551709, 0.0435267, 0.04224176, 0.04105759, 0.0394965, 0.03645589, 0.03377851, 0.03219233, 0.03070819, 0.02910109, 0.02721289, 0.02400931, 0.0208264, 0.02399756])
+    prob['tower_buckling_length']   = 15.0
+    prob['transition_piece_mass']   = 100e3
+    prob['transition_piece_height'] = 15.0
+
+
+    prob['DC']      = 80.0
+    prob['shear']   = True
+    prob['geom']    = True
+    prob['tower_force_discretization'] = 5.0
+    prob['nM']      = 2
+    prob['Mmethod'] = 1
+    prob['lump']    = 0
+    prob['tol']     = 1e-9
+    prob['shift']   = 0.0
+    
+    # Plant size
+    prob['project_lifetime'] = prob['lifetime'] = 20.0    
+    prob['number_of_turbines']             = 200
+    prob['annual_opex']                    = 43.56 # $/kW/yr
+    prob['bos_costs']                      = 1234.5 # $/kW
+    
+    prob['tower_add_gravity'] = True
+
+    # For turbine costs
+    prob['offshore']             = True
+    prob['crane']                = False
+    prob['bearing_number']       = 2
+    prob['crane_cost']           = 0.0
+    prob['labor_cost_rate']      = 3.0
+    prob['material_cost_rate']   = 2.0
+    prob['painting_cost_rate']   = 28.8
+    
+    # Gearbox
+    prob['tilt']       = 6.0
     prob['overhang']                = 11.014
     prob['hub_cm']                  = np.array([-10.685, 0.0, 5.471])
     prob['nac_cm']                  = np.array([-5.718, 0.0, 4.048])
@@ -280,20 +229,6 @@ def initialize_problem(Analysis_Level, optFlag=False):
     prob['generator_mass']          = 226.7e3+145.25e3
     prob['bedplate_mass']           = 39.434e3
     prob['main_bearing_mass']       = 4.699e3
-    prob['significant_wave_height'] = 4.52
-    prob['significant_wave_period'] = 9.45
-    prob['monopile']                = True
-    prob['foundation_height']       = -30.
-    prob['water_depth']             = 30.
-    prob['suctionpile_depth']       = 45.
-    prob['wind_reference_height']   = 150.
-    prob['hub_height']              = 150.
-    prob['tower_section_height']    = np.array([5., 5., 5., 5., 5., 5., 5., 5., 5., 13.,  13.,  13.,  13.,  13.,  13.,  13.,  13.,  13., 12.58244309])
-    prob['tower_outer_diameter'] = np.array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 9.92647687, 9.44319282, 8.83283769, 8.15148167, 7.38976138, 6.90908962, 6.74803581, 6.57231775, 6.5])
-    prob['tower_wall_thickness'] = np.array([0.05534138, 0.05344902, 0.05150928, 0.04952705, 0.04751736, 0.04551709, 0.0435267, 0.04224176, 0.04105759, 0.0394965, 0.03645589, 0.03377851, 0.03219233, 0.03070819, 0.02910109, 0.02721289, 0.02400931, 0.0208264, 0.02399756])
-    prob['tower_buckling_length']   = 15.0
-    prob['transition_piece_mass']   = 100e3
-    prob['transition_piece_height'] = 15.0
 
     return prob, blade
 
@@ -305,34 +240,46 @@ def run_problem(prob, optFlag=False):
     print('Running at Initial Position:')
     prob.run_model()
 
-    # Screen outputs
-    print('rna_mass', prob['tow.pre.mass'])
-    print('rna_I', prob['tow.pre.mI'])
-    print('rna_F', prob['tow.pre.rna_F'])
-    print('rna_M', prob['tow.pre.rna_M'])
-    print('rna_cg', prob['rna_cg'])
-    print('Uref', prob['tow.wind.Uref'])
-    print('frequencies', prob['tow.post.structural_frequencies'])
-    #print('stress', prob['tow.post.stress'])
-    #print('local buckling', prob['tow.post.shell_buckling'])
-    #print('shell buckling', prob['tow.post.global_buckling'])
-
-    print('AEP =',                      prob['AEP'])
-    print('diameter =',                 prob['diameter'])
-    print('ratedConditions.V =',        prob['rated_V'])
-    print('ratedConditions.Omega =',    prob['rated_Omega'])
-    print('ratedConditions.pitch =',    prob['rated_pitch'])
-    print('ratedConditions.T =',        prob['rated_T'])
-    print('ratedConditions.Q =',        prob['rated_Q'])
-    print('mass_one_blade =',           prob['mass_one_blade'])
-    print('mass_all_blades =',          prob['mass_all_blades'])
-    print('I_all_blades =',             prob['I_all_blades'])
-    print('freq =',                     prob['freq_pbeam'])
-    print('tip_deflection =',           prob['tip_deflection'])
-    print('root_bending_moment =',      prob['root_bending_moment'])
-    print('moments at the hub =',       prob['Mxyz_total'])
-    print('blade cost =',               prob['total_blade_cost'])
-    print('tower freq =',               prob['tow.tower.f1'])
+    print('########################################')
+    print('')
+    print('Control variables')
+    print('Rotor diam:    {:8.3f} m'.format(prob['diameter'][0]))
+    print('TSR:           {:8.3f} -'.format(prob['control_tsr'][0]))
+    print('Rated vel:     {:8.3f} m/s'.format(prob['rated_V'][0]))
+    print('Rated rpm:     {:8.3f} rpm'.format(prob['rated_Omega'][0]))
+    print('Rated pitch:   {:8.3f} deg'.format(prob['rated_pitch'][0]))
+    print('Rated thrust:  {:8.3f} N'.format(prob['rated_T'][0]))
+    print('Rated torque:  {:8.3f} N-m'.format(prob['rated_Q'][0]))
+    print('')
+    print('Constraints')
+    print('Max TD:       {:8.3f} m'.format(prob['tip_deflection'][0]))
+    print('TD ratio:     {:8.3f} -'.format(prob['tip_deflection_ratio'][0]))
+    print('Blade root M: {:8.3f} N-m'.format(prob['root_bending_moment'][0]))
+    print('')
+    print('Objectives')
+    print('AEP:         {:8.3f} GWh'.format(prob['AEP'][0]))
+    print('LCoE:        {:8.4f} $/MWh'.format(prob['lcoe'][0]))
+    print('')
+    print('Blades')
+    print('Blade mass:  {:8.3f} kg'.format(prob['mass_one_blade'][0]))
+    print('Blade cost:  {:8.3f} $'.format(prob['total_blade_cost'][0]))
+    print('Blade freq:  {:8.3f} Hz'.format(prob['freq_curvefem'][0]))
+    print('3 blade M_of_I:  ', prob['I_all_blades'], ' kg-m^2')
+    print('Hub M:  ', prob['Mxyz_total'], ' kg-m^2')
+    print('')
+    print('RNA Summary')
+    print('RNA mass:    {:8.3f} kg'.format(prob['tow.pre.mass'][0]))
+    print('RNA C_of_G (TT):  ', prob['rna_cg'], ' m')
+    print('RNA M_of_I:  ', prob['tow.pre.mI'], ' kg-m^2')
+    print('')
+    print('Tower')
+    print('Tower top F: ', prob['tow.pre.rna_F'], ' N')
+    print('Tower top M: ', prob['tow.pre.rna_M'], ' N-m')
+    print('Tower freqs: ', prob['tow.post.structural_frequencies'], ' Hz')
+    print('Tower vel:   {:8.3f} kg'.format(prob['tow.wind.Uref'][0]))
+    print('Tower mass:  {:8.3f} kg'.format(prob['tower_mass'][0]))
+    print('Tower cost:  {:8.3f} $'.format(prob['tower_cost'][0]))
+    print('########################################')
 
     # Complete data dump
     #prob.model.list_inputs(units=True)
