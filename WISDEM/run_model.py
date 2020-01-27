@@ -190,11 +190,28 @@ def initialize_problem(Analysis_Level, optFlag=False):
     prob['tol']     = 1e-9
     prob['shift']   = 0.0
     
-    # Plant size
+    # Offshore BOS
+    prob['wtiv'] = 'example_wtiv'
+    prob['feeder'] = 'future_feeder'
+    prob['num_feeders'] = 1
+    prob['oss_install_vessel'] = 'example_heavy_lift_vessel'
+    prob['site_distance'] = 40.0
+    prob['site_distance_to_landfall'] = 40.0
+    prob['site_distance_to_interconnection'] = 40.0
+    prob['plant_turbine_spacing'] = 7
+    prob['plant_row_spacing'] = 7
+    prob['plant_substation_distance'] = 1
+    prob['tower_deck_space'] = 0.
+    prob['nacelle_deck_space'] = 0.
+    prob['blade_deck_space'] = 0.
+    prob['port_cost_per_month'] = 2e6
+    prob['monopile_deck_space'] = 0.
+    prob['transition_piece_deck_space'] = 0.
+    prob['commissioning_pct'] = 0.01
+    prob['decommissioning_pct'] = 0.15
     prob['project_lifetime'] = prob['lifetime'] = 20.0    
-    prob['number_of_turbines']             = 200
+    prob['number_of_turbines']             = 40
     prob['annual_opex']                    = 43.56 # $/kW/yr
-    prob['bos_costs']                      = 1234.5 # $/kW
     
     prob['tower_add_gravity'] = True
 
@@ -207,15 +224,15 @@ def initialize_problem(Analysis_Level, optFlag=False):
     prob['material_cost_rate']   = 2.0
     prob['painting_cost_rate']   = 28.8
     
-    # Gearbox
-    prob['tilt']       = 6.0
-    prob['overhang']                = 11.014
+    # Drivetrain
+    prob['tilt']                    = 6.0
+    prob['overhang']                = 11.075
     prob['hub_cm']                  = np.array([-10.685, 0.0, 5.471])
     prob['nac_cm']                  = np.array([-5.718, 0.0, 4.048])
     prob['hub_I']                   = np.array([1382171.187, 2169261.099, 2160636.794, 0.0, 0.0, 0.0])
     prob['nac_I']                   = np.array([13442265.552, 21116729.439, 18382414.385, 0.0, 0.0, 0.0])
-    prob['hub_mass']                = 140e3
-    prob['nac_mass']                = 797.275e3
+    prob['hub_mass']                = 190e3
+    prob['nac_mass']                = 797.275e3-190e3
     prob['hss_mass']                = 0.0
     prob['lss_mass']                = 19.504e3
     prob['cover_mass']              = 0.0
@@ -279,6 +296,8 @@ def run_problem(prob, optFlag=False):
     print('Tower vel:   {:8.3f} kg'.format(prob['tow.wind.Uref'][0]))
     print('Tower mass:  {:8.3f} kg'.format(prob['tower_mass'][0]))
     print('Tower cost:  {:8.3f} $'.format(prob['tower_cost'][0]))
+    print('Monopile mass:  {:8.3f} kg'.format(prob['monopile_mass'][0]))
+    print('Monopile cost:  {:8.3f} $'.format(prob['monopile_cost'][0]))
     print('########################################')
 
     # Complete data dump

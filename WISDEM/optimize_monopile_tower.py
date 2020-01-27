@@ -41,7 +41,7 @@ def set_common_params(prob):
     prob['rna_mass'] = 1141316.5884164
     prob['rna_I'] = np.array([mIxx, mIyy, mIzz, mIxy, mIxz, mIyz])
     prob['rna_cg'] = np.array([-7.21526604, 0., 4.47695301])
-    prob['tower_add_gravity'] = False # Don't double count
+    prob['tower_add_gravity'] = True
     # -----------
 
     # --- wind & wave ---
@@ -88,9 +88,9 @@ def set_common_params(prob):
     prob['wind.Uref'] = 20.00138038
     prob['pre.rna_F'] = np.array([3712210.30517985,
                                   -25397.27352212,
-                                  -11501630.81680242])
+                                  -419019.0213100216])
     prob['pre.rna_M'] = np.array([71685475.4824221,
-                                  -62399498.89277127,
+                                  17184504.66608971,
                                   1765885.10839113])
     # # ---------------
     return prob
@@ -98,9 +98,10 @@ def set_common_params(prob):
 
 def postprocess(prob):
     z,_ = nodal2sectional(prob['z_full'])
-    print('section_height', prob['tower_section_height'])
-    print('section_diam', prob['tower_outer_diameter'])
-    print('section_thick', prob['tower_wall_thickness'])
+    print('section_height [m]', prob['tower_section_height'])
+    print('section_diam [m]', prob['tower_outer_diameter'])
+    print('section_thick [m]', prob['tower_wall_thickness'])
+    print('pile depth [m]', prob['suctionpile_depth'])
     print('zs=', z)
     print('ds=', prob['d_full'])
     print('ts=', prob['t_full'])
@@ -221,6 +222,7 @@ def design_monopile_tower(floating_tower=True):
     else:
         prob.model.add_design_var('tower_outer_diameter', lower=3.87, upper=10.0, indices=[m for m in range(nPoints-1)])
         prob.model.add_design_var('tower_wall_thickness', lower=4e-3, upper=2e-1)
+    #prob.model.add_design_var('suctionpile_depth', lower=10., upper=70.)
     # ----------------------
 
     # --- Constraints ---
@@ -277,7 +279,7 @@ def design_monopile_tower(floating_tower=True):
 
 
 if __name__ == '__main__':
-    prob_float = design_monopile_tower(floating_tower=True)
+    #prob_float = design_monopile_tower(floating_tower=True)
     # Determine the penalty for using a single tower as opposed to two different ones
     prob_mono  = design_monopile_tower(floating_tower=False)
-    print(prob_mono['tower_mass'] - prob_float['tower_mass'])
+    #print(prob_mono['tower_mass'] - prob_float['tower_mass'])

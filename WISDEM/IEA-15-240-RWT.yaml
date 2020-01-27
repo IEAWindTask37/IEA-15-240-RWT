@@ -592,14 +592,14 @@ assembly:
         flange: 3.627
         yaw_system: 100.0
         other: 50.0
-        blade: 65.2535
+        blade: 65.8
         hub: 190.0
         nacelle_other: 100.0
         nacelle: 797.275
-        rna: 993.035
-        rna_center_of_mass: [-6.853, 0.0, 4.351]
-        tower: 803.5
-        monopile: 1138.0
+        rna: 994.72
+        rna_center_of_mass: [-7.65265556, 0.0, 4.6022611]
+        tower: 859.8
+        monopile: 1317.7
     control:
         Vin: 3.0
         Vout: 25.0
@@ -608,7 +608,7 @@ assembly:
         tsr: 9.0
         pitch: 0.
         maxTS: 95.
-        Vrated: 10.84
+        Vrated: 10.88
         variable_speed: true
         IPC: false
         

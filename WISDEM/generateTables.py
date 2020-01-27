@@ -248,23 +248,9 @@ class RWT_Tabular(object):
         ws.cell(row=irow, column=1, value='Nacelle center of mass from tower top [m]')
         ws.cell(row=irow, column=2, value=str(self.yaml['assembly']['mass']['rna_center_of_mass']))
         irow += 1
-
-        if not self.towDF is None:
-            z    = np.array( self.towDF['Height [m]'] )
-            D    = np.array( self.towDF['OD [m]'] )
-            t    = 1e-3*np.array( self.towDF['Thickness [mm]'] )
-            rho  = np.array( self.towDF['Mass Density [kg/m]'] )
-            indM = np.where(z <= 15.0)[0]
-            indT = np.where(z >= 15.0)[0]
-            mtow = 1e-3*np.trapz(rho[indT], z[indT])
-            mmon = 1e-3*np.trapz(rho[indM], z[indM])
-            mtot = 1e-3*np.trapz(rho, z)
-        else:
-            mtow=self.yaml['assembly']['mass']['tower']
-            mmon=self.yaml['assembly']['mass']['monopile']
             
         ws.cell(row=irow, column=1, value='Tower mass [t]')
-        ws.cell(row=irow, column=2, value=mtow)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['tower'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Tower base diameter [m]')
@@ -284,7 +270,7 @@ class RWT_Tabular(object):
         irow += 1
         
         ws.cell(row=irow, column=1, value='Monopile mass [t]')
-        ws.cell(row=irow, column=2, value=mmon)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['monopile'])
         irow += 1
         
         # Header row style formatting
