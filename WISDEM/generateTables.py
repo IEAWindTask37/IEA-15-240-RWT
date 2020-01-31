@@ -221,8 +221,12 @@ class RWT_Tabular(object):
         ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['shaft'])
         irow += 1
 
-        ws.cell(row=irow, column=1, value='Shaft bearing mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['main_bearing'])
+        ws.cell(row=irow, column=1, value='Shaft bearing mass (SRB) [t]')
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['main_bearing_srb'])
+        irow += 1
+
+        ws.cell(row=irow, column=1, value='Shaft bearing mass (TDO) [t]')
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['main_bearing_tdo'])
         irow += 1
 
         ws.cell(row=irow, column=1, value='Flange mass [t]')
@@ -408,14 +412,25 @@ class RWT_Tabular(object):
             self.airfoil_span.append( self.yaml['components']['blade']['outer_shape_bem']['airfoil_position']['grid'][k] )
 
         ws.cell(row=npts+3, column=1, value='Profile')
+
+        # Interpolation function for arbitraty grids
+        mygrid = self.yaml['components']['blade']['outer_shape_bem']['chord']['grid']
+        def myinterp(xgrid, val):
+            return interp1d(xgrid, val, kind='cubic', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
+        
         # Create blade geometry array in pandas
         geommat = np.c_[self.yaml['components']['blade']['outer_shape_bem']['chord']['grid'],
                         self.yaml['components']['blade']['outer_shape_bem']['chord']['values'],
-                        self.yaml['components']['blade']['outer_shape_bem']['twist']['values'],
-                        self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values'],
-                        self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['z']['values'],
-                        self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['x']['values'],
-                        self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['y']['values']]
+                        myinterp(self.yaml['components']['blade']['outer_shape_bem']['twist']['grid'],
+                                 self.yaml['components']['blade']['outer_shape_bem']['twist']['values']),
+                        myinterp(self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['grid'],
+                                 self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values']),
+                        myinterp(self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['z']['grid'],
+                                 self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['z']['values']),
+                        myinterp(self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['x']['grid'],
+                                 self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['x']['values']),
+                        myinterp(self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['y']['grid'],
+                                 self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['y']['values'])  ]
         geomDF = pd.DataFrame(geommat, columns=['Spanwise position [r/R]',
                                               'Chord [m]',
                                               'Twist [rad]',
@@ -785,12 +800,18 @@ class RWT_Tabular(object):
         for cell in ws["2:2"]:
             cell.style = 'Headline 2'
 
+        
+            
         # Make plot
         blade_x  = np.array(self.yaml['components']['blade']['outer_shape_bem']['chord']['grid'])
+        def myinterp(xgrid, val):
+            return interp1d(xgrid, val, kind='cubic', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(blade_x)
         blade_le = (np.array(self.yaml['components']['blade']['outer_shape_bem']['chord']['values']) *
-                    np.array(self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values']))
+                    myinterp(self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['grid'],
+                             self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values']) )
         blade_te = (np.array(self.yaml['components']['blade']['outer_shape_bem']['chord']['values']) *
-                    (1.-np.array(self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values'])))
+                    (1. - myinterp(self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['grid'],
+                                   self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values']) ) )
         xx      = bladeStructDF.index 
         y_mass  = bladeStructDF['Mass center (chordwise), m']
         y_neut  = bladeStructDF['Neutral axes (chordwise), m']

@@ -32,15 +32,15 @@ def set_common_params(prob):
     prob['sigma_y'] = 345.0e6 #450.0e6
 
     # --- extra mass ----
-    mIxx = 4.10974879e+08
-    mIyy = 2.73852641e+08
-    mIzz = 2.10770543e+08
+    mIxx = 3.42240948e+08
+    mIyy = 2.26926355e+08
+    mIzz = 1.74414104e+08
     mIxy = 0.0
-    mIxz = 3.85659547e+07
+    mIxz = 3.12038059e+07
     mIyz = 0.0
-    prob['rna_mass'] = 1141316.5884164
+    prob['rna_mass'] = 1017574.930
     prob['rna_I'] = np.array([mIxx, mIyy, mIzz, mIxy, mIxz, mIyz])
-    prob['rna_cg'] = np.array([-7.21526604, 0., 4.47695301])
+    prob['rna_cg'] = np.array([-6.47601681, 0., 4.2691133])
     prob['tower_add_gravity'] = True
     # -----------
 
@@ -86,12 +86,12 @@ def set_common_params(prob):
 
     # # --- loading case 1: max Thrust ---
     prob['wind.Uref'] = 20.00138038
-    prob['pre.rna_F'] = np.array([3712210.30517985,
-                                  -25397.27352212,
-                                  -419019.0213100216])
-    prob['pre.rna_M'] = np.array([71685475.4824221,
-                                  17184504.66608971,
-                                  1765885.10839113])
+    prob['pre.rna_F'] = np.array([3569257.70891496,
+                                  -22787.83765441,
+                                  -404483.54819059])
+    prob['pre.rna_M'] = np.array([68746553.1515807,
+                                  16045443.38557568,
+                                  1811078.988995])
     # # ---------------
     return prob
 

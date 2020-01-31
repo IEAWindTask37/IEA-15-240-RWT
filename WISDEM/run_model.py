@@ -218,34 +218,34 @@ def initialize_problem(Analysis_Level, optFlag=False):
     # For turbine costs
     prob['offshore']             = True
     prob['crane']                = False
-    prob['bearing_number']       = 2
     prob['crane_cost']           = 0.0
     prob['labor_cost_rate']      = 3.0
     prob['material_cost_rate']   = 2.0
     prob['painting_cost_rate']   = 28.8
     
     # Drivetrain
+    prob['bearing_number']          = 2
     prob['tilt']                    = 6.0
-    prob['overhang']                = 11.075
-    prob['hub_cm']                  = np.array([-10.685, 0.0, 5.471])
-    prob['nac_cm']                  = np.array([-5.718, 0.0, 4.048])
+    prob['overhang']                = 10.99
+    prob['hub_cm']                  = np.array([-10.604, 0.0, 5.462])
+    prob['nac_cm']                  = np.array([-3.946, 0.0, 3.538])
     prob['hub_I']                   = np.array([1382171.187, 2169261.099, 2160636.794, 0.0, 0.0, 0.0])
-    prob['nac_I']                   = np.array([13442265.552, 21116729.439, 18382414.385, 0.0, 0.0, 0.0])
+    prob['nac_I']                   = np.array([7918328., 4751108., 5314813., 0.0, 0.0, 0.0])
     prob['hub_mass']                = 190e3
-    prob['nac_mass']                = 797.275e3-190e3
+    prob['nac_mass']                = 6.309e5
     prob['hss_mass']                = 0.0
-    prob['lss_mass']                = 19.504e3
+    prob['lss_mass']                = 15734.0
     prob['cover_mass']              = 0.0
-    prob['pitch_system_mass']       = 50e3
-    prob['platforms_mass']          = 0.0
+    prob['pitch_system_mass']       = 0.0
+    prob['platforms_mass']          = 11393 + 2*1973.
     prob['spinner_mass']            = 0.0
-    prob['transformer_mass']        = 0.0
+    prob['transformer_mass']        = 50e3
     prob['vs_electronics_mass']     = 0.0
     prob['yaw_mass']                = 100e3
     prob['gearbox_mass']            = 0.0
-    prob['generator_mass']          = 226.7e3+145.25e3
-    prob['bedplate_mass']           = 39.434e3
-    prob['main_bearing_mass']       = 4.699e3
+    prob['generator_mass']          = 226628.6 + 144963.1
+    prob['bedplate_mass']           = 70328.7
+    prob['main_bearing_mass']       = 5664
 
     return prob, blade
 
