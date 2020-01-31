@@ -819,12 +819,12 @@ class RWT_Tabular(object):
         y_shear = bladeStructDF['Shear center (chordwise), m']
         fig = plt.figure(figsize=(8,4))
         ax  = fig.add_subplot(111)
-        ax.plot(blade_x, np.zeros(blade_x.shape), 'k:')
-        ax.plot(xx, y_mass,
-                xx, y_neut,
-                xx, y_geo,
-                xx, y_shear, linewidth=2)
-        ax.plot(blade_x, blade_le, 'k', blade_x, -blade_te, 'k', linewidth=2.5)
+        ax.plot(blade_x, np.zeros_like(blade_x), 'k:')
+        ax.plot(np.array(xx), np.array(y_mass), linewidth=2)
+        ax.plot(np.array(xx), np.array(y_neut), linewidth=2)
+        ax.plot(np.array(xx), np.array(y_geo), linewidth=2)
+        ax.plot(np.array(xx), np.array(y_shear), linewidth=2)
+        ax.plot(np.array(blade_x), np.array(blade_le), 'k', np.array(blade_x), np.array(-blade_te), 'k', linewidth=2.5)
         ax.legend(['Pitch axis','Mass center','Neutral center','Geometric center','Shear center'])
         ax.set_xlabel('Blade span r/R', size=14, weight='bold')
         ax.set_ylabel('Chordwise [m]', size=14, weight='bold')

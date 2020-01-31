@@ -20,7 +20,7 @@ from generateTables import RWT_Tabular
 
 # Global inputs and outputs
 fname_schema  = 'IEAontology_schema.yaml'
-fname_input   = 'IEA-15-240-RWT.yaml'
+fname_input   = 'IEA-15-240-RWT_FineGrid.yaml'
 fname_output  = 'IEA-15-240-RWT_out.yaml'
 folder_output = os.getcwd() + os.sep + 'outputs'
 
@@ -30,9 +30,9 @@ def initialize_problem(Analysis_Level, optFlag=False):
     # Initialize blade design
     refBlade = ReferenceBlade()
     refBlade.verbose  = True
-    refBlade.NINPUT       = 8
+    refBlade.NINPUT       = 200
     Nsection_Tow          = 19
-    refBlade.NPTS         = 30
+    refBlade.NPTS         = 200
     refBlade.spar_var     = ['Spar_cap_ss', 'Spar_cap_ps'] # SS, then PS
     refBlade.te_var       = 'TE_reinforcement'
     refBlade.validate     = False
