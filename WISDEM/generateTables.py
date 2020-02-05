@@ -945,14 +945,51 @@ class RWT_Tabular(object):
             
     
     def write_rotor_performance(self):
-        if not self.rotDF is None:
-            ws = self.wb.create_sheet(title = 'Rotor Performance')
-            for r in dataframe_to_rows(self.rotDF, index=False, header=True):
-                ws.append(r)
+        ws = self.wb.create_sheet(title = 'Rotor Performance')
+
+        # Use OpenFAST output if it is available
+        foutput = '..'+os.sep+'OpenFAST'+os.sep+'outputs'+os.sep+'IEA-15-240-RWT_steady.yaml'
+        if os.path.exists(foutput):
+            f = open(foutput, 'r')
+            fastout = yaml.safe_load( f )
+            f.close()
+
+            rotmat = np.c_[fastout['Wind1VelX']['mean'],
+                           fastout['BldPitch1']['mean'],
+                           1e-3*np.array(fastout['GenPwr']['mean']),
+                           fastout['RotSpeed']['mean'],
+                           120.0*np.array(fastout['RotSpeed']['mean'])*2*np.pi/60.0,
+                           1e-3*np.array(fastout['RotThrust']['mean']),
+                           1e-3*np.array(fastout['RotTorq']['mean']),
+                           1e-3*np.array(fastout['GenTq']['mean']),
+                           fastout['RtAeroCp']['mean'],
+                           fastout['RtAeroCt']['mean']]
+            cols = ['Wind [m/s]',
+                    'Pitch [deg]',
+                    'Power [MW]',
+                    'Rotor Speed [rpm]',
+                    'Tip Speed [m/s]',
+                    'Rotor Thrust [MN]',
+                    'Rotor Torque [MNm]',
+                    'Generator Torque [MNm]',
+                    'Rotor Cp [-]',
+                    'Rotor Ct [-]']
+            myDF = pd.DataFrame(rotmat, columns=cols)
+            
+        elif not self.rotDF is None:
+            # Use WISDEM output
+            myDF = self.rotDF
+
+        else:
+            return
+
+        # Write to the file
+        for r in dataframe_to_rows(myDF, index=False, header=True):
+            ws.append(r)
         
-            # Header row style formatting
-            for cell in ws["1:1"]:
-                cell.style = 'Headline 2'
+        # Header row style formatting
+        for cell in ws["1:1"]:
+            cell.style = 'Headline 2'
 
 
     def write_nacelle(self):
