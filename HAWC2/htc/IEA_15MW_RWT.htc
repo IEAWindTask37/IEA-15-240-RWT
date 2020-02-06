@@ -1,4 +1,4 @@
-; IEA 15 MW Reference Wind Turbine.
+; IEA 15 MW Reference Wind Turbine. Model update from commit "9a1069e".
 ; 
 begin simulation ;
   time_stop    700.0 ;
@@ -23,7 +23,7 @@ begin new_htc_structure;
     type        timoschenko ;
     nbodies     1 ;
     node_distribution     c2_def ;
-    damping_posdef   0.0 0.0 0.0 1.671E-03 1.671E-03 1.357E-04  ; tuned to 2% log dec on 1st FA/SS/torsion modes (#1, #2, #7)
+    damping_posdef   0.0 0.0 0.0 1.533E-03 1.533E-03 1.194E-04  ; tuned to 2% log dec on 1st FA/SS/torsion modes (#1, #2, #7)
      begin timoschenko_input;
       filename ./data/IEA_15MW_RWT_Tower_st.dat;
       set 1 1 ; 
@@ -40,7 +40,7 @@ begin new_htc_structure;
       sec	8	0	0	-105.0	0	;
       sec	9	0	0	-120.0	0	;
       sec	10	0	0	-135.0	0	;
-      sec	11	0	0	-145.0	0	;	  
+      sec	11	0	0	-144.495	0	;	  
      end c2_def ;
     end main_body;
 ;
@@ -50,7 +50,7 @@ begin new_htc_structure;
     nbodies     1 ;
     node_distribution     c2_def ;
     damping_posdef  0.0  0.0  0.0  7.00E-04  7.00E-04  7.00E-04  ;   dummy values (stiff body)
-	concentrated_mass	1  0.00  -6.210  -3.450  1.070E+06  7.558513e+06  7.900629e+06  1.013478e+07	;  nacelle: NR+R mass; NR inertia
+	concentrated_mass  1  0.00  -4.985  -4.358  5.073e+05  7.674778e+06  1.055686e+07  8.127143e+06	;  nacelle: NR+R mass; NR inertia
 	begin timoschenko_input;
       filename ./data/IEA_15MW_RWT_Towertop_st.dat ;
       set 1 1 ;                
@@ -58,7 +58,7 @@ begin new_htc_structure;
     begin c2_def;
       nsec 2;
       sec 1 0.0 0.0  0.0    0.0 ; x,y,z,twist
-      sec 2 0.0 0.0 -3.819  0.0 ; 
+      sec 2 0.0 0.0 -4.3478  0.0 ; 
     end c2_def ;
   end main_body;
 ;
@@ -75,7 +75,7 @@ begin new_htc_structure;
     begin c2_def;
       nsec 2;
       sec 1 0.0 0.0  0.0    0.0 ; x,y,z,twist
-      sec 2 0.0 0.0  6.264  0.0 ; 
+      sec 2 0.0 0.0  5.96769163920947  0.0 ; 
     end c2_def ;
   end main_body;
 ;
@@ -84,9 +84,9 @@ begin new_htc_structure;
     type        timoschenko ;
     nbodies     1 ;
     node_distribution     c2_def ;
-	damping_posdef  0.0 0.0 0.0 4.65E-04  4.65E-04  4.457544e-04 ;  TODO Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
-    concentrated_mass	1  0.0	0.0	0.0	0.0 0.0	0.0	1.715930e+07	;	generator inertia about shaft
-    concentrated_mass	2  0.0	0.0	0.0	1.78832E+05	0.0	0.0	7.277949E+05	;	hub mass/inertia;
+	damping_posdef  0.0 0.0 0.0 4.65E-04  4.65E-04  3.078839e-04 ;  TODO Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
+    concentrated_mass  1  0.0 0.0 0.0 0.0 0.0 0.0 8.008650e+06	;	generator inertia about shaft
+    concentrated_mass  2  0.0 0.0 0.0 1.90000e+05 0.0 0.0 1.373471e+06	;	hub mass/inertia;
 	begin timoschenko_input;
       filename ./data/IEA_15MW_RWT_Shaft_st.dat ;
       set 1 1 ;
@@ -94,7 +94,7 @@ begin new_htc_structure;
     begin c2_def;
       nsec 2;
       sec 1 0.0 0.0  0.00 0.0 ; x,y,z,twist
-      sec 2 0.0 0.0  5.118 0.0 ;
+      sec 2 0.0 0.0  5.168312556956474 0.0 ;
     end c2_def ;
   end main_body;	
 ;
@@ -130,7 +130,7 @@ begin new_htc_structure;
     type        timoschenko ;
     nbodies     10 ;
     node_distribution    c2_def;
-    damping_aniso  0.0 0.0 0.0 3.23e-3 2.85e-3 1.0e-4 ; blade damping tuned to 3% log dec flap/edge, torsion as low as possible
+    damping_aniso  0.0 0.0 0.0 2.955e-3 2.424e-3 1.0e-8 ; blade damping tuned to 3% log dec flap/edge, torsion arbitrarily small
     begin timoschenko_input ;
       filename ./data/IEA_15MW_RWT_Blade_st.dat;
       FPM 1;  using fully populated matrix from BECAS
@@ -138,7 +138,7 @@ begin new_htc_structure;
     end timoschenko_input;
     begin c2_def;
       nsec 20;
-      sec  1  2.276626484469566e-02 -6.354122360450852e-03  0.000000000000000e+00 -1.559455301971172e+01;
+      sec  1                       0.0                      0.0                       0.0 -1.559455301971172e+01;
       sec  2 -1.947632306428538e-01  1.118894130288145e-01  6.201182297139584e+00 -1.517563341692140e+01;
       sec  3 -4.980721139630508e-01  2.670165808116275e-01  1.307124721605084e+01 -1.295380896003360e+01;
       sec  4 -8.093831584098645e-01  3.739824412925188e-01  2.055236308990396e+01 -9.768502125620273e+00;
@@ -332,7 +332,7 @@ begin wind ;
     tower_mbdy_link tower;
     nsec  2;
     radius       0.0 5.00 ;  radius at base
-    radius     145.0 3.36 ;  radius at top
+    radius     144.495 3.25 ;  radius at top
   end tower_shadow_potential_2;
 end wind;
 ;
@@ -342,7 +342,7 @@ begin aerodrag ;  tower drag
     aerodrag_sections uniform 10 ;
     nsec 2 ;
     sec   0.0 0.6 10.00 ;  tower bottom
-    sec 145.0 0.6  6.72 ;  tower top
+    sec 144.495 0.6 6.5 ;  tower top
   end aerodrag_element;
 ;
   begin aerodrag_element ;  nacelle drag
@@ -350,7 +350,7 @@ begin aerodrag ;  tower drag
     aerodrag_sections uniform 2 ;
     nsec 2 ;
     sec   0.0  0.8 10.0 ;  
-    sec 11.32  0.8 10.0 ;  
+    sec 11.136004196165944 0.8 10.0 ;  
   end aerodrag_element;
 end aerodrag;
 ;
@@ -383,32 +383,32 @@ begin dll;
 	begin init ;
        ; Overall parameters
       constant   1 15000.0    	; Rated power [kW]                         
-      constant   2   0.482    	; Minimum rotor (LSS) speed [rad/s]
-      constant   3   0.785    	; Rated rotor (LSS) speed [rad/s]
-      constant   4  2.60E+07  	; Maximum allowable generator torque [Nm]
+      constant   2 0.524 ; Minimum rotor (LSS) speed [rad/s]
+      constant   3 0.792 ; Rated rotor (LSS) speed [rad/s]
+      constant   4 21586850.73599 ; Maximum allowable generator torque [Nm]
       constant   5  100.0    	; Minimum pitch angle, theta_min [deg], 
 								; if |theta_min|>90, then a table of <wsp,theta_min> is read ;
 								; from a file named 'wptable.n', where n=int(theta_min)
-      constant   6  90.0    	; Maximum pitch angle [deg]
-      constant   7   2.0    	; Maximum pitch velocity operation [deg/s]
-      constant   8   0.801    	; Frequency of generator speed filter [Hz]
-      constant   9   0.7    	; Damping ratio of speed filter [-]
+      constant   6 90.0 ; Maximum pitch angle [deg]
+      constant   7 2.0 ; Maximum pitch velocity operation [deg/s]
+      constant   8 1.0081 ; Frequency of generator speed filter [Hz]
+      constant   9 0.7 ; Damping ratio of speed filter [-]
       constant  10   1.01   	; Frequency of free-free DT torsion mode [Hz], if zero no notch filter used
       ; Partial load control parameters
-      constant  11   0.264285E+08 ; Optimal Cp tracking K factor [Nm/(rad/s)^2], ;
+      constant  11   0.284642E+08 ; Optimal Cp tracking K factor [Nm/(rad/s)^2], ;
                                 ; Qg=K*Omega^2, K=eta*0.5*rho*A*Cp_opt*R^3/lambda_opt^3                     
-      constant  12   0.164438E+09 ; Proportional gain of torque controller [Nm/(rad/s)]
-      constant  13   0.368998E+08 ; Integral gain of torque controller [Nm/rad]
+      constant  12   0.140541E+09 ; Proportional gain of torque controller [Nm/(rad/s)]
+      constant  13   0.315374E+08 ; Integral gain of torque controller [Nm/rad]
       constant  14   0.0    	; Differential gain of torque controller [Nm/(rad/s^2)]
 ;     Full load control parameters
       constant  15   1      	; Generator control switch [1=constant power, 0=constant torque]
-      constant  16   0.177141E+01 ; Proportional gain of pitch controller [rad/(rad/s)]
-      constant  17   0.421192E+00 ; Integral gain of pitch controller [rad/rad]
+      constant  16   0.127727E+01 ; Proportional gain of pitch controller [rad/(rad/s)]
+      constant  17   0.343942E+00 ; Integral gain of pitch controller [rad/rad]
       constant  18   0.0    	; Differential gain of pitch controller [rad/(rad/s^2)]
       constant  19   0.4e-8 	; Proportional power error gain [rad/W]
       constant  20   0.4e-8 	; Integral power error gain [rad/(Ws)]
-      constant  21 	 12.03781   ; Coefficient of linear term in aerodynamic gain scheduling, KK1 [deg]
-      constant  22 	 683.03643  ; Coefficient of quadratic term in aerodynamic gain scheduling, KK2 [deg^2] &
+      constant  21 	 11.95434   ; Coefficient of linear term in aerodynamic gain scheduling, KK1 [deg]
+      constant  22 	 720.25183  ; Coefficient of quadratic term in aerodynamic gain scheduling, KK2 [deg^2] &
 								; (if zero, KK1 = pitch angle at double gain)
       constant  23   1.5    	; Relative speed for double nonlinear gain [-]
 ;     Cut-in simulation parameters
@@ -447,7 +447,7 @@ begin dll;
 ;     Parameters for rotor inertia reduction in variable speed region
       constant 48    0.0  ; Proportional gain on rotor acceleration in variable speed region [Nm/(rad/s^2)] (not used when zero)
 ;     Parameters for alternative partial load controller with PI regulated TSR tracking
-      constant 49    9.5  ; Optimal tip speed ratio [-] (only used when K=constant 11 = 0 otherwise  Qg=K*Omega^2 is used)
+      constant  49    9.0 ; Optimal tip speed ratio [-] (only used when K=constant 11 = 0 otherwise  Qg=K*Omega^2 is used)
 ;     Parameters for adding aerodynamic drivetrain damping on gain scheduling
       constant 50    0.0  ; Aerodynamic DT damping coefficient at the operational point of zero pitch angle [Nm/(rad/s)] (not used when zero)
       constant 51    0.0  ; Coefficient of linear term in aerodynamic DT damping scheduling, KK1 [deg]
@@ -509,8 +509,8 @@ begin dll;
  	begin init ;
        constant 1  20.0    ; Frequency of 2nd order servo model of generator-converter system [Hz]   
        constant 2  0.9     ; Damping ratio 2nd order servo model of generator-converter system [-]
-       constant 3 2.60E+07 ; Maximum allowable LSS torque (pull-out torque) [Nm]
-       constant 4 0.93     ; Generator efficiency [-]
+       constant 3 21586850.73599 ; Maximum allowable LSS torque (pull-out torque) [Nm]
+       constant 4 0.9655 ; Generator efficiency [-]
        constant 5 1.0      ; Gearratio [-]
        constant 6 0.0      ; Time for half value in softstart of torque [s] 
        constant 7 -1       ; Time for grid loss [s] (never if lower than zero)
@@ -536,7 +536,7 @@ begin dll;
      arraysizes_init    100 1 ;
      arraysizes_update  100 100 ;
  	begin init ;
-      constant 1 1.356E+07   ; Fully deployed maximum brake torque [Nm] (0.6*max torque)
+      constant 1 12952110.441593999 ; Fully deployed maximum brake torque [Nm] (0.6*max torque)
       constant 2     100.0   ; Parameter alpha used in Q = tanh(omega*alpha), typically 1e2/Omega_nom
       constant 3       0.5   ; Delay time for before brake starts to deploy [s]
       constant 4       0.6   ; Time for brake to become fully deployed [s]
@@ -567,7 +567,7 @@ begin dll;
       constant 4   2.0  ; Max. pitch speed [deg/s]
       constant 5  15.0  ; Max. pitch acceleration [deg/s^2]
       constant 6   0.0  ; Min. pitch angle [deg] 
-      constant  7 90.0  ; Max. pitch angle [deg] 	  
+      constant  7 90.0  ; Max. pitch angle [deg]    
 	  constant  8 -1    ; Time for pitch runaway [s]
 	  constant  9 -1    ; Time for stuck blade 1 [s]
 	  constant 10 0.0   ; Angle of stuck blade 1 [deg] (if > 90 deg then blade is stuck at instantaneous angle)
@@ -596,7 +596,7 @@ begin type2_dll;  tower-blade-tip distance
   arraysizes_update  15 6 ;
   begin init ;    Variables passed into initialization function
     constant  1 5.00  ; Tower radius at tower bottom [m] 
-    constant  2 3.36  ; Tower radius at tower top [m]
+    constant  2 3.25  ; Tower radius at tower top [m]
     constant  3    3  ; Number of points to check [-]
   end init ;
   begin output;   Variables passed into update function
