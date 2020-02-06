@@ -586,22 +586,22 @@ assembly:
         monopile_embedment: 45
         transition_height: 15
     mass:
-        generator: 371.95
-        turret: 13.362
-        bedplate: 39.434
-        shaft: 19.504
-        main_bearing: 4.699
-        flange: 3.627
+        generator: 371.5917
+        turret: 11.394
+        bedplate: 70.329
+        shaft: 15.734
+        main_bearing_srb: 5.664
+        main_bearing_tdo: 2.230
+        flange: 3.946
         yaw_system: 100.0
-        other: 50.0
-        blade: 65.2535
+        blade: 65.252
         hub: 190.0
-        nacelle_other: 100.0
-        nacelle: 797.275
-        rna: 993.035
-        rna_center_of_mass: [-6.853, 0.0, 4.351]
-        tower: 803.5
-        monopile: 1138.0
+        nacelle_other: 50.0
+        nacelle: 630.888
+        rna: 1016.645
+        rna_center_of_mass: [-6.47601681, 0., 4.2691133]
+        tower: 859.8
+        monopile: 1317.7
     control:
         Vin: 3.0
         Vout: 25.0
@@ -610,6 +610,6 @@ assembly:
         tsr: 9.0
         pitch: 0.
         maxTS: 95.
-        Vrated: 10.84
+        Vrated: 10.88
         variable_speed: true
         IPC: false

@@ -221,8 +221,12 @@ class RWT_Tabular(object):
         ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['shaft'])
         irow += 1
 
-        ws.cell(row=irow, column=1, value='Shaft bearing mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['main_bearing'])
+        ws.cell(row=irow, column=1, value='Shaft bearing mass (SRB) [t]')
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['main_bearing_srb'])
+        irow += 1
+
+        ws.cell(row=irow, column=1, value='Shaft bearing mass (TDO) [t]')
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['main_bearing_tdo'])
         irow += 1
 
         ws.cell(row=irow, column=1, value='Flange mass [t]')
@@ -248,23 +252,9 @@ class RWT_Tabular(object):
         ws.cell(row=irow, column=1, value='Nacelle center of mass from tower top [m]')
         ws.cell(row=irow, column=2, value=str(self.yaml['assembly']['mass']['rna_center_of_mass']))
         irow += 1
-
-        if not self.towDF is None:
-            z    = np.array( self.towDF['Height [m]'] )
-            D    = np.array( self.towDF['OD [m]'] )
-            t    = 1e-3*np.array( self.towDF['Thickness [mm]'] )
-            rho  = np.array( self.towDF['Mass Density [kg/m]'] )
-            indM = np.where(z <= 15.0)[0]
-            indT = np.where(z >= 15.0)[0]
-            mtow = 1e-3*np.trapz(rho[indT], z[indT])
-            mmon = 1e-3*np.trapz(rho[indM], z[indM])
-            mtot = 1e-3*np.trapz(rho, z)
-        else:
-            mtow=self.yaml['assembly']['mass']['tower']
-            mmon=self.yaml['assembly']['mass']['monopile']
             
         ws.cell(row=irow, column=1, value='Tower mass [t]')
-        ws.cell(row=irow, column=2, value=mtow)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['tower'])
         irow += 1
         
         ws.cell(row=irow, column=1, value='Tower base diameter [m]')
@@ -284,7 +274,7 @@ class RWT_Tabular(object):
         irow += 1
         
         ws.cell(row=irow, column=1, value='Monopile mass [t]')
-        ws.cell(row=irow, column=2, value=mmon)
+        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['monopile'])
         irow += 1
         
         # Header row style formatting
@@ -422,14 +412,25 @@ class RWT_Tabular(object):
             self.airfoil_span.append( self.yaml['components']['blade']['outer_shape_bem']['airfoil_position']['grid'][k] )
 
         ws.cell(row=npts+3, column=1, value='Profile')
+
+        # Interpolation function for arbitraty grids
+        mygrid = self.yaml['components']['blade']['outer_shape_bem']['chord']['grid']
+        def myinterp(xgrid, val):
+            return interp1d(xgrid, val, kind='cubic', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
+        
         # Create blade geometry array in pandas
         geommat = np.c_[self.yaml['components']['blade']['outer_shape_bem']['chord']['grid'],
                         self.yaml['components']['blade']['outer_shape_bem']['chord']['values'],
-                        self.yaml['components']['blade']['outer_shape_bem']['twist']['values'],
-                        self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values'],
-                        self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['z']['values'],
-                        self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['x']['values'],
-                        self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['y']['values']]
+                        myinterp(self.yaml['components']['blade']['outer_shape_bem']['twist']['grid'],
+                                 self.yaml['components']['blade']['outer_shape_bem']['twist']['values']),
+                        myinterp(self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['grid'],
+                                 self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values']),
+                        myinterp(self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['z']['grid'],
+                                 self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['z']['values']),
+                        myinterp(self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['x']['grid'],
+                                 self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['x']['values']),
+                        myinterp(self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['y']['grid'],
+                                 self.yaml['components']['blade']['outer_shape_bem']['reference_axis']['y']['values'])  ]
         geomDF = pd.DataFrame(geommat, columns=['Spanwise position [r/R]',
                                               'Chord [m]',
                                               'Twist [rad]',
@@ -799,12 +800,18 @@ class RWT_Tabular(object):
         for cell in ws["2:2"]:
             cell.style = 'Headline 2'
 
+        
+            
         # Make plot
         blade_x  = np.array(self.yaml['components']['blade']['outer_shape_bem']['chord']['grid'])
+        def myinterp(xgrid, val):
+            return interp1d(xgrid, val, kind='cubic', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(blade_x)
         blade_le = (np.array(self.yaml['components']['blade']['outer_shape_bem']['chord']['values']) *
-                    np.array(self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values']))
+                    myinterp(self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['grid'],
+                             self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values']) )
         blade_te = (np.array(self.yaml['components']['blade']['outer_shape_bem']['chord']['values']) *
-                    (1.-np.array(self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values'])))
+                    (1. - myinterp(self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['grid'],
+                                   self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values']) ) )
         xx      = bladeStructDF.index 
         y_mass  = bladeStructDF['Mass center (chordwise), m']
         y_neut  = bladeStructDF['Neutral axes (chordwise), m']
@@ -812,12 +819,12 @@ class RWT_Tabular(object):
         y_shear = bladeStructDF['Shear center (chordwise), m']
         fig = plt.figure(figsize=(8,4))
         ax  = fig.add_subplot(111)
-        ax.plot(blade_x, np.zeros(blade_x.shape), 'k:')
-        ax.plot(xx, y_mass,
-                xx, y_neut,
-                xx, y_geo,
-                xx, y_shear, linewidth=2)
-        ax.plot(blade_x, blade_le, 'k', blade_x, -blade_te, 'k', linewidth=2.5)
+        ax.plot(blade_x, np.zeros_like(blade_x), 'k:')
+        ax.plot(np.array(xx), np.array(y_mass), linewidth=2)
+        ax.plot(np.array(xx), np.array(y_neut), linewidth=2)
+        ax.plot(np.array(xx), np.array(y_geo), linewidth=2)
+        ax.plot(np.array(xx), np.array(y_shear), linewidth=2)
+        ax.plot(np.array(blade_x), np.array(blade_le), 'k', np.array(blade_x), np.array(-blade_te), 'k', linewidth=2.5)
         ax.legend(['Pitch axis','Mass center','Neutral center','Geometric center','Shear center'])
         ax.set_xlabel('Blade span r/R', size=14, weight='bold')
         ax.set_ylabel('Chordwise [m]', size=14, weight='bold')
@@ -938,14 +945,51 @@ class RWT_Tabular(object):
             
     
     def write_rotor_performance(self):
-        if not self.rotDF is None:
-            ws = self.wb.create_sheet(title = 'Rotor Performance')
-            for r in dataframe_to_rows(self.rotDF, index=False, header=True):
-                ws.append(r)
+        ws = self.wb.create_sheet(title = 'Rotor Performance')
+
+        # Use OpenFAST output if it is available
+        foutput = '..'+os.sep+'OpenFAST'+os.sep+'outputs'+os.sep+'IEA-15-240-RWT_steady.yaml'
+        if os.path.exists(foutput):
+            f = open(foutput, 'r')
+            fastout = yaml.safe_load( f )
+            f.close()
+
+            rotmat = np.c_[fastout['Wind1VelX']['mean'],
+                           fastout['BldPitch1']['mean'],
+                           1e-3*np.array(fastout['GenPwr']['mean']),
+                           fastout['RotSpeed']['mean'],
+                           120.0*np.array(fastout['RotSpeed']['mean'])*2*np.pi/60.0,
+                           1e-3*np.array(fastout['RotThrust']['mean']),
+                           1e-3*np.array(fastout['RotTorq']['mean']),
+                           1e-3*np.array(fastout['GenTq']['mean']),
+                           fastout['RtAeroCp']['mean'],
+                           fastout['RtAeroCt']['mean']]
+            cols = ['Wind [m/s]',
+                    'Pitch [deg]',
+                    'Power [MW]',
+                    'Rotor Speed [rpm]',
+                    'Tip Speed [m/s]',
+                    'Rotor Thrust [MN]',
+                    'Rotor Torque [MNm]',
+                    'Generator Torque [MNm]',
+                    'Rotor Cp [-]',
+                    'Rotor Ct [-]']
+            myDF = pd.DataFrame(rotmat, columns=cols)
+            
+        elif not self.rotDF is None:
+            # Use WISDEM output
+            myDF = self.rotDF
+
+        else:
+            return
+
+        # Write to the file
+        for r in dataframe_to_rows(myDF, index=False, header=True):
+            ws.append(r)
         
-            # Header row style formatting
-            for cell in ws["1:1"]:
-                cell.style = 'Headline 2'
+        # Header row style formatting
+        for cell in ws["1:1"]:
+            cell.style = 'Headline 2'
 
 
     def write_nacelle(self):
