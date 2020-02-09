@@ -25,7 +25,7 @@ fname_output  = 'IEA-15-240-RWT_out.yaml'
 folder_output = os.getcwd() + os.sep + 'outputs'
 
 
-def initialize_problem(Analysis_Level, optFlag=False):
+def initialize_problem(Analysis_Level):
     
     # Initialize blade design
     refBlade = ReferenceBlade()
@@ -81,54 +81,10 @@ def initialize_problem(Analysis_Level, optFlag=False):
     prob.model.nonlinear_solver = om.NonlinearRunOnce()
     prob.model.linear_solver    = om.DirectSolver()
 
-    if optFlag:
-        # --- Driver ---
-        prob.driver = om.pyOptSparseDriver()
-        prob.driver.options['optimizer'] = 'CONMIN'
-        # prob.driver.opt_settings['ITMAX']     = 2
-        # ----------------------
+    return prob, blade, fst_vt
 
-        # --- Objective ---
-        prob.model.add_objective('lcoe')
-        # ----------------------
 
-        # --- Design Variables ---
-        indices_no_root         = range(2,refBlade.NINPUT)
-        indices_no_root_no_tip  = range(2,refBlade.NINPUT-1)
-        prob.model.add_design_var('chord_in',    indices = indices_no_root_no_tip, lower=0.5,      upper=7.0)
-        prob.model.add_design_var('theta_in',    indices = indices_no_root,        lower=-5.0,     upper=20.0)
-        prob.model.add_design_var('sparT_in',    indices = indices_no_root_no_tip, lower=0.001,    upper=0.200)
-        prob.model.add_design_var('control_tsr',                                   lower=6.000,    upper=11.00)
-        # prob.model.add_design_var('tower_section_height', lower=5.0,  upper=80.0)
-        # prob.model.add_design_var('tower_outer_diameter', lower=3.87, upper=10.0)
-        # prob.model.add_design_var('tower_wall_thickness', lower=4e-3, upper=2e-1)
-        # ----------------------
-        
-        # --- Constraints ---
-        # Rotor
-        prob.model.add_constraint('tip_deflection_ratio',     upper=1.0)  
-        #prob.model.add_constraint('AEP',                      lower=prob_ref['AEP'])
-        # Tower
-        # prob.model.add_constraint('tow.height_constraint',    lower=-1e-2,upper=1.e-2)
-        # prob.model.add_constraint('tow.post.stress',          upper=1.0)
-        # prob.model.add_constraint('tow.post.global_buckling', upper=1.0)
-        # prob.model.add_constraint('tow.post.shell_buckling',  upper=1.0)
-        # prob.model.add_constraint('tow.weldability',          upper=0.0)
-        # prob.model.add_constraint('tow.manufacturability',    lower=0.0)
-        # prob.model.add_constraint('frequencyNP_margin',       upper=0.)
-        # prob.model.add_constraint('frequency1P_margin',       upper=0.)
-        # prob.model.add_constraint('ground_clearance',         lower=20.0)
-        # ----------------------
-        
-        # --- Recorder ---
-        filename_opt_log = folder_output + os.sep + 'log_opt_' + blade['config']['name']
-        
-        prob.driver.add_recorder(om.SqliteRecorder(filename_opt_log))
-        prob.driver.recording_options['includes'] = ['AEP','total_blade_cost','lcoe','tip_deflection_ratio']
-        prob.driver.recording_options['record_objectives']  = True
-        prob.driver.recording_options['record_constraints'] = True
-        prob.driver.recording_options['record_desvars']     = True
-        # ----------------------
+def initialize_variables(prob, blade, Analysis_Level, fst_vt):
 
     # Initialize variable inputs
     prob.setup()
@@ -146,6 +102,7 @@ def initialize_problem(Analysis_Level, optFlag=False):
     prob['water_density']                  = 1025.0
     prob['water_viscosity']                = 1.3351e-3
     prob['wind_beta'] = prob['wave_beta'] = 0.0
+    prob['gust_stddev'] = 3
 
     # Steel properties for the tower
     prob['material_density']               = 7850.0
@@ -246,12 +203,14 @@ def initialize_problem(Analysis_Level, optFlag=False):
     prob['generator_mass']          = 226628.6 + 144963.1
     prob['bedplate_mass']           = 70328.7
     prob['main_bearing_mass']       = 5664
+    prob['drive.shaft_angle']       = np.radians(6.)
+    prob['drive.distance_hub2mb']   = 3.819
 
-    return prob, blade
+    return prob
 
 
 
-def run_problem(prob, optFlag=False):
+def run_problem(prob):
 
     # Run initial condition no matter what
     print('Running at Initial Position:')
@@ -304,29 +263,6 @@ def run_problem(prob, optFlag=False):
     #prob.model.list_inputs(units=True)
     #prob.model.list_outputs(units=True)
     
-    
-    if optFlag:
-        prob_ref = copy.deepcopy(prob)
-        print('Running Optimization:')
-        print('N design var: ', 2*len(indices_no_root_no_tip) + len(indices_no_root) + 1)
-        prob.model.approx_totals()
-        prob.run_driver()
-
-        # --- Save output .yaml ---
-        refBlade.write_ontology(fname_output, prob['blade_out'], refBlade.wt_ref)
-        shutil.copyfile(fname_input,  folder_output + os.sep + fname_output)
-
-        # ----------------------
-        # --- Outputs plotting ---
-        print('AEP:         \t\t\t %f\t%f GWh \t Difference: %f %%' % (prob_ref['AEP']*1e-6, prob['AEP']*1e-6, (prob['AEP']-prob_ref['AEP'])/prob_ref['AEP']*100.))
-        print('LCoE:        \t\t\t %f\t%f USD/MWh \t Difference: %f %%' % (prob_ref['lcoe']*1.e003, prob['lcoe']*1.e003, (prob['lcoe']-prob_ref['lcoe'])/prob_ref['lcoe']*100.))
-        print('Blade cost:  \t\t\t %f\t%f USD \t Difference: %f %%' % (prob_ref['total_blade_cost'], prob['total_blade_cost'], (prob['total_blade_cost']-prob_ref['total_blade_cost'])/prob_ref['total_blade_cost']*100.))
-        print('Blade mass:  \t\t\t %f\t%f kg  \t Difference: %f %%' % (prob_ref['total_blade_mass'], prob['total_blade_mass'], (prob['total_blade_mass']-prob_ref['total_blade_mass'])/prob_ref['total_blade_mass']*100.))
-        print('Tower cost:  \t\t\t %f\t%f USD \t Difference: %f %%' % (prob_ref['tower_cost'], prob['tower_cost'], (prob['tower_cost']-prob_ref['tower_cost'])/prob_ref['tower_cost']*100.))
-        print('Tower mass:  \t\t\t %f\t%f kg  \t Difference: %f %%' % (prob_ref['tower_mass'], prob['tower_mass'], (prob['tower_mass']-prob_ref['tower_mass'])/prob_ref['tower_mass']*100.))
-        # ----------------------
-    
-    return prob
 
 
 def postprocess(prob, blade):
@@ -696,9 +632,6 @@ def postprocess(prob, blade):
 
 
 if __name__ == "__main__":
-    # Set optimization
-    optFlag = False
-
     # Initialize output container
     if not os.path.isdir(folder_output):
         os.mkdir(folder_output)
@@ -708,10 +641,11 @@ if __name__ == "__main__":
     Analysis_Level = 0
 
     # Seed inputs
-    prob, blade = initialize_problem(Analysis_Level, optFlag=optFlag)
+    prob, blade, fst_vt = initialize_problem(Analysis_Level)
+    prob = initialize_variables(prob, blade, Analysis_Level, fst_vt): 
 
     # Run the analysis
-    prob = run_problem(prob, optFlag=False)    
+    prob = run_problem(prob)    
 
     # Generate output plots, tables, and Excel sheet
     postprocess(prob, blade)
