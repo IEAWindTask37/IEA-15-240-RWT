@@ -1,37 +1,39 @@
 from __future__ import print_function
+
+import os
+import shutil
+
 import numpy as np
 from scipy.interpolate import PchipInterpolator
-import os, shutil, copy, time, sys
 import matplotlib.pyplot as plt
-from pprint import pprint
-from openmdao.api import IndepVarComp, ExplicitComponent, Group, Problem, ScipyOptimizeDriver, SqliteRecorder, NonlinearRunOnce, DirectSolver, CaseReader, ExecComp
-try:
-    from openmdao.api import pyOptSparseDriver
-except:
-    pass
+import pandas as pd
+
+import openmdao.api as om
 from wisdem.rotorse.rotor import RotorSE, Init_RotorSE_wRefBlade
 from wisdem.rotorse.rotor_geometry_yaml import ReferenceBlade
-# from wisdem.rotorse.rotor_fast import eval_unsteady
-from wisdem.rotorse.rotor_visualization import plot_lofted
-from wisdem.towerse.tower import TowerSE
-from wisdem.commonse import NFREQ
-# from wisdem.commonse.rna import RNA
-from wisdem.commonse.environment import PowerWind, LogWind
-from wisdem.commonse.turbine_constraints import TurbineConstraints
-from wisdem.turbine_costsse.turbine_costsse_2015 import Turbine_CostsSE_2015
-from wisdem.plant_financese.plant_finance import PlantFinance
-from wisdem.drivetrainse.drivese_omdao import DriveSE
-from wisdem.assemblies.land_based.land_based_noGenerator_noBOS_lcoe import LandBasedTurbine, Init_LandBasedAssembly
-from wisdem.assemblies.fixed_bottom.monopile_assembly_turbine import MonopileTurbine, Init_MonopileTurbine
+from wisdem.assemblies.fixed_bottom.monopile_assembly_turbine_nodrive import MonopileTurbine
 from wisdem.commonse.mpi_tools import MPI
+from wisdem.commonse import NFREQ
 
-from wisdem.aeroelasticse.FAST_reader import InputReader_Common, InputReader_OpenFAST, InputReader_FAST7
+from run_model import initialize_variables
 
+if MPI:
+    rank = MPI.COMM_WORLD.Get_rank()
+else:
+    rank = 0
 
+# Global inputs and outputs
+fname_schema  = 'IEAontology_schema.yaml'
+fname_input   = 'IEA-15-240-RWT_FineGrid.yaml'
+folder_output = os.getcwd() + os.sep + 'outputs'
+fname_output  = folder_output + os.sep + 'IEA-15-240-RWT_out.yaml'
 
+if not os.path.isdir(folder_output) and rank==0:
+    os.mkdir(folder_output)
+    
 
 # Class to print outputs on screen
-class Outputs_2_Screen(ExplicitComponent):
+class Outputs_2_Screen(om.ExplicitComponent):
     def setup(self):
         
         self.add_input('bladeLength',          val=0.0, units = 'm')
@@ -46,7 +48,7 @@ class Outputs_2_Screen(ExplicitComponent):
         self.add_input('root_bending_moment',  val=0.0, units = 'MN * m')
         self.add_input('tip_deflection',       val=0.0, units = 'm')
         self.add_input('tip_deflection_ratio', val=0.0)
-        self.add_input('freq_pbeam',           val=np.zeros(NFREQ), units = 'Hz')
+        self.add_input('freq_curvefem',           val=np.zeros(NFREQ), units = 'Hz')
         self.add_input('freq_distance',        val=0.0)
 
         
@@ -58,7 +60,7 @@ class Outputs_2_Screen(ExplicitComponent):
         print('Constraints')
         print('Max TD:      {:8.3f} m'.format(inputs['tip_deflection'][0]))
         print('TD ratio:    {:8.10f} -'.format(inputs['tip_deflection_ratio'][0]))
-        print('Blade Freq:', inputs['freq_pbeam'])
+        print('Blade Freq:', inputs['freq_curvefem'])
         print('Freq Ratio:  {:8.5f}'.format(inputs['freq_distance'][0]))
         print('')
         print('Objectives')
@@ -71,16 +73,17 @@ class Outputs_2_Screen(ExplicitComponent):
         print('########################################')
 
 
-class blade_freq_check(ExplicitComponent):
+class blade_freq_check(om.ExplicitComponent):
     def setup(self):
-        self.add_input('freq_pbeam', val=np.ones(5), units = 'Hz')
+        self.add_input('freq_curvefem', val=np.ones(5), units = 'Hz')
         self.add_output('freq_check_out', val=1.)
         
     def compute(self, inputs, outputs):
-        print(inputs['freq_pbeam'])
-        outputs['freq_check_out'] = inputs['freq_pbeam'][1]/inputs['freq_pbeam'][0]
+        print(inputs['freq_curvefem'])
+        outputs['freq_check_out'] = inputs['freq_curvefem'][1]/inputs['freq_curvefem'][0]
 
-class Convergence_Trends_Opt(ExplicitComponent):
+
+class Convergence_Trends_Opt(om.ExplicitComponent):
     def initialize(self):
         
         self.options.declare('folder_output')
@@ -117,8 +120,9 @@ class Convergence_Trends_Opt(ExplicitComponent):
                 plt.close(fig)
 
 
+
 # Group to link the openmdao components
-class Optimize_MonopileTurbine(Group):
+class Optimize_MonopileTurbine(om.Group):
 
     def initialize(self):
         self.options.declare('RefBlade')
@@ -126,46 +130,23 @@ class Optimize_MonopileTurbine(Group):
         self.options.declare('FASTpref',        default={})
         self.options.declare('Nsection_Tow',    default = 6)
         self.options.declare('VerbosityCosts',  default = False)
-        self.options.declare('user_update_routine',     default=None)
         
     def setup(self):
         RefBlade             = self.options['RefBlade']
         folder_output        = self.options['folder_output']
         Nsection_Tow         = self.options['Nsection_Tow']
         VerbosityCosts       = self.options['VerbosityCosts']
-        user_update_routine  = self.options['user_update_routine']
         FASTpref             = self.options['FASTpref']
     
-        self.add_subsystem('lb_wt', MonopileTurbine(RefBlade=blade, Nsection_Tow = Nsection_Tow, VerbosityCosts = VerbosityCosts, FASTpref=FASTpref), promotes=['*']) #, user_update_routine=user_update_routine
+        self.add_subsystem('lb_wt', MonopileTurbine(RefBlade=RefBlade, Nsection_Tow = Nsection_Tow, VerbosityCosts = VerbosityCosts, FASTpref=FASTpref), promotes=['*'])
         # Post-processing
         self.add_subsystem('outputs_2_screen',  Outputs_2_Screen(), promotes=['*'])
         self.add_subsystem('conv_plots',        Convergence_Trends_Opt(folder_output = folder_output, optimization_log = 'log_opt_' + RefBlade['config']['name']))
         
 
-
-if __name__ == "__main__":
-    if MPI:
-        rank = MPI.COMM_WORLD.Get_rank()
-    else:
-        rank = 0
+        
+def run_problem(optFlag=False, prob_ref=None):
     
-    optFlag       = True
-
-    WT_input      = "IEA-15-240-RWT.yaml"
-    WT_output     = "IEA-15-240-RWT_out.yaml"
-
-    folder_input  = "/mnt/c/Users/egaertne/IEA-15-240-RWT/WISDEM/"
-    folder_output = '/mnt/c/Users/egaertne/IEA-15-240-RWT/WISDEM/results/IEA15MW_out/'
-    schema        = 'IEAontology_schema.yaml'
-    
-    fname_schema  = folder_input + schema
-    fname_input   = folder_input + WT_input
-    fname_output  = folder_output + WT_output
-    
-    if not os.path.isdir(folder_output) and rank==0:
-        os.mkdir(folder_output)
-
-    Analysis_Level        = 0 # 0: Run CCBlade; 1: Update FAST model at each iteration but do not run; 2: Run FAST w/ ElastoDyn; 3: (Not implemented) Run FAST w/ BeamDyn
     # Initialize blade design
     refBlade = ReferenceBlade()
     if rank == 0:
@@ -173,7 +154,7 @@ if __name__ == "__main__":
     else:
         refBlade.verbose  = False
     refBlade.NINPUT       = 8
-    Nsection_Tow          = 12
+    Nsection_Tow          = 19
     refBlade.NPTS         = 30
     refBlade.spar_var     = ['Spar_cap_ss', 'Spar_cap_ps'] # SS, then PS
     refBlade.te_var       = 'TE_reinforcement'
@@ -182,99 +163,133 @@ if __name__ == "__main__":
     refBlade.fname_schema = fname_schema
     blade = refBlade.initialize(fname_input)
     
-    FASTpref                        = {}
-    FASTpref['Analysis_Level']      = Analysis_Level
-    # Set FAST Inputs
-    # if Analysis_Level >= 1:
-    #     # File management
-    #     FASTpref['FAST_ver']            = 'OpenFAST'
-    #     FASTpref['dev_branch']          = True
-    #     FASTpref['FAST_exe']            = 'openfast'
-    #     FASTpref['FAST_directory']      = '/mnt/c/Users/egaertne/IEA-15-240-RWT/OpenFAST/'
-    #     FASTpref['FAST_InputFile']      = 'IEA-15-240-RWT.fst'
-    #     FASTpref['Turbsim_exe']         = "turbsim"
-    #     FASTpref['FAST_namingOut']      = 'IEA-15-240-RWT'
-    #     FASTpref['FAST_runDirectory']   = 'temp/' + FASTpref['FAST_namingOut']
-        
-    #     # Run Settings
-    #     FASTpref['cores']               = 1
-    #     FASTpref['debug_level']         = 2 # verbosity: set to 0 for quiet, 1 & 2 for increasing levels of output
+    Analysis_Level             = 0
+    FASTpref                   = {}
+    FASTpref['Analysis_Level'] = Analysis_Level
+    fst_vt                     = {}
 
-    #     # DLCs
-    #     FASTpref['DLC_gust']            = None      # Max deflection
-    #     FASTpref['DLC_extrm']           = None      # Max strain
-    #     FASTpref['DLC_turbulent']       = None
-    #     FASTpref['DLC_powercurve']      = None      # AEP
-
-    #     # Initialize, read initial FAST files to avoid doing it iteratively
-    #     fast = InputReader_OpenFAST(FAST_ver=FASTpref['FAST_ver'], dev_branch=FASTpref['dev_branch'])
-    #     fast.FAST_InputFile = FASTpref['FAST_InputFile']
-    #     fast.FAST_directory = FASTpref['FAST_directory']
-    #     fast.execute()
-    #     fst_vt = fast.fst_vt
-    # else:
-    fst_vt = {}
-    
     # Initialize and execute OpenMDAO problem with input data
     if MPI:
         num_par_fd = MPI.COMM_WORLD.Get_size()
-        prob_ref   = Problem(model=Group(num_par_fd=num_par_fd))
-        prob_ref.model.approx_totals(method='fd')
-        prob_ref.model.add_subsystem('comp', Optimize_MonopileTurbine(RefBlade=blade, Nsection_Tow = Nsection_Tow, VerbosityCosts = False, folder_output = folder_output), promotes=['*'])
+        prob       = om.Problem(model=om.Group(num_par_fd=num_par_fd))
+        prob.model.approx_totals(method='fd')
+        prob.model.add_subsystem('comp', Optimize_MonopileTurbine(RefBlade=blade, Nsection_Tow=Nsection_Tow, folder_output=folder_output), promotes=['*'])
     else:
-        prob_ref = Problem()
-        prob_ref.model=Optimize_MonopileTurbine(RefBlade=blade, Nsection_Tow = Nsection_Tow, VerbosityCosts = False, folder_output = folder_output, FASTpref = FASTpref)
-
-    prob_ref.setup()
-    prob_ref = Init_MonopileTurbine(prob_ref, blade, Nsection_Tow = Nsection_Tow, Analysis_Level = Analysis_Level, fst_vt = fst_vt)
-    prob_ref['gust_stddev'] = 3
-    prob_ref['tower_section_height']           = (prob_ref['hub_height'] - prob_ref['foundation_height']) / Nsection_Tow * np.ones(Nsection_Tow)
-    prob_ref['drive.shaft_angle']              = np.radians(6.)
-    prob_ref['overhang']                       = 11.014
-    prob_ref['drive.distance_hub2mb']          = 3.819
-
-    prob_ref['foundation_height']              = -30.
-    prob_ref['water_depth']                    = 30.
-    prob_ref['wind_reference_height']          = 150.
-    prob_ref['hub_height']                     = 150.
-    prob_ref['tower_outer_diameter']           = np.array([10., 10., 10., 10., 9.692655, 9.312475, 8.911586, 8.532367, 8.082239, 7.621554, 7.286144, 6.727136, 6.3])
-    prob_ref['tower_section_height']           = (prob_ref['hub_height'] - prob_ref['foundation_height']) / Nsection_Tow * np.ones(Nsection_Tow)
-    prob_ref['tower_wall_thickness']           = np.array([0.04224176, 0.04105759, 0.0394965, 0.03645589, 0.03377851, 0.03219233, 0.03070819, 0.02910109, 0.02721289, 0.02400931, 0.0208264, 0.02399756])
-    prob_ref['nostallconstraint.min_s']        = 0.25  # The stall constraint is only computed from this value (nondimensional coordinate along blade span) to blade tip
-    prob_ref['nostallconstraint.stall_margin'] = 3.0   # Values in deg of stall margin
-    # prob_ref['dynamic_amplification']          = 1.075 # steady/dynamic tuning factor
+        prob = om.Problem()
+        prob.model = Optimize_MonopileTurbine(RefBlade=blade, Nsection_Tow=Nsection_Tow, folder_output=folder_output)
     
+    prob.model.nonlinear_solver = om.NonlinearRunOnce()
+    prob.model.linear_solver    = om.DirectSolver()
 
-    prob_ref.model.nonlinear_solver = NonlinearRunOnce()
-    prob_ref.model.linear_solver    = DirectSolver()
-    if rank == 0:
-        print('Running at Initial Position:')
-    prob_ref.run_driver()
-    
-    # refBlade.write_ontology(fname_output, prob_ref['blade_out'], refBlade.wt_ref)
-    
-    print('AEP =',                      prob_ref['AEP'])
-    print('diameter =',                 prob_ref['diameter'])
-    print('ratedConditions.V =',        prob_ref['rated_V'])
-    print('ratedConditions.Omega =',    prob_ref['rated_Omega'])
-    print('ratedConditions.pitch =',    prob_ref['rated_pitch'])
-    print('ratedConditions.T =',        prob_ref['rated_T'])
-    print('ratedConditions.Q =',        prob_ref['rated_Q'])
-    print('mass_one_blade =',           prob_ref['mass_one_blade'])
-    print('mass_all_blades =',          prob_ref['mass_all_blades'])
-    print('I_all_blades =',             prob_ref['I_all_blades'])
-    print('freq =',                     prob_ref['freq_pbeam'])
-    print('tip_deflection =',           prob_ref['tip_deflection'])
-    print('root_bending_moment =',      prob_ref['root_bending_moment'])
-    print('moments at the hub =',       prob_ref['Mxyz_total'])
-    print('blade cost =',               prob_ref['total_blade_cost'])
-    print('Cp_aero =',                  max(prob_ref['Cp_aero']))
+    if optFlag and not prob_ref is None:
+        if MPI:
+            num_par_fd = MPI.COMM_WORLD.Get_size()
+            prob = om.Problem(model=om.Group(num_par_fd=num_par_fd))
+            prob.model.approx_totals(method='fd')
+            prob.model.add_subsystem('comp', Optimize_MonopileTurbine(RefBlade=blade, Nsection_Tow=Nsection_Tow, folder_output=folder_output), promotes=['*'])
+        else:
+            prob = om.Problem()
+            prob.model=Optimize_MonopileTurbine(RefBlade=blade, Nsection_Tow=Nsection_Tow, folder_output=folder_output)
+        
+        # --- Driver ---
+        prob.driver = om.pyOptSparseDriver()
+        prob.driver.options['optimizer']   = 'SNOPT' #'SLSQP' #'CONMIN'
+        #prob.driver.opt_settings['ITMAX']  = 15
+        #prob.driver.opt_settings['IPRINT'] = 4
+        # ----------------------
 
-    
+        # --- Objective ---
+        # prob.model.add_objective('lcoe')
+        #prob.model.add_objective('AEP', scaler = -1.)
+        prob.model.add_objective('mass_one_blade')
+        # ----------------------
+
+        # --- Design Variables ---
+        indices_no_root         = range(2,refBlade.NINPUT)
+        indices_no_root_no_tip  = range(2,refBlade.NINPUT-1)
+        indices_no_max_chord    = range(3,refBlade.NINPUT)
+        prob.model.add_design_var('sparT_in',    indices = indices_no_root_no_tip, lower=0.001,    upper=0.200)
+        prob.model.add_design_var('chord_in',    indices = indices_no_max_chord,   lower=0.5,      upper=7.0)
+        #prob.model.add_design_var('theta_in',    indices = indices_no_root,        lower=-7.5,     upper=20.0)
+        prob.model.add_design_var('teT_in', lower=prob_ref['teT_in']*0.5, upper=0.1)
+        #prob.model.add_design_var('leT_in', lower=prob_ref['leT_in']*0.5, upper=0.1)
+        # ----------------------
+        
+        # --- Constraints ---
+        prob.model.add_subsystem('freq_check', blade_freq_check(), promotes=['freq_check_out'])
+        prob.model.connect('freq_curvefem', 'freq_check.freq_curvefem')#, src_indices=[0])
+
+        # Rotor
+        prob.model.add_constraint('tip_deflection_ratio',     upper=1.0)  
+        # prob.model.add_constraint('no_stall_constraint',      upper=1.0)  
+        prob.model.add_constraint('freq_check_out', lower=1.1)
+        #prob.model.add_constraint('rated_Q',     lower=21.4e6, upper=21.6e6)  
+        # prob.model.add_constraint('mass_one_blade',           upper=prob_ref['mass_one_blade']*1.02)  
+        prob.model.add_constraint('AEP',                      lower=0.99*prob_ref['AEP'])
+        # ----------------------
+        
+        # --- Recorder ---
+        filename_opt_log = folder_output + 'log_opt_' + blade['config']['name']
+        
+        prob.driver.add_recorder(om.SqliteRecorder(filename_opt_log))
+        prob.driver.recording_options['includes'] = ['AEP','total_blade_cost','lcoe','tip_deflection_ratio','mass_one_blade','theta_in']
+        prob.driver.recording_options['record_objectives']  = True
+        prob.driver.recording_options['record_constraints'] = True
+        prob.driver.recording_options['record_desvars']     = True
+        # ----------------------
+
+    # Initialize variable inputs
+    prob = initialize_variables(prob, blade, Analysis_Level, fst_vt)
+
+    # Run initial condition no matter what
+    print('Running at Initial Position:')
+    prob.run_model()
+
+    print('########################################')
+    print('')
+    print('Control variables')
+    print('Rotor diam:    {:8.3f} m'.format(prob['diameter'][0]))
+    print('TSR:           {:8.3f} -'.format(prob['control_tsr'][0]))
+    print('Rated vel:     {:8.3f} m/s'.format(prob['rated_V'][0]))
+    print('Rated rpm:     {:8.3f} rpm'.format(prob['rated_Omega'][0]))
+    print('Rated pitch:   {:8.3f} deg'.format(prob['rated_pitch'][0]))
+    print('Rated thrust:  {:8.3f} N'.format(prob['rated_T'][0]))
+    print('Rated torque:  {:8.3f} N-m'.format(prob['rated_Q'][0]))
+    print('')
+    print('Constraints')
+    print('Max TD:       {:8.3f} m'.format(prob['tip_deflection'][0]))
+    print('TD ratio:     {:8.3f} -'.format(prob['tip_deflection_ratio'][0]))
+    print('Blade root M: {:8.3f} N-m'.format(prob['root_bending_moment'][0]))
+    print('')
+    print('Objectives')
+    print('AEP:         {:8.3f} GWh'.format(prob['AEP'][0]))
+    print('LCoE:        {:8.4f} $/MWh'.format(prob['lcoe'][0]))
+    print('')
+    print('Blades')
+    print('Blade mass:  {:8.3f} kg'.format(prob['mass_one_blade'][0]))
+    print('Blade cost:  {:8.3f} $'.format(prob['total_blade_cost'][0]))
+    print('Blade freq:  {:8.3f} Hz'.format(prob['freq_curvefem'][0]))
+    print('3 blade M_of_I:  ', prob['I_all_blades'], ' kg-m^2')
+    print('Hub M:  ', prob['Mxyz_total'], ' kg-m^2')
+    print('')
+    print('RNA Summary')
+    print('RNA mass:    {:8.3f} kg'.format(prob['tow.pre.mass'][0]))
+    print('RNA C_of_G (TT):  ', prob['rna_cg'], ' m')
+    print('RNA M_of_I:  ', prob['tow.pre.mI'], ' kg-m^2')
+    print('')
+    print('Tower')
+    print('Tower top F: ', prob['tow.pre.rna_F'], ' N')
+    print('Tower top M: ', prob['tow.pre.rna_M'], ' N-m')
+    print('Tower freqs: ', prob['tow.post.structural_frequencies'], ' Hz')
+    print('Tower vel:   {:8.3f} kg'.format(prob['tow.wind.Uref'][0]))
+    print('Tower mass:  {:8.3f} kg'.format(prob['tower_mass'][0]))
+    print('Tower cost:  {:8.3f} $'.format(prob['tower_cost'][0]))
+    print('########################################')
+
     # Angle of attack and stall angle
     faoa, axaoa = plt.subplots(1,1,figsize=(5.3, 4))
-    axaoa.plot(prob_ref['r'], prob_ref['nostallconstraint.aoa_along_span'], label='Initial aoa')
-    axaoa.plot(prob_ref['r'], prob_ref['nostallconstraint.stall_angle_along_span'], '.', label='Initial stall')
+    axaoa.plot(prob['r'], prob['nostallconstraint.aoa_along_span'], label='Initial aoa')
+    axaoa.plot(prob['r'], prob['nostallconstraint.stall_angle_along_span'], '.', label='Initial stall')
     axaoa.legend(fontsize=12)
     plt.xlabel('Blade Span [m]', fontsize=14, fontweight='bold')
     plt.ylabel('Angle [deg]', fontsize=14, fontweight='bold')
@@ -284,117 +299,23 @@ if __name__ == "__main__":
     plt.subplots_adjust(bottom = 0.15, left = 0.15)
     fig_name = 'aoa.png'
     faoa.savefig(folder_output + fig_name)
-
-    # plt.show()    
     
-    # Run an optimization
+    # Complete data dump
+    #prob.model.list_inputs(units=True)
+    #prob.model.list_outputs(units=True)
+    
     if optFlag:
-        if MPI:
-            num_par_fd = MPI.COMM_WORLD.Get_size()
-            prob = Problem(model=Group(num_par_fd=num_par_fd))
-            prob.model.approx_totals(method='fd')
-            prob.model.add_subsystem('comp', Optimize_MonopileTurbine(RefBlade=blade, Nsection_Tow = Nsection_Tow, folder_output = folder_output), promotes=['*'])
-        else:
-            prob = Problem()
-            prob.model=Optimize_MonopileTurbine(RefBlade=blade, Nsection_Tow = Nsection_Tow, folder_output = folder_output)
-        
-        # --- Driver ---
-        prob.driver = pyOptSparseDriver()
-        prob.driver.options['optimizer'] = 'CONMIN'
-        prob.driver.opt_settings['ITMAX']     = 15
-        prob.driver.opt_settings['IPRINT']     = 4
-        # ----------------------
-
-        # --- Objective ---
-        # prob.model.add_objective('AEP', scaler = -1.)
-        prob.model.add_objective('mass_one_blade')
-        # ----------------------
-
-        # --- Design Variables ---
-        indices_no_root         = range(2,refBlade.NINPUT)
-        indices_no_root_no_tip  = range(2,refBlade.NINPUT-1)
-        indices_no_max_chord    = range(3,refBlade.NINPUT)
-        prob.model.add_design_var('sparT_in',    indices = indices_no_root_no_tip, lower=0.001,    upper=0.200)
-        # prob.model.add_design_var('chord_in',    indices = indices_no_max_chord,   lower=0.5,      upper=7.0)
-        # prob.model.add_design_var('theta_in',    indices = indices_no_root,        lower=-7.5,     upper=20.0)
-        # prob.model.add_design_var('teT_in', lower=prob_ref['teT_in']*0.5, upper=0.1)
-        # prob.model.add_design_var('leT_in', lower=prob_ref['leT_in']*0.5, upper=0.1)
-        # prob.model.add_design_var('control_tsr',                                   lower=6.000,    upper=11.00)
-        # prob.model.add_design_var('tower_section_height', lower=5.0,  upper=80.0)
-        # prob.model.add_design_var('tower_outer_diameter', lower=3.87, upper=10.0)
-        # prob.model.add_design_var('tower_wall_thickness', lower=4e-3, upper=2e-1)
-        # ----------------------
-        
-        # --- Constraints ---
-        # Rotor
-        prob.model.add_constraint('tip_deflection_ratio',     upper=1.0)  
-        # prob.model.add_constraint('no_stall_constraint',      upper=1.0)  
-        # prob.model.add_constraint('mass_one_blade',           upper=prob_ref['mass_one_blade']*1.02)  
-        # prob.model.add_constraint('freq_check', lower=1.1)
-        # prob.model.add_constraint('AEP',                      lower=prob_ref['AEP'])
-
-        # prob.model.add_subsystem('freq_check', blade_freq_check(), promotes=['freq_check_out'])
-        # prob.model.connect('freq_pbeam', 'freq_check.freq_pbeam')#, src_indices=[0])
-        # prob.model.add_subsystem('freq_check', ExecComp('f_check=freq_pbeam1/freq_pbeam0', freq_pbeam0={'units':'Hz'}, freq_pbeam1={'units':'Hz'}))
-        # prob.model.connect('freq_pbeam', 'freq_check.freq_pbeam0', src_indices=[0])
-        # prob.model.connect('freq_pbeam', 'freq_check.freq_pbeam1', src_indices=[1])
-        # prob.model.add_constraint('tip_deflection', upper=prob_ref['tip_deflection'])
-
-        # Tower
-        # prob.model.add_constraint('tow.height_constraint',    lower=-1e-2,upper=1.e-2)
-        # prob.model.add_constraint('tow.post.stress',          upper=1.0)
-        # prob.model.add_constraint('tow.post.global_buckling', upper=1.0)
-        # prob.model.add_constraint('tow.post.shell_buckling',  upper=1.0)
-        # prob.model.add_constraint('tow.weldability',          upper=0.0)
-        # prob.model.add_constraint('tow.manufacturability',    lower=0.0)
-        # prob.model.add_constraint('frequencyNP_margin',       upper=0.)
-        # prob.model.add_constraint('frequency1P_margin',       upper=0.)
-        # ----------------------
-        
-        # --- Recorder ---
-        filename_opt_log = folder_output + 'log_opt_' + blade['config']['name']
-        
-        prob.driver.add_recorder(SqliteRecorder(filename_opt_log))
-        prob.driver.recording_options['includes'] = ['AEP','total_blade_cost','lcoe','tip_deflection_ratio','theta_in']
-        prob.driver.recording_options['record_objectives']  = True
-        prob.driver.recording_options['record_constraints'] = True
-        prob.driver.recording_options['record_desvars']     = True
-        # ----------------------
-        
-        # --- Run ---
-        prob.setup()
-        prob = Init_MonopileTurbine(prob, blade, Nsection_Tow = Nsection_Tow)
-        prob['gust_stddev'] = 3
-        prob['tower_section_height']           = (prob_ref['hub_height'] - prob_ref['foundation_height']) / Nsection_Tow * np.ones(Nsection_Tow)
-        prob['drive.shaft_angle']              = np.radians(6.)
-        prob['overhang']                       = 11.014
-        prob['drive.distance_hub2mb']          = 3.819
-        
-        prob['foundation_height']              = -30.
-        prob['water_depth']                    = 30.
-        prob['wind_reference_height']          = 150.
-        prob['hub_height']                     = 150.
-        prob['tower_outer_diameter']           = np.array([10., 10., 10., 10., 9.692655, 9.312475, 8.911586, 8.532367, 8.082239, 7.621554, 7.286144, 6.727136, 6.3])
-        prob['tower_section_height']           = (prob_ref['hub_height'] - prob_ref['foundation_height']) / Nsection_Tow * np.ones(Nsection_Tow)
-        prob['tower_wall_thickness']           = np.array([0.04224176, 0.04105759, 0.0394965, 0.03645589, 0.03377851, 0.03219233, 0.03070819, 0.02910109, 0.02721289, 0.02400931, 0.0208264, 0.02399756])
-        prob['nostallconstraint.min_s']        = 0.25  # The stall constraint is only computed from this value (nondimensional coordinate along blade span) to blade tip
-        prob['nostallconstraint.stall_margin'] = 3.0   # Values in deg of stall margin
-    
-        prob.model.nonlinear_solver = NonlinearRunOnce()
-        prob.model.linear_solver = DirectSolver()
         if rank == 0:
             print('Running Optimization:')
             print('N design var: ', 2*len(indices_no_root_no_tip) + len(indices_no_root) + 1)
         if not MPI:
             prob.model.approx_totals()
         prob.run_driver()
-        # ----------------------
 
         if rank == 0:
             # --- Save output .yaml ---
             refBlade.write_ontology(fname_output, prob['blade_out'], refBlade.wt_ref)
-            shutil.copyfile(fname_input,  folder_output + WT_input)
-            # ----------------------
+
             # --- Outputs plotting ---
             print('AEP:         \t\t\t %f\t%f GWh \t Difference: %f %%' % (prob_ref['AEP']*1e-6, prob['AEP']*1e-6, (prob['AEP']-prob_ref['AEP'])/prob_ref['AEP']*100.))
             print('LCoE:        \t\t\t %f\t%f USD/MWh \t Difference: %f %%' % (prob_ref['lcoe']*1.e003, prob['lcoe']*1.e003, (prob['lcoe']-prob_ref['lcoe'])/prob_ref['lcoe']*100.))
@@ -434,6 +355,14 @@ if __name__ == "__main__":
             plt.grid(color=[0.8,0.8,0.8], linestyle='--')
             plt.subplots_adjust(bottom = 0.15, left = 0.15)
             fig_name = 'aoa.png'
-            faoa.savefig(folder_output + fig_name)
+            ft.savefig(folder_output + fig_name)
 
             plt.show()
+        
+    return prob, blade
+
+
+if __name__ == '__main__':
+    prob_ref, blade = run_problem(False)
+    prob, blade = run_problem(True, prob_ref)
+
