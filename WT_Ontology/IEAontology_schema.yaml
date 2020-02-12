@@ -423,7 +423,10 @@ definitions:
                     $ref: "#/definitions/distributed_data/grid_nd"
                 values: 
                     $ref: "#/definitions/distributed_data/angle"
-        
+                fixed: 
+                    type: string
+                    description: Name of the layer to lock the edge
+
         
         
         axis_coordinates:

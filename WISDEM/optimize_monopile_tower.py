@@ -313,7 +313,7 @@ def design_monopile_tower(floating_tower=True):
     postprocess(prob)
 
     # CSV output
-    htow = np.cumsum(np.r_[0.0, prob['suctionpile_depth'], prob['tower_section_height']]) - (prob['water_depth']+prob['suctionpile_depth'])
+    htow = np.cumsum(np.r_[0.0, prob['suctionpile_depth'], prob['tower_section_height']]) + (prob['foundation_height']-prob['suctionpile_depth'])
     towdata = np.c_[htow,
                     np.r_[prob['tower_outer_diameter'][0], prob['tower_outer_diameter']],
                     np.r_[prob['tower_wall_thickness'][0], prob['tower_wall_thickness'][0], prob['tower_wall_thickness']]]
@@ -329,7 +329,7 @@ def design_monopile_tower(floating_tower=True):
     towDF = pd.DataFrame(data=towdata, columns=colstr)
     mycomments = ['']*towdata.shape[0]
     mycomments[0] = 'Monopile start'
-    mycomments[np.where(towdata[:,0] == -prob['water_depth'])[0][0]] = 'Mud line'
+    mycomments[np.where(towdata[:,0] == prob['foundation_height'])[0][0]] = 'Mud line'
     mycomments[np.where(towdata[:,0] == 0.0)[0][0]] = 'Water line'
     mycomments[np.where(towdata[:,0] == prob['transition_piece_height'])[0][0]] = 'Tower start'
     mycomments[-1] = 'Tower top'
@@ -350,8 +350,8 @@ def design_monopile_tower(floating_tower=True):
 
 
 if __name__ == '__main__':
-    prob_float = design_floating_tower()
+    #prob_float = design_floating_tower()
     # Determine the penalty for using a single tower as opposed to two different ones
     #prob_float = design_monopile_tower(floating_tower=True)
-    #prob_mono  = design_monopile_tower(floating_tower=False)
+    prob_mono  = design_monopile_tower(floating_tower=False)
     #print(prob_mono['tower_mass'] - prob_float['tower_mass'])

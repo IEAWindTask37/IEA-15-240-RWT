@@ -19,10 +19,14 @@ from generateTables import RWT_Tabular
 
 
 # Global inputs and outputs
-fname_schema  = 'IEAontology_schema.yaml'
-fname_input   = 'IEA-15-240-RWT_FineGrid.yaml'
-fname_output  = 'IEA-15-240-RWT_out.yaml'
+ontology_dir  = os.path.dirname( os.path.dirname( os.path.realpath(__file__)) ) + os.sep + 'WT_Ontology'
+fname_schema  = ontology_dir + os.sep + 'IEAontology_schema.yaml'
+fname_input   = ontology_dir + os.sep + 'IEA-15-240-RWT_FineGrid.yaml'
+fname_output  = ontology_dir + os.sep + 'IEA-15-240-RWT_out.yaml'
 folder_output = os.getcwd() + os.sep + 'outputs'
+
+if not os.path.isdir(folder_output) and rank==0:
+    os.mkdir(folder_output)
 
 
 def initialize_problem(Analysis_Level):
@@ -203,8 +207,6 @@ def initialize_variables(prob, blade, Analysis_Level, fst_vt):
     prob['generator_mass']          = 226628.6 + 144963.1
     prob['bedplate_mass']           = 70328.7
     prob['main_bearing_mass']       = 5664
-    prob['drive.shaft_angle']       = np.radians(6.)
-    prob['drive.distance_hub2mb']   = 3.819
 
     return prob
 
@@ -262,7 +264,7 @@ def run_problem(prob):
     # Complete data dump
     #prob.model.list_inputs(units=True)
     #prob.model.list_outputs(units=True)
-    
+    return prob
 
 
 def postprocess(prob, blade):
@@ -642,7 +644,7 @@ if __name__ == "__main__":
 
     # Seed inputs
     prob, blade, fst_vt = initialize_problem(Analysis_Level)
-    prob = initialize_variables(prob, blade, Analysis_Level, fst_vt): 
+    prob = initialize_variables(prob, blade, Analysis_Level, fst_vt)
 
     # Run the analysis
     prob = run_problem(prob)    

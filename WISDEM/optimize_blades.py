@@ -23,10 +23,11 @@ else:
     rank = 0
 
 # Global inputs and outputs
-fname_schema  = 'IEAontology_schema.yaml'
-fname_input   = 'IEA-15-240-RWT_FineGrid.yaml'
+ontology_dir  = os.path.dirname( os.path.dirname( os.path.realpath(__file__)) ) + os.sep + 'WT_Ontology'
+fname_schema  = ontology_dir + os.sep + 'IEAontology_schema.yaml'
+fname_input   = ontology_dir + os.sep + 'IEA-15-240-RWT_FineGrid.yaml'
+fname_output  = ontology_dir + os.sep + 'IEA-15-240-RWT_out.yaml'
 folder_output = os.getcwd() + os.sep + 'outputs'
-fname_output  = folder_output + os.sep + 'IEA-15-240-RWT_out.yaml'
 
 if not os.path.isdir(folder_output) and rank==0:
     os.mkdir(folder_output)
@@ -193,15 +194,15 @@ def run_problem(optFlag=False, prob_ref=None):
         
         # --- Driver ---
         prob.driver = om.pyOptSparseDriver()
-        prob.driver.options['optimizer']   = 'SNOPT' #'SLSQP' #'CONMIN'
-        #prob.driver.opt_settings['ITMAX']  = 15
-        #prob.driver.opt_settings['IPRINT'] = 4
+        prob.driver.options['optimizer']   = 'CONMIN'
+        prob.driver.opt_settings['ITMAX']  = 15
+        prob.driver.opt_settings['IPRINT'] = 4
         # ----------------------
 
         # --- Objective ---
         # prob.model.add_objective('lcoe')
-        #prob.model.add_objective('AEP', scaler = -1.)
-        prob.model.add_objective('mass_one_blade')
+        prob.model.add_objective('AEP', scaler = -1.)
+        #prob.model.add_objective('mass_one_blade')
         # ----------------------
 
         # --- Design Variables ---
@@ -210,7 +211,7 @@ def run_problem(optFlag=False, prob_ref=None):
         indices_no_max_chord    = range(3,refBlade.NINPUT)
         prob.model.add_design_var('sparT_in',    indices = indices_no_root_no_tip, lower=0.001,    upper=0.200)
         prob.model.add_design_var('chord_in',    indices = indices_no_max_chord,   lower=0.5,      upper=7.0)
-        #prob.model.add_design_var('theta_in',    indices = indices_no_root,        lower=-7.5,     upper=20.0)
+        prob.model.add_design_var('theta_in',    indices = indices_no_root,        lower=-7.5,     upper=20.0)
         prob.model.add_design_var('teT_in', lower=prob_ref['teT_in']*0.5, upper=0.1)
         #prob.model.add_design_var('leT_in', lower=prob_ref['leT_in']*0.5, upper=0.1)
         # ----------------------
