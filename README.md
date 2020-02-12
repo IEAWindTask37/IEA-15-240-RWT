@@ -1,44 +1,27 @@
 # IEA-15-240-RWT
-15MW reference wind turbine repository developed in conjunction with IEA Wind
+This repository contains the model data for the 15 MW offshore reference turbine developed within IEA Wind Task 37.
 
-This repository is the home for the dissemination of files related to the in-development IEA 15MW Offshore Reference Turbine.  Community use and feedback on the provided data, and turbine design more generally, are encouraged.  Please be aware that the turbine design and model development is ongoing and subject to regular changes and corrections.
+The documentation for the turbine is accessable here: tbd
 
- 
-## Upcoming features:
+Data in this repository includes:
+* Documentation, including tabular data used in the figures from the technical report
+* OpenFAST aeroelastic model inputs
+* HAWC2 aeroelastic model inputs
+* WISDEM optimization files
+* Wind turbine ontology .yaml files
+* CAD modeling of turbine in SolidWorks and an Ansys FEA model of the blades
 
-* Design refinements: nacelle bedplate, yaw bearing and drive, airfoil polar data
-* OpenFAST features: yaw system spring and damping constant
-* Industry review of monopile design
+Note that the OpenFAST model uses the NREL's [Reference OpenSource Controller (ROSCO)](https://github.com/nrel/rosco).  Users will need to compile the dynamic library following the ROSCO install instructions and need to provide relavent path to the dynamic library within ServoDyn.  [Tools](https://github.com/NREL/ROSCO_toolbox) also exist for automatically retuning the controller, updating the "Cp_Ct_Cq.IEA15MW.txt" and "DISCON.IN" files that are inputs to ROSCO.  Please use OpenFAST-v2.2.0 or later, the OpenFAST model has not been tested for backwards compatability.
 
-## Update 11/20/2019:
+If you use this model in your research or publications, please cite as:
 
-* Generator and nacelle redesign based on industry feedback
-* Monopile and tower redesign for updated RNA mass, minimum rotor speed increased to 5 RPM to avoid tower 3P excitation
-* Updated contoller with shutdown and minimum rotor speed, source code available at: https://github.com/NREL/ROSCO
-* Updated tower documentation and new spreadsheet with RNA high level modeling (OpenFAST, Hawc2, and WISDEM) properties (mass, intertia, geometry)
+    @techreport{IEA15MW_ORWT,
+    author = {Evan Gaertner and Jennifer Rinker and Latha Sethuraman and Frederik Zahle and Benjamin Anderson and Garrett Barter and Nikhar Abbas and Fanzhong Meng and Pietro Bortolotti and Witold Skrzypinski and George Scott and Roland Feil and Henrik Bredsmoe and Katherine Dykes and Matt Sheilds and Christopher Allen and Anthony Viselli},
+    Howpublished = {NREL/TP-75698},
+    institution = {International Energy Agency},
+    title = {{Definition of the IEA 15 MW Offshore Reference Wind Turbine}},
+    URL = {tbd},
+    Year = {}
+    }
 
-## Update 10/17/2019:
-
-* Adding some documentation on generator design
-* Fixed mismatch between tower and monopile
-
-## Update 10/15/2019:
-
-* First upload of monopile foundation in OpenFAST model
-* First upload of yaml file for use with multiple repos
-
-## Update 10/13/2019:
-
-* OpenFAST controller in place thanks to Nikhar Abbas
-* Include next version of OpenFAST files to fix twist and spar cap rotation bug
-
-## Update 10/9/2019:
-
-* Switching over to permanent GitHub home
-* Addition of OpenFAST controller from Nikhar Abbas
-
-## Update 10/6/2019:
-
-* Corrections to tower properties and mode shapes
-* Corrections to RNA masses and inertias
-* Yaw and drivetrain stiffness and damping added
+For questions, contact Evan Gaertner (evan.gaertner@nrel.gov).  The technical report lists the contributions of individual authors, which may provide a more relevant point of contact.
