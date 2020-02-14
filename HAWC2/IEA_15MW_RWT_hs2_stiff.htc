@@ -122,7 +122,7 @@
       begin timoschenko_input;
         filename	./data/IEA_15MW_RWT_Blade_st.dat;
         FPM	1;	using fully populated matrix from BECAS
-        set	1 1;
+        set	1 2;
       end timoschenko_input;
       begin c2_def;
         nsec	20;
@@ -340,7 +340,7 @@
       main_body	blade1;
       second_order_actuator	pitch1 100 0.7;
     end rotating_threebladed_substructure;
-    operational_data_filename	./data/operation.dat;
+    operational_data_filename	./data/operation_stiff.dat;
     ; inputs for finding optimal operational data;
     begin operational_data;
       windspeed	3 25 45;	cut-in [m/s], cut-out [m/s], points [-]
