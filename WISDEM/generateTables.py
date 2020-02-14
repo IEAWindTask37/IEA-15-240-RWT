@@ -56,8 +56,10 @@ class RWT_Tabular(object):
         f.close()
         
         # Store output file name
-        froot, _ = os.path.splitext( finput )
-        self.fout = froot + '_tabular.xlsx'
+        folder_output = os.getcwd() + os.sep + 'outputs'
+        _, fname      = os.path.split(finput)
+        froot, _      = os.path.splitext( fname )
+        self.fout     = folder_output + os.sep + froot + '_tabular.xlsx'
 
         # If provided, store blade, tower, and rotor data
         self.towDF   = towDF
@@ -1038,8 +1040,11 @@ class RWT_Tabular(object):
         
 if __name__ == '__main__':
     
+
+
     # Ontology file as input
-    fontology = 'IEA-15-240-RWT.yaml'
+    ontology_dir  = os.path.dirname( os.path.dirname( os.path.realpath(__file__)) ) + os.sep + 'WT_Ontology'
+    fontology     = ontology_dir + os.sep + 'IEA-15-240-RWT_FineGrid.yaml'
     
     myobj = RWT_Tabular(fontology)
     myobj.write_all()
