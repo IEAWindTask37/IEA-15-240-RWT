@@ -1,11 +1,11 @@
 # IEA-15-240-RWT
 This repository contains the model data for the 15 MW offshore reference turbine developed within IEA Wind Task 37.
 
-The documentation for the turbine is accessable here: tbd
+The documentation for the turbine is accessable here: (report expected to be published in the coming weeks)
 
 Data in this repository includes:
 * Documentation, including tabular data used in the figures from the technical report
-* OpenFAST aeroelastic model inputs
+* OpenFAST aeroelastic model inputs (compatable with the latest "dev" branch available: https://github.com/OpenFAST/openfast.git)
 * HAWC2 aeroelastic model inputs
 * WISDEM optimization files
 * Wind turbine ontology .yaml files
