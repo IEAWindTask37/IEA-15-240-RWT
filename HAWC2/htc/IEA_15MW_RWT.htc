@@ -395,15 +395,15 @@ begin dll;
       constant   9 0.7 ; Damping ratio of speed filter [-]
       constant  10   1.01   	; Frequency of free-free DT torsion mode [Hz], if zero no notch filter used
       ; Partial load control parameters
-      constant  11   0.284642E+08 ; Optimal Cp tracking K factor [Nm/(rad/s)^2], ;
+      constant  11   0.302217E+08 ; Optimal Cp tracking K factor [Nm/(rad/s)^2], ;
                                 ; Qg=K*Omega^2, K=eta*0.5*rho*A*Cp_opt*R^3/lambda_opt^3                     
-      constant  12   0.140541E+09 ; Proportional gain of torque controller [Nm/(rad/s)]
-      constant  13   0.315374E+08 ; Integral gain of torque controller [Nm/rad]
+      constant  12   0.112427E+09 ; Proportional gain of torque controller [Nm/(rad/s)]
+      constant  13   0.201829E+08 ; Integral gain of torque controller [Nm/rad]
       constant  14   0.0    	; Differential gain of torque controller [Nm/(rad/s^2)]
 ;     Full load control parameters
       constant  15   1      	; Generator control switch [1=constant power, 0=constant torque]
-      constant  16   0.127727E+01 ; Proportional gain of pitch controller [rad/(rad/s)]
-      constant  17   0.343942E+00 ; Integral gain of pitch controller [rad/rad]
+      constant  16   0.640241E+00 ; Proportional gain of pitch controller [rad/(rad/s)]
+      constant  17   0.862019E-01 ; Integral gain of pitch controller [rad/rad]
       constant  18   0.0    	; Differential gain of pitch controller [rad/(rad/s^2)]
       constant  19   0.4e-8 	; Proportional power error gain [rad/W]
       constant  20   0.4e-8 	; Integral power error gain [rad/(Ws)]

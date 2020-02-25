@@ -326,7 +326,7 @@
   end aero;
 ;----------------------------------------------------------------------------------------------------------------------------------------------------------------
   begin hawcstab2;
-    ; define structure;
+; define structure;
     begin ground_fixed_substructure;
       main_body	tower;
       main_body	towertop;
@@ -340,40 +340,39 @@
       main_body	blade1;
       second_order_actuator	pitch1 100 0.7;
     end rotating_threebladed_substructure;
-    operational_data_filename	./data/operation_stiff.dat;
-    ; inputs for finding optimal operational data;
+    operational_data_filename	./data/operation_notorsion.dat;
     begin operational_data;
       windspeed	3 25 45;	cut-in [m/s], cut-out [m/s], points [-]
       genspeed	5.000011692174984 7.559891627853647;	[rpm]
       gearratio	1;	[-]
-      minpitch	0.0;	[deg]
-      opt_lambda	9.0;	[-]
+      minpitch	0;	[deg]
+      opt_lambda	9;	[-]
       maxpow	15535.991714137754;	[kW]
       prvs_turbine	1;	[-]
       include_torsiondeform	1;	[-]
     end operational_data;
-    ; define controller couplings;
+; define controller couplings;
     begin controller;
       begin input;
         constraint	bearing1 shaft_rot;
         constraint	bearing2 pitch1 collective;
       end input;
       begin output;
-        constraint	bearing1 shaft_rot 1 only 2;
-        constraint	bearing2 pitch1 1 only 1 collective;
+        constraint bearing1	shaft_rot 1 only 2;
+        constraint bearing2	pitch1 1 only 1 collective;
       end output;
     end controller;
-    ; inputs for controller tuning;
+; inputs for controller tuning;
     begin controller_tuning;
       partial_load	0.05 0.7;	fn [hz], zeta [-]
-      full_load	0.06 0.7;	fn [hz], zeta [-]
+      full_load	0.03 0.7;	fn [hz], zeta [-]
       gain_scheduling	2;	1 linear, 2 quadratic
       constant_power	0;	0 constant torque, 1 constant power at full load
     end controller_tuning;
-    ; HAWC2S commands (uncomment as needed);
-    ;compute_optimal_pitch_angle	use_operational_data;
-    ;compute_steady_states	bladedeform tipcorrect induction nogradients;	compute steady states using hawcstab2 (need for some other commands)
-    ;save_power;	save steady-state values to input_htc_file.pwr
-    ;compute_controller_input;	tune controller parameters
+; HAWC2S commands (uncomment as needed);
+;compute_optimal_pitch_angle	use_operational_data;
+;compute_steady_states	bladedeform tipcorrect induction nogradients;	compute steady states using hawcstab2 (need for some other commands)
+;save_power;	save steady-state values to input_htc_file.pwr
+;compute_controller_input;	tune controller parameters
   end hawcstab2;
 exit;
