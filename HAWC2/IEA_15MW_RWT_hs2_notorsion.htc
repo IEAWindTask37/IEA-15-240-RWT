@@ -343,7 +343,7 @@
     operational_data_filename	./data/operation_notorsion.dat;
     begin operational_data;
       windspeed	3 25 45;	cut-in [m/s], cut-out [m/s], points [-]
-      genspeed	5.000011692174984 7.559891627853647;	[rpm]
+      genspeed	5.000011692174984 7.559987120819503;	[rpm]
       gearratio	1;	[-]
       minpitch	0;	[deg]
       opt_lambda	9;	[-]
