@@ -72,7 +72,7 @@
       type	timoschenko;
       nbodies	1;
       node_distribution	c2_def;
-      damping_posdef	0 0 0 0.000465 0.000465 0.0003078839;	TODO Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
+      damping_posdef	0 0 0 0.000465 0.000465 0.0003078839;	Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
       concentrated_mass	1 0 0 0 0 0 0 8008650;	generator inertia about shaft
       concentrated_mass	2 0 0 0 190000 0 0 1373471;	hub mass/inertia;
       begin timoschenko_input;
