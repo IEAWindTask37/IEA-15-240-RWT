@@ -84,7 +84,7 @@
       type	timoschenko;
       nbodies	1;
       node_distribution	c2_def;
-      damping_posdef	0 0 0 0.000465 0.000465 0.0003078839;	TODO Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
+      damping_posdef	0 0 0 0.000465 0.000465 0.0003078839;	Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
       concentrated_mass	1 0 0 0 0 0 0 8008650;	generator inertia about shaft
       concentrated_mass	2 0 0 0 190000 0 0 1373471;	hub mass/inertia;
       begin timoschenko_input;
@@ -445,7 +445,7 @@
 ;     Drivetrain damper
         constant	38 0;	Proportional gain of active DT damper [Nm/(rad/s)], requires frequency in input 10
 ;	  Over speed
-        constant	39 25;	Overspeed percentage before initiating turbine controller alarm (shut-down) [%]
+        constant	39 50;	Overspeed percentage before initiating turbine controller alarm (shut-down) [%]
 ;     Additional non-linear pitch control term (not used when all zero)
         constant	40 0;	Rotor speed error scaling factor [rad/s]
         constant	41 0;	Rotor acceleration error scaling factor [rad/s^2]
@@ -454,7 +454,7 @@
         constant	43 28;	Wind speed 'Vstorm' above which derating of rotor speed is used [m/s]
         constant	44 28;	Cut-out wind speed (only used for derating of rotor speed in storm) [m/s]
 ;     Safety system parameters
-        constant	45 30;	Overspeed percentage before initiating safety system alarm (shut-down) [%]
+        constant	45 50;	Overspeed percentage before initiating safety system alarm (shut-down) [%]
         constant	46 2;	Max low-pass filtered tower top acceleration level [m/s^2]
 ;     Turbine parameter
         constant	47 240;	Nominal rotor diameter [m]
