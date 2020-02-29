@@ -996,7 +996,7 @@ class RWT_Tabular(object):
 
     def write_nacelle(self):
         # Nacelle data
-        fnac  =  '..'+os.sep+'Documentation'+os.sep+'drivetrain'+os.sep+'Nacelle_Mass_Properties.xlsx'
+        fnac  =  '..'+os.sep+'Documentation'+os.sep+'Nacelle_Mass_Properties.xlsx'
         nacDF = pd.read_excel(fnac)
         nacDF.set_index('Name', inplace=True)
 

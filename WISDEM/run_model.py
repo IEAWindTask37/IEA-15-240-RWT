@@ -4,14 +4,12 @@ import os
 import shutil
 
 import numpy as np
-from scipy.interpolate import PchipInterpolator
 import matplotlib.pyplot as plt
 import pandas as pd
 
 import openmdao.api as om
 from wisdem.rotorse.rotor import RotorSE, Init_RotorSE_wRefBlade
 from wisdem.rotorse.rotor_geometry_yaml import ReferenceBlade
-from wisdem.commonse.turbine_constraints import TurbineConstraints
 from wisdem.assemblies.fixed_bottom.monopile_assembly_turbine_nodrive import MonopileTurbine
 from wisdem.aeroelasticse.FAST_reader import InputReader_Common, InputReader_OpenFAST, InputReader_FAST7
 
