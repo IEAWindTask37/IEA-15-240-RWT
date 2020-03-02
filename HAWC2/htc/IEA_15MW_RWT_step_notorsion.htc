@@ -5,7 +5,7 @@
     solvertype	1;	(newmark)
     on_no_convergence	continue;
     convergence_limits	1000 1 1e-07;
-    logfile	./log/IEA_15MW_RWT_step.log;
+    logfile	./log/IEA_15MW_RWT_step_notorsion.log;
     begin newmark;
       deltat	0.01;
     end newmark;
@@ -134,7 +134,7 @@
       begin timoschenko_input;
         filename	./data/IEA_15MW_RWT_Blade_st.dat;
         FPM	1;	using fully populated matrix from BECAS
-        set	1 1;
+        set	1 2;
       end timoschenko_input;
       begin c2_def;
         nsec	20;
@@ -626,7 +626,7 @@
 ;----------------------------------------------------------------------------------------------------------------------------------------------------------------
 ;
   begin output;
-    filename	./res/IEA_15MW_RWT_step;
+    filename	./res/IEA_15MW_RWT_step_notorsion;
     data_format	hawc_binary;
     buffer	1;
     time	100 1139;
