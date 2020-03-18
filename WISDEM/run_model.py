@@ -214,6 +214,7 @@ def run_problem(prob):
 
     # Run initial condition no matter what
     print('Running at Initial Position:')
+    prob['gust_stddev'] = 0
     prob.run_model()
 
     print('########################################')
@@ -241,7 +242,8 @@ def run_problem(prob):
     print('Blade cost:  {:8.3f} $'.format(prob['total_blade_cost'][0]))
     print('Blade freq:  {:8.3f} Hz'.format(prob['freq_curvefem'][0]))
     print('3 blade M_of_I:  ', prob['I_all_blades'], ' kg-m^2')
-    print('Hub M:  ', prob['Mxyz_total'], ' kg-m^2')
+    print('Hub F:  ', 1e-3*prob['Fxyz_total'], ' kN')
+    print('Hub M:  ', 1e-3*prob['Mxyz_total'], ' kNm')
     print('')
     print('RNA Summary')
     print('RNA mass:    {:8.3f} kg'.format(prob['tow.pre.mass'][0]))
@@ -258,7 +260,6 @@ def run_problem(prob):
     print('Monopile mass:  {:8.3f} kg'.format(prob['monopile_mass'][0]))
     print('Monopile cost:  {:8.3f} $'.format(prob['monopile_cost'][0]))
     print('########################################')
-
     # Complete data dump
     #prob.model.list_inputs(units=True)
     #prob.model.list_outputs(units=True)
