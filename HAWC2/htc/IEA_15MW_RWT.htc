@@ -1,4 +1,4 @@
-; IEA 15 MW Reference Wind Turbine. Model update from commit "9a1069e".
+; IEA 15 MW Reference Wind Turbine. Model update from commit "7d179ee".
 ; 
 begin simulation ;
   time_stop    700.0 ;
@@ -50,7 +50,8 @@ begin new_htc_structure;
     nbodies     1 ;
     node_distribution     c2_def ;
     damping_posdef  0.0  0.0  0.0  7.00E-04  7.00E-04  7.00E-04  ;   dummy values (stiff body)
-	concentrated_mass  1  0.00  -4.985  -4.358  5.073e+05  7.674778e+06  1.055686e+07  8.127143e+06	;  nacelle: NR+R mass; NR inertia
+	concentrated_mass  1  0.00  0.00 0.00  1.000e+05  0.00  0.00  0.00	;  yaw system
+	concentrated_mass  1  0.00  -4.688  -4.240  5.309e+05  7.674778e+06  1.055686e+07  8.127143e+06	;  nacelle: NR+R mass; NR inertia
 	begin timoschenko_input;
       filename ./data/IEA_15MW_RWT_Towertop_st.dat ;
       set 1 1 ;                
@@ -85,7 +86,7 @@ begin new_htc_structure;
     nbodies     1 ;
     node_distribution     c2_def ;
 	damping_posdef  0.0 0.0 0.0 4.65E-04  4.65E-04  3.078839e-04 ;  Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
-    concentrated_mass  1  0.0 0.0 0.0 0.0 0.0 0.0 8.008650e+06	;	generator inertia about shaft
+    concentrated_mass  1  0.0 0.0 0.0 0.0 0.0 0.0 3.222631e+06	;	generator inertia about shaft
     concentrated_mass  2  0.0 0.0 0.0 1.90000e+05 0.0 0.0 1.373471e+06	;	hub mass/inertia;
 	begin timoschenko_input;
       filename ./data/IEA_15MW_RWT_Shaft_st.dat ;
@@ -385,7 +386,7 @@ begin dll;
       constant   1 15000.0    	; Rated power [kW]                         
       constant   2 0.524 ; Minimum rotor (LSS) speed [rad/s]
       constant   3 0.792 ; Rated rotor (LSS) speed [rad/s]
-      constant   4 21586850.73599 ; Maximum allowable generator torque [Nm]
+      constant   4 21586451.33303 ; Maximum allowable generator torque [Nm]
       constant   5  100.0    	; Minimum pitch angle, theta_min [deg], 
 								; if |theta_min|>90, then a table of <wsp,theta_min> is read ;
 								; from a file named 'wptable.n', where n=int(theta_min)
@@ -509,7 +510,7 @@ begin dll;
  	begin init ;
        constant 1  20.0    ; Frequency of 2nd order servo model of generator-converter system [Hz]   
        constant 2  0.9     ; Damping ratio 2nd order servo model of generator-converter system [-]
-       constant 3 21586850.73599 ; Maximum allowable LSS torque (pull-out torque) [Nm]
+       constant 3 21586451.33303 ; Maximum allowable LSS torque (pull-out torque) [Nm]
        constant 4 0.9655 ; Generator efficiency [-]
        constant 5 1.0      ; Gearratio [-]
        constant 6 0.0      ; Time for half value in softstart of torque [s] 
@@ -536,7 +537,7 @@ begin dll;
      arraysizes_init    100 1 ;
      arraysizes_update  100 100 ;
  	begin init ;
-      constant 1 12952110.441593999 ; Fully deployed maximum brake torque [Nm] (0.6*max torque)
+      constant 1 12951870.799818 ; Fully deployed maximum brake torque [Nm] (0.6*max torque)
       constant 2     100.0   ; Parameter alpha used in Q = tanh(omega*alpha), typically 1e2/Omega_nom
       constant 3       0.5   ; Delay time for before brake starts to deploy [s]
       constant 4       0.6   ; Time for brake to become fully deployed [s]
