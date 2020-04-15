@@ -420,13 +420,13 @@ def postprocess(prob, blade):
     towDF = towDF[['Location']+colstr]
     A = 0.25*np.pi*(towDF['OD [m]']**2 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**2)
     I = (1/64.)*np.pi*(towDF['OD [m]']**4 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**4)
-    towDF['Mass Density [kg/m]'] = 7850 * A
+    towDF['Mass Density [kg/m]'] = prob['material_density'] * A
     towDF['Fore-aft inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
     towDF['Side-side inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
-    towDF['Fore-aft stiffness [N.m^2]'] = 2e11 * I
-    towDF['Side-side stiffness [N.m^2]'] = 2e11 * I
-    towDF['Torsional stiffness [N.m^2]'] = 7.93e10 * 2*I
-    towDF['Axial stiffness [N]'] = 2e11 * A
+    towDF['Fore-aft stiffness [N.m^2]'] = prob['E'] * I
+    towDF['Side-side stiffness [N.m^2]'] = prob['E'] * I
+    towDF['Torsional stiffness [N.m^2]'] = prob['G'] * 2*I
+    towDF['Axial stiffness [N]'] = prob['E'] * A
     with open('tow.tbl','w') as f:
         towDF.to_latex(f, index=False)
 

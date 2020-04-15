@@ -13,8 +13,8 @@ from wisdem.commonse.environment import LogWind
 
 # Initial guess
 h_param = np.array([5., 5., 5., 5., 5., 5., 5., 5., 5., 13.,  13.,  13.,  13.,  13.,  13.,  13.,  13.,  13., 12.58244309])
-d_param = np.array([10., 9.8030784, 9.79874123, 9.8030784, 9.79874123, 9.8030784, 9.68185956, 9.44717576, 9.22513042, 9., 9., 9., 9., 9., 9., 9., 9., 9., 7.28693747, 6.5])
-t_param = np.array([0.05664958, 0.05562889, 0.05373922, 0.05177922, 0.04983506, 0.04793076, 0.04676483, 0.04677619, 0.04678032, 0.075, 0.06877404, 0.06040807, 0.05194785, 0.04336537, 0.0347967, 0.02639276, 0.02241118, 0.02142537, 0.02633759])
+d_param = np.array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 9.92647687, 9.44319282, 8.83283769, 8.15148167, 7.38976138, 6.90908962, 6.74803581, 6.57231775, 6.5])
+t_param = np.array([0.05534138, 0.05344902, 0.05150928, 0.04952705, 0.04751736, 0.04551709, 0.0435267, 0.04224176, 0.04105759, 0.0394965, 0.03645589, 0.03377851, 0.03219233, 0.03070819, 0.02910109, 0.02721289, 0.02400931, 0.0208264, 0.02399756])
 
 # Index for where the tower starts
 itow = 9
@@ -136,13 +136,13 @@ def postprocess(prob, towDF, spre='monopile'):
     # Outputs from tower diameter-thickness schedule
     A = 0.25*np.pi*(towDF['OD [m]']**2 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**2)
     I = (1/64.)*np.pi*(towDF['OD [m]']**4 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**4)
-    towDF['Mass Density [kg/m]'] = 7850 * A
+    towDF['Mass Density [kg/m]'] = prob['material_density'] * A
     towDF['Fore-aft inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
     towDF['Side-side inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
-    towDF['Fore-aft stiffness [N.m^2]'] = 2e11 * I
-    towDF['Side-side stiffness [N.m^2]'] = 2e11 * I
-    towDF['Torsional stiffness [N.m^2]'] = 7.93e10 * 2*I
-    towDF['Axial stiffness [N]'] = 2e11 * A
+    towDF['Fore-aft stiffness [N.m^2]'] = prob['E'] * I
+    towDF['Side-side stiffness [N.m^2]'] = prob['E'] * I
+    towDF['Torsional stiffness [N.m^2]'] = prob['G'] * 2*I
+    towDF['Axial stiffness [N]'] = prob['E'] * A
     towDF.to_csv(folder_output + os.sep + spre+'_tower.csv', index=False)
 
     def format_save(fig, fig_name):
