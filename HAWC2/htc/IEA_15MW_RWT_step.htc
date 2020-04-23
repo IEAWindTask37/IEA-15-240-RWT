@@ -1,7 +1,7 @@
-; IEA 15 MW Reference Wind Turbine. Model update from commit "9a1069e".
+; IEA 15 MW Reference Wind Turbine. Model update from commit "7d179ee".
 ;
   begin simulation;
-    time_stop	1042;
+    time_stop	1139;
     solvertype	1;	(newmark)
     on_no_convergence	continue;
     convergence_limits	1000 1 1e-07;
@@ -50,7 +50,8 @@
       nbodies	1;
       node_distribution	c2_def;
       damping_posdef	0 0 0 0.0007 0.0007 0.0007;	dummy values (stiff body)
-      concentrated_mass	1 0 -4.985 -4.358 507300 7674778 10556860 8127143;	nacelle: NR+R mass; NR inertia
+      concentrated_mass	1 0 0 0 100000 0 0 0;	yaw system
+      concentrated_mass	1 0 -4.688 -4.24 530900 7674778 10556860 8127143;	nacelle: NR+R mass; NR inertia
       begin timoschenko_input;
         filename	./data/IEA_15MW_RWT_Towertop_st.dat;
         set	1 1;
@@ -84,8 +85,8 @@
       type	timoschenko;
       nbodies	1;
       node_distribution	c2_def;
-      damping_posdef	0 0 0 0.000465 0.000465 0.0003078839;	TODO Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
-      concentrated_mass	1 0 0 0 0 0 0 8008650;	generator inertia about shaft
+      damping_posdef	0 0 0 0.000465 0.000465 0.0003078839;	Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
+      concentrated_mass	1 0 0 0 0 0 0 3222631;	generator inertia about shaft
       concentrated_mass	2 0 0 0 190000 0 0 1373471;	hub mass/inertia;
       begin timoschenko_input;
         filename	./data/IEA_15MW_RWT_Shaft_st.dat;
@@ -312,9 +313,9 @@
     horizontal_input	1;	0=false, 1=true
     windfield_rotations	0 0 0;	yaw, tilt, rotation
     center_pos0	0 0 -150;	center of turb box
-    shear_format	2 0.2;	0=none,1=constant,2=log,3=power,4=linear
+    shear_format	3 0.0;
     turb_format	0;
-    tower_shadow_method	3;	0=none, 1=potential flow, 2=jet, 3=potential 2
+    tower_shadow_method	0;
     scale_time_start	0;
     wind_ramp_factor	0 40 0.6 1;	tstart, tstop, % start, % stop
 ;
@@ -326,28 +327,28 @@
     end tower_shadow_potential_2;
     ;;
     ;	step-wind for testing controller tuning;
-    wind_ramp_abs	140 141 0 1;	wsp. after the step:  4.0
-    wind_ramp_abs	181 182 0 1;	wsp. after the step:  5.0
-    wind_ramp_abs	222 223 0 1;	wsp. after the step:  6.0
-    wind_ramp_abs	263 264 0 1;	wsp. after the step:  7.0
-    wind_ramp_abs	304 305 0 1;	wsp. after the step:  8.0
-    wind_ramp_abs	345 346 0 1;	wsp. after the step:  9.0
-    wind_ramp_abs	386 387 0 1;	wsp. after the step:  10.0
-    wind_ramp_abs	427 428 0 1;	wsp. after the step:  11.0
-    wind_ramp_abs	468 469 0 1;	wsp. after the step:  12.0
-    wind_ramp_abs	509 510 0 1;	wsp. after the step:  13.0
-    wind_ramp_abs	550 551 0 1;	wsp. after the step:  14.0
-    wind_ramp_abs	591 592 0 1;	wsp. after the step:  15.0
-    wind_ramp_abs	632 633 0 1;	wsp. after the step:  16.0
-    wind_ramp_abs	673 674 0 1;	wsp. after the step:  17.0
-    wind_ramp_abs	714 715 0 1;	wsp. after the step:  18.0
-    wind_ramp_abs	755 756 0 1;	wsp. after the step:  19.0
-    wind_ramp_abs	796 797 0 1;	wsp. after the step:  20.0
-    wind_ramp_abs	837 838 0 1;	wsp. after the step:  21.0
-    wind_ramp_abs	878 879 0 1;	wsp. after the step:  22.0
-    wind_ramp_abs	919 920 0 1;	wsp. after the step:  23.0
-    wind_ramp_abs	960 961 0 1;	wsp. after the step:  24.0
-    wind_ramp_abs	1001 1002 0 1;	wsp. after the step:  25.0
+    wind_ramp_abs	259 260 0 1;	wsp. after the step:  4.0
+    wind_ramp_abs	299 300 0 1;	wsp. after the step:  5.0
+    wind_ramp_abs	339 340 0 1;	wsp. after the step:  6.0
+    wind_ramp_abs	379 380 0 1;	wsp. after the step:  7.0
+    wind_ramp_abs	419 420 0 1;	wsp. after the step:  8.0
+    wind_ramp_abs	459 460 0 1;	wsp. after the step:  9.0
+    wind_ramp_abs	499 500 0 1;	wsp. after the step:  10.0
+    wind_ramp_abs	539 540 0 1;	wsp. after the step:  11.0
+    wind_ramp_abs	579 580 0 1;	wsp. after the step:  12.0
+    wind_ramp_abs	619 620 0 1;	wsp. after the step:  13.0
+    wind_ramp_abs	659 660 0 1;	wsp. after the step:  14.0
+    wind_ramp_abs	699 700 0 1;	wsp. after the step:  15.0
+    wind_ramp_abs	739 740 0 1;	wsp. after the step:  16.0
+    wind_ramp_abs	779 780 0 1;	wsp. after the step:  17.0
+    wind_ramp_abs	819 820 0 1;	wsp. after the step:  18.0
+    wind_ramp_abs	859 860 0 1;	wsp. after the step:  19.0
+    wind_ramp_abs	899 900 0 1;	wsp. after the step:  20.0
+    wind_ramp_abs	939 940 0 1;	wsp. after the step:  21.0
+    wind_ramp_abs	979 980 0 1;	wsp. after the step:  22.0
+    wind_ramp_abs	1019 1020 0 1;	wsp. after the step:  23.0
+    wind_ramp_abs	1059 1060 0 1;	wsp. after the step:  24.0
+    wind_ramp_abs	1099 1100 0 1;	wsp. after the step:  25.0
   end wind;
 ;
   begin aerodrag;	tower drag
@@ -399,7 +400,7 @@
         constant	1 15000;	Rated power [kW]
         constant	2 0.524;	Minimum rotor (LSS) speed [rad/s]
         constant	3 0.792;	Rated rotor (LSS) speed [rad/s]
-        constant	4 21586850.73599;	Maximum allowable generator torque [Nm]
+        constant	4 21586451.33303;	Maximum allowable generator torque [Nm]
         constant	5 100;	Minimum pitch angle, theta_min [deg],
 ; if |theta_min|>90, then a table of <wsp,theta_min> is read ;
 ; from a file named 'wptable.n', where n=int(theta_min)
@@ -409,15 +410,15 @@
         constant	9 0.7;	Damping ratio of speed filter [-]
         constant	10 1.01;	Frequency of free-free DT torsion mode [Hz], if zero no notch filter used
 ; Partial load control parameters
-        constant	11 28464200;	Optimal Cp tracking K factor [Nm/(rad/s)^2], ;
+        constant	11 30221700;	Optimal Cp tracking K factor [Nm/(rad/s)^2], ;
 ; Qg=K*Omega^2, K=eta*0.5*rho*A*Cp_opt*R^3/lambda_opt^3
-        constant	12 140541000;	Proportional gain of torque controller [Nm/(rad/s)]
-        constant	13 31537400;	Integral gain of torque controller [Nm/rad]
+        constant	12 112427000;	Proportional gain of torque controller [Nm/(rad/s)]
+        constant	13 20182900;	Integral gain of torque controller [Nm/rad]
         constant	14 0;	Differential gain of torque controller [Nm/(rad/s^2)]
 ;     Full load control parameters
-        constant	15 1;	Generator control switch [1=constant power, 0=constant torque]
-        constant	16 1.27727;	Proportional gain of pitch controller [rad/(rad/s)]
-        constant	17 0.343942;	Integral gain of pitch controller [rad/rad]
+        constant	15 0;	Generator control switch [1=constant power, 0=constant torque]
+        constant	16 0.640241;	Proportional gain of pitch controller [rad/(rad/s)]
+        constant	17 0.0862019;	Integral gain of pitch controller [rad/rad]
         constant	18 0;	Differential gain of pitch controller [rad/(rad/s^2)]
         constant	19 4e-09;	Proportional power error gain [rad/W]
         constant	20 4e-09;	Integral power error gain [rad/(Ws)]
@@ -445,7 +446,7 @@
 ;     Drivetrain damper
         constant	38 0;	Proportional gain of active DT damper [Nm/(rad/s)], requires frequency in input 10
 ;	  Over speed
-        constant	39 25;	Overspeed percentage before initiating turbine controller alarm (shut-down) [%]
+        constant	39 50;	Overspeed percentage before initiating turbine controller alarm (shut-down) [%]
 ;     Additional non-linear pitch control term (not used when all zero)
         constant	40 0;	Rotor speed error scaling factor [rad/s]
         constant	41 0;	Rotor acceleration error scaling factor [rad/s^2]
@@ -454,7 +455,7 @@
         constant	43 28;	Wind speed 'Vstorm' above which derating of rotor speed is used [m/s]
         constant	44 28;	Cut-out wind speed (only used for derating of rotor speed in storm) [m/s]
 ;     Safety system parameters
-        constant	45 30;	Overspeed percentage before initiating safety system alarm (shut-down) [%]
+        constant	45 50;	Overspeed percentage before initiating safety system alarm (shut-down) [%]
         constant	46 2;	Max low-pass filtered tower top acceleration level [m/s^2]
 ;     Turbine parameter
         constant	47 240;	Nominal rotor diameter [m]
@@ -523,7 +524,7 @@
       begin init;
         constant	1 20;	Frequency of 2nd order servo model of generator-converter system [Hz]
         constant	2 0.9;	Damping ratio 2nd order servo model of generator-converter system [-]
-        constant	3 21586850.73599;	Maximum allowable LSS torque (pull-out torque) [Nm]
+        constant	3 21586451.33303;	Maximum allowable LSS torque (pull-out torque) [Nm]
         constant	4 0.9655;	Generator efficiency [-]
         constant	5 1;	Gearratio [-]
         constant	6 0;	Time for half value in softstart of torque [s]
@@ -550,7 +551,7 @@
       arraysizes_init	100 1;
       arraysizes_update	100 100;
       begin init;
-        constant	1 12952110.441593999;	Fully deployed maximum brake torque [Nm] (0.6*max torque)
+        constant	1 12951870.799818;	Fully deployed maximum brake torque [Nm] (0.6*max torque)
         constant	2 100;	Parameter alpha used in Q = tanh(omega*alpha), typically 1e2/Omega_nom
         constant	3 0.5;	Delay time for before brake starts to deploy [s]
         constant	4 0.6;	Time for brake to become fully deployed [s]
@@ -629,7 +630,7 @@
     filename	./res/IEA_15MW_RWT_step;
     data_format	hawc_binary;
     buffer	1;
-    time	100 1042;
+    time	100 1139;
     general time;
     constraint bearing1	shaft_rot 2;	angle and angle velocity
     constraint bearing2	pitch1 5;	angle and angular velocity

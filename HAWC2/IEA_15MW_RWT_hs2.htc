@@ -1,4 +1,4 @@
-; IEA 15 MW Reference Wind Turbine. Model update from commit "9a1069e".
+; IEA 15 MW Reference Wind Turbine. Model update from commit "7d179ee".
 ;
   begin new_htc_structure;
 ;body_output_file_name ./bodyeig/IEA_15MW_RWT_body.dat;  body locations correct?
@@ -38,7 +38,8 @@
       nbodies	1;
       node_distribution	c2_def;
       damping_posdef	0 0 0 0.0007 0.0007 0.0007;	dummy values (stiff body)
-      concentrated_mass	1 0 -4.985 -4.358 507300 7674778 10556860 8127143;	nacelle: NR+R mass; NR inertia
+      concentrated_mass	1 0 0 0 100000 0 0 0;	yaw system
+      concentrated_mass	1 0 -4.688 -4.24 530900 7674778 10556860 8127143;	nacelle: NR+R mass; NR inertia
       begin timoschenko_input;
         filename	./data/IEA_15MW_RWT_Towertop_st.dat;
         set	1 1;
@@ -72,8 +73,8 @@
       type	timoschenko;
       nbodies	1;
       node_distribution	c2_def;
-      damping_posdef	0 0 0 0.000465 0.000465 0.0003078839;	TODO Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
-      concentrated_mass	1 0 0 0 0 0 0 8008650;	generator inertia about shaft
+      damping_posdef	0 0 0 0.000465 0.000465 0.0003078839;	Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
+      concentrated_mass	1 0 0 0 0 0 0 3222631;	generator inertia about shaft
       concentrated_mass	2 0 0 0 190000 0 0 1373471;	hub mass/inertia;
       begin timoschenko_input;
         filename	./data/IEA_15MW_RWT_Shaft_st.dat;
@@ -344,7 +345,7 @@
     ; inputs for finding optimal operational data;
     begin operational_data;
       windspeed	3 25 45;	cut-in [m/s], cut-out [m/s], points [-]
-      genspeed	5.000011692174984 7.559891627853647;	[rpm]
+      genspeed	5.000011692174984 7.559987120819503;	[rpm]
       gearratio	1;	[-]
       minpitch	0.0;	[deg]
       opt_lambda	9.0;	[-]
@@ -366,7 +367,7 @@
     ; inputs for controller tuning;
     begin controller_tuning;
       partial_load	0.05 0.7;	fn [hz], zeta [-]
-      full_load	0.06 0.7;	fn [hz], zeta [-]
+      full_load	0.03 0.7;	fn [hz], zeta [-]
       gain_scheduling	2;	1 linear, 2 quadratic
       constant_power	0;	0 constant torque, 1 constant power at full load
     end controller_tuning;

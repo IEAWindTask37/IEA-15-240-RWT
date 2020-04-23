@@ -4,14 +4,12 @@ import os
 import shutil
 
 import numpy as np
-from scipy.interpolate import PchipInterpolator
 import matplotlib.pyplot as plt
 import pandas as pd
 
 import openmdao.api as om
 from wisdem.rotorse.rotor import RotorSE, Init_RotorSE_wRefBlade
 from wisdem.rotorse.rotor_geometry_yaml import ReferenceBlade
-from wisdem.commonse.turbine_constraints import TurbineConstraints
 from wisdem.assemblies.fixed_bottom.monopile_assembly_turbine_nodrive import MonopileTurbine
 from wisdem.aeroelasticse.FAST_reader import InputReader_Common, InputReader_OpenFAST, InputReader_FAST7
 
@@ -216,6 +214,7 @@ def run_problem(prob):
 
     # Run initial condition no matter what
     print('Running at Initial Position:')
+    prob['gust_stddev'] = 0
     prob.run_model()
 
     print('########################################')
@@ -243,7 +242,8 @@ def run_problem(prob):
     print('Blade cost:  {:8.3f} $'.format(prob['total_blade_cost'][0]))
     print('Blade freq:  {:8.3f} Hz'.format(prob['freq_curvefem'][0]))
     print('3 blade M_of_I:  ', prob['I_all_blades'], ' kg-m^2')
-    print('Hub M:  ', prob['Mxyz_total'], ' kg-m^2')
+    print('Hub F:  ', 1e-3*prob['Fxyz_total'], ' kN')
+    print('Hub M:  ', 1e-3*prob['Mxyz_total'], ' kNm')
     print('')
     print('RNA Summary')
     print('RNA mass:    {:8.3f} kg'.format(prob['tow.pre.mass'][0]))
@@ -260,7 +260,6 @@ def run_problem(prob):
     print('Monopile mass:  {:8.3f} kg'.format(prob['monopile_mass'][0]))
     print('Monopile cost:  {:8.3f} $'.format(prob['monopile_cost'][0]))
     print('########################################')
-
     # Complete data dump
     #prob.model.list_inputs(units=True)
     #prob.model.list_outputs(units=True)
@@ -421,13 +420,13 @@ def postprocess(prob, blade):
     towDF = towDF[['Location']+colstr]
     A = 0.25*np.pi*(towDF['OD [m]']**2 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**2)
     I = (1/64.)*np.pi*(towDF['OD [m]']**4 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**4)
-    towDF['Mass Density [kg/m]'] = 7850 * A
+    towDF['Mass Density [kg/m]'] = prob['material_density'] * A
     towDF['Fore-aft inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
     towDF['Side-side inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
-    towDF['Fore-aft stiffness [N.m^2]'] = 2e11 * I
-    towDF['Side-side stiffness [N.m^2]'] = 2e11 * I
-    towDF['Torsional stiffness [N.m^2]'] = 7.93e10 * 2*I
-    towDF['Axial stiffness [N]'] = 2e11 * A
+    towDF['Fore-aft stiffness [N.m^2]'] = prob['E'] * I
+    towDF['Side-side stiffness [N.m^2]'] = prob['E'] * I
+    towDF['Torsional stiffness [N.m^2]'] = prob['G'] * 2*I
+    towDF['Axial stiffness [N]'] = prob['E'] * A
     with open('tow.tbl','w') as f:
         towDF.to_latex(f, index=False)
 
