@@ -1,46 +1,64 @@
---------------------- MoorDyn Input File ------------------------------------											
-15MW Semi Mooring System - C. Allen UMaine											
-FALSE    Echo      - echo the input file data (flag)											
------------------------ LINE TYPES ------------------------------------------											
-1        NTypes    - number of LineTypes											
-Name	Diam	MassDen	EA	BA/-zeta	Can	Cat	Cdn	Cdt			
-(-)	(m)	(kg/m)	(N)	(N-s/-)	(-)	(-)	(-)	(-)			
-main	0.333	685.000	3.27E+09	-1	0.8	0.25	2	0.4		
----------------------- CONNECTION PROPERTIES --------------------------------											
-6      NConnects - number of connections including anchors and fairleads											
-Node	Type	X	Y	Z	M	V	FX	FY	FZ	CdA	CA
-(-)	(-)	(m)	(m)	(m)	(kg)	(m^3)	(kN)	(kN)	(kN)	(m^2)	(-)
-1	Vessel	-58.000	0.000	-14.000	0	0	0	0	0	0	0
-2	Fixed	-837.600	0.000	-200.000	0	0	0	0	0	0	0
-3	Vessel	29.000	50.229	-14.000	0	0	0	0	0	0	0
-4	Fixed	418.800	725.383	-200.000	0	0	0	0	0	0	0
-5	Vessel	29.000	-50.229	-14.000	0	0	0	0	0	0	0
-6	Fixed	418.800	-725.383	-200.000	0	0	0	0	0	0	0
----------------------- LINE PROPERTIES --------------------------------------											
-3	        NLines    - number of line objects										
-Line	LineType	UnstrLen	NumSegs	NodeAnch	NodeFair	Flags/Outputs					
-(-)	(-)	(m)	(-)	(-)	(-)	(-)					
-1	main	850.00	20	2	1	-					
-2	main	850.00	20	4	3	-					
-3	main	850.00	20	6	5	-					
----------------------- SOLVER OPTIONS ---------------------------------------											
+--------------------- MoorDyn Input File ------------------------------------                                           
+IEA 15 MW offshore reference model on UMaine VolturnUS-S semi-submersible floating platform mooring model- C. Allen UMaine                                          
+FALSE    Echo      - echo the input file data (flag)                                            
+----------------------- LINE TYPES ------------------------------------------                                           
+1        NTypes    - number of LineTypes                                            
+Name  Diam  MassDen  EA       BA/-zeta  Can   Cat   Cdn   Cdt         
+(-)   (m)   (kg/m)   (N)      (N-s/-)   (-)   (-)   (-)   (-)         
+main  0.333  685.00  3.27E+09 -1        0.82  0.27  1.11  0.20        
+---------------------- CONNECTION PROPERTIES --------------------------------                                           
+6      NConnects - number of connections including anchors and fairleads                                            
+Node Type      X         Y       Z       M    V    FX   FY   FZ  CdA   CA
+(-)  (-)      (m)       (m)     (m)    (kg) (m^3) (kN) (kN) (kN) (m^2) (-)
+1   Vessel  -58.000    0.000 -14.000     0    0    0    0    0    0    0
+2   Fixed  -837.600    0.000 -200.000    0    0    0    0    0    0    0
+3   Vessel   29.000   50.229 -14.000     0    0    0    0    0    0    0
+4   Fixed   418.800  725.383 -200.000    0    0    0    0    0    0    0
+5   Vessel   29.000  -50.229 -14.000     0    0    0    0    0    0    0
+6   Fixed   418.800 -725.383  200.000    0    0    0    0    0    0    0
+---------------------- LINE PROPERTIES --------------------------------------                                           
+3           NLines    - number of line objects                                      
+Line  LineType  UnstrLen  NumSegs  NodeAnch  NodeFair  Flags/Outputs                   
+(-)   (-)       (m)       (-)      (-)       (-)       (-)                 
+1     main      850.00    50        2         1         -                   
+2     main      850.00    50        4         3         -                   
+3     main      850.00    50        6         5         -                   
+---------------------- SOLVER OPTIONS ---------------------------------------                                           
 0.001    dtM       - time step to use in mooring integration (s)
 3.0e6    kbot      - bottom stiffness (Pa/m)
 3.0e5    cbot      - bottom damping (Pa-s/m)
-2.0      dtIC      - time interval for analyzing convergence during IC gen (s)
+1.0      dtIC      - time interval for analyzing convergence during IC gen (s)
 60.0     TmaxIC    - max time for ic gen (s)
 4.0      CdScaleIC - factor by which to scale drag coefficients during dynamic relaxation (-)
-0.01     threshIC  - threshold for IC convergence (-)											
------------------------- OUTPUTS --------------------------------------------											
-FairTen1											
-FairTen2											
-FairTen3											
-AnchTen1											
-AnchTen2											
-AnchTen3											
-Con1fz											
-Con3fz											
-Con5fz										
-END											
-------------------------- need this line --------------------------------------																						
-											
+0.001     threshIC  - threshold for IC convergence (-)                                          
+------------------------ OUTPUTS --------------------------------------------                                           
+FairTen1                                            
+FairTen2                                            
+FairTen3                                            
+AnchTen1                                            
+AnchTen2                                            
+AnchTen3
+Con1fx                                          
+Con3fx                                          
+Con5fx      
+Con1fy                                          
+Con3fy                                          
+Con5fy                                          
+Con1fz                                          
+Con3fz                                          
+Con5fz  
+Con2fx                                          
+Con4fx                                          
+Con6fx      
+Con2fy                                          
+Con4fy                                          
+Con6fy                                          
+Con2fz                                          
+Con4fz                                          
+Con6fz  
+fx
+fy
+fz                                  
+END                                         
+------------------------- need this line --------------------------------------                                                                                     
+                                            
