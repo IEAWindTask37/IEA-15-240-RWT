@@ -1,5 +1,5 @@
 ------- SERVODYN v1.05.* INPUT FILE --------------------------------------------
-IEA 15 MW offshore reference model on UMaine VolturnUS-S semi-submersible floating platform
+IEA 15 MW offshore reference model monopile configuration
 ---------------------- SIMULATION CONTROL --------------------------------------
 False                  Echo        - Echo input data to <RootName>.ech (flag)
 "default"              DT          - Communication interval for controllers (s) (or "default")
@@ -18,7 +18,7 @@ False                  Echo        - Echo input data to <RootName>.ech (flag)
 ---------------------- GENERATOR AND TORQUE CONTROL ----------------------------
 5                      VSContrl    - Variable-speed control mode {0: none, 1: simple VS, 3: user-defined from routine UserVSCont, 4: user-defined from Simulink/Labview, 5: user-defined from Bladed-style DLL} (switch)
 2                      GenModel    - Generator model {1: simple, 2: Thevenin, 3: user-defined from routine UserGen} (switch) [used only when VSContrl=0]
-96.55                   GenEff      - Generator efficiency [ignored by the Thevenin and user-defined generator models] (%)
+96.55                  GenEff      - Generator efficiency [ignored by the Thevenin and user-defined generator models] (%)
 True                   GenTiStr    - Method to start the generator {T: timed using TimGenOn, F: generator speed using SpdGenOn} (flag)
 True                   GenTiStp    - Method to stop the generator {T: timed using TimGenOf, F: when generator power = 0} (flag)
 9999.9                 SpdGenOn    - Generator speed to turn on the generator for a startup (HSS speed) (rpm) [used only when GenTiStr=False]
@@ -63,11 +63,11 @@ False                  CompNTMD    - Compute nacelle tuned mass damper {true/fal
 False                  CompTTMD    - Compute tower tuned mass damper {true/false} (flag)
 "unused"               TTMDfile    - Name of the file for tower tuned mass damper (quoted string) [unused when CompTTMD is false]
 ---------------------- BLADED INTERFACE ---------------------------------------- [used only with Bladed Interface]
-"ServoData/libdiscon.so" DLL_FileName - Name/location of the dynamic library {.dll [Windows] or .so [Linux]} in the Bladed-DLL format (-) [used only with Bladed Interface]
-"ServoData/DISCON-UMaineSemi.IN"   DLL_InFile  - Name of input file sent to the DLL (-) [used only with Bladed Interface]
+"control/DTUWEC_for_OpenFAST.so"  DLL_FileName - Name/location of the dynamic library {.dll [Windows] or .so [Linux]} in the Bladed-DLL format (-) [used only with Bladed Interface]
+"control/DISCON.IN"   DLL_InFile  - Name of input file sent to the DLL (-) [used only with Bladed Interface]
 "DISCON"               DLL_ProcName - Name of procedure in DLL to be called (-) [case sensitive; used only with DLL Interface]
-"default"              DLL_DT      - Communication interval for dynamic library (s) (or "default") [used only with Bladed Interface]
-False                  DLL_Ramp    - Whether a linear ramp should be used between DLL_DT time steps [introduces time shift when true] (flag) [used only with Bladed Interface]
+0.01                   DLL_DT      - Communication interval for dynamic library (s) (or "default") [used only with Bladed Interface]
+True                   DLL_Ramp    - Whether a linear ramp should be used between DLL_DT time steps [introduces time shift when true] (flag) [used only with Bladed Interface]
 9999.9                 BPCutoff    - Cuttoff frequency for low-pass filter on blade pitch from DLL (Hz) [used only with Bladed Interface]
 0.0                    NacYaw_North - Reference yaw angle of the nacelle when the upwind end points due North (deg) [used only with Bladed Interface]
 0                      Ptch_Cntrl  - Record 28: Use individual pitch control {0: collective pitch; 1: individual pitch control} (switch) [used only with Bladed Interface]
@@ -92,8 +92,8 @@ True                   SumPrint    - Print summary data to <RootName>.sum (flag)
 True                   TabDelim    - Use tab delimiters in text tabular output file? (flag) (currently unused)
 "ES10.3E2"             OutFmt      - Format used for text tabular output (except time).  Resulting field should be 10 characters. (quoted string) (currently unused)
 30.0                   TStart      - Time to begin tabular output (s) (currently unused)
-OutList      - The next line(s) contains a list of output parameters.  
+              OutList      - The next line(s) contains a list of output parameters.  See OutListParameters.xlsx for a listing of available output channels, (-)
 "GenPwr"
 "GenTq"
-END of input file (the word "END" must appear in the first 3 columns of this last Out_List line)
+END of input file (the word "END" must appear in the first 3 columns of this last OutList line)
 ---------------------------------------------------------------------------------------
