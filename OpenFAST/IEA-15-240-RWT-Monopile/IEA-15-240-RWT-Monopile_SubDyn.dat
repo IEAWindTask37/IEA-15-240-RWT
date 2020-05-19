@@ -7,20 +7,24 @@ True             Echo        - Echo input data to "<rootname>.SD.ech" (flag)
 True             SttcSolve   - Solve dynamics about static equilibrium point
 -------------------- FEA and CRAIG-BAMPTON PARAMETERS---------------------------
              3   FEMMod      - FEM switch: element model in the FEM. [1= Euler-Bernoulli(E-B);  2=Tapered E-B (unavailable);  3= 2-node Timoshenko;  4= 2-node tapered Timoshenko (unavailable)]
-             3   NDiv        - Number of sub-elements per member
+             1   NDiv        - Number of sub-elements per member
 True             CBMod       - [T/F] If True perform C-B reduction, else full FEM dofs will be retained. If True, select Nmodes to retain in C-B reduced system.
              0   Nmodes      - Number of internal modes to retain (ignored if CBMod=False). If Nmodes=0 --> Guyan Reduction.
              1   JDampings   - Damping Ratios for each retained mode (% of critical) If Nmodes>0, list Nmodes structural damping ratios for each retained mode (% of critical), or a single damping ratio to be applied to all retained modes. (last entered value will be used for all remaining modes).
 ---- STRUCTURE JOINTS: joints connect structure members (~Hydrodyn Input File)---
-             6   NJoints     - Number of joints (-)
+             10   NJoints     - Number of joints (-)
 JointID          JointXss               JointYss               JointZss  [Coordinates of Member joints in SS-Coordinate System]
   (-)               (m)                    (m)                    (m)
    1              0.00000                0.00000              -30.0000
-   2              0.00000                0.00000              -20.0000
-   3              0.00000                0.00000              -10.0000
-   4              0.00000                0.00000                0.0000
-   5              0.00000                0.00000               10.0000
-   6              0.00000                0.00000               20.0000
+   2              0.00000                0.00000              -25.0000
+   3              0.00000                0.00000              -20.0000
+   4              0.00000                0.00000              -15.0000
+   5              0.00000                0.00000              -10.0000
+   6              0.00000                0.00000               -5.0000
+   7              0.00000                0.00000                0.0000
+   8              0.00000                0.00000                5.0000
+   9              0.00000                0.00000               10.0000
+  10              0.00000                0.00000               15.0000
 ------------------- BASE REACTION JOINTS: 1/0 for Locked/Free DOF @ each Reaction Node ---------------------
              1   NReact      - Number of Joints with reaction forces; be sure to remove all rigid motion DOFs of the structure  (else det([K])=[0])
 RJointID   RctTDXss    RctTDYss    RctTDZss    RctRDXss    RctRDYss    RctRDZss     [Global Coordinate System]
@@ -30,21 +34,33 @@ RJointID   RctTDXss    RctTDYss    RctTDZss    RctRDXss    RctRDYss    RctRDZss 
              1   NInterf     - Number of interface joints locked to the Transition Piece (TP):  be sure to remove all rigid motion dofs
 IJointID   ItfTDXss    ItfTDYss    ItfTDZss    ItfRDXss    ItfRDYss    ItfRDZss     [Global Coordinate System]
   (-)       (flag)      (flag)      (flag)      (flag)      (flag)      (flag)
-   5           1           1           1           1           1           1
+  10           1           1           1           1           1           1
 ----------------------------------- MEMBERS --------------------------------------
-             5   NMembers    - Number of frame members
+             9   NMembers    - Number of frame members
 MemberID   MJointID1   MJointID2   MPropSetID1   MPropSetID2     COSMID
   (-)         (-)         (-)          (-)           (-)           (-)
    1           1           2            1             1
-   2           2           3            1             1
-   3           3           4            1             1
-   4           4           5            1             1
-   5           5           6            1             1
+   2           2           3            2             2
+   3           3           4            3             3
+   4           4           5            4             4
+   5           5           6            5             5
+   6           6           7            6             6
+   7           7           8            7             7
+   8           8           9            8             8
+   9           9          10            9             9
 ------------------ MEMBER X-SECTION PROPERTY data 1/2 [isotropic material for now: use this table for circular-tubular elements] ------------------------
-             1   NPropSets   - Number of structurally unique x-sections (i.e. how many groups of X-sectional properties are utilized throughout all of the members)
+             9   NPropSets   - Number of structurally unique x-sections (i.e. how many groups of X-sectional properties are utilized throughout all of the members)
 PropSetID     YoungE          ShearG          MatDens          XsecD           XsecT
   (-)         (N/m2)          (N/m2)          (kg/m3)           (m)             (m)
-   1        2.10000e+11       79.3e9          7850.0           10.0             0.1
+   1        2.00000e+11       79.3e9          7850.0           10.0             0.055341
+   2        2.00000e+11       79.3e9          7850.0           10.0             0.053449
+   3        2.00000e+11       79.3e9          7850.0           10.0             0.051509
+   4        2.00000e+11       79.3e9          7850.0           10.0             0.049527
+   5        2.00000e+11       79.3e9          7850.0           10.0             0.047517
+   6        2.00000e+11       79.3e9          7850.0           10.0             0.045517
+   7        2.00000e+11       79.3e9          7850.0           10.0             0.043527
+   8        2.00000e+11       79.3e9          7850.0           10.0             0.042242
+   9        2.00000e+11       79.3e9          7850.0           10.0             0.041058
 ------------------ MEMBER X-SECTION PROPERTY data 2/2 [isotropic material for now: use this table if any section other than circular, however provide COSM(i,j) below] ------------------------
              0   NXPropSets  - Number of structurally unique non-circular x-sections (if 0 the following table is ignored)
 PropSetID     YoungE          ShearG          MatDens          XsecA          XsecAsx       XsecAsy       XsecJxx       XsecJyy        XsecJ0
