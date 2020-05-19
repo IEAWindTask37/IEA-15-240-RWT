@@ -11,7 +11,7 @@ DEFAULT                  InterpOrd   ! Interpolation order to use for quasi-stea
 ! data for table 1
 ! ------------------------------------------------------------------------------
               0.750000   Re          ! Reynolds number in millions
-0                        Ctrl        ! Control setting (must be 0 for current AirfoilInfo)
+0                        UserProp    ! User property (control) setting
 True                     InclUAdata  ! Is unsteady aerodynamics data included in this table? If TRUE, then include 30 UA coefficients below this line
 !........................................
              -2.844986   alpha0      ! 0-lift angle of attack, depends on airfoil.
