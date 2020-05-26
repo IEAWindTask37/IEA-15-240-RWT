@@ -251,7 +251,7 @@ class RWT_Tabular(object):
         ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['rna'])
         irow += 1
         
-        ws.cell(row=irow, column=1, value='Nacelle center of mass from tower top [m]')
+        ws.cell(row=irow, column=1, value='RNA center of mass from tower top [m]')
         ws.cell(row=irow, column=2, value=str(self.yaml['assembly']['mass']['rna_center_of_mass']))
         irow += 1
             
