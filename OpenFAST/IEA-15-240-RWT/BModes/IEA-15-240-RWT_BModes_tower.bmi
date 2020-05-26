@@ -1,8 +1,8 @@
-======================   BModes v1.03 Main Input File  ==================
-Modes of a 82.4m tower with tip mass (output is space-delimited)
+======================   BModes v3.00 Main Input File  ==================
+IEA-15-240-RWT Offshore Tower (from tip to TP 15 m above MSL). Substructure is computed from Subdyn Summary files.
 
 --------- General parameters ---------------------------------------------------------------------
-False     Echo        Echo input file contents to *.echo file if true.
+True      Echo        Echo input file contents to *.echo file if true.
 2         beam_type   1: blade, 2: tower (-)
 0.        romg:       rotor speed (rpm), automatically set to zero for tower modal analysis
 1.0       romg_mult:  rotor speed muliplicative factor (-)
@@ -10,14 +10,15 @@ False     Echo        Echo input file contents to *.echo file if true.
 15.       hub_rad:    hub radius measured along coned blade axis OR tower rigid-base height (m)
 0.        precone:    built-in precone angle (deg), automatically set to zero for a tower
 0.        bl_thp:     blade pitch setting (deg), automatically set to zero for a tower
-1         hub_conn:   hub-to-blade connection [1: cantilevered; other options not yet available]
+3         hub_conn:   hub-to-blade connection [1: cantilevered; other options not yet available]
 20        modepr:     number of modes to be printed (-)
-f         TabDelim    (true: tab-delimited output tables; false: space-delimited tables)
+t         TabDelim    (true: tab-delimited output tables; false: space-delimited tables)
 f         mid_node_tw  (true: output twist at mid-node of elements; false: no mid-node outputs)
 
 --------- Blade-tip or tower-top mass properties --------------------------------------------
-1639877.  tip_mass    blade-tip or tower-top mass (see users' manual) (kg)
--6.97     cm_loc      tip-mass c.m. offset from the tower axis measured along the tower-tip x reference axis (m)
+1639877.         tip_mass    blade-tip or tower-top mass (see users' manual) (kg)
+-6.476016        cm_loc      tip-mass c.m. offset from the tower axis measured along the tower-tip x reference axis (m)
+4.2691133        cm_axial    tip-mass c.m. offset tower tip measures axially along the z axis (m)
 3.89258526e+08   ixx_tip     blade lag or tower s-s mass moment of inertia about the tip-section x reference axis (kg-m^2)
 2.29364247e+08   iyy_tip     blade flap or tower f-a mass moment of inertia about the tip-section y reference axis (kg-m^2)
 1.86875391e+08   izz_tip     torsion mass moment of inertia about the tip-section z reference axis (kg-m^2)
@@ -42,13 +43,56 @@ Property scaling factors..............................
 1.0       tc_offst_mult:   tension center multiplier (-)
 
 --------- Finite element discretization --------------------------------------------------
-12        nselt:     no of blade or tower elements (-)
+61        nselt:     no of blade or tower elements (-)
 Distance of element boundary nodes from blade or flexible-tower root (normalized wrt blade or tower length), el_loc()
-0.  0.08  0.16  0.24  0.32  0.40  0.48  0.56  0.64  0.72  0.80  0.90   1.0
+0	0.003481894	0.010445682	0.017409471	0.024373259	0.031337047	0.038300836	0.045264624	0.052228412	0.059192201	0.066155989	0.073119777	0.080083565	0.087047354	0.094011142	0.10097493	0.107938719	0.114902507	0.121866295	0.128830084	0.135793872	 0.13990	0.149721448	0.156685237	0.163649025	0.170612813	0.177576602	0.18454039	0.191504178	0.198467967	0.205431755	0.212395543	0.219359331	0.22632312	0.233286908	0.240250696	0.247214485	0.250696379	0.320334262	 0.37971	 0.424791072	0.45961	0.486635	0.51366	0.54068	0.5677	0.594715	0.62173	0.64875	0.67577	0.70279	0.72981	0.75683	0.78385	0.81087	0.83789	0.864905	0.89192	0.91894	0.94596	0.97298	1.0
 
---------- Properties of tension wires suporting the tower --------------------------------
-0         n_attachments: no of wire-attachment locations on tower, maxm allowable is 2; 0: no tension-wire support (-)
-3 3       n_wires:       no of wires attached at each location (must be 3 or higher) (-)
-6 9       node_attach:   node numbers of attacments location (node number must be more than 1 and less than nselt+2) (-)
-0.e0 0.e0 wire_stfness:  wire sifnness in each set (see users' manual) (N/m)
-0. 0.     th_wire:       angle of tension wires wrt the tower axis at each attachment point (deg)
+--------- Properties of tower support subsystem (read only if beam_type is 2) ------------
+1          tow_support: : aditional tower support [0: no additional support; 1: floating-platform or monopile with or without tension wires] (-)
+-15.0        draft        : depth of tower base from the ground or the MSL (mean sea level) (m)
+0.0         cm_pform     : distance of platform c.m. below the MSL (m)
+0.0         mass_pform   : platform mass (kg)
+Platform mass inertia 3X3 matrix (i_matrix_pform):
+0.   0.   0.
+0.   0.   0.
+0.   0.   0.
+-15.0        ref_msl    : distance of platform reference point below the MSL (m)
+Platform-reference-point-referred hydrodynamic 6X6 matrix (hydro_M):
+ 0.168773E+06   0.000000E+00   0.000000E+00   0.000000E+00  -0.987753E+06   0.000000E+00
+ 0.000000E+00   0.168773E+06   0.000000E+00   0.987753E+06   0.000000E+00   0.000000E+00
+ 0.000000E+00   0.000000E+00   0.146961E+06   0.000000E+00   0.000000E+00   0.000000E+00
+ 0.000000E+00   0.987753E+06   0.000000E+00   0.830811E+07   0.000000E+00   0.000000E+00
+-0.987753E+06   0.000000E+00   0.000000E+00   0.000000E+00   0.830811E+07   0.000000E+00
+ 0.000000E+00   0.000000E+00   0.000000E+00   0.000000E+00   0.000000E+00   0.364523E+07
+Platform-reference-point-referred hydrodynamic 6X6 stiffness matrix (hydro_K):
+ 0.353727E+09   0.000000E+00   0.000000E+00   0.000000E+00  -0.751078E+10   0.000000E+00
+ 0.000000E+00   0.353727E+09   0.000000E+00   0.751078E+10   0.000000E+00   0.000000E+00
+ 0.000000E+00   0.000000E+00   0.656870E+10   0.000000E+00   0.000000E+00   0.000000E+00
+ 0.000000E+00   0.751078E+10   0.000000E+00   0.240814E+12   0.000000E+00   0.000000E+00
+-0.751078E+10   0.000000E+00   0.000000E+00   0.000000E+00   0.240814E+12   0.000000E+00
+ 0.000000E+00   0.000000E+00   0.000000E+00   0.000000E+00   0.000000E+00   0.644996E+11
+Mooring-system 6X6 stiffness matrix (mooring_K):
+        0.0        0.0      0.0          0.0          0.0         0.0
+        0.0        0.0      0.0          0.0          0.0         0.0
+        0.0        0.0      0.0          0.0          0.0         0.0
+        0.0        0.0      0.0          0.0          0.0         0.0
+        0.0        0.0      0.0          0.0          0.0         0.0
+        0.0        0.0      0.0          0.0          0.0         0.0
+
+Distributed (hydrodynamic) added-mass per unit length along a flexible portion of the tower length:
+0           n_secs_m_distr: number of sections at which added mass per unit length is specified (-)
+0.  0.    : z_distr_m [row array of size n_added_m_pts; section locations wrt the flexible tower base over which distributed mass is specified] (m)
+0.  0.    : distr_m [row array of size n_added_m_pts; added distributed masses per unit length] (kg/m)
+
+Distributed elastic stiffness per unit length along a flexible portion of the tower length:
+0           n_secs_k_distr: number of points at which distributed stiffness per unit length is specified (-)
+
+Tension wires data
+0         n_attachments: no of wire-attachment locations on tower [0: no tension wires] (-)
+0         n_wires:       no of wires attached at each location (must be 3 or higher) (-)
+0         node_attach:   node numbers of attacments location (node number must be more than 1 and less than nselt+2) (-)
+0.e0 0.e0 wire_stfness:  wire spring constant in each set (see users' manual) (N/m)
+0. 0.     th_wire:       angle of tension wires (wrt the horizontal ground plane) at each attachment point (deg)
+
+END of Main Input File Data *********************************************************************
+*************************************************************************************************
