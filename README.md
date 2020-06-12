@@ -5,13 +5,13 @@ The documentation for the turbine is accessable here: https://www.nrel.gov/docs/
 
 Data in this repository includes:
 * Documentation, including tabular data used in the figures from the technical report
-* OpenFAST aeroelastic model inputs (compatable with the latest "dev" branch available: https://github.com/OpenFAST/openfast.git)
+* OpenFAST aeroelastic model inputs (compatable with OpenFAST-v2.3 available: https://github.com/OpenFAST/openfast.git)
 * HAWC2 aeroelastic model inputs
 * WISDEM optimization files
 * Wind turbine ontology .yaml files
 * CAD modeling of turbine in SolidWorks and an Ansys FEA model of the blades
 
-Note that the OpenFAST model uses the NREL's [Reference OpenSource Controller (ROSCO)](https://github.com/nrel/rosco).  Users will need to compile the dynamic library following the ROSCO install instructions and need to provide relavent path to the dynamic library within ServoDyn.  [Tools](https://github.com/NREL/ROSCO_toolbox) also exist for automatically retuning the controller, updating the "Cp_Ct_Cq.IEA15MW.txt" and "DISCON.IN" files that are inputs to ROSCO.  Please use OpenFAST-v2.2.0 or later, the OpenFAST model has not been tested for backwards compatability.
+Note that the OpenFAST model uses the NREL's [Reference OpenSource Controller (ROSCO)](https://github.com/nrel/rosco).  Users will need to compile the dynamic library following the ROSCO install instructions and need to provide relavent path to the dynamic library within ServoDyn.  [Tools](https://github.com/NREL/ROSCO_toolbox) also exist for automatically retuning the controller, updating the "Cp_Ct_Cq.IEA15MW.txt" and "DISCON.IN" files that are inputs to ROSCO.  The OpenFAST models are compatable with OpenFAST-v2.3.
 
 If you use this model in your research or publications, please cite as:
 

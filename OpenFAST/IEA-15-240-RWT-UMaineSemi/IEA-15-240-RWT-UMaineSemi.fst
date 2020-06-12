@@ -4,15 +4,15 @@ IEA 15 MW offshore reference model on UMaine VolturnUS-S semi-submersible floati
 False                  Echo        - Echo input data to <RootName>.ech (flag) 
 "FATAL"                AbortLevel  - Error level when simulation should abort (string) {"WARNING", "SEVERE", "FATAL"} 
 10.0                   TMax        - Total run time (s) 
-0.05000                DT          - Integration time step (s)  
+0.025                  DT          - Integration time step (s)  
 2                      InterpOrder - Interpolation order for input/output time history (-) {1=linear, 2=quadratic} 
 0                      NumCrctn    - Number of correction iterations (-) {0=explicit calculation, i.e., no corrections} 
 99999.0                DT_UJac     - Time between calls to get Jacobians (s) 
 1000000.0              UJacSclFact - Scaling factor used in Jacobians (-) 
 ---------------------- FEATURE SWITCHES AND FLAGS ------------------------------ 
       1   CompElast       - Compute structural dynamics (switch) {1=ElastoDyn; 2=ElastoDyn + BeamDyn for blades}  
-      0   CompInflow      - Compute inflow wind velocities (switch) {0=still air; 1=InflowWind; 2=external from OpenFOAM} 
-      0   CompAero        - Compute aerodynamic loads (switch) {0=None; 1=AeroDyn v14; 2=AeroDyn v15} 
+      1   CompInflow      - Compute inflow wind velocities (switch) {0=still air; 1=InflowWind; 2=external from OpenFOAM} 
+      2   CompAero        - Compute aerodynamic loads (switch) {0=None; 1=AeroDyn v14; 2=AeroDyn v15} 
       1   CompServo       - Compute control and electrical-drive dynamics (switch) {0=None; 1=ServoDyn} 
       1   CompHydro       - Compute hydrodynamic loads (switch) {0=None; 1=HydroDyn} 
       0   CompSub         - Compute sub-structural dynamics (switch) {0=None; 1=SubDyn}  
