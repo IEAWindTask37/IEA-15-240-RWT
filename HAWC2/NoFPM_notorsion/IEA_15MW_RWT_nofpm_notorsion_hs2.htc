@@ -1,4 +1,5 @@
 ; IEA 15 MW Reference Wind Turbine. Model update from commit "7d179ee".
+; Fully populated matrix, no torsion.
 ;
   begin new_htc_structure;
 ;body_output_file_name ./bodyeig/IEA_15MW_RWT_body.dat;  body locations correct?
@@ -121,9 +122,8 @@
       node_distribution	c2_def;
       damping_aniso	0 0 0 0.002955 0.002424 1e-08;	blade damping tuned to 3% log dec flap/edge, torsion arbitrarily small
       begin timoschenko_input;
-        filename	./data/IEA_15MW_RWT_Blade_st.dat;
-        FPM	1;	using fully populated matrix from BECAS
-        set	1 1;
+        filename	./data/IEA_15MW_RWT_Blade_st_noFPM.dat;
+        set	1 2;	set 1 2 = no torsion
       end timoschenko_input;
       begin c2_def;
         nsec	20;
@@ -302,8 +302,8 @@
     windfield_rotations	0 0 0;	yaw, tilt, rotation
     center_pos0	0 0 -150;	center of turb box
     shear_format	2 0.2;	0=none,1=constant,2=log,3=power,4=linear
-    turb_format	0;
-    tower_shadow_method	0;
+    turb_format	0;	0=none, 1=mann,2=flex
+    tower_shadow_method	0;	0=none, 1=potential flow, 2=jet, 3=potential 2
     scale_time_start	0;
     wind_ramp_factor	0 40 0.6 1;	tstart, tstop, % start, % stop
 ;
@@ -341,7 +341,7 @@
       main_body	blade1;
       second_order_actuator	pitch1 100 0.7;
     end rotating_threebladed_substructure;
-    operational_data_filename	./data/operation.dat;
+    operational_data_filename	./data/operation_nofpm_notorsion.dat;
     ; inputs for finding optimal operational data;
     begin operational_data;
       windspeed	3 25 45;	cut-in [m/s], cut-out [m/s], points [-]

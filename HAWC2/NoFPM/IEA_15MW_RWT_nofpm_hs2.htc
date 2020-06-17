@@ -1,4 +1,5 @@
 ; IEA 15 MW Reference Wind Turbine. Model update from commit "7d179ee".
+; Fully populated matrix, no torsion.
 ;
   begin new_htc_structure;
 ;body_output_file_name ./bodyeig/IEA_15MW_RWT_body.dat;  body locations correct?
@@ -121,9 +122,8 @@
       node_distribution	c2_def;
       damping_aniso	0 0 0 0.002955 0.002424 1e-08;	blade damping tuned to 3% log dec flap/edge, torsion arbitrarily small
       begin timoschenko_input;
-        filename	./data/IEA_15MW_RWT_Blade_st.dat;
-        FPM	1;	using fully populated matrix from BECAS
-        set	1 2;
+        filename	./data/IEA_15MW_RWT_Blade_st_noFPM.dat;
+        set	1 1;
       end timoschenko_input;
       begin c2_def;
         nsec	20;
@@ -302,8 +302,8 @@
     windfield_rotations	0 0 0;	yaw, tilt, rotation
     center_pos0	0 0 -150;	center of turb box
     shear_format	2 0.2;	0=none,1=constant,2=log,3=power,4=linear
-    turb_format	0;
-    tower_shadow_method	0;
+    turb_format	0;	0=none, 1=mann,2=flex
+    tower_shadow_method	0;	0=none, 1=potential flow, 2=jet, 3=potential 2
     scale_time_start	0;
     wind_ramp_factor	0 40 0.6 1;	tstart, tstop, % start, % stop
 ;
@@ -327,7 +327,7 @@
   end aero;
 ;----------------------------------------------------------------------------------------------------------------------------------------------------------------
   begin hawcstab2;
-; define structure;
+    ; define structure;
     begin ground_fixed_substructure;
       main_body	tower;
       main_body	towertop;
@@ -341,39 +341,40 @@
       main_body	blade1;
       second_order_actuator	pitch1 100 0.7;
     end rotating_threebladed_substructure;
-    operational_data_filename	./data/operation_notorsion.dat;
+    operational_data_filename	./data/operation_nofpm.dat;
+    ; inputs for finding optimal operational data;
     begin operational_data;
       windspeed	3 25 45;	cut-in [m/s], cut-out [m/s], points [-]
       genspeed	5.000011692174984 7.559987120819503;	[rpm]
       gearratio	1;	[-]
-      minpitch	0;	[deg]
-      opt_lambda	9;	[-]
+      minpitch	0.0;	[deg]
+      opt_lambda	9.0;	[-]
       maxpow	15535.991714137754;	[kW]
       prvs_turbine	1;	[-]
       include_torsiondeform	1;	[-]
     end operational_data;
-; define controller couplings;
+    ; define controller couplings;
     begin controller;
       begin input;
         constraint	bearing1 shaft_rot;
         constraint	bearing2 pitch1 collective;
       end input;
       begin output;
-        constraint bearing1	shaft_rot 1 only 2;
-        constraint bearing2	pitch1 1 only 1 collective;
+        constraint	bearing1 shaft_rot 1 only 2;
+        constraint	bearing2 pitch1 1 only 1 collective;
       end output;
     end controller;
-; inputs for controller tuning;
+    ; inputs for controller tuning;
     begin controller_tuning;
       partial_load	0.05 0.7;	fn [hz], zeta [-]
       full_load	0.03 0.7;	fn [hz], zeta [-]
       gain_scheduling	2;	1 linear, 2 quadratic
       constant_power	0;	0 constant torque, 1 constant power at full load
     end controller_tuning;
-; HAWC2S commands (uncomment as needed);
-;compute_optimal_pitch_angle	use_operational_data;
-;compute_steady_states	bladedeform tipcorrect induction nogradients;	compute steady states using hawcstab2 (need for some other commands)
-;save_power;	save steady-state values to input_htc_file.pwr
-;compute_controller_input;	tune controller parameters
+    ; HAWC2S commands (uncomment as needed);
+    ;compute_optimal_pitch_angle	use_operational_data;
+    ;compute_steady_states	bladedeform tipcorrect induction nogradients;	compute steady states using hawcstab2 (need for some other commands)
+    ;save_power;	save steady-state values to input_htc_file.pwr
+    ;compute_controller_input;	tune controller parameters
   end hawcstab2;
 exit;
