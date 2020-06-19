@@ -197,7 +197,7 @@
         body1	connector last;
         body2	shaft 1;
         body2_eulerang	0 0 0;	same as connector; zS along shaft upwind
-        body2_ini_rotvec_d1	0 0 -1 0.2;
+        body2_ini_rotvec_d1	0 0 -1 0.5;
       end relative;
 ;
       begin relative;
@@ -317,7 +317,7 @@
     turb_format	0;	0=none, 1=mann,2=flex
     tower_shadow_method	0;	0=none, 1=potential flow, 2=jet, 3=potential 2
     scale_time_start	0;
-    wind_ramp_factor	0 40 0.6 1;	tstart, tstop, % start, % stop
+    wind_ramp_factor	0 80 0.5 1;	tstart, tstop, % start, % stop
 ;
     begin tower_shadow_potential_2;
       tower_mbdy_link	tower;
