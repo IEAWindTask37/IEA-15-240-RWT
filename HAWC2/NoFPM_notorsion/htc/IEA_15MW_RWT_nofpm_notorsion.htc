@@ -313,7 +313,7 @@ begin wind ;
   horizontal_input        1 ;  0=false, 1=true
   windfield_rotations     0 0.0 0.0 ;    yaw, tilt, rotation
   center_pos0             0.0 0.0 -150 ;  center of turb box
-  shear_format            2  0.20 ;  0=none,1=constant,2=log,3=power,4=linear
+  shear_format            3  0.20 ;  0=none,1=constant,2=log,3=power,4=linear
   turb_format             1 ;  0=none, 1=mann,2=flex
   tower_shadow_method     3 ;  0=none, 1=potential flow, 2=jet, 3=potential 2
   scale_time_start       0.0 ;
