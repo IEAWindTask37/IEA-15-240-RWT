@@ -1,4 +1,5 @@
 ; IEA 15 MW Reference Wind Turbine. Model update from commit "7d179ee".
+; Fully populated matrix, no torsion.
 ;
   begin simulation;
     time_stop	1139;
@@ -133,9 +134,8 @@
       node_distribution	c2_def;
       damping_aniso	0 0 0 0.002955 0.002424 1e-08;	blade damping tuned to 3% log dec flap/edge, torsion arbitrarily small
       begin timoschenko_input;
-        filename	./data/IEA_15MW_RWT_Blade_st.dat;
-        FPM	1;	using fully populated matrix from BECAS
-        set	1 1;
+        filename	./data/IEA_15MW_RWT_Blade_st_noFPM.dat;
+        set	1 2;	set 1 2 = no torsion
       end timoschenko_input;
       begin c2_def;
         nsec	20;
@@ -197,7 +197,7 @@
         body1	connector last;
         body2	shaft 1;
         body2_eulerang	0 0 0;	same as connector; zS along shaft upwind
-        body2_ini_rotvec_d1	0 0 -1 0.2;
+        body2_ini_rotvec_d1	0 0 -1 0.5;
       end relative;
 ;
       begin relative;
@@ -313,11 +313,11 @@
     horizontal_input	1;	0=false, 1=true
     windfield_rotations	0 0 0;	yaw, tilt, rotation
     center_pos0	0 0 -150;	center of turb box
-    shear_format	3 0.0;
-    turb_format	0;
-    tower_shadow_method	0;
+    shear_format	3 0.0;	0=none,1=constant,2=log,3=power,4=linear
+    turb_format	0;	0=none, 1=mann,2=flex
+    tower_shadow_method	0;	0=none, 1=potential flow, 2=jet, 3=potential 2
     scale_time_start	0;
-    wind_ramp_factor	0 40 0.6 1;	tstart, tstop, % start, % stop
+    wind_ramp_factor	0 80 0.5 1;	tstart, tstop, % start, % stop
 ;
     begin tower_shadow_potential_2;
       tower_mbdy_link	tower;
@@ -410,20 +410,20 @@
         constant	9 0.7;	Damping ratio of speed filter [-]
         constant	10 1.01;	Frequency of free-free DT torsion mode [Hz], if zero no notch filter used
 ; Partial load control parameters
-        constant	11 30221700;	Optimal Cp tracking K factor [Nm/(rad/s)^2], ;
+        constant	11 32935600;	Optimal Cp tracking K factor [Nm/(rad/s)^2], ;
 ; Qg=K*Omega^2, K=eta*0.5*rho*A*Cp_opt*R^3/lambda_opt^3
-        constant	12 112427000;	Proportional gain of torque controller [Nm/(rad/s)]
-        constant	13 20182900;	Integral gain of torque controller [Nm/rad]
+        constant	12 138355000;	Proportional gain of torque controller [Nm/(rad/s)]
+        constant	13 31046700;	Integral gain of torque controller [Nm/rad]
         constant	14 0;	Differential gain of torque controller [Nm/(rad/s^2)]
 ;     Full load control parameters
         constant	15 0;	Generator control switch [1=constant power, 0=constant torque]
-        constant	16 0.640241;	Proportional gain of pitch controller [rad/(rad/s)]
-        constant	17 0.0862019;	Integral gain of pitch controller [rad/rad]
+        constant	16 0.784687;	Proportional gain of pitch controller [rad/(rad/s)]
+        constant	17 0.10565;	Integral gain of pitch controller [rad/rad]
         constant	18 0;	Differential gain of pitch controller [rad/(rad/s^2)]
         constant	19 4e-09;	Proportional power error gain [rad/W]
         constant	20 4e-09;	Integral power error gain [rad/(Ws)]
-        constant	21 11.95434;	Coefficient of linear term in aerodynamic gain scheduling, KK1 [deg]
-        constant	22 720.25183;	Coefficient of quadratic term in aerodynamic gain scheduling, KK2 [deg^2] &
+        constant	21 10.34648;	Coefficient of linear term in aerodynamic gain scheduling, KK1 [deg]
+        constant	22 464.83349;	Coefficient of quadratic term in aerodynamic gain scheduling, KK2 [deg^2] &
 ; (if zero, KK1 = pitch angle at double gain)
         constant	23 1.5;	Relative speed for double nonlinear gain [-]
 ;     Cut-in simulation parameters
@@ -630,7 +630,8 @@
     filename	./res/IEA_15MW_RWT_step;
     data_format	hawc_binary;
     buffer	1;
-    time	100 1139;
+    time	100 1139;	
+;
     general time;
     constraint bearing1	shaft_rot 2;	angle and angle velocity
     constraint bearing2	pitch1 5;	angle and angular velocity

@@ -1,4 +1,5 @@
 ; IEA 15 MW Reference Wind Turbine. Model update from commit "7d179ee".
+; Fully populated matrix, no torsion.
 ; 
 begin simulation ;
   time_stop    700.0 ;
@@ -133,8 +134,7 @@ begin new_htc_structure;
     node_distribution    c2_def;
     damping_aniso  0.0 0.0 0.0 2.955e-3 2.424e-3 1.0e-8 ; blade damping tuned to 3% log dec flap/edge, torsion arbitrarily small
     begin timoschenko_input ;
-      filename ./data/IEA_15MW_RWT_Blade_st.dat;
-      FPM 1;  using fully populated matrix from BECAS
+      filename ./data/IEA_15MW_RWT_Blade_st_noFPM.dat;
       set 1 1 ;
     end timoschenko_input;
     begin c2_def;

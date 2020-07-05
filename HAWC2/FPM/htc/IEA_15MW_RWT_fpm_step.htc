@@ -1,11 +1,12 @@
-; IEA 15 MW Reference Wind Turbine. Model update from commit "9a1069e".
+; IEA 15 MW Reference Wind Turbine. Model update from commit "7d179ee".
+; Fully populated matrix, no torsion.
 ;
   begin simulation;
     time_stop	1139;
     solvertype	1;	(newmark)
     on_no_convergence	continue;
     convergence_limits	1000 1 1e-07;
-    logfile	./log/IEA_15MW_RWT_step_notorsion.log;
+    logfile	./log/IEA_15MW_RWT_step.log;
     begin newmark;
       deltat	0.01;
     end newmark;
@@ -50,7 +51,8 @@
       nbodies	1;
       node_distribution	c2_def;
       damping_posdef	0 0 0 0.0007 0.0007 0.0007;	dummy values (stiff body)
-      concentrated_mass	1 0 -4.985 -4.358 507300 7674778 10556860 8127143;	nacelle: NR+R mass; NR inertia
+      concentrated_mass	1 0 0 0 100000 0 0 0;	yaw system
+      concentrated_mass	1 0 -4.688 -4.24 530900 7674778 10556860 8127143;	nacelle: NR+R mass; NR inertia
       begin timoschenko_input;
         filename	./data/IEA_15MW_RWT_Towertop_st.dat;
         set	1 1;
@@ -85,7 +87,7 @@
       nbodies	1;
       node_distribution	c2_def;
       damping_posdef	0 0 0 0.000465 0.000465 0.0003078839;	Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
-      concentrated_mass	1 0 0 0 0 0 0 8008650;	generator inertia about shaft
+      concentrated_mass	1 0 0 0 0 0 0 3222631;	generator inertia about shaft
       concentrated_mass	2 0 0 0 190000 0 0 1373471;	hub mass/inertia;
       begin timoschenko_input;
         filename	./data/IEA_15MW_RWT_Shaft_st.dat;
@@ -134,7 +136,7 @@
       begin timoschenko_input;
         filename	./data/IEA_15MW_RWT_Blade_st.dat;
         FPM	1;	using fully populated matrix from BECAS
-        set	1 2;
+        set	1 1;
       end timoschenko_input;
       begin c2_def;
         nsec	20;
@@ -312,9 +314,9 @@
     horizontal_input	1;	0=false, 1=true
     windfield_rotations	0 0 0;	yaw, tilt, rotation
     center_pos0	0 0 -150;	center of turb box
-    shear_format	3 0.0;
-    turb_format	0;
-    tower_shadow_method	0;
+    shear_format	3 0.0;	0=none,1=constant,2=log,3=power,4=linear
+    turb_format	0;	0=none, 1=mann,2=flex
+    tower_shadow_method	0;	0=none, 1=potential flow, 2=jet, 3=potential 2
     scale_time_start	0;
     wind_ramp_factor	0 40 0.6 1;	tstart, tstop, % start, % stop
 ;
@@ -399,7 +401,7 @@
         constant	1 15000;	Rated power [kW]
         constant	2 0.524;	Minimum rotor (LSS) speed [rad/s]
         constant	3 0.792;	Rated rotor (LSS) speed [rad/s]
-        constant	4 21586850.73599;	Maximum allowable generator torque [Nm]
+        constant	4 21586451.33303;	Maximum allowable generator torque [Nm]
         constant	5 100;	Minimum pitch angle, theta_min [deg],
 ; if |theta_min|>90, then a table of <wsp,theta_min> is read ;
 ; from a file named 'wptable.n', where n=int(theta_min)
@@ -523,7 +525,7 @@
       begin init;
         constant	1 20;	Frequency of 2nd order servo model of generator-converter system [Hz]
         constant	2 0.9;	Damping ratio 2nd order servo model of generator-converter system [-]
-        constant	3 21586850.73599;	Maximum allowable LSS torque (pull-out torque) [Nm]
+        constant	3 21586451.33303;	Maximum allowable LSS torque (pull-out torque) [Nm]
         constant	4 0.9655;	Generator efficiency [-]
         constant	5 1;	Gearratio [-]
         constant	6 0;	Time for half value in softstart of torque [s]
@@ -550,7 +552,7 @@
       arraysizes_init	100 1;
       arraysizes_update	100 100;
       begin init;
-        constant	1 12952110.441593999;	Fully deployed maximum brake torque [Nm] (0.6*max torque)
+        constant	1 12951870.799818;	Fully deployed maximum brake torque [Nm] (0.6*max torque)
         constant	2 100;	Parameter alpha used in Q = tanh(omega*alpha), typically 1e2/Omega_nom
         constant	3 0.5;	Delay time for before brake starts to deploy [s]
         constant	4 0.6;	Time for brake to become fully deployed [s]
@@ -626,10 +628,11 @@
 ;----------------------------------------------------------------------------------------------------------------------------------------------------------------
 ;
   begin output;
-    filename	./res/IEA_15MW_RWT_step_notorsion;
+    filename	./res/IEA_15MW_RWT_step;
     data_format	hawc_binary;
     buffer	1;
-    time	100 1139;
+    time	100 1139;	
+;
     general time;
     constraint bearing1	shaft_rot 2;	angle and angle velocity
     constraint bearing2	pitch1 5;	angle and angular velocity
