@@ -5,7 +5,7 @@ The documentation for the turbine is accessable here: https://www.nrel.gov/docs/
 
 Data in this repository includes:
 * Documentation, including tabular data used in the figures from the technical report
-* OpenFAST aeroelastic model inputs (compatable with OpenFAST-v2.3+) available: )
+* OpenFAST aeroelastic model inputs
 * HAWC2 aeroelastic model inputs
 * WISDEM optimization files
 * Wind turbine ontology .yaml files
@@ -13,7 +13,7 @@ Data in this repository includes:
 
 Requirements for using the OpenFAST model:
 * The OpenFAST input files are compatable with OpenFAST-v2.3+.  This can be compiled [from source here](https://github.com/OpenFAST/openfast.git) or precompiled Windows binaries are [available for download](https://github.com/OpenFAST/openfast/releases/latest/download/windows_openfast_binaries.zip). More information on installing and running OpenFAST is available in [OpenFAST documention](https://openfast.readthedocs.io/en/master/). 
-* NREL's Reference OpenSource Controller (ROSCO) is required.  This can be compile [from source here](https://github.com/nrel/rosco) or precompiled Windows binaries are [available for download](https://github.com/NREL/ROSCO/releases/tag/latest).
+* NREL's Reference OpenSource Controller (ROSCO) is required.  This can be compile [from source here](https://github.com/nrel/rosco) or the precompiled Windows .dll is [available for download](https://github.com/NREL/ROSCO/releases/tag/latest).
 
 If you use this model in your research or publications, please cite as:
 
