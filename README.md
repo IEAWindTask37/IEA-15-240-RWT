@@ -5,13 +5,15 @@ The documentation for the turbine is accessable here: https://www.nrel.gov/docs/
 
 Data in this repository includes:
 * Documentation, including tabular data used in the figures from the technical report
-* OpenFAST aeroelastic model inputs (compatable with OpenFAST-v2.3 available: https://github.com/OpenFAST/openfast.git)
+* OpenFAST aeroelastic model inputs (compatable with OpenFAST-v2.3+) available: )
 * HAWC2 aeroelastic model inputs
 * WISDEM optimization files
 * Wind turbine ontology .yaml files
 * CAD modeling of turbine in SolidWorks and an Ansys FEA model of the blades
 
-Note that the OpenFAST model uses the NREL's [Reference OpenSource Controller (ROSCO)](https://github.com/nrel/rosco).  Users will need to compile the dynamic library following the ROSCO install instructions and need to provide relavent path to the dynamic library within ServoDyn.  [Tools](https://github.com/NREL/ROSCO_toolbox) also exist for automatically retuning the controller, updating the "Cp_Ct_Cq.IEA15MW.txt" and "DISCON.IN" files that are inputs to ROSCO.  The OpenFAST models are compatable with OpenFAST-v2.3.
+Requirements for using the OpenFAST model:
+* The OpenFAST input files are compatable with OpenFAST-v2.3+.  This can be compiled [from source here](https://github.com/OpenFAST/openfast.git) or precompiled Windows binaries are [available for download](https://github.com/OpenFAST/openfast/releases/latest/download/windows_openfast_binaries.zip). More information on installing and running OpenFAST is available in [OpenFAST documention](https://openfast.readthedocs.io/en/master/). 
+* NREL's Reference OpenSource Controller (ROSCO) is required.  This can be compile [from source here](https://github.com/nrel/rosco) or precompiled Windows binaries are [available for download](https://github.com/NREL/ROSCO/releases/tag/latest).
 
 If you use this model in your research or publications, please cite as:
 
@@ -21,7 +23,7 @@ If you use this model in your research or publications, please cite as:
     institution = {International Energy Agency},
     title = {{Definition of the IEA 15 MW Offshore Reference Wind Turbine}},
     URL = {https://www.nrel.gov/docs/fy20osti/75698.pdf},
-    Year = {}
+    Year = {2020}
     }
 
 For questions, contact Evan Gaertner (evan.gaertner@nrel.gov).  The technical report lists the contributions of individual authors, which may provide a more relevant point of contact.
