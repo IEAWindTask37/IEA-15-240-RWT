@@ -15,7 +15,7 @@ Node Type      X         Y       Z       M    V    FX   FY   FZ  CdA   CA
 3   Vessel   29.000   50.229 -14.000     0    0    0    0    0    0    0
 4   Fixed   418.800  725.383 -200.000    0    0    0    0    0    0    0
 5   Vessel   29.000  -50.229 -14.000     0    0    0    0    0    0    0
-6   Fixed   418.800 -725.383  200.000    0    0    0    0    0    0    0
+6   Fixed   418.800 -725.383 -200.000    0    0    0    0    0    0    0
 ---------------------- LINE PROPERTIES --------------------------------------                                           
 3           NLines    - number of line objects                                      
 Line  LineType  UnstrLen  NumSegs  NodeAnch  NodeFair  Flags/Outputs                   
