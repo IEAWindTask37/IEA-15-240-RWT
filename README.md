@@ -35,4 +35,4 @@ If you use this model in your research or publications, please cite as:
     Year = {2020}
     }
 
-For questions, contact Evan Gaertner (evan.gaertner@nrel.gov).  The technical report lists the contributions of individual authors, which may provide a more relevant point of contact.
+For questions, contact Garrett Barter (garrett.barter@nrel.gov).  The technical report lists the contributions of individual authors, which may provide a more relevant point of contact.
