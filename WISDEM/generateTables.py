@@ -758,7 +758,7 @@ class RWT_Tabular(object):
     def write_blade_struct(self):
         
         # Load in VABS data
-        froot  = '..' + os.sep + 'OpenFAST' + os.sep + 'VABS' + os.sep + 'IEA-15-240-RWT_vabs_beam_properties_'
+        froot  = os.path.join('..','OpenFAST','IEA-15-240-RWT','VABS','IEA-15-240-RWT_vabs_beam_properties_')
         fnames = ['mass_matrices.csv','stiff_matrices.csv','general.csv']
         M, Mr  = vabs_load(froot+fnames[0])
         K, Kr  = vabs_load(froot+fnames[1])
