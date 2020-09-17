@@ -22,7 +22,7 @@ Requirements for using the OpenFAST model:
 
 If the IEA Wind Task 37 authors deems it appropriate, design updates will be uploaded to the repository and tagged with version numbers appropriately.  This will ensure that any design oversights are addressed and that the input files stay current with model updates.
 
-We also encourage the broader wind community to submit design updates either through Pull Requests or by reaching out to the authors.  Design variants that we are aware of include:
+We also encourage the broader wind community to submit design updates either through Pull Requests or by reaching out to the authors.  Community contributions that we are aware of include:
 * [OrcaFlex implementation](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#is-orcaflex-supported)
 
 
