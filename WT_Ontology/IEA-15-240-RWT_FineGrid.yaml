@@ -610,6 +610,6 @@ assembly:
         tsr: 9.0
         pitch: 0.
         maxTS: 95.
-        Vrated: 10.88
+        Vrated: 10.59
         variable_speed: true
         IPC: false

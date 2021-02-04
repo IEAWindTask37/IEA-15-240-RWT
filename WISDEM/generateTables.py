@@ -13,12 +13,47 @@ from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-from matplotlib.patches import Polygon, Rectangle
+from matplotlib.patches import Rectangle
 from scipy.interpolate import interp1d
 
 def find_nearest(array, value):
     return (np.abs(array - value)).argmin() 
 
+def beamdyn_load(fname):
+    f = open(fname, 'r')
+    while True:
+        line = f.readline()
+        if line.find('station_total') >= 0:
+            npts = int(line.split()[0])
+        elif line.find('DISTRIBUTED PROPERTIES') >= 0:
+            break
+
+    r = np.zeros(npts)
+    M = np.zeros( (6,6,npts) )
+    K = np.zeros( (6,6,npts) )
+
+    def read6x6(f):
+        A = np.zeros((6,6))
+        for k in range(6):
+            line = f.readline()
+            try:
+                A[k,:] = np.fromstring(line, count=6, sep=' ')
+            except:
+                print(k,line)
+                breakpoint()
+        return A
+        
+    for ir in range(npts):
+        r[ir] = float( f.readline().split()[0] )
+        K[:,:,ir] = read6x6(f)
+        f.readline()
+        M[:,:,ir] = read6x6(f)
+        f.readline()
+        
+    f.close()
+
+    return M, K, r
+        
 def vabs_load(fname):
     with open(fname, 'r') as f:
         Alist = list( csv.reader(f) )
@@ -758,11 +793,14 @@ class RWT_Tabular(object):
     def write_blade_struct(self):
         
         # Load in VABS data
-        froot  = '..' + os.sep + 'OpenFAST' + os.sep + 'VABS' + os.sep + 'IEA-15-240-RWT_vabs_beam_properties_'
+        froot  = os.path.join('..','OpenFAST','IEA-15-240-RWT','VABS','IEA-15-240-RWT_vabs_beam_properties_')
         fnames = ['mass_matrices.csv','stiff_matrices.csv','general.csv']
         M, Mr  = vabs_load(froot+fnames[0])
         K, Kr  = vabs_load(froot+fnames[1])
-        tempDF = pd.read_csv(froot+fnames[2], header=1, index_col=0)
+
+        fbeamdyn = os.path.join('..','OpenFAST','IEA-15-240-RWT','IEA-15-240-RWT_BeamDyn_blade.dat')
+        M, K, r = beamdyn_load( fbeamdyn )
+        
         mydata = np.c_[M[0,0,:], M[0,1,:], M[0,2,:], M[0,3,:], M[0,4,:], M[0,5,:], 
                        M[1,1,:], M[1,2,:], M[1,3,:], M[1,4,:], M[1,5,:], 
                        M[2,2,:], M[2,3,:], M[2,4,:], M[2,5,:], 
@@ -789,17 +827,23 @@ class RWT_Tabular(object):
                   'K_55','K_56',
                   'K_66']
 
-        bladeStructDF = pd.DataFrame(data=mydata, columns=labels, index=Mr)
-        bladeStructDF = pd.concat([tempDF, bladeStructDF], axis=1)
+        sumDF = pd.read_csv(froot+fnames[2], header=1, index_col=0)
+        #bladeStructDF = pd.DataFrame(data=mydata, columns=labels, index=Mr)
+        bladeStructDF = pd.DataFrame(data=mydata, columns=labels, index=r)
         
         # Write to sheet
         ws = self.wb.create_sheet(title = 'Blade Structural Properties')
         ws['A1'] = 'BeamDyn Coordinate System (see https://wind.nrel.gov/nwtc/docs/BeamDyn_Manual.pdf)'
+        for r in dataframe_to_rows(sumDF, index=True, header=True):
+            ws.append(r)
+        ws['A16'] = ''
         for r in dataframe_to_rows(bladeStructDF, index=True, header=True):
             ws.append(r)
         
         # Header row style formatting
         for cell in ws["2:2"]:
+            cell.style = 'Headline 2'
+        for cell in ws["17:17"]:
             cell.style = 'Headline 2'
 
         
@@ -814,11 +858,11 @@ class RWT_Tabular(object):
         blade_te = (np.array(self.yaml['components']['blade']['outer_shape_bem']['chord']['values']) *
                     (1. - myinterp(self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['grid'],
                                    self.yaml['components']['blade']['outer_shape_bem']['pitch_axis']['values']) ) )
-        xx      = bladeStructDF.index 
-        y_mass  = bladeStructDF['Mass center (chordwise), m']
-        y_neut  = bladeStructDF['Neutral axes (chordwise), m']
-        y_geo   = bladeStructDF['Geometric center (chordwise), m']
-        y_shear = bladeStructDF['Shear center (chordwise), m']
+        xx      = sumDF.index 
+        y_mass  = sumDF['Mass center (chordwise), m']
+        y_neut  = sumDF['Neutral axes (chordwise), m']
+        y_geo   = sumDF['Geometric center (chordwise), m']
+        y_shear = sumDF['Shear center (chordwise), m']
         fig = plt.figure(figsize=(8,4))
         ax  = fig.add_subplot(111)
         ax.plot(blade_x, np.zeros_like(blade_x), 'k:')
