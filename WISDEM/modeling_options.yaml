@@ -1,0 +1,26 @@
+# Generic modeling options file to run standard WISDEM case
+General:
+    verbosity: False  # When set to True, the code prints to screen many infos
+WISDEM:
+    RotorSE:
+        flag: True
+        spar_cap_ss: Spar_Cap_SS # Name in the yaml of the spar cap laminate on the suction side
+        spar_cap_ps: Spar_Cap_PS # Name in the yaml of the spar cap laminate on the suction side
+        gust_std: 0.0
+    DriveSE:
+        flag: True
+    TowerSE:             # Options of TowerSE module
+        flag: True
+        gamma_f: 1.2     # Safety factor for freq
+        gamma_m: 1.3     # Safety factor for material properties
+        gamma_n: 1.0     # Safety factor for ...
+        gamma_b: 1.1     # Safety factor for ...
+        buckling_length: 15    # Buckling parameter
+        soil_springs: True
+        gravity_foundation: False
+        frame3dd:
+            shear: True
+            geom: True
+            tol: 1e-9
+    BOS:
+        flag: True

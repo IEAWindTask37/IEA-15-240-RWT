@@ -83,7 +83,7 @@ def vabs_load(fname):
 
 
 class RWT_Tabular(object):
-    def __init__(self, finput, towDF=None, rotDF=None, bladeDF=None):
+    def __init__(self, finput, towDF=None, rotDF=None, bladeDF=None, nacDF=None, overview=None):
         
         # Read ontology file into dictionary-like data structure
         f = open(finput, 'r')
@@ -100,6 +100,8 @@ class RWT_Tabular(object):
         self.towDF   = towDF
         self.rotDF   = rotDF
         self.bladeDF = bladeDF
+        self.nacDF   = nacDF
+        self.overview = overview
 
         # Initialize workbook object
         self.wb   = Workbook()
@@ -128,191 +130,11 @@ class RWT_Tabular(object):
         ws['B1'] = 'IEA 15 MW Reference Wind Turbine'
 
         irow = 2
-        ws.cell(row=irow, column=1, value='Power rating [MW]')
-        ws.cell(row=irow, column=2, value=1e-6*self.yaml['assembly']['global']['rating'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Turbine class')
-        ws.cell(row=irow, column=2, value='IEC Class '+
-                self.yaml['assembly']['global']['turbine_class']+
-                self.yaml['assembly']['global']['turbulence_class'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Specific rating [W/m^2]')
-        ws.cell(row=irow, column=2, value=15e6/np.pi/120.0**2.0)
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Rotor orientation')
-        ws.cell(row=irow, column=2, value=str(self.yaml['assembly']['global']['orientation']).title())
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Number of blades')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['number_of_blades'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Control')
-        ws.cell(row=irow, column=2, value='Variable speed, Collective pitch')
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Cut-in wind speed [m/s]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['Vin'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Rated wind speed [m/s]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['Vrated'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Cut-out wind speed [m/s]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['Vout'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Rotor diameter [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['rotor_diameter'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Airfoil series')
-        ws.cell(row=irow, column=2, value='FFA-W3')
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Hub height [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['hub_height'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Hub diameter [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['hubD'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Hub distance from center to blades [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['hub_blade_distance'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Hub Overhang [m]')
-        ws.cell(row=irow, column=2, value=-self.yaml['assembly']['global']['overhang'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Drive train')
-        ws.cell(row=irow, column=2, value='Low speed, Direct drive')
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Design tip speed ratio')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['tsr'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Minimum rotor speed [rpm]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['minOmega'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Maximum rotor speed [rpm]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['maxOmega'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Maximum tip speed [m/s]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['maxTS'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Shaft tilt angle [deg]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['tilt_angle'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Rotor pre-cone angle [deg]')
-        ws.cell(row=irow, column=2, value=-self.yaml['assembly']['global']['cone_angle'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Tower top to nacelle (yaw bearing height) [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['tower_top_to_nacelle'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Tower top to shaft distance [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['tower_top_to_shaft'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Generator efficiency [%]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['gen_eff'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Blade pre-bend [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['tip_prebend'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Blade mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['blade'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Hub mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['hub'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Generator mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['generator'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Turret/Nose mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['turret'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Bedplate mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['bedplate'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Shaft mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['shaft'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Shaft bearing mass (SRB) [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['main_bearing_srb'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Shaft bearing mass (TDO) [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['main_bearing_tdo'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Flange mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['flange'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Yaw system mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['yaw_system'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Other nacelle mass (electronics, thermal system, etc) [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['nacelle_other'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Nacelle mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['nacelle'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='RNA mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['rna'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='RNA center of mass from tower top [m]')
-        ws.cell(row=irow, column=2, value=str(self.yaml['assembly']['mass']['rna_center_of_mass']))
-        irow += 1
-            
-        ws.cell(row=irow, column=1, value='Tower mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['tower'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Tower base diameter [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['tower_baseD'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Transition piece height [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['transition_height'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Monopile embedment depth [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['monopile_embedment'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Monopile base diameter [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['monopile_baseD'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Monopile mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['monopile'])
-        irow += 1
+        for k,v in self.overview.items():
+            myv = float(v) if type(v)==type(np.array([])) else v
+            ws.cell(row=irow, column=1, value=k)
+            ws.cell(row=irow, column=2, value=myv)
+            irow += 1
         
         # Header row style formatting
         for cell in ws["1:1"]:
@@ -433,7 +255,8 @@ class RWT_Tabular(object):
         figLDA.savefig('outputs' + os.sep + 'airfoil_data-clcd_alpha.pdf', pad_inches=0.1, bbox_inches='tight')
         figCLCD.savefig('outputs' + os.sep + 'airfoil_data-cl_cd.pdf', pad_inches=0.1, bbox_inches='tight')
         figAIR.savefig('outputs' + os.sep + 'airfoil_family.pdf', pad_inches=0.1, bbox_inches='tight')
-                
+        plt.close()
+        
     def write_blade_outer(self):
         # Sheet name
         ws = self.wb.create_sheet(title = 'Blade Geometry')
@@ -657,7 +480,8 @@ class RWT_Tabular(object):
             fig.subplots_adjust(bottom = 0.15, left = 0.15)
             fig.savefig('outputs' + os.sep + 'layers_'+self.airfoil_list[iaf]+'_'+str(int(np.round(1e2*self.airfoil_span[iaf])))+'.pdf',
                         pad_inches=0.1, bbox_inches='tight')
-            
+            plt.close()
+        
         # Grab shear web data for excel sheet
         web3_grid, web3_ss, web3_ps = None, None, None
         for k in range(nweb):
@@ -678,13 +502,13 @@ class RWT_Tabular(object):
 
         # Grab spar cap and LE/TE reinforcement data for excel sheet
         for k in range(nlay):
-            if self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'] == 'Spar_cap_ss':
+            if self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'].lower() == 'spar_cap_ss':
                 sparcap_ss_grid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['grid']
                 sparcap_ss_th   = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values']
                 sparcap_ss_wid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['values']
                 sparcap_ss_beg  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['values']
                 sparcap_ss_end  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['values']
-            elif self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'] == 'Spar_cap_ps':
+            elif self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'].lower() == 'spar_cap_ps':
                 sparcap_ps_grid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['grid']
                 sparcap_ps_th   = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values']
                 sparcap_ps_wid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['values']
@@ -1039,37 +863,18 @@ class RWT_Tabular(object):
 
 
     def write_nacelle(self):
-        # Nacelle data
-        fnac  =  '..'+os.sep+'Documentation'+os.sep+'Nacelle_Mass_Properties.xlsx'
-        nacDF = pd.read_excel(fnac)
-        nacDF.set_index('Name', inplace=True)
-
-        # Put units in column name
-        colnames = []
-        for k in range(len(nacDF.columns)):
-            colnames.append( nacDF.columns[k] + ' ['+nacDF[ nacDF.columns[k] ].loc['Units']+']' )
-        nacDF.rename(columns=dict(zip(nacDF.columns, colnames)), inplace=True)
-        nacDF.drop(index='Units', inplace=True)
-        nacDF = nacDF.astype('float64') 
-
-        # Round off big numbers for appearances
-        for k in nacDF.columns:
-            if k in ['X_TT [m]','Z_TT [m]']: continue
-            for i in nacDF.index:
-                nacDF[k].loc[i] = np.round( nacDF[k].loc[i] )
-
-        # Write it out to sheet
-        ws = self.wb.create_sheet(title = 'Nacelle Mass Properties')
-        for r in dataframe_to_rows(nacDF, index=True, header=True):
-            ws.append(r)
+        if not self.nacDF is None:
+            ws = self.wb.create_sheet(title = 'Nacelle Mass Properties')
+            for r in dataframe_to_rows(self.nacDF, index=True, header=True):
+                ws.append(r)
         
-        # Header row style formatting
-        for cell in ws["1:1"]:
-            cell.style = 'Headline 2'
+            # Header row style formatting
+            for cell in ws["1:1"]:
+                cell.style = 'Headline 2'
 
         # Dump to latex file
-        with open('nac.tbl','w') as f:
-            nacDF.to_latex(f, index=True)
+        #with open('nac.tbl','w') as f:
+        #    self.nacDF.to_latex(f, index=True)
         
         
     def cleanup(self):
