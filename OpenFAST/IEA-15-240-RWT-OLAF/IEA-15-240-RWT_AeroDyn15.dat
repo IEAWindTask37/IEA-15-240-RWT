@@ -44,7 +44,7 @@ True                   FLookup     - Flag to indicate whether a lookup for f' wi
 3                      InCol_Cd    - The column in the airfoil tables that contains the drag coefficient (-)
 4                      InCol_Cm    - The column in the airfoil tables that contains the pitching-moment coefficient; use zero if there is no Cm column (-)
 0                      InCol_Cpmin - The column in the airfoil tables that contains the Cpmin coefficient; use zero if there is no Cpmin column (-)
-60                     NumAFfiles  - Number of airfoil files used (-)
+50                     NumAFfiles  - Number of airfoil files used (-)
 "../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_00.dat"    AFNames            - Airfoil file names (NumAFfiles lines) (quoted strings)
 "../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_01.dat"
 "../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_02.dat"
@@ -95,16 +95,6 @@ True                   FLookup     - Flag to indicate whether a lookup for f' wi
 "../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_47.dat"
 "../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_48.dat"
 "../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_49.dat"
-"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_50.dat"
-"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_51.dat"
-"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_52.dat"
-"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_53.dat"
-"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_54.dat"
-"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_55.dat"
-"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_56.dat"
-"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_57.dat"
-"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_58.dat"
-"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_59.dat"
 ======  Rotor/Blade Properties  =====================================================================
 True                   UseBlCm     - Include aerodynamic pitching moment in calculations?  (flag)
 "../IEA-15-240-RWT/IEA-15-240-RWT_AeroDyn15_blade.dat" ADBlFile(1) - Name of file containing distributed aerodynamic properties for Blade #1 (-)
