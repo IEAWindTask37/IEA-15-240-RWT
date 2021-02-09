@@ -70,9 +70,10 @@ PropSetID     YoungE          ShearG          MatDens          XsecA          Xs
 COSMID    COSM11    COSM12    COSM13    COSM21    COSM22    COSM23    COSM31    COSM32    COSM33
  (-)       (-)       (-)       (-)       (-)       (-)       (-)       (-)       (-)       (-)
 ------------------------ JOINT ADDITIONAL CONCENTRATED MASSES--------------------------
-             0   NCmass      - Number of joints with concentrated masses; Global Coordinate System
-CMJointID       JMass            JMXX             JMYY             JMZZ
-  (-)            (kg)          (kg*m^2)         (kg*m^2)         (kg*m^2)
+1                      NCmass      - Number of joints with concentrated masses; Global Coordinate System
+ CMJointID     JMass       JMXX        JMYY        JMZZ
+    (-)        (kg)      (kg*m^2)    (kg*m^2)    (kg*m^2)
+    10       100000.0    1250000.0   1250000.0   2500000.0
 ---------------------------- OUTPUT: SUMMARY & OUTFILE ------------------------------
 True             SSSum       - Output a Summary File (flag).It contains: matrices K,M  and C-B reduced M_BB, M-BM, K_BB, K_MM(OMG^2), PHI_R, PHI_L. It can also contain COSMs if requested.
 False            OutCOSM     - Output cosine matrices with the selected output member forces (flag)

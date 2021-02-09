@@ -2,7 +2,7 @@
 IEA 15 MW offshore reference model monopile configuration
 False            Echo           - Echo the input file data (flag)
 ---------------------- ENVIRONMENTAL CONDITIONS --------------------------------
-          1027   WtrDens        - Water density (kg/m^3)
+          1025   WtrDens        - Water density (kg/m^3)
             30   WtrDpth        - Water depth (meters)
              0   MSL2SWL        - Offset between still-water level and mean sea level (meters) [positive upward; unused when WaveMod = 6; must be zero if PotMod=1 or 2]
 ---------------------- WAVES ---------------------------------------------------
@@ -10,8 +10,8 @@ False            Echo           - Echo the input file data (flag)
              0   WaveStMod      - Model for stretching incident wave kinematics to instantaneous free surface {0: none=no stretching, 1: vertical stretching, 2: extrapolation stretching, 3: Wheeler stretching} (switch) [unused when WaveMod=0 or when PotMod/=0]
           3630   WaveTMax       - Analysis time for incident wave calculations (sec) [unused when WaveMod=0; determines WaveDOmega=2Pi/WaveTMax in the IFFT]
           0.25   WaveDT         - Time step for incident wave calculations     (sec) [unused when WaveMod=0; 0.1<=WaveDT<=1.0 recommended; determines WaveOmegaMax=Pi/WaveDT in the IFFT]
-             6   WaveHs         - Significant wave height of incident waves (meters) [used only when WaveMod=1, 2, or 3]
-            10   WaveTp         - Peak-spectral period of incident waves       (sec) [used only when WaveMod=1 or 2]
+          4.52   WaveHs         - Significant wave height of incident waves (meters) [used only when WaveMod=1, 2, or 3]
+          9.45   WaveTp         - Peak-spectral period of incident waves       (sec) [used only when WaveMod=1 or 2]
 "DEFAULT"        WavePkShp      - Peak-shape parameter of incident wave spectrum (-) or DEFAULT (string) [used only when WaveMod=2; use 1.0 for Pierson-Moskowitz]
        0.15708   WvLowCOff      - Low  cut-off frequency or lower frequency limit of the wave spectrum beyond which the wave spectrum is zeroed (rad/s) [unused when WaveMod=0, 1, or 6]
            3.2   WvHiCOff       - High cut-off frequency or upper frequency limit of the wave spectrum beyond which the wave spectrum is zeroed (rad/s) [unused when WaveMod=0, 1, or 6]
@@ -92,16 +92,32 @@ AxCoefID  AxCd     AxCa     AxCp
    (-)    (-)      (-)      (-)
     1     0.00     0.00     1.00
 ---------------------- MEMBER JOINTS -------------------------------------------
-             2   NJoints        - Number of joints (-)   [must be exactly 0 or at least 2]
+             10   NJoints        - Number of joints (-)   [must be exactly 0 or at least 2]
 JointID   Jointxi     Jointyi     Jointzi  JointAxID   JointOvrlp   [JointOvrlp= 0: do nothing at joint, 1: eliminate overlaps by calculating super member]
    (-)     (m)         (m)         (m)        (-)       (switch)
-    1     0.00000     0.00000   -30.00010      1            0
-    2     0.00000     0.00000    20.00000      1            0
+   1      0.00000     0.00000   -30.0000       1            0
+   2      0.00000     0.00000   -25.0000       1            0
+   3      0.00000     0.00000   -20.0000       1            0
+   4      0.00000     0.00000   -15.0000       1            0
+   5      0.00000     0.00000   -10.0000       1            0
+   6      0.00000     0.00000    -5.0000       1            0
+   7      0.00000     0.00000     0.0000       1            0
+   8      0.00000     0.00000     5.0000       1            0
+   9      0.00000     0.00000    10.0000       1            0
+  10      0.00000     0.00000    15.0000       1            0
 ---------------------- MEMBER CROSS-SECTION PROPERTIES -------------------------
-             1   NPropSets      - Number of member property sets (-)
+             9   NPropSets      - Number of member property sets (-)
 PropSetID    PropD         PropThck
    (-)        (m)            (m)
-    1        10.00          0.055
+   1        10.0            0.055341
+   2        10.0            0.053449
+   3        10.0            0.051509
+   4        10.0            0.049527
+   5        10.0            0.047517
+   6        10.0            0.045517
+   7        10.0            0.043527
+   8        10.0            0.042242
+   9        10.0            0.041058
 ---------------------- SIMPLE HYDRODYNAMIC COEFFICIENTS (model 1) --------------
      SimplCd    SimplCdMG    SimplCa    SimplCaMG    SimplCp    SimplCpMG   SimplAxCa  SimplAxCaMG  SimplAxCp   SimplAxCpMG
        (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)
@@ -115,10 +131,18 @@ Dpth      DpthCd   DpthCdMG   DpthCa   DpthCaMG       DpthCp   DpthCpMG   DpthAx
 MemberID    MemberCd1     MemberCd2    MemberCdMG1   MemberCdMG2    MemberCa1     MemberCa2    MemberCaMG1   MemberCaMG2    MemberCp1     MemberCp2    MemberCpMG1   MemberCpMG2   MemberAxCa1   MemberAxCa2  MemberAxCaMG1 MemberAxCaMG2  MemberAxCp1  MemberAxCp2   MemberAxCpMG1   MemberAxCpMG2
    (-)         (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)
 -------------------- MEMBERS -------------------------------------------------
-             1   NMembers       - Number of members (-)
+             9   NMembers       - Number of members (-)
 MemberID  MJointID1  MJointID2  MPropSetID1  MPropSetID2  MDivSize   MCoefMod  PropPot   [MCoefMod=1: use simple coeff table, 2: use depth-based coeff table, 3: use member-based coeff table] [ PropPot/=0 if member is modeled with potential-flow theory]
   (-)        (-)        (-)         (-)          (-)        (m)      (switch)   (flag)
-    1         1          2           1            1         0.5000      1        FALSE
+    1         1          2           1            1         0.5          1         FALSE   
+    2         2          3           2            2         0.5          1         FALSE   
+    3         3          4           3            3         0.5          1         FALSE   
+    4         4          5           4            4         0.5          1         FALSE   
+    5         5          6           5            5         0.5          1         FALSE   
+    6         6          7           6            6         0.5          1         FALSE   
+    7         7          8           7            7         0.5          1         FALSE   
+    8         8          9           8            8         0.5          1         FALSE   
+    9         9         10           9            9         0.5          1         FALSE   
 ---------------------- FILLED MEMBERS ------------------------------------------
              0   NFillGroups     - Number of filled member groups (-) [If FillDens = DEFAULT, then FillDens = WtrDens; FillFSLoc is related to MSL2SWL]
 FillNumM FillMList             FillFSLoc     FillDens

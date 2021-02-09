@@ -10,7 +10,6 @@ from generateTables import RWT_Tabular
 
 # Script control
 fine_grid_flag = False
-plot_flag = False
 
 # File management
 thisdir = os.path.dirname(os.path.realpath(__file__))
@@ -115,21 +114,15 @@ nacDF = prob.model.wt.drivese.nac._mass_table
 hub_cm = float(prob["drivese.hub_system_cm"])
 L_drive = float(prob["drivese.L_drive"])
 tilt = float(prob.get_val('nacelle.uptilt', 'rad'))
+shaft0 = prob["drivese.shaft_start"]
 Cup = -1.0
-hub_cm = R = (L_drive + hub_cm) * np.array([Cup * np.cos(tilt), 0.0, np.sin(tilt)])
+hub_cm = R = shaft0 + (L_drive + hub_cm) * np.array([Cup * np.cos(tilt), 0.0, np.sin(tilt)])
 hub_mass = prob['drivese.hub_system_mass']
-hub_I = util.assembleI(util.rotateI(prob["drivese.hub_system_I"], -Cup * tilt, axis="y"))
-hub_I_TT = hub_I + hub_mass * (np.dot(R, R) * np.eye(3) - np.outer(R, R))
+hub_I = prob["drivese.hub_system_I"]
 blades_mass = prob['drivese.blades_mass']
-blades_I = util.assembleI(util.rotateI(prob["drivese.blades_I"], -Cup * tilt, axis="y"))
-blades_I_TT = blades_I + blades_mass * (np.dot(R, R) * np.eye(3) - np.outer(R, R))
-nacDF.loc['Blades'] = np.r_[blades_mass, hub_cm, util.unassembleI(blades_I_TT)].tolist()
-nacDF.loc['Hub_System'] = np.r_[hub_mass, hub_cm, util.unassembleI(hub_I_TT)].tolist()
-nacDF.loc['RNA'] = np.r_[prob['drivese.rna_mass'], prob['drivese.rna_cm'], prob['drivese.rna_I_TT']].tolist()
-
-#print(np.r_[prob['drivese.rna_mass'], prob['drivese.rna_cm'], prob['drivese.rna_I_TT']].tolist())
-#print(np.r_[prob['drivese.base_F'].flatten(),prob['drivese.base_M'].flatten()].tolist())
-#print(prob["rp.gust.V_gust"])
+blades_I = prob["drivese.blades_I"]
+nacDF.loc['Blades'] = np.r_[blades_mass, hub_cm, blades_I].tolist()
+nacDF.loc['Hub_System'] = np.r_[hub_mass, hub_cm, hub_I].tolist()
 
 # Tabular output: Tower 
 water_depth = prob['env.water_depth']

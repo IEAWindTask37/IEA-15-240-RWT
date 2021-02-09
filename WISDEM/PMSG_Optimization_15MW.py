@@ -24,9 +24,10 @@ if opt_flag:
     # Add optimizer and set-up problem (using user defined input on objective function)
     #prob.driver = om.ScipyOptimizeDriver()
     #prob.driver.options["optimizer"] = "SLSQP"
+    #prob.driver.options["tol"] = 1e-6
 
     prob.driver = om.pyOptSparseDriver()
-    prob.driver.options["optimizer"] = 'SNOPT' #"CONMIN"
+    prob.driver.options["optimizer"] = 'CONMIN' # 'SNOPT'
 
     # Specificiency target efficiency(%)
     Eta_Target = 0.955
