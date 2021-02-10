@@ -1,11 +1,10 @@
-## IEA Wind 15-MW Release Notes
+# IEA Wind 15-MW Release Notes
 
-v 1.1
-----------
+## v 1.1
 
 This update to the IEA Wind 15-MW Reference Wind Turbine attempts to address some of the modeling issues that have been pointed out by users.  Larger redesign requests, such as a smaller diameter monopile, or higher specific power for the floating turbine, are not included as that would require a more significant allocation of resources (see the [Wiki FAQ](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)) for some extended answers to those topics).  
 
-The main themes of this update are the following:
+**Major Changes**
 
  * Many of the modeling tools have undergone changes and updates, so the files here have been updated to keep pace with API changes.
  
@@ -25,7 +24,7 @@ The main themes of this update are the following:
 Blade mass change due to material properties
 
 
-*Detailed OpenFAST changes*
+**Detailed OpenFAST changes**
 
 For the monopile variant:
 
@@ -80,18 +79,35 @@ For the UMaine Volturn-S floating variant:
 Also added input files that invoke OLAF, the OpenFAST vortex particle method for aerodynamics (monopile variant only)
 
 
-*Detailed WISDEM changes*
+**Detailed HAWC2 changes**
 
-Words
+(Jenni / DTU to-do items)
 
-*Detailed ROSCO changes*
+
+**Detailed WISDEM changes**
+
+Three WISDEM scripts remain:
+
+ * `run_model.py` : WISDEM analysis (no design optimization) of the IEA Wind 15-MW RWT.  Uses the WindIO ontology file directly as input, along with `modeling_options.yaml` and `analysis_options.yaml`. Script also includes automated plotting of blade geometry, rotor performance, and tower geometry.  The tabular data Excel sheet is also generated.
+ 
+ * `optimize_monopile_tower.py` : Script that can be used to optimize the tower and monopile diameter and thickness schedule.  Uses the WindIO ontology file directly as input, along with `modeling_options_monopile.yaml` and `analysis_options_monopile.yaml`.
+ 
+ * `optimize_generator.py` : Script that can be used to optimize the permanent magnet synchronous generator.
+ 
+For more information about WISDEM and how these scripts can be run, please see the WISDEM [documentation](https://wisdem.readthedocs.io) and [repository](https://github.com/WISDEM/WISDEM).
+
+
+**Detailed ROSCO changes**
 
 (just point folks to the ROSCO repo and commit logs?)
 
 
-v 1.0
----------
-Jan 2021: Officially tagged the v1.0 release, although there are still some outstanding issues
-Apr-Nov, 2020: Series of minor fixes in model input files (see closed pull requests for details)
-March 30, 2020: Finalization of OpenFAST and HAWC2 models in conjuction with release of report and media pieces
+## v 1.0
+
+ * Jan 2021: Officially tagged the v1.0 release, although there are still some outstanding issues
+ 
+ * Apr-Nov, 2020: Series of minor fixes in model input files (see closed pull requests for details)
+ 
+ * March 30, 2020: Finalization of OpenFAST and HAWC2 models in conjuction with release of report and media pieces
+ 
 
