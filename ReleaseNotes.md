@@ -8,7 +8,7 @@ This update to the IEA Wind 15-MW Reference Wind Turbine attempts to address som
 
  * Many of the modeling tools have undergone changes and updates, so the files here have been updated to keep pace with API changes.
  
-   - Changes WISDEM has undergone perhaps the most extensive overhaul.  It now uses the YAML-based ontology files from the [WindIO](https://github.com/IEAWindTask37/windIO) project as the chief input, and is also more tightly integrated with OpenFAST and ROSCO.  More detailed changes described below.
+   - WISDEM has undergone perhaps the most extensive overhaul.  It now uses the YAML-based ontology files from the [WindIO](https://github.com/IEAWindTask37/windIO) project as the chief input, and is also more tightly integrated with OpenFAST and ROSCO.  More detailed changes described below.
    
    - OpenFAST has seen a couple of releases since the 15-MW RWT input files were created.  Additionally, the original input deck also had a number of errors and inconsistencies.  The integration with WISDEM and, by extension, the WindIO ontology files has help to rectify these problems.  Finally, a set of input files that works with OLAF, the OpenFAST vortex particle aerodynamics code has been included.
    
