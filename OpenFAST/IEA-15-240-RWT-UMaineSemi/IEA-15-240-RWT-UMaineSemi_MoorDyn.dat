@@ -18,11 +18,11 @@ Node Type      X         Y       Z       M    V    FX   FY   FZ  CdA   CA
 6   Fixed   418.800 -725.383 -200.000    0    0    0    0    0    0    0
 ---------------------- LINE PROPERTIES --------------------------------------                                           
 3           NLines    - number of line objects                                      
-Line  LineType  UnstrLen  NumSegs  NodeAnch  NodeFair  Flags/Outputs                   
-(-)   (-)       (m)       (-)      (-)       (-)       (-)                 
-1     main      850.00    50        2         1         -                   
-2     main      850.00    50        4         3         -                   
-3     main      850.00    50        6         5         -                   
+Line  LineType  UnstrLen  NumSegs  NodeAnch  NodeFair  Outputs  CtrlChan
+(-)   (-)       (m)       (-)      (-)       (-)       (-)        (-)
+1     main      850.00    50        2         1         -          0
+2     main      850.00    50        4         3         -          0
+3     main      850.00    50        6         5         -          0
 ---------------------- SOLVER OPTIONS ---------------------------------------                                           
 0.001    dtM       - time step to use in mooring integration (s)
 3.0e6    kbot      - bottom stiffness (Pa/m)
