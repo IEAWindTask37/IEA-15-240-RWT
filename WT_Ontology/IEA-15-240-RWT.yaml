@@ -699,8 +699,8 @@ materials:
       Xy: 485.e+6
       unit_cost: 0.9
    -  name: cast_iron
-      description: TODO Steel of the drivetrain ASTM 4140 40Cr1Mo28
-      source: TODO http://www.matweb.com/search/DataSheet.aspx?MatGUID=38108bfd64c44b4c9c6a02af78d5b6c6
+      description: Cast iron for hub and nacelle components
+      source: TODO
       orth: 0
       rho: 7200
       alpha: 0.0
@@ -740,7 +740,7 @@ materials:
    -  name: CarbonUD
       E: [114500000000.0, 8390000000.0, 8390000000.0]
       G: [5990000000.0, 5990000000.0, 5990000000.0]
-      rho: 1500.0
+      rho: 1220.0
       orth: 1
       nu: [0.27, 0.27, 0.27]
       Xt: [1546.e6, 0.0, 0.0]
@@ -749,9 +749,9 @@ materials:
       GIc: 0.0
       GIIc: 0.0
       alp0: 0.0
-      fvf: 0.5384615384615385
-      fwf: 0.6461538461538463
-      ply_t: 0.0010317460317460314
+      fvf: 0.1076923076923077 #0.5384615384615385
+      fwf: 0.15889029003783103 #0.6461538461538463
+      ply_t: 0.005158730158730159 #0.0010317460317460314
       unit_cost: 30.
       waste: 0.05
       fiber_density: 1800.

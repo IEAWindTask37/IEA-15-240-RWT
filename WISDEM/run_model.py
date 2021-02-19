@@ -1,7 +1,7 @@
 import os
 from collections import OrderedDict
 from wisdem import run_wisdem
-import wisdem.postprocessing.compare_designs as compare_designs 
+import wisdem.postprocessing.compare_designs as compare_designs
 import wisdem.commonse.utilities as util
 import numpy as np
 import pandas as pd
@@ -124,7 +124,7 @@ blades_I = prob["drivese.blades_I"]
 nacDF.loc['Blades'] = np.r_[blades_mass, hub_cm, blades_I].tolist()
 nacDF.loc['Hub_System'] = np.r_[hub_mass, hub_cm, hub_I].tolist()
 
-# Tabular output: Tower 
+# Tabular output: Tower
 water_depth = prob['env.water_depth']
 h_trans = prob['towerse.transition_piece_height']
 htow = np.cumsum(np.r_[0.0, prob['towerse.tower_section_height']]) + prob['towerse.z_start']
