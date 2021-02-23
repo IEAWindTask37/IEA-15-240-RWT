@@ -11,9 +11,10 @@ For convenience, we have provided helper Python scripts in `make_htc`
 to create three types of htc files from the base file: (1) a HAWC2 step-wind
 from cut-in to cut-out, (2) a HAWC2 turbulence simulation, and (3) a 
 HAWCStab2/HAWC2S input file. **Note** that if you want to run with the
-no-torsion model, you should change the blade model in the base file before
-running the scripts. The Python scripts require Python >= 3.6
-and the Wind Energy Toolbox, which can be installed with `pip install wetb`.
+no-torsion model, you should change the blade model and controller parameters
+in the base file (see "Using no-torsion model" below) before running the
+scripts. The Python scripts require Python >= 3.6 and the Wind Energy
+Toolbox, which can be installed with `pip install wetb`.
 
 
 ## Blade models
