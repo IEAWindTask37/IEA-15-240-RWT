@@ -1,7 +1,10 @@
 *.py[cod]
 
 # HAWC2
-*/bodyeig/*
-*/res/*
-*/turb/*
+**/bodyeig/*
+**/res/*
+**/turb/*
 *.pwr
+*_step.htc
+*_hs2.htc
+*_turb.htc

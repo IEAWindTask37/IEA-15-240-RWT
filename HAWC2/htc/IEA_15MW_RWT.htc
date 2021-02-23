@@ -1,12 +1,11 @@
 ; IEA 15 MW Reference Wind Turbine. Model update from commit "7d179ee".
-; Fully populated matrix, no torsion.
 ; 
 begin simulation ;
-  time_stop    700.0 ;
+  time_stop    100.0 ;
   solvertype   1 ;    (newmark)
   on_no_convergence continue ;
   convergence_limits 1E3 1.0 1E-7 ;
-  logfile ./log/IEA_15MW_RWT_turb.log ;
+  logfile ./log/IEA_15MW_RWT.log ;
   begin newmark;
     deltat    0.01;  
   end newmark;
@@ -134,8 +133,9 @@ begin new_htc_structure;
     node_distribution    c2_def;
     damping_aniso  0.0 0.0 0.0 2.955e-3 2.424e-3 1.0e-8 ; blade damping tuned to 3% log dec flap/edge, torsion arbitrarily small
     begin timoschenko_input ;
-      filename ./data/IEA_15MW_RWT_Blade_st_noFPM.dat;
-      set 1 1 ;
+      filename ./data/IEA_15MW_RWT_Blade_st_fpm.dat;  blade files: [IEA_15MW_RWT_Blade_st_fpm.dat] or [IEA_15MW_RWT_Blade_st_nofpm.dat]
+      FPM 1;  is blade file original beam model [0] or fully populated matrix from BECAS [1]
+      set 1 1 ;  [1 1]=flexible, [1 2]=no torsion, [1 3]=stiff
     end timoschenko_input;
     begin c2_def;
       nsec 20;
@@ -309,25 +309,15 @@ end new_htc_structure;
 begin wind ;
   density                 1.225 ;
   wsp                     12 ;
-  tint                    0.17 ;
+  tint                    0.0 ;
   horizontal_input        1 ;  0=false, 1=true
   windfield_rotations     0 0.0 0.0 ;    yaw, tilt, rotation
   center_pos0             0.0 0.0 -150 ;  center of turb box
-  shear_format            2  0.20 ;  0=none,1=constant,2=log,3=power,4=linear
-  turb_format             1 ;  0=none, 1=mann,2=flex
+  shear_format            1  0 ;  0=none,1=constant,2=log,3=power,4=linear
+  turb_format             0 ;  0=none, 1=mann,2=flex
   tower_shadow_method     3 ;  0=none, 1=potential flow, 2=jet, 3=potential 2
   scale_time_start       0.0 ;
   wind_ramp_factor   0.0 40.0 0.6 1.0 ;  tstart, tstop, % start, % stop
-; 
-  begin mann;
-    create_turb_parameters 29.4 1.0 3.9 1001 0 ;
-    filename_u ./turb/IEA_15MW_RWT_turb_u.bin ;
-    filename_v ./turb/IEA_15MW_RWT_turb_v.bin ;
-    filename_w ./turb/IEA_15MW_RWT_turb_w.bin ;
-    box_dim_u 8192 0.878906 ; U*T/n_u
-    box_dim_v 32 8.12903 ; wid/(n_v-1), wid = rotdiam + 5%
-    box_dim_w 32 8.12903 ; ht/(n_w-1), ht = rotdiam + 5%
-  end mann;
 ;
   begin tower_shadow_potential_2;
     tower_mbdy_link tower;
@@ -613,10 +603,10 @@ end dll;
 ;---------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 ;
 begin output;
-  filename ./res/IEA_15MW_RWT_turb ;
+  filename ./res/IEA_15MW_RWT ;
   data_format  hawc_binary;
   buffer 1 ;
-  time 100 700;
+  time 0 100;
 ;
   general time;  
   constraint bearing1 shaft_rot 2; angle and angle velocity 
