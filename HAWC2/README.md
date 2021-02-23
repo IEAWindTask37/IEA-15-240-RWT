@@ -7,7 +7,7 @@ simulation with constant shear using the flexible FPM model.
 See "Blade Models" below for more information on the options
 for blade modeling.
 
-for convenience, we have provided helper Python scripts to create four
+For convenience, we have provided helper Python scripts to create three
 more types of htc files from the base file: (1) a HAWC2 step-wind
 from cut-in to cut-out with the same blade model as the base file,
 (2) a HAWC2 turbulence simulation with the same blade model as the
