@@ -33,13 +33,20 @@ There are three blade structural files included in this repo:
 
 
 The blade models can be changed by toggling the `filename` and `FPM`
-options in the blade's `timoshenko_input` block.
-
-**NOTE**: If using the no-torsion model, you must also update the controller
-block using the controller parameters provided in
-`control/controller_block_notorsion.txt`. No controller parameters are provided
-for the BTC blade, but they can be tuned with HAWCStab2.
+options in the blade's `timoshenko_input` block. More instructions
+on using the no-torsion model are provided below. Note that neither
+controller parameters nor operational data are provided for the BTC
+blade, but they can be calculated using HAWCStab2.
 
 To compare HAWC2 with ElastoDyn, you should use the no-torsion
 blade model. To compare HAWC2 with BeamDyn, you should use the fully
 flexible blade model. The stiff model is provided purely for convenience.
+
+## Using no-torsion model
+
+If using the no-torsion model, in addition to changing the blade
+model, you must also update the controller parameters for the HAWC2
+simulation, and the operational data file for the HAWCStab2 block.
+The controller parameters for the no-torsion model are provided in
+`control/controller_block_notorsion.txt`. The operational data file
+for the no-torsion model is given in `data/operation_nofpm_notorsion.dat`
