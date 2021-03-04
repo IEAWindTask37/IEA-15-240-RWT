@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from generateTables import RWT_Tabular
 
 # Script control
-fine_grid_flag = False
+fine_grid_flag = True #False
 
 # File management
 thisdir = os.path.dirname(os.path.realpath(__file__))
@@ -109,7 +109,9 @@ rotor_perf_col = ['Wind [m/s]','Pitch [deg]',
 perfDF = pd.DataFrame(data=rotor_perf, columns=rotor_perf_col)
 
 # Nacelle mass properties tabular
-# Columns are ['Mass', 'CoM_x', 'CoM_y', 'CoM_z', 'MoI_xx', 'MoI_yy', 'MoI_zz', 'MoI_xy', 'MoI_xz', 'MoI_yz']
+# Columns are ['Mass', 'CoM_x', 'CoM_y', 'CoM_z',
+#              'MoI_cm_xx', 'MoI_cm_yy', 'MoI_cm_zz', 'MoI_cm_xy', 'MoI_cm_xz', 'MoI_cm_yz',
+#              'MoI_TT_xx', 'MoI_TT_yy', 'MoI_TT_zz', 'MoI_TT_xy', 'MoI_TT_xz', 'MoI_TT_yz']
 nacDF = prob.model.wt.drivese.nac._mass_table
 hub_cm = float(prob["drivese.hub_system_cm"])
 L_drive = float(prob["drivese.L_drive"])
@@ -119,10 +121,16 @@ Cup = -1.0
 hub_cm = R = shaft0 + (L_drive + hub_cm) * np.array([Cup * np.cos(tilt), 0.0, np.sin(tilt)])
 hub_mass = prob['drivese.hub_system_mass']
 hub_I = prob["drivese.hub_system_I"]
+hub_I_TT = util.rotateI(hub_I, -Cup * tilt, axis="y")
+hub_I_TT = util.unassembleI( util.assembleI(hub_I_TT) +
+                             hub_mass * (np.dot(R, R) * np.eye(3) - np.outer(R, R)) )
 blades_mass = prob['drivese.blades_mass']
 blades_I = prob["drivese.blades_I"]
-nacDF.loc['Blades'] = np.r_[blades_mass, hub_cm, blades_I].tolist()
-nacDF.loc['Hub_System'] = np.r_[hub_mass, hub_cm, hub_I].tolist()
+blades_I_TT = util.rotateI(blades_I, -Cup * tilt, axis="y")
+blades_I_TT = util.unassembleI( util.assembleI(blades_I_TT) +
+                                blades_mass * (np.dot(R, R) * np.eye(3) - np.outer(R, R)) )
+nacDF.loc['Blades'] = np.r_[blades_mass, hub_cm, blades_I, blades_I_TT].tolist()
+nacDF.loc['Hub_System'] = np.r_[hub_mass, hub_cm, hub_I, hub_I_TT].tolist()
 
 # Tabular output: Tower
 water_depth = prob['env.water_depth']
