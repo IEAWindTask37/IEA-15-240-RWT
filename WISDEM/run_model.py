@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from generateTables import RWT_Tabular
 
 # Script control
-fine_grid_flag = True #False
+fine_grid_flag = False
 
 # File management
 thisdir = os.path.dirname(os.path.realpath(__file__))
