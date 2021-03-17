@@ -101,7 +101,15 @@ For more information about WISDEM and how these scripts can be run, please see t
 
 **Detailed ROSCO changes**
 
-(just point folks to the ROSCO repo and commit logs?)
+* Add constant power above rated for TSR tracking torque control
+
+* Use filtered blade pitch signals for gain schedule calls
+
+* Many bug fixes
+
+* [Documentation available](https://rosco-toolbox.readthedocs.io/en/latest/)
+
+* [See other release notes](https://github.com/NREL/ROSCO/releases)
 
 
 ## v 1.0
