@@ -16,13 +16,15 @@ This update to the IEA Wind 15-MW Reference Wind Turbine attempts to address som
 
  * The ontology YAML-files have been expanded to include descriptions of the entire turbine.  This follows the progress made in the parallel IEA Task 37 [WindIO](https://github.com/IEAWindTask37/windIO) project.  Note that the YAML descriptions for some of these components will likely still evolve, especially the nacelle components, as settling on a communal parameterization takes time and numerous iterations.
 
+ * There was an inconsistency in the stated hub diameter in the original report, YAML-definition, and WISDEM files (7.94m) versus the hub diameter in the OpenFAST and HAWC2 files (3.0m).  This was due to a late design change to better accommodate the blade root chord/diameter size that did not fully propagate to all input files.  With the hub diameter at 7.94m and the blade unchanged at 117.15m in length (arc length measurement that includes the prebend), the precise rotor diameter is 242.24m.  This is called out in [Issue #51](https://github.com/IEAWindTask37/IEA-15-240-RWT/issues/51) and the [Wiki FAQ](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)).
+
  * The nacelle component mass properties and dimensions were approximate in the report and then inconsistently captured between the various model input decks.  Furthermore Table 5-1 in the report had values that could do be replicated and did not add up (called out in [Issue #30](https://github.com/IEAWindTask37/IEA-15-240-RWT/issues/30).  With the new capabilities in WISDEM's DrivetrainSE model, this has been rectified and the nacelle mass properties tab in the IEA-15-240-RWT_tabular.xlsx file.
 
  * The composite material properties, especially for carbon fiber reinforced carbon (CFRC) composites, are known to be out of date and inconsistent with modern pultrusion manufacturing methods.  A future release will likely update these properties and re-optimize the spar cap thickness along the blade.
 
- * Bug fixes and other improvements in composite material representation in the WISDEM model has resulted in a slight growth in blade mass compared to the original report (69t vs 65t). This was also called out in the [Wiki FAQ](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)).
+ * Bug fixes and other improvements in composite material representation in the WISDEM model has resulted in a slight growth in blade mass compared to the original report (68t vs 65t). This was also called out in the [Wiki FAQ](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)).
 
- * Trailing edge reinforcement was mistakenly added too close to root and tip of blade in the first release, so this has been corrected.
+ * Trailing edge reinforcement was mistakenly added too close to root and tip of blade in the first release, and was not always consistent with the physical space constraints along the span.  Due to different approaches to meshing the trailing edge, this also created some inconsistencies stiffness distributions depending on model inputs. This has been corrected via this [Pull Request](https://github.com/IEAWindTask37/IEA-15-240-RWT/pull/48).
 
 
 **Detailed OpenFAST changes**
