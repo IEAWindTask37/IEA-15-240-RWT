@@ -168,7 +168,7 @@ towDF['Axial stiffness [N]'] = prob['towerse.E'][0] * A
 #    towDF.to_latex(f, index=False)
 
 # Frequency plot
-fn_tower = prob['towerse.post.structural_frequencies'][:2]
+fn_tower = prob['towerse.tower.structural_frequencies'][:2]
 f        = np.linspace(0., 0.5, num=1000)[1:]
 omega    = f*(2.*np.pi)
 
