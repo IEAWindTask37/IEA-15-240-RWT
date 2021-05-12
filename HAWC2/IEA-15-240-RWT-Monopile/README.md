@@ -1,4 +1,4 @@
-# HAWC2 models
+# HAWC2 monopile models
 
 ## HTC file(s)
 
