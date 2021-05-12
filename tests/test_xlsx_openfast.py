@@ -20,7 +20,7 @@ class TestConsistency(unittest.TestCase):
         for ED in [ED_mono, ED_semi]:
             self.assertAlmostEqual(ED['HubMass'], tabdata.loc['Hub_System','Mass'], 0)
             self.assertAlmostEqual(ED['HubIner'], tabdata.loc['Hub_System','MoI_CoM_xx'], 0)
-            self.assertAlmostEqual(ED['GenIner'], tabdata.loc['generator','MoI_CoM_xx'], 0)
+            self.assertAlmostEqual(ED['GenIner'], tabdata.loc['generator_rotor','MoI_CoM_xx'], 0)
             self.assertAlmostEqual(ED['NacMass'], tabdata.loc['Above_yaw','Mass'], 0)
             self.assertAlmostEqual(ED['NacCMxn'], tabdata.loc['Above_yaw','CoM_TT_x'], 0)
             self.assertAlmostEqual(ED['NacCMyn'], 0.0, 0)
