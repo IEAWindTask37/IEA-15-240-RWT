@@ -142,7 +142,7 @@ end new_htc_structure;
 [wind]  turb_format             [turb_format] ;  0=none, 1=mann,2=flex
 [wind]  tower_shadow_method     [tower_shadow] ;  0=none, 1=potential flow, 2=jet, 3=potential 2
 [wind]  scale_time_start       0.0 ;
-[wind]  wind_ramp_factor   0.0 40.0 0.6 1.0 ;  tstart, tstop, % start, % stop
+[wind]  wind_ramp_factor   0.0 80.0 0.6 1.0 ;  tstart, tstop, % start, % stop
 [wind]; 
 [wind]  begin mann;
 [wind]    create_turb_parameters 29.4 1.0 3.9 [seed] 0 ;
