@@ -10,10 +10,11 @@ import pandas as pd
 filename = 'IEA_15MW_RWT_UMaine'
 wsp = 8
 sim_time = 900
+ini_time = 300
 dx = 8192
 Iref = 0.14
 tint = Iref * (0.75 * wsp + 5.6) / wsp
-mann_dx = sim_time * wsp / dx
+mann_dx = (sim_time - ini_time) * wsp / dx
 on = ''
 off = ';'
 
@@ -26,12 +27,12 @@ dict_data = {'case':            filename,
              'mooring_sys':     'htc/template/mooring_sys.inc',
              'sim_time':        sim_time,
              'time_step':       0.01,
-             'ini_time':        300,
+             'ini_time':        ini_time,
              'info':            off,
              'output':          on,
              'hydro':           on,
              'qtf':             off,
-             'wave':            on,
+             'wave':            off,
              'wind':            on,
              'control':         on,
              'control_rosco':   off,
