@@ -13,7 +13,8 @@ from _htc_conversion_fxns import base_to_hs2, base_to_step, base_to_turb
 make_step = True  # make a step-wind file?
 make_turb = True  # make a turbulence file?
 make_hs2 = True  # make a hawcstab2 file?
-base_htc = '../htc/IEA_15MW_RWT.htc'  # relative path to base htc file
+base_dir = '../htc_monopile/'  # relative path to base directory
+base_name = 'IEA_15MW_RWT_monopile.htc'  # relative path to base htc file
 
 kw = dict(cut_in=3, cut_out=25, dt=39, tstart=220,  # step parameters
           wsp=12, tint=0.17, tb_wid=252, tb_ht=252,  # turbulence parameters
@@ -24,6 +25,7 @@ kw = dict(cut_in=3, cut_out=25, dt=39, tstart=220,  # step parameters
 
 
 if __name__ == '__main__':
+    base_htc = base_dir + base_name
 
     if make_step:
         step_htc = base_htc.replace('.htc', '_step.htc')
@@ -38,7 +40,7 @@ if __name__ == '__main__':
         print('   done.')
 
     if make_hs2:
-        hs2_htc = base_htc.replace('.htc', '_hs2.htc').replace('../htc', '../')
+        hs2_htc = base_htc.replace('.htc', '_hs2.htc').replace(base_dir, '../')
         print(f'  Writing hawcstab2 file to {hs2_htc}...')
         base_to_hs2(base_htc, hs2_htc, **kw)
         print('   done.')
