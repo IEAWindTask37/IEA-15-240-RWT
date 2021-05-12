@@ -8,7 +8,7 @@ import pandas as pd
 
 # Set general parameters (dlbs will be created afterwards, so no need for precision)
 filename = 'IEA_15MW_RWT_UMaine'
-wsp = 8
+wsp = 10
 sim_time = 900
 ini_time = 300
 dx = 8192
