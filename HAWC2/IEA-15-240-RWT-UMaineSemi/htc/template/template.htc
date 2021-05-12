@@ -260,8 +260,8 @@ end dll;
 ;-----------------------------------------------------------------------------------------
 [output]begin output;
 [output]  filename ./res/[flnm] ;
-[output]  data_format  hawc_ascii;
-[output]  buffer 1 ;
+[output]  data_format  gtsdf;
+[output]  buffer 100 ;
 [output]  time [ini_time] [sim_time] ;
 ;
 [output]  general time;  
