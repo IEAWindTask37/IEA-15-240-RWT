@@ -5,7 +5,7 @@
     node_distribution     c2_def ;
     damping_posdef   0.0 0.0 0.0 0.000982 0.000982 0.0001011  ; tuned to 2% log dec on 1st FA/SS/torsion modes (#1, #2, #7)
      begin timoschenko_input;
-      filename ./data/umaine_tower_st.dat;
+      filename ./data/umaine_tower_st_stiffen.dat;
       set 1 1 ; 
     end timoschenko_input;
     begin c2_def;              Definition of centerline (main_body coordinates)
