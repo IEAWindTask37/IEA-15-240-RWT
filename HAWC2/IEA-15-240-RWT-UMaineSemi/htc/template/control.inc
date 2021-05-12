@@ -26,18 +26,18 @@
 ;	  Partial load control parameters
       constant  11 30228800; 		Optimal Cp tracking K factor [Nm/(rad/s)^2], ;
                            ;	 	Qg=K*Omega^2, K=eta*0.5*rho*A*Cp_opt*R^3/lambda_opt^3                     
-      constant  12 63856400; 		Proportional gain of torque controller [Nm/(rad/s)]
-      constant  13 4484240; 		Integral gain of torque controller [Nm/rad]
+      constant  12 0.112427E+09; 		Proportional gain of torque controller [Nm/(rad/s)]
+      constant  13 0.201829E+08; 		Integral gain of torque controller [Nm/rad]
       constant  14 0.0; 			Differential gain of torque controller [Nm/(rad/s^2)]
 ;     Full load control parameters
       constant  15   0;				Generator control switch [1=constant power, 0=constant torque]
       constant  16   0.96119; 		Proportional gain of pitch controller [rad/(rad/s)]
-      constant  17   0.0966293; 	Integral gain of pitch controller [rad/rad]
+      constant  17   0.640241E+00; 	Integral gain of pitch controller [rad/rad]
       constant  18   0.0;		 	Differential gain of pitch controller [rad/(rad/s^2)]
       constant  19   0.4e-8; 		Proportional power error gain [rad/W]
       constant  20   0.4e-8; 		Integral power error gain [rad/(Ws)]
-      constant  21 	 11.17107;		Coefficient of linear term in aerodynamic gain scheduling, KK1 [deg]
-      constant  22 	 780.24765; 	Coefficient of quadratic term in aerodynamic gain scheduling, KK2 [deg^2] &
+      constant  21 	 11.95434;		Coefficient of linear term in aerodynamic gain scheduling, KK1 [deg]
+      constant  22 	 720.25183; 	Coefficient of quadratic term in aerodynamic gain scheduling, KK2 [deg^2] &
 							 ; 		(if zero, KK1 = pitch angle at double gain)
       constant  23   1.5; 			Relative speed for double nonlinear gain [-]
 ;     Cut-in simulation parameters
@@ -123,7 +123,7 @@
 	  constant  80 	  100; 			Derate percentage (eg. 70 means 70% of nominal power)
 	  constant 	81    0.0; 			Moment of inertia of the rotor 
 ; 	  Floating additional control loop
-	  constant 	82   10.59;    		Rated wind speed (Only used when constant 79 = 3 OR constant 91/92/93/94 != 0)
+	  constant 	82    0.0;    		Rated wind speed (Only used when constant 79 = 3 OR constant 91/92/93/94 != 0)
 	  constant 	83    0.0619;		    Gain for the loop mapping from tower velocity to blade pitch [rad/(m/s)]
 	  constant  84    0.0; 			Gain for the loop mapping from tower velocity to GenTorque [Nm/(m/s)]
 	  constant  85   10.0; 			Time to switch on the floating control loop [s]
