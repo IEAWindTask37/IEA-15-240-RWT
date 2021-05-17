@@ -209,7 +209,7 @@ end new_htc_structure;
 [hydro]		gravity 9.80665 ;
 [hydro]		mwl 0.0 ;
 [hydro]		mudlevel 200.0 ;
-[hydro][wave]		water_kinematics_dll wkin_dll.dll waves/[wave_flnm].txt ;
+[hydro][wave]		water_kinematics_dll wkin_dll.dll ./waves/[wave_flnm] ;
 [hydro]	end water_properties;
 [hydro]end hydro;
 ;
