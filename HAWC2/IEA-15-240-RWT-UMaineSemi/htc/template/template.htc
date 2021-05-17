@@ -261,7 +261,7 @@ end dll;
 [output]begin output;
 [output]  filename ./res/[flnm] ;
 [output]  data_format  gtsdf;
-[output]  buffer 100 ;
+[output]  buffer 9999 ;
 [output]  time [ini_time] [sim_time] ;
 ;
 [output]  general time;  
