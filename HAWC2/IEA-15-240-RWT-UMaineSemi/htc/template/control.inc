@@ -108,7 +108,7 @@
       constant  73    0.0; 			Max low-pass filtered tower top acceleration level before initiating safety system alarm (shut-down) [m/s^2] (Default 1.1 x input 46 used if zero)	  
       constant  74    0.0; 			Time constant of 1st order filter on tower top acceleration [1/1P] (Default 1 used if zero)	  
 ;     Pitch deviation monitor parameters	  
-      constant  75 1005020; 		Parameters for pitch deviation monitoring. The format is 1,nnn,mmm 	  
+      constant  75      0; 		Parameters for pitch deviation monitoring. The format is 1,nnn,mmm 	  
                           ; 		where 'nnn' [s] is the period of the moving average and 'mmm' is threshold of the deviation [0.1 deg] (functionality is inactive if value $<$ 1,000,000)	  
 ;     Gear ratio	  
       constant  76    1.0; 			Gear ratio used for the calculation of the LSS rotational speeds and the HSS generator torque reference [-] (Default 1 if zero)	  
@@ -124,7 +124,7 @@
 	  constant 	81    0.0; 			Moment of inertia of the rotor 
 ; 	  Floating additional control loop
 	  constant 	82    0.0;    		Rated wind speed (Only used when constant 79 = 3 OR constant 91/92/93/94 != 0)
-	  constant 	83    0.0619;		    Gain for the loop mapping from tower velocity to blade pitch [rad/(m/s)]
+	  constant 	83    0.05;		    Gain for the loop mapping from tower velocity to blade pitch [rad/(m/s)]
 	  constant  84    0.0; 			Gain for the loop mapping from tower velocity to GenTorque [Nm/(m/s)]
 	  constant  85   10.0; 			Time to switch on the floating control loop [s]
 	  constant  86    0.036; 		Frequency of LP filter [Hz] (Default 0 if filter not used) - chose properly
