@@ -55,6 +55,7 @@ For the monopile variant:
 
     - Made small changes to (WaveHs, WaveTp) to match ontology values
     - Monopile geometry specification is the same as SubDyn and the ontology file, with more accurate thickness profile
+	- Activated ExctnMod by default per [Issue #52](https://github.com/IEAWindTask37/IEA-15-240-RWT/issues/52)
 
  * SubDyn:
 
