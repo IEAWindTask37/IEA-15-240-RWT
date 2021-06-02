@@ -106,7 +106,7 @@ True          PtfmYDOF    - Platform yaw rotation DOF (flag)
 False         Furling     - Read in additional model properties for furling turbine (flag) [must currently be FALSE)
 "unused"      FurlFile    - Name of file containing furling properties (quoted string) [unused when Furling=False]
 ---------------------- TOWER ---------------------------------------------------
-         50   TwrNodes    - Number of tower nodes used for analysis (-)
+         20   TwrNodes    - Number of tower nodes used for analysis (-)
 "IEA-15-240-RWT-UMaineSemi_ElastoDyn_tower.dat"    TwrFile     - Name of file containing tower properties (quoted string)
 ---------------------- OUTPUT --------------------------------------------------
 True         SumPrint    - Print summary data to "<RootName>.sum" (flag)
