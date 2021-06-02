@@ -1,0 +1,53 @@
+general:
+    folder_output: outputs
+    fname_output: tower_output
+design_variables:
+
+  tower:
+    outer_diameter:
+      flag: True
+      lower_bound: 6.5
+      upper_bound: 10.0
+    layer_thickness:
+      flag: True
+      lower_bound: 4e-3
+      upper_bound: 2e-1
+
+merit_figure: tower_mass
+
+constraints:
+  tower:
+    stress:
+      flag: True
+    global_buckling:
+      flag: True
+    shell_buckling:
+      flag: True
+    d_to_t:
+      flag: False #True
+      lower_bound: 50.0
+      upper_bound: 500.0
+    taper:
+      flag: False #True
+      lower_bound: 0.2
+    slope:
+      flag: True
+    frequency_1:
+      flag: True
+      lower_bound: 0.45
+      upper_bound: 0.60
+
+driver:
+    optimization:
+        flag: True         # Flag to enable optimization
+        tol: 1.e-6          # Optimality tolerance
+        max_major_iter: 10    # Maximum number of major design iterations (SNOPT)
+        max_minor_iter: 100   # Maximum number of minor design iterations (SNOPT)
+        max_iter: 100         # Maximum number of iterations (SLSQP)
+        solver: SNOPT         # Optimization solver. Other options are 'SLSQP' - 'CONMIN'
+        step_size: 1.e-6      # Step size for finite differencing
+        form: forward       # Finite differencing mode, either forward or central
+    
+recorder:
+    flag: False              # Flag to activate OpenMDAO recorder
+    file_name: log_opt.sql  # Name of OpenMDAO recorder
