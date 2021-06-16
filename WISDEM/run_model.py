@@ -43,25 +43,25 @@ blade_shape_col = ['Blade Span','Rotor Coordinate [m]',
 bladeDF = pd.DataFrame(data=blade_shape, columns=blade_shape_col)
 
 # Tabular output: Blade Stiffness
-blade_stiff  = np.c_[prob.get_val('re.precomp.z','m'),
-                     prob.get_val('re.A','m**2'),
-                     prob.get_val('re.EA','N'),
-                     prob.get_val('re.EIxx','N*m**2'),
-                     prob.get_val('re.EIyy','N*m**2'),
-                     prob.get_val('re.EIxy','N*m**2'),
-                     prob.get_val('re.GJ','N*m**2'),
-                     prob.get_val('re.rhoA','kg/m'),
-                     prob.get_val('re.rhoJ','kg*m'),
-                     prob.get_val('re.x_ec','mm'),
-                     prob.get_val('re.y_ec','mm'),
-                     prob.get_val('re.x_tc','mm'),
-                     prob.get_val('re.y_tc','mm'),
-                     prob.get_val('re.x_sc','mm'),
-                     prob.get_val('re.y_sc','mm'),
-                     prob.get_val('re.x_cg','mm'),
-                     prob.get_val('re.y_cg','mm'),
-                     prob.get_val('re.precomp.flap_iner','kg/m'),
-                     prob.get_val('re.precomp.edge_iner','kg/m')]
+blade_stiff  = np.c_[prob.get_val('rotorse.r','m'),
+                     prob.get_val('rotorse.A','m**2'),
+                     prob.get_val('rotorse.EA','N'),
+                     prob.get_val('rotorse.EIxx','N*m**2'),
+                     prob.get_val('rotorse.EIyy','N*m**2'),
+                     prob.get_val('rotorse.EIxy','N*m**2'),
+                     prob.get_val('rotorse.GJ','N*m**2'),
+                     prob.get_val('rotorse.rhoA','kg/m'),
+                     prob.get_val('rotorse.rhoJ','kg*m'),
+                     prob.get_val('rotorse.x_ec','mm'),
+                     prob.get_val('rotorse.y_ec','mm'),
+                     prob.get_val('rotorse.re.x_tc','mm'),
+                     prob.get_val('rotorse.re.y_tc','mm'),
+                     prob.get_val('rotorse.re.x_sc','mm'),
+                     prob.get_val('rotorse.re.y_sc','mm'),
+                     prob.get_val('rotorse.re.x_cg','mm'),
+                     prob.get_val('rotorse.re.y_cg','mm'),
+                     prob.get_val('rotorse.re.precomp.flap_iner','kg/m'),
+                     prob.get_val('rotorse.re.precomp.edge_iner','kg/m')]
 blade_stiff_col = ['Blade Span [m]',
                    'Cross-sectional area [m^2]',
                    'Axial stiffness [N]',
@@ -85,19 +85,19 @@ blade_stiff_col = ['Blade Span [m]',
 bladeStiffDF = pd.DataFrame(data=blade_stiff, columns=blade_stiff_col)
 
 # Tabular output: Rotor Performance
-rotor_perf = np.c_[prob.get_val("rp.powercurve.V",'m/s'),
-                   prob.get_val("rp.powercurve.pitch",'deg'),
-                   prob.get_val("rp.powercurve.P",'MW'),
-                   prob.get_val("rp.powercurve.Cp"),
-                   prob.get_val("rp.powercurve.Cp_aero"),
-                   prob.get_val("rp.powercurve.Omega",'rpm'),
-                   prob.get_val("rp.powercurve.Omega",'rad/s')*0.5*prob["assembly.rotor_diameter"],
-                   prob.get_val("rp.powercurve.T",'MN'),
-                   prob.get_val("rp.powercurve.Ct_aero"),
-                   prob.get_val("rp.powercurve.Q",'MN*m'),
-                   prob.get_val("rp.powercurve.Cq_aero"),
-                   prob.get_val("rp.powercurve.M",'MN*m'),
-                   prob.get_val("rp.powercurve.Cm_aero"),
+rotor_perf = np.c_[prob.get_val("rotorse.rp.powercurve.V",'m/s'),
+                   prob.get_val("rotorse.rp.powercurve.pitch",'deg'),
+                   prob.get_val("rotorse.rp.powercurve.P",'MW'),
+                   prob.get_val("rotorse.rp.powercurve.Cp"),
+                   prob.get_val("rotorse.rp.powercurve.Cp_aero"),
+                   prob.get_val("rotorse.rp.powercurve.Omega",'rpm'),
+                   prob.get_val("rotorse.rp.powercurve.Omega",'rad/s')*0.5*prob["assembly.rotor_diameter"],
+                   prob.get_val("rotorse.rp.powercurve.T",'MN'),
+                   prob.get_val("rotorse.rp.powercurve.Ct_aero"),
+                   prob.get_val("rotorse.rp.powercurve.Q",'MN*m'),
+                   prob.get_val("rotorse.rp.powercurve.Cq_aero"),
+                   prob.get_val("rotorse.rp.powercurve.M",'MN*m'),
+                   prob.get_val("rotorse.rp.powercurve.Cm_aero"),
                    ]
 rotor_perf_col = ['Wind [m/s]','Pitch [deg]',
                   'Power [MW]','Power Coefficient [-]','Aero Power Coefficient [-]',
@@ -168,7 +168,7 @@ towDF['Axial stiffness [N]'] = prob['towerse.E'][0] * A
 #    towDF.to_latex(f, index=False)
 
 # Frequency plot
-fn_tower = prob['towerse.post.structural_frequencies'][:2]
+fn_tower = prob['towerse.tower.structural_frequencies'][:2]
 f        = np.linspace(0., 0.5, num=1000)[1:]
 omega    = f*(2.*np.pi)
 
@@ -244,7 +244,7 @@ overview['Rotor orientation'] = 'Upwind' if prob['configuration.upwind'] else 'D
 overview['Number of blades'] = prob['configuration.n_blades']
 overview['Control'] = 'Variable speed, Collective pitch'
 overview['Cut-in wind speed [m/s]'] = prob['control.V_in']
-overview['Rated wind speed [m/s]'] = prob["rp.powercurve.rated_V"]
+overview['Rated wind speed [m/s]'] = prob["rotorse.rp.powercurve.rated_V"]
 overview['Cut-out wind speed [m/s]'] = prob['control.V_out']
 overview['Airfoil series'] = 'FFA-W3'
 overview['Hub height [m]'] = prob['assembly.hub_height']
@@ -260,7 +260,7 @@ overview['Rotor cone angle [deg]'] = prob.get_val('hub.cone','deg')
 overview['Tower top to hub flange height [m]'] = prob['nacelle.distance_tt_hub']
 overview['Generator rated efficiency [%]'] = prob["drivese.generator_efficiency"][-1]
 overview['Blade pre-bend [m]'] = prob['blade.outer_shape_bem.ref_axis'][-1,0]
-overview['Blade mass [t]'] = prob['re.precomp.blade_mass']
+overview['Blade mass [t]'] = prob['rotorse.re.precomp.blade_mass']
 overview['Hub mass [t]'] = prob['drivese.hub_mass']
 overview['Generator mass [t]'] = prob['drivese.generator_mass']
 overview['Nacelle mass [t]'] = prob['drivese.nacelle_mass']
