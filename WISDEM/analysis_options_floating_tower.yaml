@@ -28,13 +28,13 @@ constraints:
       lower_bound: 50.0
       upper_bound: 500.0
     taper:
-      flag: False #True
+      flag: True
       lower_bound: 0.2
     slope:
       flag: True
     frequency_1:
       flag: True
-      lower_bound: 0.45
+      lower_bound: 0.49
       upper_bound: 0.60
 
 driver:

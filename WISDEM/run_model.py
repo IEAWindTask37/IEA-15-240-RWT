@@ -294,8 +294,8 @@ def run_15mw(fname_wt_input):
 
 
 if __name__ == '__main__':
-    #run_15mw( os.path.join(ontology_dir, "IEA-15-240-RWT.yaml") )
-    #run_15mw( os.path.join(ontology_dir, "IEA-15-240-RWT_FineGrid.yaml") )
+    run_15mw( os.path.join(ontology_dir, "IEA-15-240-RWT.yaml") )
+    run_15mw( os.path.join(ontology_dir, "IEA-15-240-RWT_FineGrid.yaml") )
     run_15mw( os.path.join(ontology_dir, "IEA-15-240-RWT_VolturnUS-S.yaml") )
-    #run_15mw( os.path.join(ontology_dir, "IEA-15-240-RWT_VolturnUS-S_FineGrid.yaml") )
+    run_15mw( os.path.join(ontology_dir, "IEA-15-240-RWT_VolturnUS-S_FineGrid.yaml") )
     

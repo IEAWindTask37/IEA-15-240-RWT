@@ -2,6 +2,7 @@
 import os
 from wisdem import run_wisdem
 import wisdem.postprocessing.compare_designs as compare_designs 
+import wisdem.postprocessing.wisdem_get as getter
 
 
 # File management
@@ -25,14 +26,14 @@ z = 0.5 * (wt_opt["floatingse.tower.z_full"][:-1] + wt_opt["floatingse.tower.z_f
 print("zs =", wt_opt["floatingse.tower.z_full"])
 print("ds =", wt_opt["floatingse.tower.d_full"])
 print("ts =", wt_opt["floatingse.tower.t_full"])
-print("mass (kg) =", wt_opt["floatingse.tower.tower_mass"])
-print("cg (m) =", wt_opt["floatingse.tower.center_of_mass"])
+print("mass (kg) =", getter.get_tower_mass(wt_opt))
+print("cg (m) =", getter.get_tower_cg(wt_opt)[-1])
 print("d:t constraint =", wt_opt["floatingse.tower.constr_d_to_t"])
 print("taper ratio constraint =", wt_opt["floatingse.tower.constr_taper"])
-print("freq (Hz) =", wt_opt["floatingse.tower.tower_frequencies"])
-print("Fore-aft mode shapes =", wt_opt["floatingse.tower.fore_aft_modes"])
-print("Side-side mode shapes =", wt_opt["floatingse.tower.side_side_modes"])
-print("top_deflection1 (m) =", wt_opt["floatingse.tower.top_deflection"])
-print("stress1 =", wt_opt["floatingse.tower_stress"])
-print("GL buckling =", wt_opt["floatingse.tower_global_buckling"])
-print("Shell buckling =", wt_opt["floatingse.tower_shell_buckling"])
+print("freq (Hz) =", getter.get_tower_freqs(wt_opt))
+print("Fore-aft mode shapes =", wt_opt["floatingse.tower_fore_aft_modes"])
+print("Side-side mode shapes =", wt_opt["floatingse.tower_side_side_modes"])
+ind = wt_opt["floatingse.constr_tower_stress"] > -999
+print("stress1 =", wt_opt["floatingse.constr_tower_stress"][ind])
+print("GL buckling =", wt_opt["floatingse.constr_tower_global_buckling"][ind])
+print("Shell buckling =", wt_opt["floatingse.constr_tower_shell_buckling"][ind])
