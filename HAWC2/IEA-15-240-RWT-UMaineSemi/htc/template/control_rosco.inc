@@ -9,8 +9,8 @@
      begin init;
        constant 1 0.01 ; 	time step [s]
        constant 2 1.0 ; 	Generator exchange ratio
-       constant 3 0.0108 ;  P_loss/Pe_nom at   0%Pe -- scaled from NREL 5 MW
-       constant 4 0.0204 ;  P_loss/Pe_nom at  50%Pe -- scaled from NREL 5 MW
+       constant 3 0.0000 ;  P_loss/Pe_nom at   0%Pe -- scaled from NREL 5 MW
+       constant 4 0.0345 ;  P_loss/Pe_nom at  50%Pe -- scaled from NREL 5 MW
        constant 5 0.0345 ; 	P_loss/Pe_nom at 100%Pe -- generator full load efficiency is 96.55% 
        constant 6 15000 ; 	Pe_nom [kW]
      end init;
@@ -33,7 +33,7 @@
     end output;
 ;
     begin actions;
-      body moment_ext shaft 1 3;
+      mbdy moment_int shaft 1 3 shaft connector 2;
     end actions;
    end type2_dll;
 ;
