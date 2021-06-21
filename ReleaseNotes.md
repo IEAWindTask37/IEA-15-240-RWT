@@ -20,6 +20,10 @@ This update to the IEA Wind 15-MW Reference Wind Turbine attempts to address som
 
  * The nacelle component mass properties and dimensions were approximate in the report and then inconsistently captured between the various model input decks.  Furthermore Table 5-1 in the report had values that could do be replicated and did not add up (called out in [Issue #30](https://github.com/IEAWindTask37/IEA-15-240-RWT/issues/30).  With the new capabilities in WISDEM's DrivetrainSE model, this has been rectified and the nacelle mass properties tab in the IEA-15-240-RWT_tabular.xlsx file.
 
+ * The floating tower design demonstrated resonance excitation from the 3P rotor mode in both OpenFAST and HAWC2, suggesting that there was an error in the original design optimization script.  The floating tower has been redesigned to be much stiffer, resulting in a sharp increase in tower mass around the same tower center of gravity.  This was also called out in the [Wiki FAQ](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)).
+
+ * Draft version of the ontology for the UMaine Volturn-S semisubmersible design variant is now included in the `WT_Ontology` directory.  This should be considered a work in-progress as there is still extensive work to do to verify how well the description matches the original intent of the design report.
+
  * The composite material properties, especially for carbon fiber reinforced carbon (CFRC) composites, are known to be out of date and inconsistent with modern pultrusion manufacturing methods.  A future release will likely update these properties and re-optimize the spar cap thickness along the blade.
 
  * Bug fixes and other improvements in composite material representation in the WISDEM model has resulted in a slight growth in blade mass compared to the original report (68t vs 65t). This was also called out in the [Wiki FAQ](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)).
@@ -80,6 +84,7 @@ For the UMaine Volturn-S floating variant:
 
  * RotSpeed set to 7.55, the rated speed
  * Reset initial platform heave, PtfmHeave, to keep the same MSL point on the platform with the nacelle mass updates
+ * Redesigned the tower to be significantly stiffer giving a first fore-aft/side-side frequency around 0.45Hz.
 
 Also added input files that invoke OLAF, the OpenFAST vortex particle method for aerodynamics (monopile variant only)
 
@@ -96,6 +101,8 @@ Three WISDEM scripts remain:
  * `run_model.py` : WISDEM analysis (no design optimization) of the IEA Wind 15-MW RWT.  Uses the WindIO ontology file directly as input, along with `modeling_options.yaml` and `analysis_options.yaml`. Script also includes automated plotting of blade geometry, rotor performance, and tower geometry.  The tabular data Excel sheet is also generated.
 
  * `optimize_monopile_tower.py` : Script that can be used to optimize the tower and monopile diameter and thickness schedule.  Uses the WindIO ontology file directly as input, along with `modeling_options_monopile.yaml` and `analysis_options_monopile.yaml`.
+
+ * `optimize_floating_tower.py` : Script that can be used to optimize the tower diameter and thickness schedule on the Volturn-S floating platform.  Uses the Volturn-S WindIO ontology file directly as input, along with `modeling_options_floating_tower.yaml` and `analysis_options_floating_tower.yaml`.
 
  * `optimize_generator.py` : Script that can be used to optimize the permanent magnet synchronous generator.
 

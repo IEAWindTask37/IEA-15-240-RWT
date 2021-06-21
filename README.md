@@ -1,4 +1,4 @@
-# IEA-15-240-RWT
+# IEA-15-240-RWT v1.1 (Revised July 2021)
 This repository contains the model data for the 15-MW offshore reference turbine developed within IEA Wind Task 37.
 
 The documentation for the turbine is accessible here: https://www.nrel.gov/docs/fy20osti/75698.pdf
