@@ -4,7 +4,7 @@ The CAD files provided here are:
 
  * `IEA-15-240-RWT_Solidworks.zip` : Original Solidworks CAD model of the full monopile variant.  Drivetrain geometry and material properties are likely incorrect.  Blade material properties may be out of date.
  
- * `IEA-15-240-RWT_blade.stl` : High resolution blade outer geometry STL file produced by the  [WindIO2CAD](https://github.com/IEAWindTask37/windio2cad) project.  No internal structure provided.
+ * `OpenSCAD` : Outer geometry STL files for the blade, tower, monopile, and floating platform produced by the  [WindIO2CAD](https://github.com/IEAWindTask37/windio2cad) project via [OpenSCAD](https://openscad.org/).  No internal structure provided.
 
  * `IEA-15-240-RWT_Ansys` : Quick attempt to provide structural analysis files for the blade.  Feedback from users has been that this is not accurate or sufficient for most analysis needs.  Kept for archival purposes.
 
