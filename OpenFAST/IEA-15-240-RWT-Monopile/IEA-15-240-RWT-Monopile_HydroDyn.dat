@@ -45,29 +45,33 @@ False            WvSumQTF       - Full summation-frequency  2nd-order wave kinem
              0   CurrDIDir      - Depth-independent current heading direction    (degrees) [used only when CurrMod=1]
 ---------------------- FLOATING PLATFORM --------------------------------------- [unused with WaveMod=6]
              0   PotMod         - Potential-flow model {0: none=no potential flow, 1: frequency-to-time-domain transforms based on WAMIT output, 2: fluid-impulse theory (FIT)} (switch)
+	     0   ExctnMod       - Wave Excitation model {0: None, 1: DFT, 2: state-space} (switch) [only used when PotMod=1; STATE-SPACE REQUIRES *.ssexctn INPUT FILE]
+	     0   RdtnMod        - Radiation memory-effect model {0: no memory-effect calculation, 1: convolution, 2: state-space} (switch) [only used when PotMod=1; STATE-SPACE REQUIRES *.ss INPUT FILE]
+	   60.0  RdtnTMax       - Analysis time for wave radiation kernel calculations (sec) [only used when PotMod=1; determines RdtnDOmega=Pi/RdtnTMax in the cosine transform; MAKE SURE THIS IS LONG ENOUGH FOR THE RADIATION IMPULSE RESPONSE FUNCTIONS TO DECAY TO NEAR-ZERO FOR THE GIVEN PLATFORM!]
+	   0.0   RdtnDT         - Time step for wave radiation kernel calculations (sec) [only used when PotMod=1; DT<=RdtnDT<=0.1 recommended; determines RdtnOmegaMax=Pi/RdtnDT in the cosine transform]
+	     1   NBody          - Number of WAMIT bodies to be used (-) [>=1; only used when PotMod=1. If NBodyMod=1, the WAMIT data contains a vector of size 6*NBody x 1 and matrices of size 6*NBody x 6*NBody; if NBodyMod>1, there are NBody sets of WAMIT data each with a vector of size 6 x 1 and matrices of size 6 x 6]
+	     1   NBodyMod       - Body coupling model {1: include coupling terms between each body and NBody in HydroDyn equals NBODY in WAMIT, 2: neglect coupling terms between each body and NBODY=1 with XBODY=0 in WAMIT, 3: Neglect coupling terms between each body and NBODY=1 with XBODY=/0 in WAMIT} (switch) [only used when PotMod=1]
 "unused"         PotFile        - Root name of potential-flow model data; WAMIT output files containing the linear, nondimensionalized, hydrostatic restoring matrix (.hst), frequency-dependent hydrodynamic added mass matrix and damping matrix (.1), and frequency- and direction-dependent wave excitation force vector per unit wave amplitude (.3) (quoted string) [MAKE SURE THE FREQUENCIES INHERENT IN THESE WAMIT FILES SPAN THE PHYSICALLY-SIGNIFICANT RANGE OF FREQUENCIES FOR THE GIVEN PLATFORM; THEY MUST CONTAIN THE ZERO- AND INFINITE-FREQUENCY LIMITS!]
              1   WAMITULEN      - Characteristic body length scale used to redimensionalize WAMIT output (meters) [only used when PotMod=1]
-             0   PtfmVol0       - Displaced volume of water when the platform is in its undisplaced position (m^3) [only used when PotMod=1; USE THE SAME VALUE COMPUTED BY WAMIT AS OUTPUT IN THE .OUT FILE!]
-             0   PtfmCOBxt      - The xt offset of the center of buoyancy (COB) from the platform reference point (meters)  [only used when PotMod=1]
-             0   PtfmCOByt      - The yt offset of the center of buoyancy (COB) from the platform reference point (meters)  [only used when PotMod=1]
-             0   ExctnMod       - Wave Excitation model {0: None, 1: DFT, 2: state-space} (switch) [only used when PotMod=1; STATE-SPACE REQUIRES *.ssexctn INPUT FILE]
-             1   RdtnMod        - Radiation memory-effect model {0: no memory-effect calculation, 1: convolution, 2: state-space} (switch) [only used when PotMod=1; STATE-SPACE REQUIRES *.ss INPUT FILE]
-            60   RdtnTMax       - Analysis time for wave radiation kernel calculations (sec) [only used when PotMod=1; determines RdtnDOmega=Pi/RdtnTMax in the cosine transform; MAKE SURE THIS IS LONG ENOUGH FOR THE RADIATION IMPULSE RESPONSE FUNCTIONS TO DECAY TO NEAR-ZERO FOR THE GIVEN PLATFORM!]
-         0.005   RdtnDT         - Time step for wave radiation kernel calculations (sec) [only used when PotMod=1; DT<=RdtnDT<=0.1 recommended; determines RdtnOmegaMax=Pi/RdtnDT in the cosine transform]
+	   0.0   PtfmRefxt      - The xt offset of the body reference point(s) from (0,0,0) (meters) [1 to NBody] [only used when PotMod=1]
+	   0.0   PtfmRefyt      - The yt offset of the body reference point(s) from (0,0,0) (meters) [1 to NBody] [only used when PotMod=1]
+	   0.0   PtfmRefzt      - The zt offset of the body reference point(s) from (0,0,0) (meters) [1 to NBody] [only used when PotMod=1. If NBodyMod=2,PtfmRefzt=0.0]
+	   0.0   PtfmRefztRot    - The rotation about zt of the body reference frame(s) from xt/yt (degrees) [1 to NBody] [only used when PotMod=1]
+	   0.0   PtfmVol0       - Displaced volume of water when the platform is in its undisplaced position (m^3) [only used when PotMod=1; USE THE SAME VALUE COMPUTED BY WAMIT AS OUTPUT IN THE .OUT FILE!]
+           0.0   PtfmCOBxt      - The xt offset of the center of buoyancy (COB) from the platform reference point (meters)  [only used when PotMod=1]
+           0.0   PtfmCOByt      - The yt offset of the center of buoyancy (COB) from the platform reference point (meters)  [only used when PotMod=1]
 ---------------------- 2ND-ORDER FLOATING PLATFORM FORCES ---------------------- [unused with WaveMod=0 or 6, or PotMod=0 or 2]
              0   MnDrift        - Mean-drift 2nd-order forces computed                                       {0: None; [7, 8, 9, 10, 11, or 12]: WAMIT file to use} [Only one of MnDrift, NewmanApp, or DiffQTF can be non-zero]
              0   NewmanApp      - Mean- and slow-drift 2nd-order forces computed with Newman's approximation {0: None; [7, 8, 9, 10, 11, or 12]: WAMIT file to use} [Only one of MnDrift, NewmanApp, or DiffQTF can be non-zero. Used only when WaveDirMod=0]
              0   DiffQTF        - Full difference-frequency 2nd-order forces computed with full QTF          {0: None; [10, 11, or 12]: WAMIT file to use}          [Only one of MnDrift, NewmanApp, or DiffQTF can be non-zero]
              0   SumQTF         - Full summation -frequency 2nd-order forces computed with full QTF          {0: None; [10, 11, or 12]: WAMIT file to use}
----------------------- FLOATING PLATFORM FORCE FLAGS  -------------------------- [unused with WaveMod=6]
-True             PtfmSgF        - Platform horizontal surge translation force (flag) or DEFAULT
-True             PtfmSwF        - Platform horizontal sway translation force (flag) or DEFAULT
-True             PtfmHvF        - Platform vertical heave translation force (flag) or DEFAULT
-True             PtfmRF         - Platform roll tilt rotation force (flag) or DEFAULT
-True             PtfmPF         - Platform pitch tilt rotation force (flag) or DEFAULT
-True             PtfmYF         - Platform yaw rotation force (flag) or DEFAULT
 ---------------------- PLATFORM ADDITIONAL STIFFNESS AND DAMPING  --------------
-             0             0             0             0             0             0   AddF0    - Additional preload (N, N-m)
+           0.0   AddF0    - Additional preload (N, N-m) [If NBodyMod=1, one size 6*NBody x 1 vector; if NBodyMod>1, NBody size 6 x 1 vectors]
+           0.0   
+           0.0   
+           0.0   
+           0.0   
+           0.0   
              0             0             0             0             0             0   AddCLin  - Additional linear stiffness (N/m, N/rad, N-m/m, N-m/rad)
              0             0             0             0             0             0
              0             0             0             0             0             0
@@ -101,7 +105,7 @@ JointID   Jointxi     Jointyi     Jointzi  JointAxID   JointOvrlp   [JointOvrlp=
    4      0.00000     0.00000   -15.0000       1            0
    5      0.00000     0.00000   -10.0000       1            0
    6      0.00000     0.00000    -5.0000       1            0
-   7      0.00000     0.00000     0.0000       1            0
+   7      0.00000     0.00000     0.0100       1            0
    8      0.00000     0.00000     5.0000       1            0
    9      0.00000     0.00000    10.0000       1            0
   10      0.00000     0.00000    15.0000       1            0
@@ -119,17 +123,17 @@ PropSetID    PropD         PropThck
    8        10.0            0.042242
    9        10.0            0.041058
 ---------------------- SIMPLE HYDRODYNAMIC COEFFICIENTS (model 1) --------------
-     SimplCd    SimplCdMG    SimplCa    SimplCaMG    SimplCp    SimplCpMG   SimplAxCa  SimplAxCaMG  SimplAxCp   SimplAxCpMG
-       (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)
-       1.00        1.00        1.00        1.00        1.00        1.00        1.00        1.00        1.00        1.00 
+  SimplCd    SimplCdMG    SimplCa    SimplCaMG    SimplCp    SimplCpMG   SimplAxCd  SimplAxCdMG  SimplAxCa  SimplAxCaMG  SimplAxCp  SimplAxCpMG
+    (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)    
+    1.0         1.0         1.0         1.0         1.0         1.0         0.0         0.0         1.0         1.0         1.0         1.0    
 ---------------------- DEPTH-BASED HYDRODYNAMIC COEFFICIENTS (model 2) ---------
              0   NCoefDpth       - Number of depth-dependent coefficients (-)
-Dpth      DpthCd   DpthCdMG   DpthCa   DpthCaMG       DpthCp   DpthCpMG   DpthAxCa   DpthAxCaMG       DpthAxCp   DpthAxCpMG
-(m)       (-)      (-)        (-)      (-)            (-)      (-)          (-)        (-)              (-)         (-)
+   Dpth       DpthCd     DpthCdMG     DpthCa     DpthCaMG     DpthCp     DpthCpMG    DpthAxCd   DpthAxCdMG   DpthAxCa   DpthAxCaMG   DpthAxCp   DpthAxCpMG 
+    (m)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)    
 ---------------------- MEMBER-BASED HYDRODYNAMIC COEFFICIENTS (model 3) --------
-             0   NCoefMembers       - Number of member-based coefficients (-)
-MemberID    MemberCd1     MemberCd2    MemberCdMG1   MemberCdMG2    MemberCa1     MemberCa2    MemberCaMG1   MemberCaMG2    MemberCp1     MemberCp2    MemberCpMG1   MemberCpMG2   MemberAxCa1   MemberAxCa2  MemberAxCaMG1 MemberAxCaMG2  MemberAxCp1  MemberAxCp2   MemberAxCpMG1   MemberAxCpMG2
-   (-)         (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)           (-)
+0           NCoefMembers - Number of member-based coefficients (-)
+MemberID_HydC  MemberCd1   MemberCd2  MemberCdMG1 MemberCdMG2  MemberCa1   MemberCa2  MemberCaMG1 MemberCaMG2  MemberCp1   MemberCp2  MemberCpMG1 MemberCpMG2 MemberAxCd1 MemberAxCd2 MemberAxCdMG1 MemberAxCdMG2 MemberAxCa1 MemberAxCa2 MemberAxCaMG1 MemberAxCaMG2 MemberAxCp1 MemberAxCp2 MemberAxCpMG1 MemberAxCpMG2
+    (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)    
 -------------------- MEMBERS -------------------------------------------------
              9   NMembers       - Number of members (-)
 MemberID  MJointID1  MJointID2  MPropSetID1  MPropSetID2  MDivSize   MCoefMod  PropPot   [MCoefMod=1: use simple coeff table, 2: use depth-based coeff table, 3: use member-based coeff table] [ PropPot/=0 if member is modeled with potential-flow theory]

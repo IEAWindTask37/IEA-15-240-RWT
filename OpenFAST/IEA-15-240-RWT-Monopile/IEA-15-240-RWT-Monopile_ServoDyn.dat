@@ -57,11 +57,15 @@ True                   GenTiStp    - Method to stop the generator {T: timed usin
 9999.9                 TYawManS    - Time to start override yaw maneuver and end standard yaw control (s)
 0.25                   YawManRat   - Yaw maneuver rate (in absolute value) (deg/s)
 0.0                    NacYawF     - Final yaw angle for override yaw maneuvers (degrees)
----------------------- TUNED MASS DAMPER ---------------------------------------
-False                  CompNTMD    - Compute nacelle tuned mass damper {true/false} (flag)
-"unused"               NTMDfile    - Name of the file for nacelle tuned mass damper (quoted string) [unused when CompNTMD is false]
-False                  CompTTMD    - Compute tower tuned mass damper {true/false} (flag)
-"unused"               TTMDfile    - Name of the file for tower tuned mass damper (quoted string) [unused when CompTTMD is false]
+---------------------- STRUCTURAL CONTROL ---------------------------------------
+0                      NumBStC     - Number of blade structural controllers (integer)
+"unused"               BStCfiles   - Name of the file for blade tuned mass damper (quoted string) [unused when CompNTMD is false]
+0                      NumNStC     - Number of nacelle structural controllers (integer)
+"unused"               NStCfiles   - Name of the file for nacelle tuned mass damper (quoted string) [unused when CompNTMD is false]
+0                      NumTStC     - Number of tower structural controllers (integer)
+"unused"               TStCfiles   - Name of the file for tower tuned mass damper (quoted string) [unused when CompNTMD is false]
+0                      NumSStC     - Number of sbustructure structural controllers (integer)
+"unused"               SStCfiles   - Name of the file for sbustructure tuned mass damper (quoted string) [unused when CompNTMD is false]
 ---------------------- BLADED INTERFACE ---------------------------------------- [used only with Bladed Interface]
 "../IEA-15-240-RWT/ServoData/libdiscon.dylib"  DLL_FileName - Name/location of the dynamic library {.dll [Windows] or .so [Linux]} in the Bladed-DLL format (-) [used only with Bladed Interface]
 "DISCON-Monopile.IN"   DLL_InFile  - Name of input file sent to the DLL (-) [used only with Bladed Interface]
