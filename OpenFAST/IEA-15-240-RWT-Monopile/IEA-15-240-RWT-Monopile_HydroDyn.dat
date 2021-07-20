@@ -99,29 +99,13 @@ AxCoefID  AxCd     AxCa     AxCp
              10   NJoints        - Number of joints (-)   [must be exactly 0 or at least 2]
 JointID   Jointxi     Jointyi     Jointzi  JointAxID   JointOvrlp   [JointOvrlp= 0: do nothing at joint, 1: eliminate overlaps by calculating super member]
    (-)     (m)         (m)         (m)        (-)       (switch)
-   1      0.00000     0.00000   -30.0000       1            0
-   2      0.00000     0.00000   -25.0000       1            0
-   3      0.00000     0.00000   -20.0000       1            0
-   4      0.00000     0.00000   -15.0000       1            0
-   5      0.00000     0.00000   -10.0000       1            0
-   6      0.00000     0.00000    -5.0000       1            0
-   7      0.00000     0.00000     0.0100       1            0
-   8      0.00000     0.00000     5.0000       1            0
-   9      0.00000     0.00000    10.0000       1            0
-  10      0.00000     0.00000    15.0000       1            0
+   1      0.00000     0.00000   -30.1000       1            0
+   2      0.00000     0.00000    15.0000       1            0
 ---------------------- MEMBER CROSS-SECTION PROPERTIES -------------------------
              9   NPropSets      - Number of member property sets (-)
 PropSetID    PropD         PropThck
    (-)        (m)            (m)
    1        10.0            0.055341
-   2        10.0            0.053449
-   3        10.0            0.051509
-   4        10.0            0.049527
-   5        10.0            0.047517
-   6        10.0            0.045517
-   7        10.0            0.043527
-   8        10.0            0.042242
-   9        10.0            0.041058
 ---------------------- SIMPLE HYDRODYNAMIC COEFFICIENTS (model 1) --------------
   SimplCd    SimplCdMG    SimplCa    SimplCaMG    SimplCp    SimplCpMG   SimplAxCd  SimplAxCdMG  SimplAxCa  SimplAxCaMG  SimplAxCp  SimplAxCpMG
     (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)    
@@ -139,14 +123,6 @@ MemberID_HydC  MemberCd1   MemberCd2  MemberCdMG1 MemberCdMG2  MemberCa1   Membe
 MemberID  MJointID1  MJointID2  MPropSetID1  MPropSetID2  MDivSize   MCoefMod  PropPot   [MCoefMod=1: use simple coeff table, 2: use depth-based coeff table, 3: use member-based coeff table] [ PropPot/=0 if member is modeled with potential-flow theory]
   (-)        (-)        (-)         (-)          (-)        (m)      (switch)   (flag)
     1         1          2           1            1         0.5          1         FALSE   
-    2         2          3           2            2         0.5          1         FALSE   
-    3         3          4           3            3         0.5          1         FALSE   
-    4         4          5           4            4         0.5          1         FALSE   
-    5         5          6           5            5         0.5          1         FALSE   
-    6         6          7           6            6         0.5          1         FALSE   
-    7         7          8           7            7         0.5          1         FALSE   
-    8         8          9           8            8         0.5          1         FALSE   
-    9         9         10           9            9         0.5          1         FALSE   
 ---------------------- FILLED MEMBERS ------------------------------------------
              0   NFillGroups     - Number of filled member groups (-) [If FillDens = DEFAULT, then FillDens = WtrDens; FillFSLoc is related to MSL2SWL]
 FillNumM FillMList             FillFSLoc     FillDens
@@ -160,8 +136,8 @@ MGDpth     MGThck       MGDens
 MemberID   NOutLoc    NodeLocs [NOutLoc < 10; node locations are normalized distance from the start of the member, and must be >=0 and <= 1] [unused if NMOutputs=0]
   (-)        (-)        (-)
 ---------------------- JOINT OUTPUT LIST ---------------------------------------
-             0   NJOutputs      - Number of joint outputs [Must be < 10]
-   0           JOutLst        - List of JointIDs which are to be output (-)[unused if NJOutputs=0]
+             2   NJOutputs      - Number of joint outputs [Must be < 10]
+   1,2           JOutLst        - List of JointIDs which are to be output (-)[unused if NJOutputs=0]
 ---------------------- OUTPUT --------------------------------------------------
 True             HDSum          - Output a summary file [flag]
 False            OutAll         - Output all user-specified member and joint loads (only at each member end, not interior locations) [flag]
