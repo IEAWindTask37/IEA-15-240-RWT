@@ -677,6 +677,7 @@ materials:
       Xc: 450.e+006
       S: 0
       Xy: 345.e+6
+      m: 3
       unit_cost: 0.7
    -  name: steel_drive
       description: Steel of the drivetrain ASTM 4140 40Cr1Mo28
@@ -694,6 +695,7 @@ materials:
       Xc: 814.e+006
       S: 0
       Xy: 485.e+6
+      m: 3
       unit_cost: 0.9
    -  name: cast_iron
       description: Cast iron for hub and nacelle components
@@ -711,6 +713,7 @@ materials:
       Xc: 310.e+006
       S: 0
       Xy: 265.e+6
+      m: 3
       unit_cost: 0.5
    -  name: glass_uni
       description: Vectorply E-LT-5500, Epikote MGS RIMR 135/Epicure MGS RIMH 1366 epoxy
@@ -723,6 +726,7 @@ materials:
       Xt: [6.092E8, 3.81E7, 1.529E7]
       Xc: [4.7471E8, 1.1264E8, 1.1322E8]
       S: [1.891E7, 1.724E7, 1.316E7]
+      m: 10
       GIc: 303
       GIIc: 3446
       alp0: 53
@@ -743,6 +747,7 @@ materials:
       Xt: [1546.e6, 0.0, 0.0]
       Xc: [1047.e6, 0.0, 0.0]
       S: [0.0, 0.0, 0.0]
+      m: 16.1
       GIc: 0.0
       GIIc: 0.0
       alp0: 0.0
@@ -765,6 +770,7 @@ materials:
       Xt: [4.29E7, 4.26E7, 1.53E7]
       Xc: [7.07E7, 7.07E7, 1.132E8]
       S: [1.034E8, 1.72E7, 1.32E7]
+      m: 10
       GIc: 303
       GIIc: 3446
       alp0: 53
@@ -788,6 +794,7 @@ materials:
       Xt: [3.96E8, 7.64E7, 1.53E7]
       Xc: [4.489E8, 1.747E8, 1.132E8]
       S: [1.034E8, 1.72E7, 1.32E7]
+      m: 10
       GIc: 303
       GIIc: 3446
       alp0: 53
