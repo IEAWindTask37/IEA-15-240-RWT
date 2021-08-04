@@ -34,7 +34,7 @@ We also encourage the broader wind community to submit design updates either thr
 
 ## Citations
 
-For a list of academic papers that use or cite this turbine, please see [here](https://scholar.google.com/scholar?cites=11739673662820715884&as_sdt=4005&sciodt=0,6&hl=en) and [here]().
+For a list of academic papers that use or cite this turbine, please see [here](https://scholar.google.com/scholar?cites=11739673662820715884&as_sdt=4005&sciodt=0,6&hl=en) and [here](https://scholar.google.com/scholar?cites=17665986740213390479&as_sdt=4005&sciodt=0,6&hl=en).
 
 If you use this model in your research or publications, please cite the appropriate report as:
 
