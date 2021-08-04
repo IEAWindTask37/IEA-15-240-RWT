@@ -2,9 +2,9 @@
 IEA 15 MW Offshore Reference Turbine
 ---------------------- BLADE PARAMETERS ----------------------------------------
 50                     NBlInpSt    - Number of blade input stations (-)
-3.0                    BldFlDmp1   - Blade flap mode #1 structural damping in percent of critical (%)
-3.0                    BldFlDmp2   - Blade flap mode #2 structural damping in percent of critical (%)
-3.0                    BldEdDmp1   - Blade edge mode #1 structural damping in percent of critical (%)
+0.48                   BldFlDmp1   - Blade flap mode #1 structural damping in percent of critical (%)
+0.48                   BldFlDmp2   - Blade flap mode #2 structural damping in percent of critical (%)
+0.48                   BldEdDmp1   - Blade edge mode #1 structural damping in percent of critical (%)
 ---------------------- BLADE ADJUSTMENT FACTORS --------------------------------
 1.0                    FlStTunr1   - Blade flapwise modal stiffness tuner, 1st mode (-)
 1.0                    FlStTunr2   - Blade flapwise modal stiffness tuner, 2nd mode (-)
