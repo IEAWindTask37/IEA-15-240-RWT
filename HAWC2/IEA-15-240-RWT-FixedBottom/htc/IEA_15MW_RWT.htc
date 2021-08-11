@@ -382,7 +382,7 @@ begin dll;
 								; from a file named 'wptable.n', where n=int(theta_min)
       constant   6 90.0 ; Maximum pitch angle [deg]
       constant   7 2.0 ; Maximum pitch velocity operation [deg/s]
-      constant   8 1.0081 ; Frequency of generator speed filter [Hz]
+      constant   8 0.15915 ; Frequency of generator speed filter [Hz]
       constant   9 0.7 ; Damping ratio of speed filter [-]
       constant  10   1.01   	; Frequency of free-free DT torsion mode [Hz], if zero no notch filter used
       ; Partial load control parameters
