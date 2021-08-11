@@ -27,10 +27,10 @@ def read_elastodyn_dat(path):
     
 
 def test_openfast_hawc2_match():
-    """compare a series of values in the monopile elastodyn and hawc2 models"""
+    """compare a series of values in the monopile elastodyn and fixed-bottom hawc2 models"""
 
     ed_path = './OpenFAST/IEA-15-240-RWT-Monopile/IEA-15-240-RWT-Monopile_ElastoDyn.dat'
-    h2_path = './HAWC2/htc/IEA_15MW_RWT.htc'
+    h2_path = './HAWC2/IEA-15-240-RWT-FixedBottom/htc/IEA_15MW_RWT.htc'
     
     ed_dict = read_elastodyn_dat(ed_path)
     htc = HTCFile(h2_path)
