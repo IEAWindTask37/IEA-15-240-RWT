@@ -40,7 +40,7 @@ begin new_htc_structure;
       sec	8	0	0	-105.0	0	;
       sec	9	0	0	-120.0	0	;
       sec	10	0	0	-135.0	0	;
-      sec	11	0	0	-144.495	0	;	  
+      sec	11	0	0	-144.386	0	;	  
      end c2_def ;
     end main_body;
 ;
@@ -50,8 +50,8 @@ begin new_htc_structure;
     nbodies     1 ;
     node_distribution     c2_def ;
     damping_posdef  0.0  0.0  0.0  7.00E-04  7.00E-04  7.00E-04  ;   dummy values (stiff body)
-	concentrated_mass  1  0.00  0.00 0.00  1.000e+05  0.00  0.00  0.00	;  yaw system
-	concentrated_mass  1  0.00  -4.688  -4.240  5.309e+05  7.674778e+06  1.055686e+07  8.127143e+06	;  nacelle: NR+R mass; NR inertia
+	concentrated_mass  1  0.00  0.00 0.00  28280  0.00  0.00  0.00	;  yaw system
+	concentrated_mass  1  0.00  -4.720  -4.275  645370  7.674778e+06  1.055686e+07  8.127143e+06	;  nacelle: NR+R mass; NR inertia
 	begin timoschenko_input;
       filename ./data/IEA_15MW_RWT_Towertop_st.dat ;
       set 1 1 ;                
@@ -86,8 +86,8 @@ begin new_htc_structure;
     nbodies     1 ;
     node_distribution     c2_def ;
 	damping_posdef  0.0 0.0 0.0 4.65E-04  4.65E-04  3.078839e-04 ;  Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
-    concentrated_mass  1  0.0 0.0 0.0 0.0 0.0 0.0 3.222631e+06	;	generator inertia about shaft
-    concentrated_mass  2  0.0 0.0 0.0 1.90000e+05 0.0 0.0 1.373471e+06	;	hub mass/inertia;
+    concentrated_mass  1  0.0 0.0 0.0 0.0 0.0 0.0 1836784	;	generator inertia about shaft
+    concentrated_mass  2  0.0 0.0 0.0 73376 0.0 0.0 1038341	;	hub mass/inertia;
 	begin timoschenko_input;
       filename ./data/IEA_15MW_RWT_Shaft_st.dat ;
       set 1 1 ;
@@ -112,7 +112,7 @@ begin new_htc_structure;
     begin c2_def;
       nsec 2;
       sec 1 0.0 0.0 0.0 0.0 ; x,y,z,twist
-      sec 2 0.0 0.0 3.0 0.0 ; 
+      sec 2 0.0 0.0 3.97 0.0 ; 
     end c2_def ;
   end main_body;
 ;
