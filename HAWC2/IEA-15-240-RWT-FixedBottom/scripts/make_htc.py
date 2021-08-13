@@ -20,7 +20,7 @@ kw = dict(cut_in=3, cut_out=25, dt=39, tstart=220,  # step parameters
           n_wsp=45, gen_min=5.000011692174984, gen_max=7.559987120819503,  # hawcstab2 parameters
           gbr=1, pitch_min=0, opt_lambda=9, rate_pow=15e3, gen_eff=0.9655,  # hawcstab2 parameters
           p1_f=0.05, p1_z=0.7, p2_f=0.03, p2_z=0.7, gs=2, constant_power=0,  # hawcstab2 parameters
-          oper_dat='./data/operation_fpm.dat')  # hawcstab2 parameters
+          oper_dat='./data/operation_BD_coarse.dat')  # hawcstab2 parameters
 
 
 if __name__ == '__main__':
