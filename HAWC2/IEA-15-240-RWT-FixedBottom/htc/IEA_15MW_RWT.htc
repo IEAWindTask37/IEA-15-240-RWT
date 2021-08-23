@@ -29,7 +29,7 @@ begin new_htc_structure;
       set 1 1 ; 
     end timoschenko_input;
     begin c2_def;              Definition of centerline (main_body coordinates)
-      nsec 11;
+      nsec 10;
       sec	1	0	0	0.00	0	;  x,y,z,twist
       sec	2	0	0	-15.0	0	;
       sec	3	0	0	-30.0	0	;
@@ -39,8 +39,7 @@ begin new_htc_structure;
       sec	7	0	0	-90.0	0	;
       sec	8	0	0	-105.0	0	;
       sec	9	0	0	-120.0	0	;
-      sec	10	0	0	-135.0	0	;
-      sec	11	0	0	-144.386	0	;	  
+      sec	10	0	0	-129.386	0	;
      end c2_def ;
     end main_body;
 ;
@@ -331,7 +330,7 @@ begin wind ;
     tower_mbdy_link tower;
     nsec  2;
     radius       0.0 5.00 ;  radius at base
-    radius     144.495 3.25 ;  radius at top
+    radius    129.495 3.25 ;  radius at top
   end tower_shadow_potential_2;
 end wind;
 ;
@@ -341,7 +340,7 @@ begin aerodrag ;  tower drag
     aerodrag_sections uniform 10 ;
     nsec 2 ;
     sec   0.0 0.6 10.00 ;  tower bottom
-    sec 144.495 0.6 6.5 ;  tower top
+    sec 129.495 0.6 6.5 ;  tower top
   end aerodrag_element;
 ;
   begin aerodrag_element ;  nacelle drag
