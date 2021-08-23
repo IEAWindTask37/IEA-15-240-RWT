@@ -8,12 +8,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy import pi
 import yaml
+import os
 
+mydir = os.path.dirname(os.path.realpath(__file__))  # get path to this file
 
 # paths
-yaml_path = '../../../WT_Ontology/IEA-15-240-RWT.yaml'  # yaml file with data
-ed_path = '../../../OpenFAST/IEA-15-240-RWT-Monopile/IEA-15-240-RWT-Monopile_ElastoDyn_tower.dat'  # elastodyn file
-h2_st_path = '../data/IEA_15MW_RWT_Tower_st.dat'  # file to write for HAWC2 model
+yaml_path = os.path.join(mydir,'../../../WT_Ontology/IEA-15-240-RWT.yaml')  # yaml file with data
+ed_path = os.path.join(mydir,'../../../OpenFAST/IEA-15-240-RWT-Monopile/IEA-15-240-RWT-Monopile_ElastoDyn_tower.dat')  # elastodyn file
+h2_st_path = os.path.join(mydir,'../data/IEA_15MW_RWT_Tower_st.dat')  # file to write for HAWC2 model
 
 
 # load the yaml file as nested dictionaries
@@ -33,6 +35,8 @@ body = 'tower'
 
 # get tower dimensions
 twr_stn = np.array(res['components'][body]['outer_shape_bem']['reference_axis']['z']['values'])
+twr_stn -= twr_stn[0]
+outfitting_factor = res['components'][body]['internal_structure_2d_fem']['outfitting_factor']
 out_diam = np.array(res['components'][body]['outer_shape_bem']['outer_diameter']['values'])
 twr_wall = res['components'][body]['internal_structure_2d_fem']['layers'][0]
 assert twr_wall['name'] == body + '_wall'
@@ -44,21 +48,21 @@ mat_props = [d for d in res['materials'] if d['name'] == material][0]
 E, G, rho = mat_props['E'], mat_props['G'], mat_props['rho']
 print('\nAssuming tower and monopile have the same material properties!\n')
 
-# ------------- transition piece (15m from water line to tower transition) -------------
-body = 'monopile'
+# # ------------- transition piece (15m from water line to tower transition) -------------
+# body = 'monopile'
 
-# get dimensions
-mon_stn = np.array(res['components'][body]['outer_shape_bem']['reference_axis']['z']['values'])
-mon_out_diam = np.array(res['components'][body]['outer_shape_bem']['outer_diameter']['values'])
-mon_wall = res['components'][body]['internal_structure_2d_fem']['layers'][0]
-assert mon_wall['name'] == body + '_wall'
-t_mon = np.array(mon_wall['thickness']['values'])
+# # get dimensions
+# mon_stn = np.array(res['components'][body]['outer_shape_bem']['reference_axis']['z']['values'])
+# mon_out_diam = np.array(res['components'][body]['outer_shape_bem']['outer_diameter']['values'])
+# mon_wall = res['components'][body]['internal_structure_2d_fem']['layers'][0]
+# assert mon_wall['name'] == body + '_wall'
+# t_mon = np.array(mon_wall['thickness']['values'])
 
-# add above-water monopile to tower
-mask = (mon_stn >= 0) & (mon_stn < 15)
-twr_stn = np.concatenate((mon_stn[mask], twr_stn))
-out_diam = np.concatenate((mon_out_diam[mask], out_diam))
-t = np.concatenate((t_mon[mask], t))
+# # add above-water monopile to tower
+# mask = (mon_stn >= 0) & (mon_stn < 15)
+# twr_stn = np.concatenate((mon_stn[mask], twr_stn))
+# out_diam = np.concatenate((mon_out_diam[mask], out_diam))
+# t = np.concatenate((t_mon[mask], t))
 
 print('s [m]  OD [m]    t [mm]')
 for i in range(t.size):
@@ -74,6 +78,7 @@ plt.subplot(1, 2, 2)
 plt.plot(t*1000, twr_stn)
 plt.xlabel('Wall thickness [mm]'); plt.ylabel('Tower height [m]'); plt.grid('on')
 plt.tight_layout()
+plt.show()
 # plt.savefig(cont_dir + r'\diam_thick.png', dpi=150)
 #
 # intermediates
@@ -89,7 +94,7 @@ shear_red = 0.5 + 0.75 * t / r_out  # shear reduction factor [-]
 nstn = 19
 out_arr = np.full((twr_stn.size, nstn), np.nan)
 out_arr[:, 0] = twr_stn  # tower station
-out_arr[:, 1] = rho*area  # mass/length
+out_arr[:, 1] = rho*area*outfitting_factor  # mass/length
 out_arr[:, 2] = 0  # center of mass, x
 out_arr[:, 3] = 0  # center of mass, y
 out_arr[:, 4] = np.sqrt(mom_iner/area)  # radius gyration, x
@@ -130,7 +135,7 @@ plt.plot(ed_st[:, 3], ed_st[:, 0])
 plt.plot(out_arr[:, 8]*out_arr[:, 11], h2_stn, label='HAWC2')  # EIyy
 plt.xlabel('TwSSStif [mm]'); plt.grid('on')
 plt.tight_layout()
-
+plt.show()
 if save_twr:
     header = (f'#1 Tower made by automatic script on {date.today().strftime("%d-%b-%Y")}\n' +
           '\t'.join(['r', 'm', 'x_cg', 'y_cg', 'ri_x', 'ri_y', 'x_sh', 'y_sh', 'E', 'G',
