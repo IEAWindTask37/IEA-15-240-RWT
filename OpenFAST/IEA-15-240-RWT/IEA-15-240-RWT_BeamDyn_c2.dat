@@ -1,7 +1,7 @@
 --------- BEAMDYN with OpenFAST INPUT FILE -------------------------------------------
 IEA 15MW Offshore Reference Turbine, with taped chord tip design blade
 ---------------------- SIMULATION CONTROL --------------------------------------
-False          Echo            - Echo input data to "<RootName>.ech" (flag)
+False         Echo            - Echo input data to "<RootName>.ech" (flag)
 True          QuasiStaticInit - Use quasistatic pre-conditioning with centripetal accelerations in initialization (flag) [dynamic solve only]
  0            rhoinf          - Numerical damping parameter for generalized-alpha integrator
  2            quadrature      - Quadrature method: 1=Gaussian; 2=Trapezoidal (switch)
@@ -23,17 +23,17 @@ True          RotStates       - Orient states in the rotating frame during linea
 		 kp_xr 			 kp_yr 			 kp_zr 		 initial_twist
 		  (m)  			  (m)  			  (m)  		   (deg)
 	 0.00000e+00 	 0.00000e+00 	 0.00000e+00 	 1.55946e+01 
-	 3.23684e-02 	 5.00891e-02 	 2.38776e+00 	 1.55877e+01 
+	 3.23301e-02 	 5.00303e-02 	 2.38776e+00 	 1.55877e+01 
 	 8.01884e-02 	 1.37813e-01 	 4.77551e+00 	 1.54108e+01 
-	 1.34085e-01 	 2.35269e-01 	 7.16327e+00 	 1.49486e+01 
-	 1.89924e-01 	 3.40100e-01 	 9.55102e+00 	 1.42585e+01 
-	 2.43405e-01 	 4.47695e-01 	 1.19388e+01 	 1.33971e+01 
-	 2.90910e-01 	 5.52444e-01 	 1.43265e+01 	 1.24220e+01 
-	 3.29869e-01 	 6.54641e-01 	 1.67143e+01 	 1.13946e+01 
-	 3.60704e-01 	 7.53399e-01 	 1.91020e+01 	 1.03710e+01 
-	 3.79578e-01 	 8.40813e-01 	 2.14898e+01 	 9.40400e+00 
+	 1.34081e-01 	 2.35176e-01 	 7.16327e+00 	 1.49486e+01 
+	 1.90004e-01 	 3.40106e-01 	 9.55102e+00 	 1.42585e+01 
+	 2.43667e-01 	 4.47818e-01 	 1.19388e+01 	 1.33971e+01 
+	 2.91358e-01 	 5.52625e-01 	 1.43265e+01 	 1.24220e+01 
+	 3.31016e-01 	 6.54914e-01 	 1.67143e+01 	 1.13946e+01 
+	 3.61480e-01 	 7.54077e-01 	 1.91020e+01 	 1.03710e+01 
+	 3.80345e-01 	 8.41788e-01 	 2.14898e+01 	 9.40400e+00 
 	 3.86320e-01 	 9.12476e-01 	 2.38776e+01 	 8.55152e+00 
-	 3.82733e-01 	 9.63318e-01 	 2.62653e+01 	 7.83315e+00 
+	 3.82848e-01 	 9.63797e-01 	 2.62653e+01 	 7.83315e+00 
 	 3.74987e-01 	 9.95261e-01 	 2.86531e+01 	 7.19135e+00 
 	 3.63418e-01 	 1.00872e+00 	 3.10408e+01 	 6.55163e+00 
 	 3.49638e-01 	 1.00847e+00 	 3.34286e+01 	 5.93400e+00 
