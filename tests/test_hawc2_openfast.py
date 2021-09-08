@@ -31,6 +31,7 @@ def test_openfast_hawc2_match():
 
     ed_path = './OpenFAST/IEA-15-240-RWT-Monopile/IEA-15-240-RWT-Monopile_ElastoDyn.dat'
     h2_path = './HAWC2/IEA-15-240-RWT-FixedBottom/htc/IEA_15MW_RWT.htc'
+    z_transition = 15  # height of transition piece
     
     ed_dict = read_elastodyn_dat(ed_path)
     htc = HTCFile(h2_path)
@@ -38,12 +39,15 @@ def test_openfast_hawc2_match():
     htc_struc = htc.new_htc_structure
     
     # tower
-    assert np.isclose(ed_dict['TowerHt'], -htc_struc.get_subsection_by_name('tower').c2_def.sec__11.values[-2])  # tower height
+    twr_h2 = htc_struc.get_subsection_by_name('tower').c2_def.contents
+    last_key = next(reversed(twr_h2))
+    twrht_h2 = -twr_h2[last_key].values[-2] + z_transition
+    assert np.isclose(ed_dict['TowerHt'], twrht_h2)  # tower height
     
     # nacelle and yaw bearing masses and inertias
     assert np.isclose(ed_dict['YawBrMass'], htc_struc.get_subsection_by_name('towertop').concentrated_mass__1.values[4]) # yaw bearing mass
-    assert np.isclose(ed_dict['NacCMxn'], htc_struc.get_subsection_by_name('towertop').concentrated_mass__2.values[2])  # nacelle cm
-    assert np.isclose(ed_dict['NacCMzn'], -htc_struc.get_subsection_by_name('towertop').concentrated_mass__2.values[3])  # nacelle cm
+    assert np.isclose(ed_dict['NacCMxn'], htc_struc.get_subsection_by_name('towertop').concentrated_mass__2.values[2], atol=1e-3)  # nacelle cm
+    assert np.isclose(ed_dict['NacCMzn'], -htc_struc.get_subsection_by_name('towertop').concentrated_mass__2.values[3], atol=1e-3)  # nacelle cm
     assert np.isclose(ed_dict['NacMass'], htc_struc.get_subsection_by_name('towertop').concentrated_mass__2[4])  # nacelle mass
     
     # generator and hub inertia
