@@ -58,7 +58,7 @@ begin new_htc_structure;
     begin c2_def;
       nsec 2;
       sec 1 0.0 0.0  0.0    0.0 ; x,y,z,twist
-      sec 2 0.0 0.0 -4.3478  0.0 ; 
+      sec 2 0.0 0.0 -4.4498  0.0 ; 
     end c2_def ;
   end main_body;
 ;
@@ -189,8 +189,8 @@ begin new_htc_structure;
   begin orientation;
     begin base;
       body   tower;
-      inipos        0.0 0.0 0.0 ;
-      body_eulerang 0.0 0.0 0.0;    same as global: zT down, yT downwind
+      inipos        0.0 0.0 -15.0 ;  tower starts above transition piece
+      body_eulerang 0.0 0.0   0.0 ;    same as global: zT down, yT downwind
     end base;
 ; 
     begin relative;

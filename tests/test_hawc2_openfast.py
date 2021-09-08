@@ -7,6 +7,14 @@ import numpy as np
 from wetb.hawc2 import HTCFile
 
 
+def get_body_length(htc_struc, body):
+    """Get the length of a body from htc structure, given string name"""
+    body_contents = htc_struc.get_subsection_by_name(body).c2_def.contents
+    last_key = next(reversed(body_contents))
+    length = abs(body_contents[last_key].values[-2])
+    return length
+
+
 def read_elastodyn_dat(path):
     """Get dictionary from an elastodyn dat file"""
     d = {}
@@ -39,9 +47,7 @@ def test_openfast_hawc2_match():
     htc_struc = htc.new_htc_structure
     
     # tower
-    twr_h2 = htc_struc.get_subsection_by_name('tower').c2_def.contents
-    last_key = next(reversed(twr_h2))
-    twrht_h2 = -twr_h2[last_key].values[-2] + z_transition
+    twrht_h2 = get_body_length(htc_struc, 'tower') + z_transition
     assert np.isclose(ed_dict['TowerHt'], twrht_h2)  # tower height
     
     # nacelle and yaw bearing masses and inertias
@@ -58,4 +64,14 @@ def test_openfast_hawc2_match():
     # hub radius, shaft tilt and coning
     assert np.isclose(ed_dict['HubRad'], htc_struc.get_subsection_by_name('hub1').c2_def.sec__2.values[-2])  # hub radius
     assert np.isclose(-ed_dict['ShftTilt'], htc_struc.orientation.relative__2.body2_eulerang__2.values[0])  # tilt
-
+    
+    # check tower height
+    tilt = 6 * np.pi / 180
+    z_hub = 150
+    ttop_length = get_body_length(htc_struc, 'towertop')
+    conn_length = get_body_length(htc_struc, 'connector')
+    shaft_length = get_body_length(htc_struc, 'shaft')
+    z_hub_h2 = twrht_h2 + ttop_length + conn_length*np.sin(tilt) + shaft_length*np.sin(tilt)
+    z_hub_of = ed_dict['TowerHt'] + ed_dict['Twr2Shft'] + -ed_dict['OverHang']*np.tan(tilt)
+    assert np.isclose(z_hub_h2, z_hub, atol=1e-2)
+    assert np.isclose(z_hub_of, z_hub, atol=1e-2)
