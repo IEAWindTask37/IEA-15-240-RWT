@@ -83,7 +83,7 @@ def vabs_load(fname):
 
 
 class RWT_Tabular(object):
-    def __init__(self, finput, towDF=None, rotDF=None, bladeDF=None, nacDF=None, overview=None):
+    def __init__(self, finput, towDF=None, rotDF=None, layerDF=None, nacDF=None, overview=None):
         
         # Read ontology file into dictionary-like data structure
         f = open(finput, 'r')
@@ -99,7 +99,7 @@ class RWT_Tabular(object):
         # If provided, store blade, tower, and rotor data
         self.towDF   = towDF
         self.rotDF   = rotDF
-        self.bladeDF = bladeDF
+        self.layerDF = layerDF
         self.nacDF   = nacDF
         self.overview = overview
 
@@ -336,7 +336,7 @@ class RWT_Tabular(object):
 
         for k in range(nlay):
             for ikey in self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k].keys():
-                if ikey in ['name', 'midpoint_nd_arc','side','web']:
+                if ikey in ['name', 'midpoint_nd_arc','start_nd_arc','end_nd_arc','side','web']:
                     continue
                 elif ikey == 'material':
                     matlist.append( self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k][ikey] )
@@ -353,7 +353,11 @@ class RWT_Tabular(object):
         
         # Interpolation function for arbitraty layers and webs
         def myinterp(xgrid, val):
-            return interp1d(xgrid, val, kind='cubic', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
+            try:
+                y = interp1d(xgrid, val, kind='cubic', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
+            except:
+                y = np.interp(mygrid, xgrid, val, left=0.0, right=0.0)
+            return y
         
         # Loop over layers and store layup data in master tables for plotting and writing to Excel table
         afstack  = [[] for m in range(naf)]
@@ -361,11 +365,10 @@ class RWT_Tabular(object):
         for k in range(nlay):
             lname = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name']
             lmat  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['material']
-            
-            ithick = myinterp(self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['grid'],
-                              self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values'])
-            idir   = myinterp(self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['fiber_orientation']['grid'],
-                              self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['fiber_orientation']['values'])
+
+            iDF = self.layerDF[k]
+            ithick = myinterp(iDF['Span'], iDF['Thickness [m]'])
+            idir   = myinterp(iDF['Span'], iDF['Fiber angle [deg]'])
 
             if lname.lower().find('web') >= 0:
                 iweb   = weblist.index( self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['web'] )
@@ -375,10 +378,8 @@ class RWT_Tabular(object):
                     webstack[iaf].append([lname, lmat, iweb, 1e3*ithick[ind], idir[ind]] )
                     
             else:
-                lay_beg = myinterp(self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['grid'],
-                                   self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['values'])
-                lay_end = myinterp(self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['grid'],
-                                   self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['values'])
+                lay_beg = myinterp(iDF['Span'], iDF['Layer Start'])
+                lay_end = myinterp(iDF['Span'], iDF['Layer End'])
 
                 for iaf in range(naf):
                     ind = np.where(mygrid == self.airfoil_span[iaf])[0][0]
@@ -519,15 +520,16 @@ class RWT_Tabular(object):
                 reinf_le_th     = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values']
                 reinf_le_wgrid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['grid']
                 reinf_le_wid    = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['values']
-                reinf_le_beg    = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['values']
-                reinf_le_end    = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['values']
-            elif self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'] == 'TE_reinforcement':
-                reinf_te_thgrid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['grid']
-                reinf_te_th     = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values']
-                reinf_te_wgrid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['grid']
-                reinf_te_wid    = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['values']
-                reinf_te_beg    = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['values']
-                reinf_te_end    = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['values']
+            elif self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'].lower() == 'te_reinforcement_ss':
+                reinf_te_ss_thgrid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['grid']
+                reinf_te_ss_th     = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values']
+                reinf_te_ss_wgrid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['grid']
+                reinf_te_ss_wid    = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['values']
+            elif self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'].lower() == 'te_reinforcement_ps':
+                reinf_te_ps_thgrid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['grid']
+                reinf_te_ps_th     = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values']
+                reinf_te_ps_wgrid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['grid']
+                reinf_te_ps_wid    = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['values']
             else:
                 continue
 
@@ -549,8 +551,10 @@ class RWT_Tabular(object):
         crossDF['Spar cap PS thick [m]']     = myinterp(sparcap_ps_grid, sparcap_ps_th )
         crossDF['LE reinf width [m]']        = myinterp(reinf_le_wgrid, reinf_le_wid)
         crossDF['LE reinf thick [m]']        = myinterp(reinf_le_thgrid, reinf_le_th )
-        crossDF['TE reinf width [m]']        = myinterp(reinf_te_wgrid, reinf_te_wid)
-        crossDF['TE reinf thick [m]']        = myinterp(reinf_te_thgrid, reinf_te_th )
+        crossDF['TE reinf SS width [m]']     = myinterp(reinf_te_ss_wgrid, reinf_te_ss_wid)
+        crossDF['TE reinf SS thick [m]']     = myinterp(reinf_te_ss_thgrid, reinf_te_ss_th )
+        crossDF['TE reinf PS width [m]']     = myinterp(reinf_te_ps_wgrid, reinf_te_ps_wid)
+        crossDF['TE reinf PS thick [m]']     = myinterp(reinf_te_ps_thgrid, reinf_te_ps_th )
 
         # Cross section over-view sheet
         ws = self.wb.create_sheet(title = 'Blade Support Structure')
@@ -617,10 +621,11 @@ class RWT_Tabular(object):
     def write_blade_struct(self):
         
         # Load in VABS data
-        froot  = os.path.join('..','OpenFAST','IEA-15-240-RWT','VABS','IEA-15-240-RWT_vabs_beam_properties_')
-        fnames = ['mass_matrices.csv','stiff_matrices.csv','general.csv']
-        M, Mr  = vabs_load(froot+fnames[0])
-        K, Kr  = vabs_load(froot+fnames[1])
+        #froot  = os.path.join('..','OpenFAST','IEA-15-240-RWT','VABS','IEA-15-240-RWT_vabs_beam_properties_')
+        #fnames = ['mass_matrices.csv','stiff_matrices.csv','general.csv']
+        #M, Mr  = vabs_load(froot+fnames[0])
+        #K, Kr  = vabs_load(froot+fnames[1])
+        #sumDF = pd.read_csv(froot+fnames[2], header=1, index_col=0)
 
         fbeamdyn = os.path.join('..','OpenFAST','IEA-15-240-RWT','IEA-15-240-RWT_BeamDyn_blade.dat')
         M, K, r = beamdyn_load( fbeamdyn )
@@ -651,16 +656,15 @@ class RWT_Tabular(object):
                   'K_55','K_56',
                   'K_66']
 
-        sumDF = pd.read_csv(froot+fnames[2], header=1, index_col=0)
         #bladeStructDF = pd.DataFrame(data=mydata, columns=labels, index=Mr)
         bladeStructDF = pd.DataFrame(data=mydata, columns=labels, index=r)
         
         # Write to sheet
         ws = self.wb.create_sheet(title = 'Blade Structural Properties')
         ws['A1'] = 'BeamDyn Coordinate System (see https://wind.nrel.gov/nwtc/docs/BeamDyn_Manual.pdf)'
-        for r in dataframe_to_rows(sumDF, index=True, header=True):
-            ws.append(r)
-        ws['A16'] = ''
+        #for r in dataframe_to_rows(sumDF, index=True, header=True):
+        #    ws.append(r)
+        #ws['A16'] = ''
         for r in dataframe_to_rows(bladeStructDF, index=True, header=True):
             ws.append(r)
         
@@ -671,7 +675,7 @@ class RWT_Tabular(object):
             cell.style = 'Headline 2'
 
         
-            
+        '''
         # Make plot
         blade_x  = np.array(self.yaml['components']['blade']['outer_shape_bem']['chord']['grid'])
         def myinterp(xgrid, val):
@@ -699,6 +703,7 @@ class RWT_Tabular(object):
         ax.set_xlabel('Blade span r/R', size=14, weight='bold')
         ax.set_ylabel('Chordwise [m]', size=14, weight='bold')
         fig.savefig('outputs' + os.sep + 'planform.pdf', pad_inches=0.1, bbox_inches='tight')
+        '''
 
         
     def write_tower_monopile(self):

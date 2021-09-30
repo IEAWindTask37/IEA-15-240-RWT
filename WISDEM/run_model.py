@@ -83,6 +83,19 @@ def run_15mw(fname_wt_input):
                        ]
     bladeStiffDF = pd.DataFrame(data=blade_stiff, columns=blade_stiff_col)
 
+    # Blade internal laminate layer details
+    layerDF = []
+    l_s = prob.get_val("blade.internal_structure_2d_fem.s")
+    lthick = prob.get_val("blade.internal_structure_2d_fem.layer_thickness", 'm')
+    lrot = prob.get_val("blade.internal_structure_2d_fem.layer_rotation", 'deg')
+    lstart = prob.get_val("blade.internal_structure_2d_fem.layer_start_nd")
+    lend = prob.get_val("blade.internal_structure_2d_fem.layer_end_nd")
+    nlay = lthick.shape[0]
+    layer_cols = ['Span','Thickness [m]','Fiber angle [deg]','Layer Start','Layer End']
+    for k in range(nlay):
+        ilay = np.c_[l_s, lthick[k,:], lrot[k,:], lstart[k,:], lend[k,:]]
+        layerDF.append( pd.DataFrame(data=ilay, columns=layer_cols) )
+    
     # Tabular output: Rotor Performance
     rotor_perf = np.c_[prob.get_val("rotorse.rp.powercurve.V",'m/s'),
                        prob.get_val("rotorse.rp.powercurve.pitch",'deg'),
@@ -289,7 +302,7 @@ def run_15mw(fname_wt_input):
 
     # Write all tabular data to xlsx
     myobj = RWT_Tabular(fname_wt_input, towDF=towDF, rotDF=perfDF,
-                        nacDF=nacDF, overview=overview)
+                        nacDF=nacDF, layerDF=layerDF, overview=overview)
     myobj.write_all()
 
 
