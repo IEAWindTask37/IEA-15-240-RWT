@@ -24,12 +24,12 @@ begin new_htc_structure;
     nbodies     1 ;
     node_distribution     c2_def ;
     damping_posdef   0.0 0.0 0.0 1.533E-03 1.533E-03 1.194E-04  ; tuned to 2% log dec on 1st FA/SS/torsion modes (#1, #2, #7)
-     begin timoschenko_input;
+    begin timoschenko_input;
       filename ./data/IEA_15MW_RWT_Tower_st.dat;
       set 1 1 ; 
     end timoschenko_input;
     begin c2_def;              Definition of centerline (main_body coordinates)
-      nsec 11;
+      nsec 10;
       sec	1	0	0	0.00	0	;  x,y,z,twist
       sec	2	0	0	-15.0	0	;
       sec	3	0	0	-30.0	0	;
@@ -39,8 +39,7 @@ begin new_htc_structure;
       sec	7	0	0	-90.0	0	;
       sec	8	0	0	-105.0	0	;
       sec	9	0	0	-120.0	0	;
-      sec	10	0	0	-135.0	0	;
-      sec	11	0	0	-144.495	0	;	  
+      sec	10	0	0	-129.386	0	;
      end c2_def ;
     end main_body;
 ;
@@ -50,8 +49,8 @@ begin new_htc_structure;
     nbodies     1 ;
     node_distribution     c2_def ;
     damping_posdef  0.0  0.0  0.0  7.00E-04  7.00E-04  7.00E-04  ;   dummy values (stiff body)
-	concentrated_mass  1  0.00  0.00 0.00  1.000e+05  0.00  0.00  0.00	;  yaw system
-	concentrated_mass  1  0.00  -4.688  -4.240  5.309e+05  7.674778e+06  1.055686e+07  8.127143e+06	;  nacelle: NR+R mass; NR inertia
+	concentrated_mass  1  0.00  0.00 0.00  28280  0.00  0.00  0.00	;  yaw system
+	concentrated_mass  1  0.00  -4.720  -4.275  645370  7.674778e+06  1.055686e+07  8.127143e+06	;  nacelle: NR+R mass; NR inertia
 	begin timoschenko_input;
       filename ./data/IEA_15MW_RWT_Towertop_st.dat ;
       set 1 1 ;                
@@ -59,7 +58,7 @@ begin new_htc_structure;
     begin c2_def;
       nsec 2;
       sec 1 0.0 0.0  0.0    0.0 ; x,y,z,twist
-      sec 2 0.0 0.0 -4.3478  0.0 ; 
+      sec 2 0.0 0.0 -4.4498  0.0 ; 
     end c2_def ;
   end main_body;
 ;
@@ -85,9 +84,9 @@ begin new_htc_structure;
     type        timoschenko ;
     nbodies     1 ;
     node_distribution     c2_def ;
-	damping_posdef  0.0 0.0 0.0 4.65E-04  4.65E-04  3.078839e-04 ;  Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
-    concentrated_mass  1  0.0 0.0 0.0 0.0 0.0 0.0 3.222631e+06	;	generator inertia about shaft
-    concentrated_mass  2  0.0 0.0 0.0 1.90000e+05 0.0 0.0 1.373471e+06	;	hub mass/inertia;
+	damping_posdef  0.0 0.0 0.0 4.65E-04  4.65E-04  5.971406e-04 ;  Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
+    concentrated_mass  1  0.0 0.0 0.0 0.0 0.0 0.0 1836784	;	generator inertia about shaft
+    concentrated_mass  2  0.0 0.0 0.0 73376 0.0 0.0 1038341	;	hub mass/inertia;
 	begin timoschenko_input;
       filename ./data/IEA_15MW_RWT_Shaft_st.dat ;
       set 1 1 ;
@@ -112,7 +111,7 @@ begin new_htc_structure;
     begin c2_def;
       nsec 2;
       sec 1 0.0 0.0 0.0 0.0 ; x,y,z,twist
-      sec 2 0.0 0.0 3.0 0.0 ; 
+      sec 2 0.0 0.0 3.97 0.0 ; 
     end c2_def ;
   end main_body;
 ;
@@ -133,32 +132,46 @@ begin new_htc_structure;
     node_distribution    c2_def;
     damping_aniso  0.0 0.0 0.0 2.955e-3 2.424e-3 1.0e-8 ; blade damping tuned to 3% log dec flap/edge, torsion arbitrarily small
     begin timoschenko_input ;
-      filename ./data/IEA_15MW_RWT_Blade_st_fpm.dat;  blade files: [IEA_15MW_RWT_Blade_st_fpm.dat] or [IEA_15MW_RWT_Blade_st_nofpm.dat]
+      filename ./data/blade_beamdyn_c2_FPM.st;  blade files: [IEA_15MW_RWT_Blade_st_fpm.dat] or [IEA_15MW_RWT_Blade_st_nofpm.dat]
       FPM 1;  is blade file original beam model [0] or fully populated matrix from BECAS [1]
       set 1 1 ;  [1 1]=flexible, [1 2]=no torsion, [1 3]=stiff
     end timoschenko_input;
     begin c2_def;
-      nsec 20;
-      sec  1                       0.0                      0.0                       0.0 -1.559455301971172e+01;
-      sec  2 -1.947632306428538e-01  1.118894130288145e-01  6.201182297139584e+00 -1.517563341692140e+01;
-      sec  3 -4.980721139630508e-01  2.670165808116275e-01  1.307124721605084e+01 -1.295380896003360e+01;
-      sec  4 -8.093831584098645e-01  3.739824412925188e-01  2.055236308990396e+01 -9.768502125620273e+00;
-      sec  5 -9.937536784943122e-01  3.756138793475129e-01  2.854529515461813e+01 -7.218598749599913e+00;
-      sec  6 -9.933625716774784e-01  3.279577406655898e-01  3.690610036286960e+01 -5.088885094904810e+00;
-      sec  7 -9.420208165255064e-01  2.681933097079662e-01  4.546140184592034e+01 -3.424371460144447e+00;
-      sec  8 -9.035358795700276e-01  9.920060012536037e-02  5.402214442561254e+01 -2.220313133432046e+00;
-      sec  9 -8.447578575993667e-01 -1.506239443252051e-01  6.239937510471066e+01 -1.268966518616668e+00;
-      sec 10 -7.733898129195858e-01 -4.966218792643505e-01  7.041842166402073e+01 -5.370306489608649e-01;
-      sec 11 -6.939710236584598e-01 -9.203225799218611e-01  7.793519479032008e+01  9.353172039816750e-02;
-      sec 12 -6.146949665482084e-01 -1.345973550362133e+00  8.484691997117963e+01  8.493766337535498e-01;
-      sec 13 -5.437000694616229e-01 -1.784306455815415e+00  9.108729127572076e+01  1.672206858318514e+00;
-      sec 14 -4.808082504753410e-01 -2.204478814353722e+00  9.663141565650780e+01  2.143433636129829e+00;
-      sec 15 -4.212886122526527e-01 -2.589840487843239e+00  1.014866648892364e+02  2.171780282338360e+00;
-      sec 16 -3.683459920519034e-01 -2.945714468488638e+00  1.056843042126973e+02  2.088794131302387e+00;
-      sec 17 -3.232741746814742e-01 -3.266603285702173e+00  1.092738898405172e+02  1.934836373952981e+00;
-      sec 18 -2.879473566064166e-01 -3.550229846431562e+00  1.123151327495461e+02  1.723367849618178e+00;
-      sec 19 -2.033818943504264e-01 -3.794043032744452e+00  1.148691506459029e+02  1.487742695689245e+00;
-      sec 20 -6.589359677411839e-02 -4.001429044657352e+00  1.170000000000000e+02  1.242387706272969e+00;
+      nsec 34 ;
+      sec    1	 2.276630e-02	-6.354120e-03	 0.000000e+00	-1.559460e+01;
+      sec    2	-1.293848e-02	 1.261945e-02	 1.171132e+00	-1.559122e+01;
+      sec    3	-4.864326e-02	 3.159302e-02	 2.342264e+00	-1.558783e+01;
+      sec    4	-9.140135e-02	 5.488521e-02	 3.513081e+00	-1.550433e+01;
+      sec    5	-1.344445e-01	 7.835194e-02	 4.683885e+00	-1.541759e+01;
+      sec    6	-1.818083e-01	 1.045408e-01	 5.854464e+00	-1.520195e+01;
+      sec    7	-2.295389e-01	 1.309607e-01	 7.025023e+00	-1.497536e+01;
+      sec    8	-2.805342e-01	 1.582549e-01	 8.195424e+00	-1.465029e+01;
+      sec    9	-3.319667e-01	 1.856661e-01	 9.365804e+00	-1.431203e+01;
+      sec   10	-3.845451e-01	 2.121439e-01	 1.053615e+01	-1.390311e+01;
+      sec   11	-4.373390e-01	 2.384463e-01	 1.170650e+01	-1.348090e+01;
+      sec   12	-4.889974e-01	 2.624051e-01	 1.287694e+01	-1.301398e+01;
+      sec   13	-5.403746e-01	 2.857836e-01	 1.404741e+01	-1.253597e+01;
+      sec   14	-6.409605e-01	 3.256061e-01	 1.638857e+01	-1.153475e+01;
+      sec   15	-7.386271e-01	 3.567336e-01	 1.872999e+01	-1.053048e+01;
+      sec   16	-8.264376e-01	 3.770434e-01	 2.107191e+01	-9.573236e+00;
+      sec   17	-8.987642e-01	 3.851610e-01	 2.341442e+01	-8.716881e+00;
+      sec   18	-9.648239e-01	 3.825914e-01	 2.634323e+01	-7.812203e+00;
+      sec   19	-9.987529e-01	 3.719855e-01	 2.927258e+01	-7.025378e+00;
+      sec   20	-1.001853e+00	 3.390686e-01	 3.513159e+01	-5.514682e+00;
+      sec   21	-9.655290e-01	 3.025461e-01	 4.099051e+01	-4.221511e+00;
+      sec   22	-9.368886e-01	 2.487508e-01	 4.684933e+01	-3.216668e+00;
+      sec   23	-9.106694e-01	 1.328630e-01	 5.270724e+01	-2.389998e+00;
+      sec   24	-8.738616e-01	-3.160201e-02	 5.856396e+01	-1.686368e+00;
+      sec   25	-8.276046e-01	-2.221558e-01	 6.441981e+01	-1.069373e+00;
+      sec   26	-7.743977e-01	-4.915380e-01	 7.027248e+01	-5.506951e-01;
+      sec   27	-7.139438e-01	-8.150146e-01	 7.612237e+01	-6.361638e-02;
+      sec   28	-6.478554e-01	-1.162822e+00	 8.197081e+01	 4.971755e-01;
+      sec   29	-5.806119e-01	-1.549740e+00	 8.781676e+01	 1.249206e+00;
+      sec   30	-5.148167e-01	-1.977418e+00	 9.365990e+01	 1.929809e+00;
+      sec   31	-4.459413e-01	-2.430095e+00	 9.950113e+01	 2.171948e+00;
+      sec   32	-3.726401e-01	-2.916233e+00	 1.053396e+02	 2.093051e+00;
+      sec   33	-2.989205e-01	-3.444117e+00	 1.111744e+02	 1.800138e+00;
+      sec   34	-6.589360e-02	-4.001430e+00	 1.170000e+02	 1.242390e+00;
      end c2_def ;
    end main_body;
 ;
@@ -176,8 +189,8 @@ begin new_htc_structure;
   begin orientation;
     begin base;
       body   tower;
-      inipos        0.0 0.0 0.0 ;
-      body_eulerang 0.0 0.0 0.0;    same as global: zT down, yT downwind
+      inipos        0.0 0.0 -15.0 ;  tower starts above transition piece
+      body_eulerang 0.0 0.0   0.0 ;    same as global: zT down, yT downwind
     end base;
 ; 
     begin relative;
@@ -323,7 +336,7 @@ begin wind ;
     tower_mbdy_link tower;
     nsec  2;
     radius       0.0 5.00 ;  radius at base
-    radius     144.495 3.25 ;  radius at top
+    radius    129.495 3.25 ;  radius at top
   end tower_shadow_potential_2;
 end wind;
 ;
@@ -333,7 +346,7 @@ begin aerodrag ;  tower drag
     aerodrag_sections uniform 10 ;
     nsec 2 ;
     sec   0.0 0.6 10.00 ;  tower bottom
-    sec 144.495 0.6 6.5 ;  tower top
+    sec 129.495 0.6 6.5 ;  tower top
   end aerodrag_element;
 ;
   begin aerodrag_element ;  nacelle drag
@@ -604,7 +617,7 @@ end dll;
 ;
 begin output;
   filename ./res/IEA_15MW_RWT ;
-  data_format  hawc_binary;
+  data_format  gtsdf;
   buffer 1 ;
   time 0 100;
 ;

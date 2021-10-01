@@ -1,6 +1,6 @@
 general:
     folder_output: outputs
-    fname_output: tower_output
+    fname_output: floating_tower_output
 design_variables:
 
   tower:

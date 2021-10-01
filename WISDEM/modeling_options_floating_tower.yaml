@@ -17,7 +17,7 @@ WISDEM:
         gamma_fatigue: 1.755  # Safety factor for fatigue loads
         buckling_method: dnvgl # Buckling code type [eurocode or dnvgl]
         buckling_length: 30    # Buckling parameter
-        soil_springs: True
+        soil_springs: False
         gravity_foundation: False
         frame3dd:
             shear: True
