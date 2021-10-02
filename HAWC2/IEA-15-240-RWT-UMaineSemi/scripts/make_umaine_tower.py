@@ -11,8 +11,8 @@ import yaml
 
 
 # paths
-yaml_path = '../../WT_Ontology/IEA-15-240-RWT_VolturnUS-S.yaml'  # yaml file with data
-ed_path = '../../OpenFAST/IEA-15-240-RWT-UMaineSemi/IEA-15-240-RWT-UMaineSemi_ElastoDyn_tower.dat'  # elastodyn file
+yaml_path = '../../../WT_Ontology/IEA-15-240-RWT_VolturnUS-S.yaml'  # yaml file with data
+ed_path = '../../../OpenFAST/IEA-15-240-RWT-UMaineSemi/IEA-15-240-RWT-UMaineSemi_ElastoDyn_tower.dat' # elastodyn file
 h2_st_path = '../data/IEA_15MW_RWT_UMaine_Tower_st.dat'  # file to write for HAWC2 model
 
 # flag to save the tower file
