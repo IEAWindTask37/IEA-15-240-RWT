@@ -16,7 +16,7 @@ ed_path = '../../../OpenFAST/IEA-15-240-RWT-UMaineSemi/IEA-15-240-RWT-UMaineSemi
 h2_st_path = '../data/IEA_15MW_RWT_UMaine_Tower_st.dat'  # file to write for HAWC2 model
 
 # flag to save the tower file
-save_twr = 0
+save_twr = 1
 
 # load the yaml file as nested dictionaries
 with open(yaml_path, 'r') as stream:
