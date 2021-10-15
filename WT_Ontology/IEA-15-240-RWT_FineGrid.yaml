@@ -1,5 +1,13 @@
 name: IEA 15MW Offshore Reference Turbine, with taped chord tip design
-assembly: {turbine_class: I, turbulence_class: B, drivetrain: direct_drive, rotor_orientation: Upwind, number_of_blades: 3, hub_height: 150.0, rotor_diameter: 242.23775645, rated_power: 15000000.0, lifetime: 25.0}
+assembly:
+    turbine_class: I
+    turbulence_class: B
+    drivetrain: direct_drive
+    rotor_orientation: Upwind
+    number_of_blades: 3
+    hub_height: 150.
+    rotor_diameter: 242.23775645
+    rated_power: 15.e+6
 components:
     blade:
         outer_shape_bem:
@@ -734,10 +742,26 @@ components:
                        -  [19.927420417974034, 0.0, 0.0, 0.0, 0.0, -3.858788273676561, 19.927420417974034, 0.0, 0.0, 0.0, 0.07929163738420604, 19.927420417974034, 3.858788273676561, -0.07929163738420604, 0.0, 4.708658948025431, 4.708658948025431, 0.0, 0.0, 0.0, 5.00571904475849]
                        -  [16.868244910111994, 0.0, 0.0, 0.0, 0.0, -2.8223759594937894, 16.868244910111994, 0.0, 0.0, 0.0, 0.07004898093290537, 16.868244910111994, 2.8223759594937894, -0.07004898093290537, 0.0, 3.003160114875342, 3.003160114875342, 0.0, 0.0, 0.0, 3.186349423710695]
                        -  [6.052677181598344, 0.0, 0.0, 0.0, 0.0, -0.3201786441266212, 6.052677181598344, 0.0, 0.0, 0.0, 0.010757467853951477, 6.052677181598344, 0.3201786441266212, -0.010757467853951477, 0.0, 0.12274198890986983, 0.12274198890986983, 0.0, 0.0, 0.0, 0.12982863609502582]
-    hub: {diameter: 7.94, cone_angle: 0.06981317007977318, drag_coefficient: 0.5, flange_t2shell_t: 6.0, flange_OD2hub_D: 0.6, flange_ID2OD: 0.8, hub_blade_spacing_margin: 1.2, hub_stress_concentration: 3.0, n_front_brackets: 5, n_rear_brackets: 5, clearance_hub_spinner: 0.5, spin_hole_incr: 1.2, pitch_system_scaling_factor: 0.75, spinner_gust_ws: 70.0, hub_material: cast_iron, spinner_material: glass_uni}
+    hub:
+        diameter: 7.94
+        cone_angle: 0.06981317007977318 # 4 deg
+        drag_coefficient: 0.5
+        flange_t2shell_t: 6.0
+        flange_OD2hub_D: 0.6
+        flange_ID2OD: 0.8
+        hub_blade_spacing_margin: 1.2
+        hub_stress_concentration: 3.0
+        n_front_brackets: 5
+        n_rear_brackets: 5
+        clearance_hub_spinner: 0.5
+        spin_hole_incr: 1.2
+        pitch_system_scaling_factor: 0.75
+        spinner_gust_ws: 70.0
+        hub_material: cast_iron
+        spinner_material: glass_uni
     nacelle:
         drivetrain:
-            uptilt: 0.10471975511965977
+            uptilt: 0.10471975511965977 # 6 deg
             distance_tt_hub: 5.614
             overhang: 12.0313
             drag_coefficient: 0.5
@@ -749,94 +773,142 @@ components:
             nose_wall_thickness: [0.1, 0.1]
             generator_length: 2.15
             bedplate_wall_thickness:
-                grid: [0.0, 0.3333333333333333, 0.6666666666666666, 1.0]
-                values: [0.05, 0.05, 0.05, 0.05]
+                grid: [0.0, 1.0]
+                values: [0.05, 0.05]
             gear_ratio: 1.0
             gearbox_efficiency: 1.0
             mb1Type: CARB
             mb2Type: SRB
-            uptower: true
+            uptower: True
             lss_material: steel_drive
             bedplate_material: steel_drive
-            distance_hub_mb: 2.0
-            distance_mb_mb: 1.0
-            generator_radius_user: 0.0
-            generator_mass_user: 0.0
-            generator_rpm_efficiency_user:
-                grid: [0.0]
-                values: [0.0]
-            damping_ratio: 0.005
-            hss_length: 1.5
-            hss_diameter: [0.3, 0.3]
-            hss_wall_thickness: [0.1, 0.1]
-            hss_material: steel
-            bedplate_flange_width: 1.0
-            bedplate_flange_thickness: 0.05
-            bedplate_web_thickness: 0.05
-            brake_mass_user: 0.0
-            hvac_mass_coefficient: 0.025
-            converter_mass_user: 0.0
-            transformer_mass_user: 0.0
-            gear_configuration: EEP
-            planet_numbers: [3, 3, 0]
-        generator: {generator_type: PMSG_Outer, rho_Fe: 7700.0, rho_Fes: 7850.0, rho_Copper: 8900.0, rho_PM: 7450.0, B_r: 1.279, P_Fe0e: 1.0, P_Fe0h: 4.0, S_N: -0.002, alpha_p: 1.0995574287564276, b_r_tau_r: 0.45, b_ro: 0.004, b_s_tau_s: 0.45, b_so: 0.004, cofi: 0.9, freq: 60.0, h_i: 0.004, h_sy0: 0.0, h_w: 0.005, k_fes: 0.8, k_fillr: 0.55, k_fills: 0.65, k_s: 0.2, m: 3.0, mu_0: 1.2566370614359173e-06, mu_r: 1.06, phi: 1.5707963267948966, q1: 5.0, q2: 4.0, ratio_mw2pp: 0.8, resist_Cu: 2.52e-08, y_tau_pr: 0.8333333, y_tau_p: 0.8, rad_ag: 5.12623359, len_s: 2.23961662, tau_p: 0.1610453779, tau_s: 0.1339360726, h_s: 0.3769449149, b_s: 0.05121796888, b_t: 0.08159225451, h_t: 0.3859449149, h_ys: 0.03618114528, h_yr: 0.0361759511, h_m: 0.0995385122, b_m: 0.1288363023, B_g: 1.38963289, B_symax: 1.63455514, B_rymax: 1.63478983, p: 100.0, R_s: 0.02457052, L_s: 0.01138752, S: 240, t_r: 0.0607657125, h_sr: 0.04677116325, t_s: 0.06065213554, h_ss: 0.04650825863, E_p: 1905.2558883257652, b: 2.0, c: 5.0, N_c: 2.0, B_tmax: 1.9, u_allow_pcent: 8.5, y_allow_pcent: 1.0, z_allow_deg: 0.05, sigma: 60000.0, h_0: 0.05, C_Cu: 4.786, C_Fe: 0.556, C_Fes: 0.50139, C_PM: 50.0, mass_coefficient: 0.0, S_Nmax: -0.2, q3: 4, I_0: 0.0, d_r: 0.0, n_r: 0.0, t_wr: 0.0, n_s: 0.0, b_st: 0.0, d_s: 0.0, t_ws: 0.0}
+        generator:
+            generator_type: PMSG_Outer
+            rho_Fe: 7700.0
+            rho_Fes: 7850.0
+            rho_Copper: 8900.0
+            rho_PM: 7450.0
+            B_r: 1.279
+            P_Fe0e: 1.0
+            P_Fe0h: 4.0
+            S_N: -0.002
+            alpha_p: 1.0995574287564276 #0.5*np.pi*0.7
+            b_r_tau_r: 0.45
+            b_ro: 0.004
+            b_s_tau_s: 0.45
+            b_so: 0.004
+            cofi: 0.9
+            freq: 60.0
+            h_i: 0.004
+            h_sy0: 0.0
+            h_w: 0.005
+            k_fes: 0.8
+            k_fillr: 0.55
+            k_fills: 0.65
+            k_s: 0.2
+            m: 3
+            mu_0: 1.2566370614359173e-06 #np.pi*4e-7
+            mu_r: 1.06
+            phi: 1.5707963267948966 # 90 deg
+            q1: 5
+            q2: 4
+            ratio_mw2pp: 0.8
+            resist_Cu: 2.52e-8 #1.8e-8*1.4
+            y_tau_pr: 0.8333333 #10. / 12
+            y_tau_p: 0.8 #12./15.
+            rad_ag: 5.12623359
+            len_s: 2.23961662
+            tau_p: 0.1610453779
+            tau_s: 0.1339360726
+            h_s: 0.3769449149
+            b_s: 0.05121796888
+            b_t: 0.08159225451
+            h_t: 0.3859449149
+            h_ys: 0.03618114528
+            h_yr: 0.0361759511
+            h_m: 0.0995385122
+            b_m: 0.1288363023
+            B_g: 1.38963289
+            B_symax: 1.63455514
+            B_rymax: 1.63478983
+            p: 100
+            R_s: 0.02457052
+            L_s: 0.01138752
+            S: 240
+            t_r: 0.0607657125
+            h_sr: 0.04677116325
+            t_s: 0.06065213554
+            h_ss: 0.04650825863
+            E_p: 1905.2558883257652
+            b: 2.0
+            c: 5.0
+            N_c: 2
+            B_tmax: 1.9
+            u_allow_pcent: 8.5
+            y_allow_pcent: 1.0
+            z_allow_deg: 0.05
+            sigma: 60e3
+
+            h_0: 0.05
+            C_Cu: 4.786
+            C_Fe: 0.556
+            C_Fes: 0.50139
+            C_PM: 50.0
     tower:
         outer_shape_bem:
-            reference_axis: &id003
+            reference_axis: &ref_axis_tower
                 x:
-                    grid: [0.0, 7.728811463372998e-05, 0.10047454902385111, 0.10055183713848485, 0.20094909804770222, 0.20102638616233595, 0.30142364707155334, 0.30150093518618704, 0.40189819609540445, 0.40197548421003826, 0.5023727451192556, 0.5024500332338894, 0.6028472941431067, 0.6029245822577405, 0.7033218431669578, 0.7033991312815916, 0.8037963921908089, 0.8038736803054427, 0.90427094121466, 0.9043482293292937, 1.0]
-                    values: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+                    grid: [0.0, 1.0]
+                    values: [0.0, 0.0]
                 y:
-                    grid: [0.0, 7.728811463372998e-05, 0.10047454902385111, 0.10055183713848485, 0.20094909804770222, 0.20102638616233595, 0.30142364707155334, 0.30150093518618704, 0.40189819609540445, 0.40197548421003826, 0.5023727451192556, 0.5024500332338894, 0.6028472941431067, 0.6029245822577405, 0.7033218431669578, 0.7033991312815916, 0.8037963921908089, 0.8038736803054427, 0.90427094121466, 0.9043482293292937, 1.0]
-                    values: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+                    grid: [0.0, 1.0]
+                    values: [0.0, 0.0]
                 z:
-                    grid: [0.0, 7.728811463372998e-05, 0.10047454902385111, 0.10055183713848485, 0.20094909804770222, 0.20102638616233595, 0.30142364707155334, 0.30150093518618704, 0.40189819609540445, 0.40197548421003826, 0.5023727451192556, 0.5024500332338894, 0.6028472941431067, 0.6029245822577405, 0.7033218431669578, 0.7033991312815916, 0.8037963921908089, 0.8038736803054427, 0.90427094121466, 0.9043482293292937, 1.0]
-                    values: [15.0, 15.01, 28.0, 28.01, 41.0, 41.01, 54.0, 54.01, 67.0, 67.01, 80.0, 80.01, 93.0, 93.01, 106.0, 106.01, 119.0, 119.01, 132.0, 132.01, 144.386]
+                    grid: &grid_tower [0.0, 0.10047455, 0.2009491 , 0.30142365, 0.4018982, 0.50237275, 0.60284729, 0.70332184, 0.80379639, 0.90427094, 1.0]
+                    values: [15, 28, 41, 54, 67, 80, 93, 106, 119, 132, 144.386]
             outer_diameter:
-                grid: [0.0, 7.728811463372998e-05, 0.10047454902385111, 0.10055183713848485, 0.20094909804770222, 0.20102638616233595, 0.30142364707155334, 0.30150093518618704, 0.40189819609540445, 0.40197548421003826, 0.5023727451192556, 0.5024500332338894, 0.6028472941431067, 0.6029245822577405, 0.7033218431669578, 0.7033991312815916, 0.8037963921908089, 0.8038736803054427, 0.90427094121466, 0.9043482293292937, 1.0]
-                values: [10.0, 10.0, 10.0, 10.0, 9.926, 9.926, 9.443, 9.443, 8.833, 8.833, 8.151, 8.151, 7.39, 7.39, 6.909, 6.909, 6.748, 6.748, 6.572, 6.572, 6.5]
+                grid: *grid_tower
+                values:  [10.0, 10.0, 9.926, 9.443, 8.833, 8.151, 7.39, 6.909, 6.748, 6.572, 6.5]
             drag_coefficient:
                 grid: [0.0, 1.0]
                 values: [0.5, 0.5]
         internal_structure_2d_fem:
             outfitting_factor: 1.07
-            reference_axis: *id003
+            reference_axis: *ref_axis_tower
             layers:
-               -  name: tower_wall
+                - name: tower_wall
                   material: steel
                   thickness:
-                      grid: [0.0, 7.728811463372998e-05, 0.10047454902385111, 0.10055183713848485, 0.20094909804770222, 0.20102638616233595, 0.30142364707155334, 0.30150093518618704, 0.40189819609540445, 0.40197548421003826, 0.5023727451192556, 0.5024500332338894, 0.6028472941431067, 0.6029245822577405, 0.7033218431669578, 0.7033991312815916, 0.8037963921908089, 0.8038736803054427, 0.90427094121466, 0.9043482293292937, 1.0]
-                      values: [0.041058, 0.039496, 0.039496, 0.036456, 0.036456, 0.033779, 0.033779, 0.032192, 0.032192, 0.030708, 0.030708, 0.029101, 0.029101, 0.027213, 0.027213, 0.024009, 0.024009, 0.020826, 0.020826, 0.023998, 0.023998]
+                    grid: *grid_tower
+                    values: [0.039496, 0.039496, 0.033416, 0.034142, 0.030242, 0.031174, 0.027028, 0.027398, 0.02062 , 0.021032, 0.026964]
     monopile:
-        transition_piece_mass: 100000.0
+        transition_piece_mass: 100e3
         outer_shape_bem:
-            reference_axis: &id004
+            reference_axis:  &ref_axis_mono
                 x:
-                    grid: [0.0, 0.5, 0.5000111111111112, 0.5555555555555556, 0.5555666666666668, 0.6111111111111112, 0.6111222222222222, 0.6666666666666666, 0.6666777777777777, 0.7222222222222222, 0.7222333333333334, 0.7777777777777778, 0.777788888888889, 0.8333333333333334, 0.8333444444444444, 0.8888888888888888, 0.8889, 0.9444444444444444, 0.9444555555555556, 1.0]
-                    values: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+                    grid: [0.0, 1.0]
+                    values: [0.0, 0.0]
                 y:
-                    grid: [0.0, 0.5, 0.5000111111111112, 0.5555555555555556, 0.5555666666666668, 0.6111111111111112, 0.6111222222222222, 0.6666666666666666, 0.6666777777777777, 0.7222222222222222, 0.7222333333333334, 0.7777777777777778, 0.777788888888889, 0.8333333333333334, 0.8333444444444444, 0.8888888888888888, 0.8889, 0.9444444444444444, 0.9444555555555556, 1.0]
-                    values: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+                    grid: [0.0, 1.0]
+                    values: [0.0, 0.0]
                 z:
-                    grid: [0.0, 0.5, 0.5000111111111112, 0.5555555555555556, 0.5555666666666668, 0.6111111111111112, 0.6111222222222222, 0.6666666666666666, 0.6666777777777777, 0.7222222222222222, 0.7222333333333334, 0.7777777777777778, 0.777788888888889, 0.8333333333333334, 0.8333444444444444, 0.8888888888888888, 0.8889, 0.9444444444444444, 0.9444555555555556, 1.0]
-                    values: [-75.0, -30.0, -29.999, -25.0, -24.999, -20.0, -19.999, -15.0, -14.999, -10.0, -9.999, -5.0, -4.999, 0.0, 0.001, 5.0, 5.001, 10.0, 10.001, 15.0]
+                    grid: &grid_mono [0.0, 0.5, 0.61111111, 0.72222222, 0.83333333, 0.94444444, 1.0]
+                    values: [-75, -30., -20., -10., 0., 10., 15.]
             outer_diameter:
-                grid: [0.0, 0.5, 0.5000111111111112, 0.5555555555555556, 0.5555666666666668, 0.6111111111111112, 0.6111222222222222, 0.6666666666666666, 0.6666777777777777, 0.7222222222222222, 0.7222333333333334, 0.7777777777777778, 0.777788888888889, 0.8333333333333334, 0.8333444444444444, 0.8888888888888888, 0.8889, 0.9444444444444444, 0.9444555555555556, 1.0]
-                values: [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+                grid: *grid_mono
+                values: [10., 10., 10., 10., 10., 10., 10.]
             drag_coefficient:
                 grid: [0.0, 1.0]
                 values: [0.5, 0.5]
         internal_structure_2d_fem:
             outfitting_factor: 1.07
-            reference_axis: *id004
+            reference_axis: *ref_axis_mono
             layers:
-               -  name: monopile_wall
+                - name: monopile_wall
                   material: steel
                   thickness:
-                      grid: [0.0, 0.5, 0.5000111111111112, 0.5555555555555556, 0.5555666666666668, 0.6111111111111112, 0.6111222222222222, 0.6666666666666666, 0.6666777777777777, 0.7222222222222222, 0.7222333333333334, 0.7777777777777778, 0.777788888888889, 0.8333333333333334, 0.8333444444444444, 0.8888888888888888, 0.8889, 0.9444444444444444, 0.9444555555555556, 1.0]
-                      values: [0.055341, 0.055341, 0.055341, 0.055341, 0.053449, 0.053449, 0.051509, 0.051509, 0.049527, 0.049527, 0.047517, 0.047517, 0.045517, 0.045517, 0.043527, 0.043527, 0.042242, 0.042242, 0.041058, 0.041058]
-        transition_piece_cost: 0.0
-        gravity_foundation_mass: 0.0
+                    grid: *grid_mono
+                    values: [0.055341, 0.055341, 0.055341, 0.047677, 0.047357, 0.039697, 0.042419]
 airfoils:
    -  name: circular
       coordinates:
@@ -989,21 +1061,88 @@ airfoils:
                 grid: *id007
                 values: [0.0, 0.09142857142857111, 0.1828571428571434, 0.2742857142857145, 0.3657142857142855, 0.4031304636095545, 0.4081392053848416, 0.4131479471601289, 0.418156688935416, 0.4262712900595553, 0.4437034692302504, 0.461135648400946, 0.4785678275716412, 0.4960000067423368, 0.4883022318330648, 0.4678431517000181, 0.4480322988503198, 0.4369725143258274, 0.4259127298013352, 0.421499653933276, 0.4205848457791291, 0.4202386282975503, 0.4216794100726142, 0.4231201918476781, 0.4225819015145725, 0.4216313044922648, 0.4186442496773847, 0.4127722129896937, 0.4069001763020025, 0.3942614888768985, 0.3816228014517944, 0.3667605953544247, 0.3503288466648674, 0.3336237480028024, 0.3156065694727009, 0.2975893909425995, 0.2798918070549701, 0.2622959123717636, 0.2449149435317124, 0.2279423337936562, 0.2109697240555999, 0.1352478121095765, 0.0551741, 0.0321142, 0.01267890000000002, -0.002821250000000001, -0.0074129, -0.0110695, -0.01250065, -0.01177275, -0.01082065, -0.0276937, -0.05106789999999999, -0.0714813, -0.0917883, -0.1011907, -0.1098835, -0.1177635, -0.124769, -0.130977, -0.136484, -0.141299, -0.1454, -0.14875, -0.151175, -0.15262, -0.153103, -0.152545, -0.151206, -0.149693, -0.145621, -0.143578, -0.140948, -0.137106, -0.140821, -0.156927, -0.179786, -0.201472, -0.2240866097136903, -0.2461860684392151, -0.2613309888245065, -0.2764759092097978, -0.2906206368276409, -0.3042389471994587, -0.3178704108777556, -0.3315432135192723, -0.3452160161607889, -0.3584572127501313, -0.3716084914119372, -0.3840462584573971, -0.3954732173796998, -0.4069001763020025, -0.4127722129896937, -0.4186442496773847, -0.4216313044922648, -0.4225819015145725, -0.4231201918476781, -0.4216794100726143, -0.4202386282975503, -0.4205848457791291, -0.421499653933276, -0.4259127298013352, -0.4369725143258274, -0.4480322988503198, -0.4678431517000181, -0.4883022318330649, -0.4960000067423369, -0.4785678275716413, -0.461135648400946, -0.4437034692302504, -0.4262712900595553, -0.4352995460782729, -0.4531479471601288, -0.4709963482419844, -0.4888447493238403, -0.457142857142857, -0.3428571428571431, -0.2285714285714291, -0.1142857142857139, 0.0]
 materials:
-   -  {name: Gelcoat, orth: 0, rho: 1235.0, E: 3440000000.0, G: 1323000000.0, nu: 0.3, alpha: 0.0, Xt: 74, Xc: 87, S: 21260000.0, GIc: 303, GIIc: 3446, alp0: 53, ply_t: 0.0005, waste: 0.25, unit_cost: 7.23, component_id: 0}
-   -  {name: steel, description: Steel of the tower and monopile ASTM A572 Grade 50, source: http://www.matweb.com/search/DataSheet.aspx?MatGUID=9ced5dc901c54bd1aef19403d0385d7f, orth: 0, rho: 7800, alpha: 0.0, E: 200000000000.0, nu: 0.3, G: 79300000000.0, GIc: 0, GIIc: 0, alp0: 0, Xt: 450000000.0, Xc: 450000000.0, S: 0, Xy: 345000000.0, m: 3, unit_cost: 0.7}
-   -  {name: steel_drive, description: Steel of the drivetrain ASTM 4140 40Cr1Mo28, source: http://www.matweb.com/search/DataSheet.aspx?MatGUID=38108bfd64c44b4c9c6a02af78d5b6c6, orth: 0, rho: 7850, alpha: 0.0, E: 205000000000.0, nu: 0.3, G: 80000000000.0, GIc: 0, GIIc: 0, alp0: 0, Xt: 814000000.0, Xc: 814000000.0, S: 0, Xy: 485000000.0, m: 3, unit_cost: 0.9}
-   -  {name: cast_iron, description: Cast iron for hub and nacelle components, source: TODO, orth: 0, rho: 7200, alpha: 0.0, E: 118000000000.0, nu: 0.3, G: 47600000000.0, GIc: 0, GIIc: 0, alp0: 0, Xt: 310000000.0, Xc: 310000000.0, S: 0, Xy: 265000000.0, m: 3, unit_cost: 0.5}
+   -  name: Gelcoat
+      orth: 0
+      rho: 1235.0
+      E: 3.440e+009
+      G: 1.323e+009
+      nu: 0.300
+      alpha: 0.0
+      Xt: 74
+      Xc: 87
+      S: 2.126E7
+      GIc: 303
+      GIIc: 3446
+      alp0: 53
+      ply_t: 5.0E-4
+      waste: 0.25
+      unit_cost: 7.23
+      component_id: 0
+   -  name: steel
+      description: Steel of the tower and monopile ASTM A572 Grade 50
+      source: http://www.matweb.com/search/DataSheet.aspx?MatGUID=9ced5dc901c54bd1aef19403d0385d7f
+      orth: 0
+      rho: 7800
+      alpha: 0.0
+      E: 200.e+009
+      nu: 0.3
+      G: 79.3e+009
+      GIc: 0  #Place holder, currently not used
+      GIIc: 0  #Place holder, currently not used
+      alp0: 0  #Place holder, currently not used
+      Xt: 450.e+006
+      Xc: 450.e+006
+      S: 0
+      Xy: 345.e+6
+      m: 3
+      unit_cost: 0.7
+   -  name: steel_drive
+      description: Steel of the drivetrain ASTM 4140 40Cr1Mo28
+      source: http://www.matweb.com/search/DataSheet.aspx?MatGUID=38108bfd64c44b4c9c6a02af78d5b6c6
+      orth: 0
+      rho: 7850
+      alpha: 0.0
+      E: 205.e+009
+      nu: 0.3
+      G: 80.0e+009
+      GIc: 0  #Place holder, currently not used
+      GIIc: 0  #Place holder, currently not used
+      alp0: 0  #Place holder, currently not used
+      Xt: 814.e+006
+      Xc: 814.e+006
+      S: 0
+      Xy: 485.e+6
+      m: 3
+      unit_cost: 0.9
+   -  name: cast_iron
+      description: Cast iron for hub and nacelle components
+      source: TODO
+      orth: 0
+      rho: 7200
+      alpha: 0.0
+      E: 118.e+009
+      nu: 0.3
+      G: 47.6e+009
+      GIc: 0  #Place holder, currently not used
+      GIIc: 0  #Place holder, currently not used
+      alp0: 0  #Place holder, currently not used
+      Xt: 310.e+006
+      Xc: 310.e+006
+      S: 0
+      Xy: 265.e+6
+      m: 3
+      unit_cost: 0.5
    -  name: glass_uni
       description: Vectorply E-LT-5500, Epikote MGS RIMR 135/Epicure MGS RIMH 1366 epoxy
       source: MSU composites database 3D property tests, Engineering Mechanics of Composite Materials, Daniel, I & Ishai, O., 1994, pg. 34
       orth: 1
       rho: 1940.0
-      E: [44600000000.0, 17000000000.0, 16700000000.0]
-      G: [3270000000.0, 3480000000.0, 3500000000.0]
+      E: [4.46E10, 1.7E10, 1.67E10]
+      G: [3.27E9, 3.48E9, 3.5E9]
       nu: [0.262, 0.35, 0.264]
-      Xt: [609200000.0, 38100000.0, 15290000.0]
-      Xc: [474710000.0, 112640000.0, 113220000.0]
-      S: [18910000.0, 17240000.0, 13160000.0]
+      Xt: [6.092E8, 3.81E7, 1.529E7]
+      Xc: [4.7471E8, 1.1264E8, 1.1322E8]
+      S: [1.891E7, 1.724E7, 1.316E7]
       m: 10
       GIc: 303
       GIIc: 3446
@@ -1022,32 +1161,32 @@ materials:
       rho: 1220.0
       orth: 1
       nu: [0.27, 0.27, 0.27]
-      Xt: [1546000000.0, 0.0, 0.0]
-      Xc: [1047000000.0, 0.0, 0.0]
+      Xt: [1546.e6, 0.0, 0.0]
+      Xc: [1047.e6, 0.0, 0.0]
       S: [0.0, 0.0, 0.0]
       m: 16.1
       GIc: 0.0
       GIIc: 0.0
       alp0: 0.0
-      fvf: 0.1076923076923077
-      fwf: 0.15889029003783103
-      ply_t: 0.005158730158730159
-      unit_cost: 30.0
+      fvf: 0.1076923076923077 #0.5384615384615385
+      fwf: 0.15889029003783103 #0.6461538461538463
+      ply_t: 0.005158730158730159 #0.0010317460317460314
+      unit_cost: 30.
       waste: 0.05
-      fiber_density: 1800.0
-      area_density_dry: 1.0
+      fiber_density: 1800.
+      area_density_dry: 1.000
       component_id: 4
    -  name: glass_biax
       description: Vectorply E-LT-5500, Epikote MGS RIMR 135/Epicure MGS RIMH 1366 epoxy
       source: MSU composites database 3D property tests, Engineering Mechanics of Composite Materials, Daniel, I & Ishai, O., 1994, pg. 34
       orth: 1
       rho: 1940.0
-      E: [11100000000.0, 11100000000.0, 16700000000.0]
-      G: [13530000000.0, 3490000000.0, 3490000000.0]
+      E: [1.11E10, 1.11E10, 1.67E10]
+      G: [1.353E10, 3.49E9, 3.49E9]
       nu: [0.5, 0.0, 0.066]
-      Xt: [42900000.0, 42600000.0, 15300000.0]
-      Xc: [70700000.0, 70700000.0, 113200000.0]
-      S: [103400000.0, 17200000.0, 13200000.0]
+      Xt: [4.29E7, 4.26E7, 1.53E7]
+      Xc: [7.07E7, 7.07E7, 1.132E8]
+      S: [1.034E8, 1.72E7, 1.32E7]
       m: 10
       GIc: 303
       GIIc: 3446
@@ -1056,7 +1195,7 @@ materials:
       fwf: 0.7450682696347697
       ply_t: 0.001
       waste: 0.15
-      unit_cost: 3.0
+      unit_cost: 3.00
       fiber_density: 2535.5
       area_density_dry: 1.4454324430914534
       component_id: 3
@@ -1066,12 +1205,12 @@ materials:
       source: MSU composites database 3D property tests, Engineering Mechanics of Composite Materials, Daniel, I & Ishai, O., 1994, pg. 34
       orth: 1.0
       rho: 1940.0
-      E: [28700000000.0, 16600000000.0, 16700000000.0]
-      G: [8400000000.0, 3490000000.0, 3490000000.0]
+      E: [2.87E10, 1.66E10, 1.67E10]
+      G: [8.4E9, 3.49E9, 3.49E9]
       nu: [0.5, 0.0, 0.17]
-      Xt: [396000000.0, 76400000.0, 15300000.0]
-      Xc: [448900000.0, 174700000.0, 113200000.0]
-      S: [103400000.0, 17200000.0, 13200000.0]
+      Xt: [3.96E8, 7.64E7, 1.53E7]
+      Xc: [4.489E8, 1.747E8, 1.132E8]
+      S: [1.034E8, 1.72E7, 1.32E7]
       m: 10
       GIc: 303
       GIIc: 3446
@@ -1085,21 +1224,118 @@ materials:
       area_density_dry: 1.4454324430914534
       component_id: 2
       roll_mass: 181.4368
-   -  {name: medium_density_foam, description: "Airex C70.130 PVC Foam, source 'https://www.3accorematerials.com/uploads/documents/TDS-AIREX-C70-E_1106.pdf'", orth: 0.0, rho: 130.0, E: 129200000.0, G: 48946969.696969695, nu: 0.32, Xt: 2083000.0, Xc: 1563000.0, S: 1250000.0, GIc: 303, GIIc: 3446, alp0: 53, component_id: 1, waste: 0.2, unit_cost: 13}
-   -  {name: resin, description: epoxy, E: 1000000.0, nu: 0.3, G: 312500.0, GIc: 0, GIIc: 0, alp0: 0, Xt: 0, Xc: 0, S: 0, rho: 1150.0, alpha: 0.0, orth: 0, unit_cost: 3.63}
+   -  name: medium_density_foam
+      description: Airex C70.130 PVC Foam, source 'https://www.3accorematerials.com/uploads/documents/TDS-AIREX-C70-E_1106.pdf'
+      orth: 0.0
+      rho: 130.0
+      E: 1.292E8
+      G: 4.8946969696969695E7
+      nu: 0.32
+      Xt: 2083000.0
+      Xc: 1563000.0
+      S: 1250000.0
+      GIc: 303
+      GIIc: 3446
+      alp0: 53
+      component_id: 1
+      waste: 0.2
+      unit_cost: 13
+   -  name: resin
+      description: epoxy
+      E: 1.e+6
+      nu: 0.3  #Place holder, currently not used
+      G: 312500.0  #Place holder, currently not used
+      GIc: 0  #Place holder, currently not used
+      GIIc: 0  #Place holder, currently not used
+      alp0: 0  #Place holder, currently not used
+      Xt: 0  #Place holder, currently not used
+      Xc: 0  #Place holder, currently not used
+      S: 0  #Place holder, currently not used
+      rho: 1150.
+      alpha: 0.0
+      orth: 0
+      unit_cost: 3.63
 control:
-    supervisory: {Vin: 3.0, Vout: 25.0, maxTS: 95.0}
+    supervisory:
+        Vin: 3.0
+        Vout: 25.0
+        maxTS: 95.
     pitch:
-        PC_zeta: 1.0
-        PC_omega: 0.2
-        ps_percent: 0.8
-        max_pitch: 1.57
-        max_pitch_rate: 0.03490658503988659
-        min_pitch: 0.0
-        fl_feedback: {twr_freq: 100.0, ptfm_freq: 0.2}
-    torque: {control_type: tsr_tracking, tsr: 9.0, VS_zeta: 1.0, VS_omega: 0.2, max_torque_rate: 1500000.0, VS_minspd: 0.5235987755982988, VS_maxspd: 0.7916813487046278}
-    setpoint_smooth: {ss_vsgain: 1, ss_pcgain: 0.001}
-    shutdown: {limit_type: gen_speed, limit_value: 2.0}
-environment: {air_density: 1.225, air_dyn_viscosity: 1.81e-05, weib_shape_parameter: 2.0, air_speed_sound: 340.0, shear_exp: 0.12, water_density: 1025.0, water_dyn_viscosity: 0.0013351, soil_shear_modulus: 140000000.0, soil_poisson: 0.4, water_depth: 30.0, significant_wave_height: 4.52, significant_wave_period: 9.45, gravity: 9.80665, air_pressure: 103500.0, air_vapor_pressure: 1700.0, V_mean: 0.0}
-bos: {plant_turbine_spacing: 7, plant_row_spacing: 7, commissioning_pct: 0.01, decommissioning_pct: 0.15, distance_to_substation: 1.0, distance_to_interconnection: 8.5, interconnect_voltage: 130.0, distance_to_site: 115.0, distance_to_landfall: 50.0, port_cost_per_month: 2000000.0, site_auction_price: 100000000.0, site_assessment_plan_cost: 1000000.0, site_assessment_cost: 25000000.0, construction_operations_plan_cost: 2500000.0, boem_review_cost: 0.0, design_install_plan_cost: 2500000.0}
-costs: {wake_loss_factor: 0.15, fixed_charge_rate: 0.056, bos_per_kW: 4053.0, opex_per_kW: 137.0, turbine_number: 40.0, labor_rate: 58.8, painting_rate: 30.0, blade_mass_cost_coeff: 14.6, hub_mass_cost_coeff: 3.9, pitch_system_mass_cost_coeff: 22.1, spinner_mass_cost_coeff: 11.1, lss_mass_cost_coeff: 11.9, bearing_mass_cost_coeff: 4.5, gearbox_mass_cost_coeff: 12.9, hss_mass_cost_coeff: 6.8, generator_mass_cost_coeff: 12.4, bedplate_mass_cost_coeff: 2.9, yaw_mass_cost_coeff: 8.3, converter_mass_cost_coeff: 18.8, transformer_mass_cost_coeff: 18.8, hvac_mass_cost_coeff: 124.0, cover_mass_cost_coeff: 5.7, elec_connec_machine_rating_cost_coeff: 41.85, platforms_mass_cost_coeff: 17.1, tower_mass_cost_coeff: 2.9, controls_machine_rating_cost_coeff: 21.15, crane_cost: 12000.0}
+        PC_zeta: 1.0                      # Pitch controller desired damping ratio [-]
+        PC_omega: 0.2                     # Pitch controller desired natural frequency [rad/s]
+        ps_percent: 0.8                   # Percent peak shaving  [%, <= 1 ], {default = 80%}
+        max_pitch: 1.57                     # Maximum pitch angle [rad], {default = 90 degrees}
+        max_pitch_rate: 0.03490658503988659 # 2 deg/s
+        min_pitch: 0.                     # Minimum pitch angle [rad], {default = 0 degrees}
+    torque:
+        control_type: tsr_tracking
+        tsr: 9.0
+        max_torque_rate: 1500000.
+        VS_minspd: 0.5235987755982988     # Minimum rotor speed [rad/s], {default = 0 rad/s}
+        VS_maxspd: 0.7916813487046278     # Minimum rotor speed [rad/s], {default = 0 rad/s}
+        VS_zeta: 1.0                      # Torque controller desired damping ratio [-]
+        VS_omega: 0.2                     # Torque controller desired natural frequency [rad/s]
+    setpoint_smooth:
+        ss_vsgain: 1                      # Torque controller setpoint smoother gain bias percentage [%, <= 1 ], {default = 100%}
+        ss_pcgain: .001                   # Pitch controller setpoint smoother gain bias percentage  [%, <= 1 ], {default = 0.1%}
+    shutdown:
+        limit_type: gen_speed
+        limit_value: 2.0
+environment:
+    air_density: 1.225
+    air_dyn_viscosity: 1.81e-5
+    weib_shape_parameter: 2.
+    air_speed_sound: 340.
+    shear_exp: 0.12
+    water_density: 1025.0
+    water_dyn_viscosity: 1.3351e-3
+    soil_shear_modulus: 140e6
+    soil_poisson: 0.4
+    water_depth: 30.0
+    significant_wave_height: 4.52
+    significant_wave_period: 9.45
+bos:
+    plant_turbine_spacing: 7
+    plant_row_spacing: 7
+    commissioning_pct: 0.01
+    decommissioning_pct: 0.15
+    distance_to_substation: 1.0
+    distance_to_interconnection: 8.5
+    interconnect_voltage: 130.
+    distance_to_site: 115.
+    distance_to_landfall: 50.
+    port_cost_per_month: 2e6
+    site_auction_price: 100e6
+    site_assessment_plan_cost: 1e6
+    site_assessment_cost: 25e6
+    construction_operations_plan_cost: 2.5e6
+    boem_review_cost: 0.0
+    design_install_plan_cost: 2.5e6
+costs:
+    wake_loss_factor: 0.15
+    fixed_charge_rate: 0.056
+    bos_per_kW: 4053.
+    opex_per_kW: 137.
+    turbine_number: 40.
+    labor_rate: 58.8
+    painting_rate: 30.0
+    blade_mass_cost_coeff: 14.6
+    hub_mass_cost_coeff: 3.9
+    pitch_system_mass_cost_coeff: 22.1
+    spinner_mass_cost_coeff: 11.1
+    lss_mass_cost_coeff: 11.9
+    bearing_mass_cost_coeff: 4.5
+    gearbox_mass_cost_coeff: 12.9
+    hss_mass_cost_coeff: 6.8
+    generator_mass_cost_coeff: 12.4
+    bedplate_mass_cost_coeff: 2.9
+    yaw_mass_cost_coeff: 8.3
+    converter_mass_cost_coeff: 18.8
+    transformer_mass_cost_coeff: 18.8
+    hvac_mass_cost_coeff: 124.0
+    cover_mass_cost_coeff: 5.7
+    elec_connec_machine_rating_cost_coeff: 41.85
+    platforms_mass_cost_coeff: 17.1
+    tower_mass_cost_coeff: 2.9
+    controls_machine_rating_cost_coeff: 21.15
+    crane_cost: 12e3
