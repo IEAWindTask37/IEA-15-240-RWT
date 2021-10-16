@@ -37,3 +37,25 @@ ind = wt_opt["floatingse.constr_tower_stress"] > -999
 print("stress1 =", wt_opt["floatingse.constr_tower_stress"][ind])
 print("GL buckling =", wt_opt["floatingse.constr_tower_global_buckling"][ind])
 print("Shell buckling =", wt_opt["floatingse.constr_tower_shell_buckling"][ind])
+
+'''
+# print results from the analysis or optimization
+z = 0.5 * (wt_opt["towerse.z_full"][:-1] + wt_opt["towerse.z_full"][1:])
+print("zs =", wt_opt["towerse.z_full"])
+print("ds =", wt_opt["towerse.d_full"])
+print("ts =", wt_opt["towerse.t_full"])
+print("mass (kg) =", wt_opt["towerse.tower_mass"])
+print("cg (m) =", wt_opt["towerse.tower_center_of_mass"])
+print("d:t constraint =", wt_opt["towerse.constr_d_to_t"])
+print("taper ratio constraint =", wt_opt["towerse.constr_taper"])
+print("\nwind: ", wt_opt["towerse.env.Uref"])
+print("freq (Hz) =", wt_opt["towerse.tower.structural_frequencies"])
+print("Fore-aft mode shapes =", wt_opt["towerse.tower.fore_aft_modes"])
+print("Side-side mode shapes =", wt_opt["towerse.tower.side_side_modes"])
+print("top_deflection1 (m) =", wt_opt["towerse.tower.top_deflection"])
+print("Tower base forces1 (N) =", wt_opt["towerse.tower.turbine_F"])
+print("Tower base moments1 (Nm) =", wt_opt["towerse.tower.turbine_M"])
+print("stress1 =", wt_opt["towerse.post.constr_stress"].flatten())
+print("GL buckling =", wt_opt["towerse.post.constr_global_buckling"].flatten())
+print("Shell buckling =", wt_opt["towerse.post.constr_shell_buckling"].flatten())
+'''

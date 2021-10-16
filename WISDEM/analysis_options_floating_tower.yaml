@@ -28,9 +28,11 @@ constraints:
       lower_bound: 50.0
       upper_bound: 500.0
     taper:
-      flag: False #True
+      flag: True
       lower_bound: 0.2
     slope:
+      flag: True
+    thickness_slope:
       flag: True
     frequency_1:
       flag: True
@@ -40,7 +42,7 @@ constraints:
 driver:
     optimization:
         flag: True         # Flag to enable optimization
-        tol: 1.e-8          # Optimality tolerance
+        tol: 1.e-6          # Optimality tolerance
         max_major_iter: 50    # Maximum number of major design iterations (SNOPT)
         max_minor_iter: 200   # Maximum number of minor design iterations (SNOPT)
         max_iter: 100         # Maximum number of iterations (SLSQP)
