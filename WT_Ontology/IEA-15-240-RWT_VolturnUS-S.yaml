@@ -475,6 +475,8 @@ components:
                     grid: *grid_tower
                     values: [0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.05767679799069243, 0.057434027420574976, 0.029067145944137167, 0.03109415045934254, 0.020146327660209167, 0.020386701636397903, 0.015270962848391528, 0.01632517877486977, 0.009339728024184172, 0.013541119637885374, 0.004000000545671691, 0.011867472415952079, 0.004, 0.010980595890122721]
     floating_platform:
+        transition_piece_mass: 100e3
+        transition_piece_cost: 100e3
         joints:
             - name: main_keel
               location: [0.0, 0.0, -20.0]
@@ -508,15 +510,15 @@ components:
               cylindrical: True
 
             - name: anchor1
-              location: [837.8, 0.0, -200.0]
+              location: [837.6, 3.14159265, -200.0] #3.14159265 = 180deg
               cylindrical: True
 
             - name: anchor2
-              location: [837.8, 2.0943951023931953, -200.0] # 120deg
+              location: [837.6, 1.0471976, -200.0] #1.0471975 = 60 deg
               cylindrical: True
 
             - name: anchor3
-              location: [837.8, 4.1887902047863905, -200.0] # 240deg
+              location: [837.6, -1.0471976, -200.0] #-1.0471975 = -60 deg
               cylindrical: True
 
         members:
@@ -574,10 +576,8 @@ components:
                 ballasts:
                     - variable_flag: False
                       material: slurry
-                      volume: 169.33
+                      volume: 169.333333
                       grid: [0.0, 0.05]
-                    - variable_flag: True
-                      grid: [0.05, 0.2]
               axial_joints:
                 - name: col1_upper_pontoon
                   grid: 0.987
@@ -666,7 +666,7 @@ components:
                 shape: circular
                 outer_diameter:
                     grid: [0.0, 1.0]
-                    values: [9.6148, 9.6148] #equates displacement not circle: [12.5, 12.5]
+                    values: [10.555 , 10.555] #equates displacement not circle: [12.5, 12.5]
               internal_structure: &pontlow_int
                   # Probably needs longitudinal stiffeners
                 layers:
@@ -684,12 +684,16 @@ components:
               joint2: col2_lower_pontoon
               outer_shape: *pontlow_out
               internal_structure: *pontlow_int
+              Ca: 1.0
+              Cd: 0.8
 
             - name: Y_pontoon_lower3
               joint1: main_lower_pontoon
               joint2: col3_lower_pontoon
               outer_shape: *pontlow_out
               internal_structure: *pontlow_int
+              Ca: 1.0
+              Cd: 0.8
     mooring:
         nodes:
             - name: line1_anchor

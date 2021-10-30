@@ -14,9 +14,14 @@ fname_analysis_noopt = os.path.join(thisdir, "analysis_options.yaml")
 fname_analysis_opt = os.path.join(thisdir, "analysis_options_floating_tower.yaml")
 folder_output = os.path.join(thisdir, "outputs")
 
+# Don't enforce a hub-height, just use tower description
+overridden_values={'configuration.hub_height_user':0.0}
+
 # Run WISDEM tower-monopile optimization
-prob, modeling_options, analysis_noopt = run_wisdem(fname_wt_input, fname_modeling, fname_analysis_noopt)
-wt_opt, modeling_options, analysis_opt = run_wisdem(fname_wt_input, fname_modeling, fname_analysis_opt)
+prob, modeling_options, analysis_noopt = run_wisdem(fname_wt_input, fname_modeling, fname_analysis_noopt,
+                                                    overridden_values=overridden_values)
+wt_opt, modeling_options, analysis_opt = run_wisdem(fname_wt_input, fname_modeling, fname_analysis_opt,
+                                                    overridden_values=overridden_values)
 
 # Produce standard comparison plots
 compare_designs.run([prob, wt_opt], ['Before','After'], modeling_options, analysis_opt)
