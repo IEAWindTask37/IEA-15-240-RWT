@@ -618,7 +618,7 @@ end dll;
 begin output;
   filename ./res/IEA_15MW_RWT ;
   data_format  gtsdf;
-  buffer 1 ;
+  buffer 9999 ;
   time 0 100;
 ;
   general time;  
