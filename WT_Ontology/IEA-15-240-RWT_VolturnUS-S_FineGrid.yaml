@@ -911,15 +911,15 @@ components:
               cylindrical: True
 
             - name: anchor1
-              location: [837.8, 0.0, -200.0]
+              location: [837.8, 3.14159265, -200.0]
               cylindrical: True
 
             - name: anchor2
-              location: [837.8, 2.0943951023931953, -200.0] # 120deg
+              location: [837.8, 1.0471976, -200.0]  # 1.0471975 = 60 deg
               cylindrical: True
 
             - name: anchor3
-              location: [837.8, 4.1887902047863905, -200.0] # 240deg
+              location: [837.8, -1.0471976, -200.0]  #-1.0471975 = -60 deg
               cylindrical: True
 
         members:
