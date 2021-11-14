@@ -4,11 +4,19 @@ General:
 WISDEM:
     RotorSE:
         flag: False
+        spar_cap_ss: Spar_Cap_SS
+        spar_cap_ps: Spar_Cap_PS
+        te_ss: TE_reinforcement_SS
+        te_ps: TE_reinforcement_PS
+        n_pitch_perf_surfaces: 5
+        n_tsr_perf_surfaces: 5
+        gust_std: 0.0
+        n_span: 60
+        n_pc: 50
     DriveSE:
         flag: False
     TowerSE:             # Options of TowerSE module
         flag: True
-        nLC: 2           # Number of design load cases
         wind: PowerWind  # Wind used
         gamma_f: 1.35    # Safety factor for fatigue loads
         gamma_m: 1.3     # Safety factor for material properties
@@ -22,15 +30,23 @@ WISDEM:
         frame3dd:
             shear: True
             geom: True
-            tol: 1e-9
+            tol: 1e-7
+    FloatingSE:
+        flag: True
+        symmetric_moorings: True
+        gamma_f: 1.35    # Safety factor for fatigue loads
+        gamma_m: 1.3     # Safety factor for material properties
+        gamma_n: 1.0     # Safety factor for ...
+        gamma_b: 1.1     # Safety factor for ...
+        gamma_fatigue: 1.755  # Safety factor for fatigue loads
     BOS:
         flag: False
 
     Loading:
-        mass: 956762.4136593617
-        center_of_mass: [-6.55919605, -0.098772, 4.52551515]
-        moment_of_inertia: [3.84130521e+08, 2.59670608e+08, 2.41112120e+08, 7.86100051e+02, 1.43771857e+07, 1.70976443e+05]
+        mass: 967074.89012356
+        center_of_mass: [-6.61477744, -0.09771873, 4.53683107]
+        moment_of_inertia: [4.13558635e+08, 2.76071589e+08, 2.57350933e+08, 7.86163621e+02, 1.35359722e+07, 1.70976373e+05]
         loads:
-            - force: [3732455.03902766, 22583.93220078, -6907171.29266029]
-              moment: [-1112777.68087128, -11500138.21852062, 9547667.10956777]
+            - force: [2427925.55809699, 29094.73368413, -7074256.2758736]
+              moment: [-278500.68674037, -12634193.44789813, 1299461.07383137]
               velocity: 11.73732

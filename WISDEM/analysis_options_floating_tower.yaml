@@ -11,7 +11,7 @@ design_variables:
     layer_thickness:
       flag: True
       lower_bound: 4e-3
-      upper_bound: 8e-2
+      upper_bound: 9e-2
 
 merit_figure: tower_mass
 
@@ -29,27 +29,27 @@ constraints:
       upper_bound: 500.0
     taper:
       flag: True
-      lower_bound: 0.2
+      lower_bound: 0.5
     slope:
       flag: True
     thickness_slope:
       flag: True
     frequency_1:
       flag: True
-      lower_bound: 0.48
-      upper_bound: 0.65
+      lower_bound: 0.38
+      upper_bound: 0.43
 
 driver:
     optimization:
         flag: True         # Flag to enable optimization
-        tol: 1.e-6          # Optimality tolerance
+        tol: 1.e-7          # Optimality tolerance
         max_major_iter: 50    # Maximum number of major design iterations (SNOPT)
         max_minor_iter: 200   # Maximum number of minor design iterations (SNOPT)
         max_iter: 100         # Maximum number of iterations (SLSQP)
         solver: SNOPT         # Optimization solver. Other options are 'SLSQP' - 'CONMIN'
         step_size: 1.e-4      # Step size for finite differencing
         form: central       # Finite differencing mode, either forward or central
-    
+
 recorder:
     flag: False              # Flag to activate OpenMDAO recorder
     file_name: log_opt.sql  # Name of OpenMDAO recorder

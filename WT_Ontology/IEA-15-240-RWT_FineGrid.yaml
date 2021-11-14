@@ -1255,6 +1255,19 @@ materials:
       alpha: 0.0
       orth: 0
       unit_cost: 3.63
+   -  name: adhesive
+      description: Sample adhesive
+      source: https://www.nrel.gov/docs/fy19osti/73585.pdf
+      orth: 0
+      rho: 1100
+      E: 4.56e+006
+      nu: 0.49
+      alpha: 0.0
+      Xt: 0.69e+006
+      Xc: 0.4e+006
+      S: 0.31e+006
+      G: 1520000.0
+      unit_cost: 9.0
 control:
     supervisory:
         Vin: 3.0

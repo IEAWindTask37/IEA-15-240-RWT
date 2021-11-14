@@ -4,6 +4,11 @@ General:
 WISDEM:
     RotorSE:
         flag: False
+        n_pitch_perf_surfaces: 5
+        n_tsr_perf_surfaces: 5
+        gust_std: 0.0
+        n_span: 60
+        n_pc: 50
     DriveSE:
         flag: False
     TowerSE:             # Options of TowerSE module
