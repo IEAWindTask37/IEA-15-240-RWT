@@ -633,11 +633,11 @@ begin output;
   wind free_wind 1 0.0 0.0 -150; local wind at fixed position: coo (1=global,2=non-rotation rotor coo.), pos x, pos y, pos z
   ; Moments:
   mbdy momentvec tower  1 1  tower # tower base ;
-  mbdy momentvec tower  9 2 tower # tower yaw bearing ;
+  mbdy momentvec tower  9 2  tower # tower yaw bearing ;
   mbdy momentvec shaft  1 1  shaft # main bearing ;
-  mbdy momentvec blade1 2  2 blade1 # blade 1 root ;
-  mbdy momentvec blade2 2  2 blade2 # blade 2 root ;
-  mbdy momentvec blade3 2  2 blade3 # blade 3 root ;
+  mbdy momentvec blade1 1 1  blade1 # blade 1 root ;
+  mbdy momentvec blade2 1 1  blade2 # blade 2 root ;
+  mbdy momentvec blade3 1 1  blade3 # blade 3 root ;
   ; Displacements and accellerations
   mbdy state pos tower 9 1.0 global only 1 # Tower top FA displ; 
   mbdy state pos tower 9 1.0 global only 2 # Tower top SS displ; 
