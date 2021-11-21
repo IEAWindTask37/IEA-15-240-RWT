@@ -75,3 +75,8 @@ def test_openfast_hawc2_match():
     z_hub_of = ed_dict['TowerHt'] + ed_dict['Twr2Shft'] + -ed_dict['OverHang']*np.tan(tilt)
     assert np.isclose(z_hub_h2, z_hub, atol=1e-2)
     assert np.isclose(z_hub_of, z_hub, atol=1e-2)
+
+    # overhang distance (measured along tilted axis)
+    overhang_h2 = shaft_length + conn_length
+    overhang_of = -ed_dict['OverHang']
+    assert overhang_h2 == overhang_of

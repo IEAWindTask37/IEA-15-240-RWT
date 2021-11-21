@@ -58,7 +58,7 @@ begin new_htc_structure;
     begin c2_def;
       nsec 2;
       sec 1 0.0 0.0  0.0    0.0 ; x,y,z,twist
-      sec 2 0.0 0.0 -4.4498  0.0 ; 
+      sec 2 0.0 0.0 -4.349459414248071  0.0 ; 
     end c2_def ;
   end main_body;
 ;
@@ -94,7 +94,7 @@ begin new_htc_structure;
     begin c2_def;
       nsec 2;
       sec 1 0.0 0.0  0.00 0.0 ; x,y,z,twist
-      sec 2 0.0 0.0  5.168312556956474 0.0 ;
+      sec 2 0.0 0.0  6.129880124703066 0.0 ;
     end c2_def ;
   end main_body;	
 ;
