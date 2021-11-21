@@ -32,14 +32,16 @@ def read_elastodyn_dat(path):
                 except ValueError:
                     d[contents[1]] = contents[0]
     return d
-    
 
-def test_openfast_hawc2_match():
-    """compare a series of values in the monopile elastodyn and fixed-bottom hawc2 models"""
+
+# TODO: Add checks for monopile and umaine models
+
+def test_of_h2_fixedbottom():
+    """Check RNA properties in OF Monopile model versus H2 fixed-bottom, UMaine, monopile
+    """
 
     ed_path = './OpenFAST/IEA-15-240-RWT-Monopile/IEA-15-240-RWT-Monopile_ElastoDyn.dat'
     h2_path = './HAWC2/IEA-15-240-RWT-FixedBottom/htc/IEA_15MW_RWT.htc'
-    z_transition = 15  # height of transition piece
     
     ed_dict = read_elastodyn_dat(ed_path)
     htc = HTCFile(h2_path)
@@ -47,9 +49,10 @@ def test_openfast_hawc2_match():
     htc_struc = htc.new_htc_structure
     
     # tower
-    twrht_h2 = get_body_length(htc_struc, 'tower') + z_transition
+    z_towerbottom = -htc_struc.orientation.base.inipos[2]  # location of tower bottom in space
+    twrht_h2 = get_body_length(htc_struc, 'tower') + z_towerbottom
     assert np.isclose(ed_dict['TowerHt'], twrht_h2)  # tower height
-    
+        
     # nacelle and yaw bearing masses and inertias
     assert np.isclose(ed_dict['YawBrMass'], htc_struc.get_subsection_by_name('towertop').concentrated_mass__1.values[4]) # yaw bearing mass
     assert np.isclose(ed_dict['NacCMxn'], htc_struc.get_subsection_by_name('towertop').concentrated_mass__2.values[2], atol=1e-3)  # nacelle cm
@@ -65,7 +68,7 @@ def test_openfast_hawc2_match():
     assert np.isclose(ed_dict['HubRad'], htc_struc.get_subsection_by_name('hub1').c2_def.sec__2.values[-2])  # hub radius
     assert np.isclose(-ed_dict['ShftTilt'], htc_struc.orientation.relative__2.body2_eulerang__2.values[0])  # tilt
     
-    # check tower height
+    # hub height
     tilt = 6 * np.pi / 180
     z_hub = 150
     ttop_length = get_body_length(htc_struc, 'towertop')
