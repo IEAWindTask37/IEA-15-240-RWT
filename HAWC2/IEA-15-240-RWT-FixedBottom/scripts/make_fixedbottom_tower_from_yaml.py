@@ -115,7 +115,7 @@ out_arr[:, 18] = 0  # elastic center, y
 
 # compare results with elastodyn
 
-ed_st = np.loadtxt(ed_path, skiprows=19, max_rows=nstn)
+ed_st = np.loadtxt(ed_path, skiprows=19, max_rows=10)
 h2_stn = (out_arr[:, 0] - out_arr[0, 0])/(out_arr[-1, 0] - out_arr[0, 0])
 
 # visualize the difference
@@ -123,7 +123,7 @@ plt.figure(2, figsize=(7, 3))
 plt.clf()
 plt.subplot(1, 3, 1)  # mass density
 plt.plot(ed_st[:, 1], ed_st[:, 0], label='OpenFAST')
-plt.plot(out_arr[:, 1], h2_stn, label='HAWC2')
+plt.plot(out_arr[:, 1], h2_stn, '--', label='HAWC2')
 plt.xlabel('Mass density [m]'); plt.ylabel('Tower height [m]'); plt.grid('on')
 plt.legend()
 plt.subplot(1, 3, 2)
