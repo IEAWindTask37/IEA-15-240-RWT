@@ -1,39 +1,39 @@
 ------- AERODYN v15.03.* INPUT FILE ------------------------------------------------
 IEA 15 MW Offshore Reference Turbine
 ======  General Options  ============================================================================
-False                    Echo         - Echo the input to "<rootname>.AD.ech"?  (flag)
-"default"                DTAero       - Time interval for aerodynamic calculations {or "default"} (s)
-1                        WakeMod      - Type of wake/induction model (switch) {0=none, 1=BEMT, 2=DBEMT, 3=OLAF} [WakeMod cannot be 2 or 3 when linearizing]
-2                        AFAeroMod    - Type of blade airfoil aerodynamics model (switch) {1=steady model, 2=Beddoes-Leishman unsteady model} [AFAeroMod must be 1 when linearizing]
-1                        TwrPotent    - Type tower influence on wind based on potential flow around the tower (switch) {0=none, 1=baseline potential flow, 2=potential flow with Bak correction}
-1                        TwrShadow    - Calculate tower influence on wind based on downstream tower shadow (switch) {0=none, 1=Powles model, 2=Eames model}
-True                     TwrAero      - Calculate tower aerodynamic loads? (flag)
-False                    FrozenWake   - Assume frozen wake during linearization? (flag) [used only when WakeMod=1 and when linearizing]
-False                    CavitCheck   - Perform cavitation check? (flag) [AFAeroMod must be 1 when CavitCheck=true]
-False                    CompAA       - Flag to compute AeroAcoustics calculation [used only when WakeMod = 1 or 2]
-"AeroAcousticsInput.dat" AA_InputFile - AeroAcoustics input file [used only when CompAA=true]
+False                  Echo        - Echo the input to "<rootname>.AD.ech"?  (flag)
+default                DTAero      - Time interval for aerodynamic calculations {or "default"} (s)
+1                      WakeMod     - Type of wake/induction model (switch) {0=none, 1=BEMT, 2=DBEMT, 3=OLAF} [WakeMod cannot be 2 or 3 when linearizing]
+2                      AFAeroMod   - Type of blade airfoil aerodynamics model (switch) {1=steady model, 2=Beddoes-Leishman unsteady model} [AFAeroMod must be 1 when linearizing]
+1                      TwrPotent   - Type tower influence on wind based on potential flow around the tower (switch) {0=none, 1=baseline potential flow, 2=potential flow with Bak correction}
+1                      TwrShadow   - Calculate tower influence on wind based on downstream tower shadow (switch) {0=none, 1=Powles model, 2=Eames model}
+True                   TwrAero     - Calculate tower aerodynamic loads? (flag)
+False                  FrozenWake  - Assume frozen wake during linearization? (flag) [used only when WakeMod=1 and when linearizing]
+False                  CavitCheck  - Perform cavitation check? (flag) [AFAeroMod must be 1 when CavitCheck=true]
+False                  CompAA      - Flag to compute AeroAcoustics calculation [only used when WakeMod=1 or 2]
+AeroAcousticsInput.dat AA_InputFile - AeroAcoustics input file [used only when CompAA=true]
 ======  Environmental Conditions  ===================================================================
  1.225000000000000e+00 AirDens     - Air density (kg/m^3)
- 1.479232653061225e-05 KinVisc     - Kinematic air viscosity (m^2/s)
- 3.350000000000000e+02 SpdSound    - Speed of sound (m/s)
+ 1.477551020408163e-05 KinVisc     - Kinematic air viscosity (m^2/s)
+ 3.400000000000000e+02 SpdSound    - Speed of sound (m/s)
  1.035000000000000e+05 Patm        - Atmospheric pressure (Pa) [used only when CavitCheck=True]
  1.700000000000000e+03 Pvap        - Vapour pressure of fluid (Pa) [used only when CavitCheck=True]
  5.000000000000000e-01 FluidDepth  - Water depth above mid-hub height (m) [used only when CavitCheck=True]
 ======  Blade-Element/Momentum Theory Options  ====================================================== [used only when WakeMod=1]
 2                      SkewMod     - Type of skewed-wake correction model (switch) {1=uncoupled, 2=Pitt/Peters, 3=coupled} [unused when WakeMod=0 or 3]
-"default"            SkewModFactor - Constant used in Pitt/Peters skewed wake model {or "default" is 15/32*pi} (-) [used only when SkewMod=2; unused when WakeMod=0 or 3]
+1.4726215563702154     SkewModFactor - Constant used in Pitt/Peters skewed wake model {or "default" is 15/32*pi} (-) [used only when SkewMod=2; unused when WakeMod=0 or 3]
 True                   TipLoss     - Use the Prandtl tip-loss model? (flag) [unused when WakeMod=0 or 3]
 True                   HubLoss     - Use the Prandtl hub-loss model? (flag) [unused when WakeMod=0 or 3]
 True                   TanInd      - Include tangential induction in BEMT calculations? (flag) [unused when WakeMod=0 or 3]
 True                   AIDrag      - Include the drag term in the axial-induction calculation? (flag) [unused when WakeMod=0 or 3]
 True                   TIDrag      - Include the drag term in the tangential-induction calculation? (flag) [unused when WakeMod=0,3 or TanInd=FALSE]
-"Default"              IndToler    - Convergence tolerance for BEMT nonlinear solve residual equation {or "default"} (-) [unused when WakeMod=0 or 3]
+default                IndToler    - Convergence tolerance for BEMT nonlinear solve residual equation {or "default"} (-) [unused when WakeMod=0 or 3]
 500                    MaxIter     - Maximum number of iteration steps (-) [unused when WakeMod=0]
 ======  Dynamic Blade-Element/Momentum Theory Options  ====================================================== [used only when WakeMod=1]
 2                      DBEMT_Mod   - Type of dynamic BEMT (DBEMT) model {1=constant tau1, 2=time-dependent tau1} (-) [used only when WakeMod=2]
-2                      tau1_const  - Time constant for DBEMT (s) [used only when WakeMod=2 and DBEMT_Mod=1]
+2.0                    tau1_const  - Time constant for DBEMT (s) [used only when WakeMod=2 and DBEMT_Mod=1]
 ======  OLAF -- cOnvecting LAgrangian Filaments (Free Vortex Wake) Theory Options  ================== [used only when WakeMod=3]
-"unused"               OLAFInputFileName - Input file for OLAF [used only when WakeMod=3]
+IEA-15-240-RWT_OLAF.dat OLAFInputFileName - Input file for OLAF [used only when WakeMod=3]
 ======  Beddoes-Leishman Unsteady Airfoil Aerodynamics Options  ===================================== [used only when AFAeroMod=2]
 3                      UAMod       - Unsteady Aero Model Switch (switch) {1=Baseline model (Original), 2=Gonzalez's variant (changes in Cn,Cc,Cm), 3=Minnema/Pierce variant (changes in Cc and Cm)} [used only when AFAeroMod=2]
 True                   FLookup     - Flag to indicate whether a lookup for f' will be calculated (TRUE) or whether best-fit exponential equations will be used (FALSE); if FALSE S1-S4 must be provided in airfoil input files (flag) [used only when AFAeroMod=2]
@@ -103,24 +103,24 @@ True                   UseBlCm     - Include aerodynamic pitching moment in calc
 ======  Tower Influence and Aerodynamics ============================================================= [used only when TwrPotent/=0, TwrShadow/=0, or TwrAero=True]
 11                     NumTwrNds   - Number of tower nodes used in the analysis  (-) [used only when TwrPotent/=0, TwrShadow/=0, or TwrAero=True]
 TwrElev        TwrDiam        TwrCd         TwrTI (used only with TwrShadow=2)
-(m)              (m)           (-)               (-)
-  15.           10.            0.5               0.1
-  28.           10.            0.5               0.1
-  41.            9.926         0.5               0.1
-  54.            9.443         0.5               0.1
-  67.            8.833         0.5               0.1
-  80.            8.151         0.5               0.1
-  93.            7.39          0.5               0.1
- 106.            6.909         0.5               0.1
- 119.            6.748         0.5               0.1
- 132.            6.572         0.5               0.1
- 144.386         6.5           0.5               0.1
+(m)              (m)           (-)            (-)
+ 1.500000000000000e+01  1.000000000000000e+01  5.000000000000000e-01  1.000000000000000e-01 
+ 2.800000000000000e+01  1.000000000000000e+01  5.000000000000000e-01  1.000000000000000e-01 
+ 4.100000000000000e+01  9.926000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
+ 5.400000000000000e+01  9.443000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
+ 6.700000000000000e+01  8.833000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
+ 8.000000000000000e+01  8.151000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
+ 9.300000000000000e+01  7.390000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
+ 1.060000000000000e+02  6.909000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
+ 1.190000000000000e+02  6.748000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
+ 1.320000000000000e+02  6.572000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
+ 1.443860000000000e+02  6.500000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
 ======  Outputs  ====================================================================================
-True                   SumPrint    - Generate a summary file listing input options and interpolated properties to "<rootname>.AD.sum"?  (flag)
+False                  SumPrint    - Generate a summary file listing input options and interpolated properties to "<rootname>.AD.sum"?  (flag)
 9                      NBlOuts     - Number of blade node outputs [0 - 9] (-)
-1, 6, 11, 20, 30, 38, 43, 47, 50 BlOutNd     - Blade nodes whose values will be output  (-)
+6, 11, 16, 21, 25, 30, 35, 40, 45 BlOutNd     - Blade nodes whose values will be output  (-)
 0                      NTwOuts     - Number of tower node outputs [0 - 9]  (-)
-1, 2, 3, 4, 5          TwOutNd     - Tower nodes whose values will be output  (-)
+0                      TwOutNd     - Tower nodes whose values will be output  (-)
                    OutList             - The next line(s) contains a list of output parameters.  See OutListParameters.xlsx for a listing of available output channels, (-)
 "RtAeroFxh"
 "RtAeroFyh"
