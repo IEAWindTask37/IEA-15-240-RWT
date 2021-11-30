@@ -1,5 +1,5 @@
  ------- BEAMDYN V1.00.* INDIVIDUAL BLADE INPUT FILE --------------------------
- Test Format 1
+IEA 15 MW Offshore Reference Turbine
  ---------------------- BLADE PARAMETERS --------------------------------------
 26   station_total    - Number of blade input stations (-)
  1   damp_type        - Damping type: 0: no damping; 1: damped

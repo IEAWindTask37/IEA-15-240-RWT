@@ -1,5 +1,5 @@
 --------- BEAMDYN with OpenFAST INPUT FILE -------------------------------------------
-IEA 15MW Offshore Reference Turbine, with taped chord tip design blade
+IEA 15 MW Offshore Reference Turbine
 ---------------------- SIMULATION CONTROL --------------------------------------
 False          Echo            - Echo input data to "<RootName>.ech" (flag)
 True          QuasiStaticInit - Use quasistatic pre-conditioning with centripetal accelerations in initialization (flag) [dynamic solve only]

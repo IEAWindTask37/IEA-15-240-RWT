@@ -21,7 +21,7 @@ AeroAcousticsInput.dat AA_InputFile - AeroAcoustics input file [used only when C
  5.000000000000000e-01 FluidDepth  - Water depth above mid-hub height (m) [used only when CavitCheck=True]
 ======  Blade-Element/Momentum Theory Options  ====================================================== [used only when WakeMod=1]
 2                      SkewMod     - Type of skewed-wake correction model (switch) {1=uncoupled, 2=Pitt/Peters, 3=coupled} [unused when WakeMod=0 or 3]
-1.4726215563702154     SkewModFactor - Constant used in Pitt/Peters skewed wake model {or "default" is 15/32*pi} (-) [used only when SkewMod=2; unused when WakeMod=0 or 3]
+default                SkewModFactor - Constant used in Pitt/Peters skewed wake model {or "default" is 15/32*pi} (-) [used only when SkewMod=2; unused when WakeMod=0 or 3]
 True                   TipLoss     - Use the Prandtl tip-loss model? (flag) [unused when WakeMod=0 or 3]
 True                   HubLoss     - Use the Prandtl hub-loss model? (flag) [unused when WakeMod=0 or 3]
 True                   TanInd      - Include tangential induction in BEMT calculations? (flag) [unused when WakeMod=0 or 3]
@@ -103,18 +103,18 @@ True                   UseBlCm     - Include aerodynamic pitching moment in calc
 ======  Tower Influence and Aerodynamics ============================================================= [used only when TwrPotent/=0, TwrShadow/=0, or TwrAero=True]
 11                     NumTwrNds   - Number of tower nodes used in the analysis  (-) [used only when TwrPotent/=0, TwrShadow/=0, or TwrAero=True]
 TwrElev        TwrDiam        TwrCd         TwrTI (used only with TwrShadow=2)
-(m)              (m)           (-)            (-)
- 1.500000000000000e+01  1.000000000000000e+01  5.000000000000000e-01  1.000000000000000e-01 
- 2.800000000000000e+01  1.000000000000000e+01  5.000000000000000e-01  1.000000000000000e-01 
- 4.100000000000000e+01  9.926000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
- 5.400000000000000e+01  9.443000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
- 6.700000000000000e+01  8.833000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
- 8.000000000000000e+01  8.151000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
- 9.300000000000000e+01  7.390000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
- 1.060000000000000e+02  6.909000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
- 1.190000000000000e+02  6.748000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
- 1.320000000000000e+02  6.572000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
- 1.443860000000000e+02  6.500000000000000e+00  5.000000000000000e-01  1.000000000000000e-01 
+(m)              (m)           (-)               (-)
+  15.           10.            0.5               0.1
+  28.           10.            0.5               0.1
+  41.            9.926         0.5               0.1
+  54.            9.443         0.5               0.1
+  67.            8.833         0.5               0.1
+  80.            8.151         0.5               0.1
+  93.            7.39          0.5               0.1
+ 106.            6.909         0.5               0.1
+ 119.            6.748         0.5               0.1
+ 132.            6.572         0.5               0.1
+ 144.386         6.5           0.5               0.1
 ======  Outputs  ====================================================================================
 False                  SumPrint    - Generate a summary file listing input options and interpolated properties to "<rootname>.AD.sum"?  (flag)
 9                      NBlOuts     - Number of blade node outputs [0 - 9] (-)
