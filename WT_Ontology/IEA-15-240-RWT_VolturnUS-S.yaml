@@ -615,6 +615,8 @@ components:
                       material: slurry
                       volume: 169.333333
                       grid: [0.0, 0.05]
+                    - variable_flag: True
+                      grid: [0.05, 0.2]
               axial_joints:
                 - name: col1_upper_pontoon
                   grid: 0.987
@@ -703,7 +705,11 @@ components:
                 shape: circular
                 outer_diameter:
                     grid: [0.0, 1.0]
-                    values: [10.555 , 10.555] #equates displacement not circle: [12.5, 12.5]
+                    values: [9.6148, 9.6148] #equates displacement not circle: [12.5, 12.5]
+                #shape: polygonal
+                #side_lengths: [12.5, 7.0, 12.5, 7.0] # rectangle dimensions
+                #angles: [1.5707963267948966, 1.5707963267948966, 1.5707963267948966, 1.5707963267948966] # rectangle angles
+                #rotation: 0.0
               internal_structure: &pontlow_int
                   # Probably needs longitudinal stiffeners
                 layers:
