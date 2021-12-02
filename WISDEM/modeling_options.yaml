@@ -23,6 +23,18 @@ WISDEM:
         gamma_b: 1.1     # Safety factor for ...
         gamma_fatigue: 1.755  # Safety factor for fatigue loads
         buckling_length: 15    # Buckling parameter
+        frame3dd:
+            shear: True
+            geom: True
+            tol: 1e-9
+    FixedBottomSE:
+        flag: True
+        gamma_f: 1.2     # Safety factor for freq
+        gamma_m: 1.3     # Safety factor for material properties
+        gamma_n: 1.0     # Safety factor for ...
+        gamma_b: 1.1     # Safety factor for ...
+        gamma_fatigue: 1.755  # Safety factor for fatigue loads
+        buckling_length: 15    # Buckling parameter
         soil_springs: True
         gravity_foundation: False
         frame3dd:

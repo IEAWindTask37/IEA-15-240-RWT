@@ -103,7 +103,7 @@ def run_15mw(fname_wt_input):
                        prob.get_val("rotorse.rp.powercurve.Cp"),
                        prob.get_val("rotorse.rp.powercurve.Cp_aero"),
                        prob.get_val("rotorse.rp.powercurve.Omega",'rpm'),
-                       prob.get_val("rotorse.rp.powercurve.Omega",'rad/s')*0.5*prob["assembly.rotor_diameter"],
+                       prob.get_val("rotorse.rp.powercurve.Omega",'rad/s')*0.5*prob["configuration.rotor_diameter_user"],
                        prob.get_val("rotorse.rp.powercurve.T",'MN'),
                        prob.get_val("rotorse.rp.powercurve.Ct_aero"),
                        prob.get_val("rotorse.rp.powercurve.Q",'MN*m'),
@@ -170,6 +170,7 @@ def run_15mw(fname_wt_input):
     towDF = pd.DataFrame(data=towdata, columns=colstr)
     mycomments = ['']*towdata.shape[0]
     if not float_flag:
+        #breakpoint()
         mycomments[0] = 'Monopile start'
         mycomments[np.where(towdata[:,0] == -water_depth)[0][0]] = 'Mud line'
         mycomments[np.where(towdata[:,0] == 0.0)[0][0]] = 'Water line'
@@ -258,8 +259,8 @@ def run_15mw(fname_wt_input):
 
     overview['Power rating [MW]'] = prob.get_val('configuration.rated_power','MW')
     overview['Turbine class'] = 'IEC Class '+ prob['configuration.ws_class']+prob['configuration.turb_class']
-    overview['Rotor diameter [m]'] = prob["assembly.rotor_diameter"]
-    overview['Specific rating [W/m^2]'] = prob.get_val('configuration.rated_power','W')/np.pi/(0.5*prob["assembly.rotor_diameter"])**2.0
+    overview['Rotor diameter [m]'] = prob["configuration.rotor_diameter_user"]
+    overview['Specific rating [W/m^2]'] = prob.get_val('configuration.rated_power','W')/np.pi/(0.5*prob["configuration.rotor_diameter_user"])**2.0
     overview['Rotor orientation'] = 'Upwind' if prob['configuration.upwind'] else 'Downwind'
     overview['Number of blades'] = prob['configuration.n_blades']
     overview['Control'] = 'Variable speed, Collective pitch'
@@ -267,7 +268,7 @@ def run_15mw(fname_wt_input):
     overview['Rated wind speed [m/s]'] = prob["rotorse.rp.powercurve.rated_V"]
     overview['Cut-out wind speed [m/s]'] = prob['control.V_out']
     overview['Airfoil series'] = 'FFA-W3'
-    overview['Hub height [m]'] = prob['assembly.hub_height']
+    overview['Hub height [m]'] = prob['configuration.hub_height_user']
     overview['Hub diameter [m]'] = prob['hub.diameter']
     overview['Hub Overhang [m]'] = -prob['nacelle.overhang']
     overview['Drive train'] = 'Low speed, Direct drive'
@@ -289,9 +290,9 @@ def run_15mw(fname_wt_input):
     overview['Tower base diameter [m]'] = towdata[np.where(towdata[:,0] == h_trans)[0][0],1]
     overview['Transition piece height [m]'] = h_trans
     if not float_flag:
-        overview['Monopile embedment depth [m]'] = prob['towerse.suctionpile_depth']
-        overview['Monopile base diameter [m]'] = prob['towerse.tower_outer_diameter'][0]
-        overview['Monopile mass [t]'] = 1e-3*prob['towerse.monopile_mass']
+        overview['Monopile embedment depth [m]'] = prob['fixedse.suctionpile_depth']
+        overview['Monopile base diameter [m]'] = prob['fixedse.monopile_outer_diameter'][0]
+        overview['Monopile mass [t]'] = 1e-3*prob['fixedse.monopile_mass']
     else:
         overview['Volturn-S hull mass [t]'] = 1e-3*prob['floatingse.platform_hull_mass']
         overview['Volturn-S fixed ballast mass [t]'] = 1e-3*prob['floatingse.platform_ballast_mass'][0]
@@ -308,7 +309,5 @@ def run_15mw(fname_wt_input):
 
 if __name__ == '__main__':
     run_15mw( os.path.join(ontology_dir, "IEA-15-240-RWT.yaml") )
-    run_15mw( os.path.join(ontology_dir, "IEA-15-240-RWT_FineGrid.yaml") )
     run_15mw( os.path.join(ontology_dir, "IEA-15-240-RWT_VolturnUS-S.yaml") )
-    run_15mw( os.path.join(ontology_dir, "IEA-15-240-RWT_VolturnUS-S_FineGrid.yaml") )
     
