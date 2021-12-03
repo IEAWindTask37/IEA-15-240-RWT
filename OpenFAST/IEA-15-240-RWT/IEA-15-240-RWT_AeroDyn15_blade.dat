@@ -1,5 +1,5 @@
 ------- AERODYN v15.00.* BLADE DEFINITION INPUT FILE -------------------------------------
-Generated with AeroElasticSE FAST driver
+IEA 15 MW Offshore Reference Turbine
 ======  Blade Properties =================================================================
 50          NumBlNds    - Number of blade nodes used in the analysis (-)
     BlSpn        BlCrvAC        BlSwpAC        BlCrvAng       BlTwist        BlChord          BlAFID
