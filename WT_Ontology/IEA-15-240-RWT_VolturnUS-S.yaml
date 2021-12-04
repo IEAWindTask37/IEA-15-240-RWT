@@ -1222,6 +1222,18 @@ materials:
       S: 0.31e+006
       G: 1520000.0
       unit_cost: 9.0
+   -  name: slurry
+      description: fixed/permanent ballast
+      E: 1.0 # compliant
+      nu: 0.3  #Place holder, currently not used
+      G: 1.0  # compliant
+      Xt: 0  #Place holder, currently not used
+      Xc: 0  #Place holder, currently not used
+      S: 0  #Place holder, currently not used
+      rho: 5000.
+      alpha: 0.0
+      unit_cost: 1.0
+      orth: 0.0
 
 control:
     supervisory:
@@ -1259,7 +1271,7 @@ environment:
     water_dyn_viscosity: 1.3351e-3
     soil_shear_modulus: 140e6
     soil_poisson: 0.4
-    water_depth: 30.0
+    water_depth: 200.0
     significant_wave_height: 4.52
     significant_wave_period: 9.45
 bos:
