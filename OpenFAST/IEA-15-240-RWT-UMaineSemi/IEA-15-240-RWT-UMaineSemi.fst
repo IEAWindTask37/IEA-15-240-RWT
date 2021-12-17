@@ -1,7 +1,7 @@
 ------- OpenFAST INPUT FILE ------------------------------------------- 
 IEA 15 MW offshore reference model on UMaine VolturnUS-S semi-submersible floating platform
 ---------------------- SIMULATION CONTROL -------------------------------------- 
-True                  Echo        - Echo input data to <RootName>.ech (flag) 
+False                  Echo        - Echo input data to <RootName>.ech (flag) 
 "FATAL"                AbortLevel  - Error level when simulation should abort (string) {"WARNING", "SEVERE", "FATAL"} 
 10.0                   TMax        - Total run time (s) 
 0.025                  DT          - Integration time step (s)  
