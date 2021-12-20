@@ -20,7 +20,7 @@ default CircSolvMaxIter    Maximum number of iterations for circulation solving 
 default FWShedVorticity    Include shed vorticity in the far wake {default: false}
 ------------------- WAKE REGULARIZATIONS AND DIFFUSION -----------------------------------------
 0       DiffusionMethod    Diffusion method to account for viscous effects {0: None, 1: Core Spreading, "default": 0}
-1       RegDeterMethod     Method to determine the regularization parameters {0:  Manual, 1: Optimized, default: 0 }
+1       RegDeterMethod     Method to determine the regularization parameters {0: Constant, 1: Optimized, 2: Chord-scaled, 3: dr-scaled, default: 0 }
 3       RegFunction        Viscous diffusion function {0: None, 1: Rankine, 2: LambOseen, 3: Vatistas, 4: Denominator, "default": 3} (switch)
 3       WakeRegMethod      Wake regularization method {1: Constant, 2: Stretching, 3: Age, default: 1} (switch)
 0.0     WakeRegFactor      Wake regularization factor (m)
@@ -39,4 +39,7 @@ False   TwrShadowOnWake    Include tower flow disturbance effects on wake convec
 1       nVTKBlades         Number of blades for which VTK files are exported {0: No VTK per blade, n: VTK for blade 1 to n} (-)
 1       VTKCoord           Coordinate system used for VTK export. {1: Global, 2: Hub, "default": 1}
 default VTK_fps            Frame rate for VTK output (frames per second) {"all" for all glue code timesteps, "default" for all OLAF timesteps} [used only if WrVTK=1]
+0       nGridOut           Number of grid outputs
+GridName  GridType  TStart  TEnd     DTOut     XStart    XEnd   nX    YStart   YEnd    nY    ZStart   ZEnd   nZ
+(-)         (-)      (s)     (s)      (s)        (m)      (m)    (-)    (m)     (m)     (-)    (m)     (m)    (-)
 ------------------------------------------------------------------------------------------------
