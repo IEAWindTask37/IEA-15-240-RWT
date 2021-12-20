@@ -102,7 +102,7 @@ True                   UseBlCm     - Include aerodynamic pitching moment in calc
 "../IEA-15-240-RWT/IEA-15-240-RWT_AeroDyn15_blade.dat" ADBlFile(3) - Name of file containing distributed aerodynamic properties for Blade #3 (-) [unused if NumBl < 3]
 ======  Tower Influence and Aerodynamics ============================================================= [used only when TwrPotent/=0, TwrShadow/=0, or TwrAero=True]
 11                     NumTwrNds   - Number of tower nodes used in the analysis  (-) [used only when TwrPotent/=0, TwrShadow/=0, or TwrAero=True]
-TwrElev        TwrDiam        TwrCd         TwrTI (used only with TwrShadow=2)
+TwrElev        TwrDiam        TwrCd         TwrTI ! (used only with TwrShadow=2)
 (m)              (m)           (-)               (-)
   15.           10.            0.5               0.1
   28.           10.            0.5               0.1
