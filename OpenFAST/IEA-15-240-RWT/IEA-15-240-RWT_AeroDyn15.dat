@@ -31,7 +31,7 @@ default                IndToler    - Convergence tolerance for BEMT nonlinear so
 500                    MaxIter     - Maximum number of iteration steps (-) [unused when WakeMod=0]
 ======  Dynamic Blade-Element/Momentum Theory Options  ====================================================== [used only when WakeMod=1]
 2                      DBEMT_Mod   - Type of dynamic BEMT (DBEMT) model {1=constant tau1, 2=time-dependent tau1} (-) [used only when WakeMod=2]
-2.0                    tau1_const  - Time constant for DBEMT (s) [used only when WakeMod=2 and DBEMT_Mod=1]
+29.03                  tau1_const  - Time constant for DBEMT (s) [used only when WakeMod=2 and DBEMT_Mod=1]
 ======  OLAF -- cOnvecting LAgrangian Filaments (Free Vortex Wake) Theory Options  ================== [used only when WakeMod=3]
 IEA-15-240-RWT_OLAF.dat OLAFInputFileName - Input file for OLAF [used only when WakeMod=3]
 ======  Beddoes-Leishman Unsteady Airfoil Aerodynamics Options  ===================================== [used only when AFAeroMod=2]
