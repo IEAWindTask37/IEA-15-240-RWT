@@ -83,13 +83,21 @@ False         UsePitchAct - Whether a pitch actuator should be used (flag)
      500000   PitchC      - Pitch actuator damping (kg-m^2/s) [used only when UsePitchAct is true]
 ---------------------- OUTPUTS -------------------------------------------------
 False          SumPrint       - Print summary data to "<RootName>.sum" (flag)
-"ES10.3E2"    OutFmt         - Format used for text tabular output, excluding the time channel.
-          1   NNodeOuts      - Number of nodes to output to file [0 - 9] (-)
-          1,          2,          3,          4,          5,          6    OutNd          - Nodes whose values will be output  (-)
+"ES10.3E2"     OutFmt         - Format used for text tabular output, excluding the time channel.
+          0    NNodeOuts      - Number of nodes to output to file [0 - 9] (-)
+          0    OutNd          - Nodes whose values will be output  (-)
           OutList            - The next line(s) contains a list of output parameters. See OutListParameters.xlsx for a listing of available output channels, (-)
 "RootFxr, RootFyr, RootFzr"
 "RootMxr, RootMyr, RootMzr"
 "TipTDxr, TipTDyr, TipTDzr"
 "TipRDxr, TipRDyr, TipRDzr"
 END of input file (the word "END" must appear in the first 3 columns of this last OutList line)
----------------------------------------------------------------------------------------
+====== Outputs for all blade stations (same ending as above for B1N1.... =========================== (optional section)
+   "All"          BldNd_BlOutNd       - Future feature will allow selecting a portion of the nodes to output.  Not implemented yet. (-)
+                  OutList             - The next line(s) contains a list of output parameters.  See OutListParameters.xlsx for a listing of available output channels, (-)
+"TDxr"
+"TDyr"
+"RDxr"
+"RDyr"
+"RDzr"
+END of input file (the word "END" must appear in the first 3 columns of this last OutList line)
