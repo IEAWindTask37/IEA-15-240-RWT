@@ -41,7 +41,7 @@ def test_of_h2_fixedbottom():
     """
 
     ed_path = './OpenFAST/IEA-15-240-RWT-Monopile/IEA-15-240-RWT-Monopile_ElastoDyn.dat'
-    h2_path = './HAWC2/IEA-15-240-RWT-FixedBottom/htc/IEA_15MW_RWT.htc'
+    h2_path = './HAWC2/IEA-15-240-RWT-FixedBottom/htc/IEA_15MW_RWT_FixedBottom.htc'
     
     ed_dict = read_elastodyn_dat(ed_path)
     htc = HTCFile(h2_path)
@@ -66,7 +66,7 @@ def test_of_h2_fixedbottom():
     
     # hub radius, shaft tilt and coning
     assert np.isclose(ed_dict['HubRad'], htc_struc.get_subsection_by_name('hub1').c2_def.sec__2.values[-2])  # hub radius
-    assert np.isclose(-ed_dict['ShftTilt'], htc_struc.orientation.relative__2.body2_eulerang__2.values[0])  # tilt
+    assert np.isclose(-ed_dict['ShftTilt'], htc_struc.orientation.relative__2.mbdy2_eulerang__2.values[0])  # tilt
     
     # hub height
     tilt = 6 * np.pi / 180

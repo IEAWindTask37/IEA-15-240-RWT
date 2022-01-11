@@ -43,6 +43,8 @@ def base_to_hs2(orig_htc, new_htc, **kw):
     # operational data
     hs2.add_line('; inputs for finding optimal operational data', [])
     sb = hs2.add_section('operational_data')
+    sb.add_line('operational_data_file_wind', [1],
+                comments='Calculate steady-state values based on wind speeds in opt file')
     sb.add_line('windspeed', [kw['cut_in'], kw['cut_out'], kw['n_wsp']],
                 comments='cut-in [m/s], cut-out [m/s], points [-]')
     sb.add_line('genspeed', [kw['gen_min'], kw['gen_max']], comments='[rpm]')
