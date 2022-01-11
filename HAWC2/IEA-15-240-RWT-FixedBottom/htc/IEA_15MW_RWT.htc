@@ -14,7 +14,7 @@ end simulation;
 ;-------------------------------------------------------------------------------------------------------------------------------
 begin new_htc_structure;
     ;body_output_file_name ./bodyeig/IEA_15MW_RWT_body.dat;  body locations correct?
-    body_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_body_eigen.dat;  damping correct?
+    ;body_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_body_eigen.dat;  damping correct?
     ;struct_inertia_output_file_name ./bodyeig/IEA_15MW_RWT_struc_inertia.dat;  CM locations correct?
     ;structure_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_struc_eigen.dat;  full-system frequencies?
 ;
@@ -128,7 +128,7 @@ begin new_htc_structure;
   begin main_body; blade
     name        blade1 ;
     type        timoschenko ;
-    nbodies     1 ;
+    nbodies     10 ;
     node_distribution    c2_def;
     damping_aniso  0.0 0.0 0.0 3.038e-3 2.167e-3 1.0e-8 ; NoFPM. blade damping tuned to 3% log dec flap/edge, torsion arbitrarily small
     begin timoschenko_input ;
