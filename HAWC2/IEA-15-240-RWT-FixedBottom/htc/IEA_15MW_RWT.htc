@@ -132,7 +132,7 @@ begin new_htc_structure;
     node_distribution    c2_def;
     damping_aniso  0.0 0.0 0.0 3.038e-3 2.167e-3 1.0e-8 ; NoFPM. blade damping tuned to 3% log dec flap/edge, torsion arbitrarily small
     begin timoschenko_input ;
-      filename ./data/blade_beamdyn_c2_noFPM.st;  blade files: [IEA_15MW_RWT_Blade_st_fpm.dat] or [IEA_15MW_RWT_Blade_st_nofpm.dat]
+      filename ./data/IEA_15MW_RWT_Blade_st_noFPM.st;  blade files: [IEA_15MW_RWT_Blade_st_fpm.dat] or [IEA_15MW_RWT_Blade_st_nofpm.dat]
       FPM 0;  is blade file original beam model [0] or fully populated matrix from BECAS [1]
       set 1 1 ;  [1 1]=flexible, [1 2]=no torsion, [1 3]=stiff
     end timoschenko_input;
