@@ -19,7 +19,7 @@ begin new_htc_structure;
   ;body_output_file_name ./bodyeig/IEA_15MW_RWT_body.dat;  body locations correct?
   ;body_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_body_eigen.dat;  damping correct?
   ;struct_inertia_output_file_name ./bodyeig/IEA_15MW_RWT_struc_inertia.dat;  CM locations correct?
-  structure_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_struc_eigen.dat;  full-system frequencies?
+  ;structure_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_struc_eigen.dat;  full-system frequencies?
   ;
   begin main_body;  tower
     name        tower ;
