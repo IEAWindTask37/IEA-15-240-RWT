@@ -26,7 +26,7 @@ begin new_htc_structure;
     type        timoschenko ;
     nbodies     1 ;
     node_distribution     c2_def ;
-    damping_posdef   0.0 0.0 0.0 1.533E-03 1.533E-03 1.194E-04  ; tuned to 2% log dec on 1st FA/SS/torsion modes (#1, #2, #7)
+    damping_posdef   0.0 0.0 0.0 1.327E-03 1.327E-03 5.553e-5  ; tuned to 2% log dec on 1st FA/SS/torsion modes (#1, #2, #7)
     begin timoschenko_input;
       filename ./data/IEA_15MW_RWT_Tower_st.dat;
       set 1 1 ;
