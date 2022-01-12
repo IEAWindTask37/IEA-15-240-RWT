@@ -28,6 +28,7 @@ jobs:
 
       # Install WEIO
       - name: Install WEIO
+        shell: bash -l {0}
         run: |
           git clone https://github.com/ebranlard/weio
           cd weio
@@ -39,11 +40,13 @@ jobs:
 
       # Run all tests
       - name: Run tests
+        shell: bash -l {0}
         run: |
           pytest tests
 
       # Run WISDEM analysis script
       - name: Run WISDEM script
+        shell: bash -l {0}
         run: |
           cd WISDEM
           python run_model.py
