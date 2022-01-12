@@ -39,10 +39,10 @@ jobs:
       #  uses: mxschmitt/action-tmate@v3
 
       # Run all tests
-      - name: Run tests
-        shell: bash -l {0}
-        run: |
-          pytest tests
+      #- name: Run tests
+      #  shell: bash -l {0}
+      #  run: |
+      #    pytest tests
 
       # Run WISDEM analysis script
       - name: Run WISDEM script
