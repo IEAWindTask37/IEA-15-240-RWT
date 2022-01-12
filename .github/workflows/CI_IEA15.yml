@@ -12,7 +12,7 @@ jobs:
       fail-fast: False
       matrix:
         os: ["ubuntu-latest"]
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.9]
 
     steps:
       - uses: actions/checkout@v2
@@ -29,28 +29,28 @@ jobs:
 
       # Install WEIO
       - name: Install WEIO
-        shell: bash -l {0}
+        shell: pwsh #bash -l {0}
         run: |
           git clone https://github.com/ebranlard/weio
           cd weio
           python -m pip install -e .
 
       # Debugging session
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+      #- name: Setup tmate session
+      #  uses: mxschmitt/action-tmate@v3
 
       # Run all tests
       #- name: Run tests
-      #  shell: bash -l {0}
+      #  shell: pwsh #bash -l {0}
       #  run: |
       #    pytest tests
 
       # Run WISDEM analysis script
       - name: Run WISDEM script
-        shell: bash -l {0}
+        shell: pwsh #bash -l {0}
         run: |
           conda info
           conda list
-          which python
+          which -a python
           cd WISDEM
           python run_model.py
