@@ -25,6 +25,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
           environment-file: tests/environment.yml
           activate-environment: "test"
+        run: |
+          conda info
+          conda list
+    
 
       # Install WEIO
       - name: Install WEIO
@@ -48,5 +52,7 @@ jobs:
       - name: Run WISDEM script
         shell: bash -l {0}
         run: |
+          conda info
+          conda list
           cd WISDEM
           python run_model.py
