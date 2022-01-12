@@ -1,0 +1,19 @@
+name: test
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - chardet
+  - matplotlib
+  - numpy
+  - openpyxl
+  - pandas
+  - pyarrow
+  - pytest
+  - simpy
+  - wisdem
+  - pip:
+    - wetb
+    - marmot-agents
