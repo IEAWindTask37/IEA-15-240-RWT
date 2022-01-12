@@ -30,7 +30,8 @@ jobs:
       - name: Install WEIO
         run: |
           git clone https://github.com/ebranlard/weio
-          python -m pip install weio
+          cd weio
+          python -m pip install -e .
 
       # Debugging session
       #- name: Setup tmate session
