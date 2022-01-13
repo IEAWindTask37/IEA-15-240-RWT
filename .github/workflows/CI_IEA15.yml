@@ -29,7 +29,7 @@ jobs:
 
       # Install WEIO
       - name: Install WEIO
-        shell: pwsh #bash -l {0}
+        shell: bash -l {0}
         run: |
           git clone https://github.com/ebranlard/weio
           cd weio
@@ -40,17 +40,14 @@ jobs:
       #  uses: mxschmitt/action-tmate@v3
 
       # Run all tests
-      #- name: Run tests
-      #  shell: pwsh #bash -l {0}
-      #  run: |
-      #    pytest tests
+      - name: Run tests
+        shell: bash -l {0}
+        run: |
+          pytest tests
 
       # Run WISDEM analysis script
       - name: Run WISDEM script
-        shell: pwsh #bash -l {0}
+        shell: bash -l {0}
         run: |
-          conda info
-          conda list
-          which -a python
           cd WISDEM
           python run_model.py
