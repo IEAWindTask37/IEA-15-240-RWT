@@ -126,6 +126,7 @@ begin aero ;
   ae_sets            1 1 1;
   tiploss_method     1 ;  0=none, 1=prandtl
   dynstall_method    2 ;  0=none, 1=stig øye method,2=mhh method
+  3d_correct_method  1 ;  1=snel 3d correction
 ;
 end aero ;
 ;----------------------------------------------------------------------------------------------------------------------------------------------------------------
