@@ -2,6 +2,7 @@
 General:
     verbosity: False  # When set to True, the code prints to screen many infos
 WISDEM:
+    n_dlc: 1           # Number of design load cases
     RotorSE:
         flag: False
         n_pitch_perf_surfaces: 5
@@ -20,6 +21,20 @@ WISDEM:
         gamma_n: 1.0     # Safety factor for ...
         gamma_b: 1.1     # Safety factor for ...
         buckling_length: 15    # Buckling parameter
+        frame3dd:
+            shear: True
+            geom: True
+            tol: 1e-9
+    FixedBottomSE:             # Options of TowerSE module
+        flag: True
+        wind: PowerWind  # Wind used
+        gamma_f: 1.2     # Safety factor for fatigue loads
+        gamma_m: 1.3     # Safety factor for material properties
+        gamma_n: 1.0     # Safety factor for ...
+        gamma_b: 1.1     # Safety factor for ...
+        gamma_fatigue: 1.755  # Safety factor for fatigue loads
+        buckling_method: dnvgl # Buckling code type [eurocode or dnvgl]
+        buckling_length: 15    # Buckling parameter
         soil_springs: True
         gravity_foundation: False
         frame3dd:
@@ -30,10 +45,10 @@ WISDEM:
         flag: False
 
     Loading:
-        mass: 970862.43073439
-        center_of_mass: [-6.62279023, 0.0, 4.53965456]
-        moment_of_inertia: [4.24057912e+08, 2.81681120e+08, 2.62912783e+08, 7.83479898e+02, 1.31648581e+07, 1.70979334e+05]
+        mass: 967074.89012356
+        center_of_mass: [-6.61477744, -0.09771873, 4.53683107]
+        moment_of_inertia: [4.13558635e+08, 2.76071589e+08, 2.57350933e+08, 7.86163621e+02, 1.35359722e+07, 1.70976373e+05]
         loads:
-            - force: [2445671.870005166, -42101.00813468566, -7067833.552381074]
-              moment: [35395.98519686179, -10621144.564994808, 1619828.7914975986]
-              velocity: 10.69916412
+            - force: [2427925.55809699, 29094.73368413, -7074256.2758736]
+              moment: [-278500.68674037, -12634193.44789813, 1299461.07383137]
+              velocity: 11.73732
