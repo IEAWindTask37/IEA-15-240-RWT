@@ -276,7 +276,11 @@ class RWT_Tabular(object):
         # Interpolation function for arbitraty grids
         mygrid = self.yaml['components']['blade']['outer_shape_bem']['chord']['grid']
         def myinterp(xgrid, val):
-            return interp1d(xgrid, val, kind='cubic', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
+            try:
+                y = interp1d(xgrid, val, kind='cubic', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
+            except:
+                y = interp1d(xgrid, val, kind='linear', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
+            return y
         
         # Create blade geometry array in pandas
         geommat = np.c_[self.yaml['components']['blade']['outer_shape_bem']['chord']['grid'],
@@ -356,7 +360,8 @@ class RWT_Tabular(object):
             try:
                 y = interp1d(xgrid, val, kind='cubic', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
             except:
-                y = np.interp(mygrid, xgrid, val, left=0.0, right=0.0)
+                y = interp1d(xgrid, val, kind='linear', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
+                #y = np.interp(mygrid, xgrid, val, left=0.0, right=0.0)
             return y
         
         # Loop over layers and store layup data in master tables for plotting and writing to Excel table
@@ -506,12 +511,14 @@ class RWT_Tabular(object):
             if self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'].lower() == 'spar_cap_ss':
                 sparcap_ss_grid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['grid']
                 sparcap_ss_th   = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values']
+                sparcap_ss_wgrid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['grid']
                 sparcap_ss_wid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['values']
                 sparcap_ss_beg  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['values']
                 sparcap_ss_end  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['values']
             elif self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'].lower() == 'spar_cap_ps':
                 sparcap_ps_grid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['grid']
                 sparcap_ps_th   = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values']
+                sparcap_ps_wgrid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['grid']
                 sparcap_ps_wid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['values']
                 sparcap_ps_beg  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['values']
                 sparcap_ps_end  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['values']
@@ -544,10 +551,10 @@ class RWT_Tabular(object):
             crossDF['Shear web-3 SS s-coord'] = myinterp(web3_grid, web3_ss)
             crossDF['Shear web-3 PS s-coord'] = myinterp(web3_grid, web3_ps)
         crossDF['Spar cap SS begin s-coord'] = myinterp(sparcap_ss_grid, sparcap_ss_beg)
-        crossDF['Spar cap SS width [m]']     = myinterp(sparcap_ss_grid, sparcap_ss_wid)
+        crossDF['Spar cap SS width [m]']     = myinterp(sparcap_ss_wgrid, sparcap_ss_wid)
         crossDF['Spar cap SS thick [m]']     = myinterp(sparcap_ss_grid, sparcap_ss_th )
         crossDF['Spar cap PS begin s-coord'] = myinterp(sparcap_ps_grid, sparcap_ps_beg)
-        crossDF['Spar cap PS width [m]']     = myinterp(sparcap_ps_grid, sparcap_ps_wid)
+        crossDF['Spar cap PS width [m]']     = myinterp(sparcap_ps_wgrid, sparcap_ps_wid)
         crossDF['Spar cap PS thick [m]']     = myinterp(sparcap_ps_grid, sparcap_ps_th )
         crossDF['LE reinf width [m]']        = myinterp(reinf_le_wgrid, reinf_le_wid)
         crossDF['LE reinf thick [m]']        = myinterp(reinf_le_thgrid, reinf_le_th )

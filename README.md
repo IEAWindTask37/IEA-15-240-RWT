@@ -1,4 +1,4 @@
-# IEA-15-240-RWT v1.1 (Revised July 2021)
+# IEA-15-240-RWT v1.1 (Revised February 2022)
 This repository contains the model data for the 15-MW offshore reference turbine developed within IEA Wind Task 37.
 
 The documentation for the turbine is accessible here: https://www.nrel.gov/docs/fy20osti/75698.pdf
@@ -10,13 +10,13 @@ Data in this repository includes:
 * HAWC2 aeroelastic model inputs
 * WISDEM optimization files
 * Wind turbine ontology .yaml files
-* CAD modeling of turbine in SolidWorks and an Ansys FEA model of the blades
+* CAD modeling of turbine where available
 
 ## Requirements
 
 *OpenFAST*:
-* The OpenFAST input files are compatable with OpenFAST-v2.6+.  This can be compiled [from source here](https://github.com/OpenFAST/openfast.git) or precompiled Windows binaries are [available for download](https://github.com/OpenFAST/openfast/releases/latest/download/windows_openfast_binaries.zip). More information on installing and running OpenFAST is available in [OpenFAST documention](https://openfast.readthedocs.io/en/master/). 
-* NREL's Reference OpenSource Controller (ROSCO) is required.  This can be compile [from source here](https://github.com/nrel/rosco) or the precompiled Windows .dll is [available for download](https://github.com/NREL/ROSCO/releases/tag/v2.0.1).
+* The OpenFAST input files are compatable with OpenFAST-v3.0.  This can be compiled [from source here](https://github.com/OpenFAST/openfast.git) or precompiled Windows binaries are [available for download](https://github.com/OpenFAST/openfast/releases/latest/download/windows_openfast_binaries.zip). More information on installing and running OpenFAST is available in [OpenFAST documention](https://openfast.readthedocs.io/en/master/).
+* NREL's Reference OpenSource Controller (ROSCO) is required.  This can be compiled [from source here](https://github.com/nrel/rosco) or precompiled binaries for all platforms are [available for download](https://github.com/NREL/ROSCO/releases/).
 
 *HAWC2*:
 * HAWC2 can be acquired from its [homepage](https://www.hawc2.dk/)
@@ -29,12 +29,12 @@ Data in this repository includes:
 
 The IEA Wind Task 37 authors endeavor to keep the model input decks current with the latest releases and API changes.  Errors and other issues pointed out by the community are also addressed to the extent that available resources make that possible.  See the [Release Notes](blob/master/ReleaseNotes.md) for a detailed description of changes.
 
-We also encourage the broader wind community to submit design updates either through Pull Requests or by reaching out to the authors.  Community contributions that we are aware of include:
+We also encourage the broader wind community to submit design updates by forking the repository and letting us know of your design customatization.  Community contributions that we are aware of include:
 * [OrcaFlex implementation](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#is-orcaflex-supported)
 
 ## Citations
 
-For a list of academic papers that use or cite this turbine, please see [here](https://scholar.google.com/scholar?cites=11739673662820715884&as_sdt=4005&sciodt=0,6&hl=en) and [here](https://scholar.google.com/scholar?cites=17665986740213390479&as_sdt=4005&sciodt=0,6&hl=en).
+For a list of academic papers that use or cite this turbine, please see [here (fixed-bottom)](https://scholar.google.com/scholar?cites=11739673662820715884&as_sdt=4005&sciodt=0,6&hl=en) and [here (floating)](https://scholar.google.com/scholar?cites=17665986740213390479&as_sdt=4005&sciodt=0,6&hl=en).
 
 If you use this model in your research or publications, please cite the appropriate report as:
 
@@ -58,6 +58,6 @@ If you use this model in your research or publications, please cite the appropri
 
 ## Questions
 
-Before reaching out to NREL or DTU authors with questions on the model or reports, please see our frequently asked questions (FAQ) on our [Github Wiki](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)).
+Before reaching out to NREL or DTU authors with questions on the model or reports, please see our frequently asked questions (FAQ) on our [Github Wiki](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)) and current or prior [Issues](https://github.com/IEAWindTask37/IEA-15-240-RWT/issues).
 
-If the FAQ does not address your need, please create a new Issue on this repository so that the dialogue is archived for others that might have similar questions. You can also reach out to the authors directly if that is your preference.  The technical report lists the contributions of individual authors if you have a specific question.  Otherwise, you can contact Garrett Barter (garrett.barter@nrel.gov).
+If neither the FAQ or Issues address your need, please create a new Issue on this repository so that the dialogue is archived for others that might have similar questions. You can also reach out to the authors directly if that is your preference.  The technical report lists the contributions of individual authors if you have a specific question.  Otherwise, you can contact Garrett Barter (garrett.barter@nrel.gov).
