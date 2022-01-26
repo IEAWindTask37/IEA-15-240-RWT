@@ -1,0 +1,53 @@
+name: CI_IEA15
+
+# We run CI on push commits and pull requests on all branches
+on: [push, pull_request]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    name: Build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: False
+      matrix:
+        os: ["ubuntu-latest"]
+        python-version: [3.9]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2
+        # https://github.com/marketplace/actions/setup-miniconda
+        with:
+          miniconda-version: "latest"
+          channels: conda-forge
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
+          environment-file: tests/environment.yml
+          activate-environment: "test"
+    
+
+      # Install WEIO
+      - name: Install WEIO
+        shell: bash -l {0}
+        run: |
+          git clone https://github.com/ebranlard/weio
+          cd weio
+          python -m pip install -e .
+
+      # Debugging session
+      #- name: Setup tmate session
+      #  uses: mxschmitt/action-tmate@v3
+
+      # Run all tests
+      - name: Run tests
+        shell: bash -l {0}
+        run: |
+          pytest tests
+
+      # Run WISDEM analysis script
+      - name: Run WISDEM script
+        shell: bash -l {0}
+        run: |
+          cd WISDEM
+          python run_model.py

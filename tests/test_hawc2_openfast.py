@@ -3,9 +3,11 @@
 
 Requires wetb, numpy
 """
+import os
 import numpy as np
 from wetb.hawc2 import HTCFile
 
+FROOT = os.path.dirname( os.path.dirname( os.path.realpath(__file__) ) )
 
 def get_body_length(htc_struc, body):
     """Get the length of a body from htc structure, given string name"""
@@ -40,8 +42,8 @@ def test_of_h2_fixedbottom():
     """Check RNA properties in OF Monopile model versus H2 fixed-bottom, UMaine, monopile
     """
 
-    ed_path = './OpenFAST/IEA-15-240-RWT-Monopile/IEA-15-240-RWT-Monopile_ElastoDyn.dat'
-    h2_path = './HAWC2/IEA-15-240-RWT-FixedBottom/htc/IEA_15MW_RWT_FixedBottom.htc'
+    ed_path = os.path.join(FROOT, 'OpenFAST', 'IEA-15-240-RWT-Monopile', 'IEA-15-240-RWT-Monopile_ElastoDyn.dat')
+    h2_path = os.path.join(FROOT, 'HAWC2', 'IEA-15-240-RWT-FixedBottom', 'htc', 'IEA_15MW_RWT_FixedBottom.htc')
     
     ed_dict = read_elastodyn_dat(ed_path)
     htc = HTCFile(h2_path)
