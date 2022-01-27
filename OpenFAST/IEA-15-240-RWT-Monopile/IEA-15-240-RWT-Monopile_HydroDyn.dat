@@ -96,13 +96,13 @@ AxCoefID  AxCd     AxCa     AxCp
    (-)    (-)      (-)      (-)
     1     0.00     0.00     1.00
 ---------------------- MEMBER JOINTS -------------------------------------------
-             10   NJoints        - Number of joints (-)   [must be exactly 0 or at least 2]
+             2   NJoints        - Number of joints (-)   [must be exactly 0 or at least 2]
 JointID   Jointxi     Jointyi     Jointzi  JointAxID   JointOvrlp   [JointOvrlp= 0: do nothing at joint, 1: eliminate overlaps by calculating super member]
    (-)     (m)         (m)         (m)        (-)       (switch)
    1      0.00000     0.00000   -30.1000       1            0
    2      0.00000     0.00000    15.0000       1            0
 ---------------------- MEMBER CROSS-SECTION PROPERTIES -------------------------
-             9   NPropSets      - Number of member property sets (-)
+             1   NPropSets      - Number of member property sets (-)
 PropSetID    PropD         PropThck
    (-)        (m)            (m)
    1        10.0            0.055341
@@ -119,7 +119,7 @@ PropSetID    PropD         PropThck
 MemberID_HydC  MemberCd1   MemberCd2  MemberCdMG1 MemberCdMG2  MemberCa1   MemberCa2  MemberCaMG1 MemberCaMG2  MemberCp1   MemberCp2  MemberCpMG1 MemberCpMG2 MemberAxCd1 MemberAxCd2 MemberAxCdMG1 MemberAxCdMG2 MemberAxCa1 MemberAxCa2 MemberAxCaMG1 MemberAxCaMG2 MemberAxCp1 MemberAxCp2 MemberAxCpMG1 MemberAxCpMG2
     (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)         (-)    
 -------------------- MEMBERS -------------------------------------------------
-             9   NMembers       - Number of members (-)
+             1   NMembers       - Number of members (-)
 MemberID  MJointID1  MJointID2  MPropSetID1  MPropSetID2  MDivSize   MCoefMod  PropPot   [MCoefMod=1: use simple coeff table, 2: use depth-based coeff table, 3: use member-based coeff table] [ PropPot/=0 if member is modeled with potential-flow theory]
   (-)        (-)        (-)         (-)          (-)        (m)      (switch)   (flag)
     1         1          2           1            1         0.5          1         FALSE   
