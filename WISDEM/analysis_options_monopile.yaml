@@ -68,6 +68,8 @@ constraints:
         pile_depth:
             flag: False
             lower_bound: 0.0
+        tower_diameter_coupling:
+            flag: True
 
 driver:
     optimization:
@@ -76,7 +78,7 @@ driver:
         max_major_iter: 10    # Maximum number of major design iterations (SNOPT)
         max_minor_iter: 100   # Maximum number of minor design iterations (SNOPT)
         max_iter: 100         # Maximum number of iterations (SLSQP)
-        solver: SNOPT         # Optimization solver. Other options are 'SLSQP' - 'CONMIN'
+        solver: SLSQP #SNOPT         # Optimization solver. Other options are 'SLSQP' - 'CONMIN'
         step_size: 1.e-5      # Step size for finite differencing
         form: forward         # Finite differencing mode, either forward or central
     design_of_experiments:
