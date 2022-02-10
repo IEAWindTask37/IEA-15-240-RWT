@@ -119,13 +119,14 @@ begin aero ;
   link 2 mbdy_c2_def blade2;
   link 3 mbdy_c2_def blade3;
   ae_filename        ../IEA-15-240-RWT/IEA_15MW_RWT_ae.dat ;
-  pc_filename        ../IEA-15-240-RWT/IEA_15MW_RWT_pc.dat ;
+  pc_filename        ../IEA-15-240-RWT/IEA_15MW_RWT_pc_OpenFASTpolars_3dcorr.dat ;
   induction_method   1 ;  0=none, 1=normal
   aerocalc_method    1 ;  0=aerodynamics disabled, 1=with aerodynamics
   aerosections       50 ;
   ae_sets            1 1 1;
   tiploss_method     1 ;  0=none, 1=prandtl
   dynstall_method    2 ;  0=none, 1=stig øye method,2=mhh method
+; 3d_correct_method  1 ;  1=Snel.  NOTE: do not use when polars are already 3d corrected
 ;
 end aero ;
 ;----------------------------------------------------------------------------------------------------------------------------------------------------------------
