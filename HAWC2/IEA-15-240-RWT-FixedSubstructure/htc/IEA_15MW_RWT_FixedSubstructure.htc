@@ -1,4 +1,4 @@
-; Fixed-Bottom IEA 15 MW Reference Wind Turbine.
+; Fixed-Substructure IEA 15 MW Reference Wind Turbine.
 ;
 ; Note! This file links to external htc files that contain
 ; values for the WTG system.
