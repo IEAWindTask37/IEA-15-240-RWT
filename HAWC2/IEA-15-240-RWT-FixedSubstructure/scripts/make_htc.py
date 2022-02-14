@@ -13,14 +13,14 @@ from _htc_conversion_fxns import base_to_hs2, base_to_step, base_to_turb
 make_step = True  # make a step-wind file?
 make_turb = True  # make a turbulence file?
 make_hs2 = True  # make a hawcstab2 file?
-base_htc = '../htc/IEA_15MW_RWT_FixedBottom.htc'  # relative path to base htc file
+base_htc = '../htc/IEA_15MW_RWT_FixedSubstructure.htc'  # relative path to base htc file
 
 kw = dict(cut_in=3, cut_out=25, dt=39, tstart=220,  # step parameters
           wsp=12, tint=0.17, tb_wid=252, tb_ht=252,  # turbulence parameters
           n_wsp=45, gen_min=5.000011692174984, gen_max=7.559987120819503,  # hawcstab2 parameters
           gbr=1, pitch_min=0, opt_lambda=9, rate_pow=15e3, gen_eff=0.9655,  # hawcstab2 parameters
           p1_f=0.05, p1_z=0.7, p2_f=0.03, p2_z=0.7, gs=2, constant_power=0,  # hawcstab2 parameters
-          oper_dat='./data/IEA_15MW_RWT_FixedBottom.opt')  # hawcstab2 parameters
+          oper_dat='./data/IEA_15MW_RWT_FixedSubstructure.opt')  # hawcstab2 parameters
 
 
 if __name__ == '__main__':
