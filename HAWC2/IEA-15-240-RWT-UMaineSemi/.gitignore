@@ -1,5 +1,0 @@
-*.py[cod]
-
-# HAWC2
-**/htc/*.htc
-waves/*
