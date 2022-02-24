@@ -3,6 +3,7 @@
 # HAWC2
 **/bodyeig/*
 **/res/*
+**/ind/*
 **/turb/*
 *.pwr
 *_step.htc
