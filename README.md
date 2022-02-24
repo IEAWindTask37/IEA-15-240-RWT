@@ -15,7 +15,7 @@ Data in this repository includes:
 ## Requirements
 
 Requirements for using the OpenFAST model:
-* The OpenFAST input files are compatable with OpenFAST-v2.3+.  This can be compiled [from source here](https://github.com/OpenFAST/openfast.git) or precompiled Windows binaries are [available for download](https://github.com/OpenFAST/openfast/releases/latest/download/windows_openfast_binaries.zip). More information on installing and running OpenFAST is available in [OpenFAST documention](https://openfast.readthedocs.io/en/master/). 
+* The OpenFAST input files are compatable with OpenFAST-v2.3+.  This can be compiled [from source here](https://github.com/OpenFAST/openfast.git) or precompiled Windows binaries are [available for download](https://github.com/OpenFAST/openfast/releases/latest/download/windows_openfast_binaries.zip). More information on installing and running OpenFAST is available in [OpenFAST documention](https://openfast.readthedocs.io/en/master/).
 * NREL's Reference OpenSource Controller (ROSCO) is required.  This can be compile [from source here](https://github.com/nrel/rosco) or the precompiled Windows .dll is [available for download](https://github.com/NREL/ROSCO/releases/tag/v2.0.1).
 
 ## Design Updates
@@ -23,6 +23,7 @@ Requirements for using the OpenFAST model:
 If the IEA Wind Task 37 authors deems it appropriate, design updates will be uploaded to the repository and tagged with version numbers appropriately.  This will ensure that any design oversights are addressed and that the input files stay current with model updates.
 
 We also encourage the broader wind community to submit design updates either through Pull Requests or by reaching out to the authors.  Community contributions that we are aware of include:
+* [Bladed implementation](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#is-bladed-supported)
 * [OrcaFlex implementation](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#is-orcaflex-supported)
 
 ## Citations
