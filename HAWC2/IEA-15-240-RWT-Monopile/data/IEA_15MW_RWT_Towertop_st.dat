@@ -1,5 +1,0 @@
-#1 IEA 15 MW tower top. Because massless and stiff, most values are dummy values.
-r	    		m	    	  x_cg		y_cg	ri_x		    ri_y	       x_sh 	y_sh	E		        G        		I_x	        	I_y     		I_p		       k_x 	   k_y  		A		pitch	  x_e	  y_e
-$1	 2  Stiff/massless towertop. Nacelle mass/inertia in htc file.
-0.0		  1.00e+00		0		0		1.36E+00		1.36E+00		0		0		2.10E+17		8.08E+17		5.52E-01		5.52E-01		1.10E+00		0.5		0.5		2.98E-01		0		0		0
-3.819	  1.00e+00		0		0		1.36E+00		1.36E+00		0		0		2.10E+17		8.08E+17		5.52E-01		5.52E-01		1.10E+00		0.5		0.5		2.98E-01		0		0		0
