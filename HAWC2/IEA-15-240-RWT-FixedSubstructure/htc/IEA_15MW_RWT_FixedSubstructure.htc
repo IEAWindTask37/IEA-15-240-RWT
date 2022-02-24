@@ -8,7 +8,7 @@ begin simulation ;
   solvertype   1 ;    (newmark)
   on_no_convergence continue ;
   convergence_limits 1E3 1.0 1E-7 ;
-  logfile ./log/IEA_15MW_RWT.log ;
+  logfile ./log/IEA_15MW_RWT_FixedSubstructure.log ;
   begin newmark;
     deltat    0.01;
   end newmark;
@@ -112,23 +112,8 @@ begin aerodrag ;  tower drag
   end aerodrag_element;
 end aerodrag;
 ;
-begin aero ;
-  nblades  3;
-  hub_vec shaft -3 ;  rotor rotation vector wrt. shaft coor sys (z upwind)
-  link 1 mbdy_c2_def blade1;
-  link 2 mbdy_c2_def blade2;
-  link 3 mbdy_c2_def blade3;
-  ae_filename        ../IEA-15-240-RWT/IEA_15MW_RWT_ae.dat ;
-  pc_filename        ../IEA-15-240-RWT/IEA_15MW_RWT_pc_OpenFASTpolars_3dcorr.dat ;
-  induction_method   1 ;  0=none, 1=normal
-  aerocalc_method    1 ;  0=aerodynamics disabled, 1=with aerodynamics
-  aerosections       50 ;
-  ae_sets            1 1 1;
-  tiploss_method     1 ;  0=none, 1=prandtl
-  dynstall_method    2 ;  0=none, 1=stig øye method,2=mhh method
-; 3d_correct_method  1 ;  1=Snel.  NOTE: do not use, polars are already 3d-corrected
+continue_in_file ../IEA-15-240-RWT/IEA_15MW_RWT_WTG_aero.htc;
 ;
-end aero ;
 ;----------------------------------------------------------------------------------------------------------------------------------------------------------------
 begin dll;
 ;
@@ -371,7 +356,7 @@ end dll;
 ;----------------------------------------------------------------------------------------------------------------------------------------------------------------
 ;
 begin output;
-  filename ./res/IEA_15MW_RWT ;
+  filename ./res/IEA_15MW_RWT_FixedSubstructure ;
   data_format  gtsdf;
   buffer 9999 ;
   time 0 100;

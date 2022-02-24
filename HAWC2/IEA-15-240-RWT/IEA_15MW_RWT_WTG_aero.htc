@@ -1,0 +1,22 @@
+;
+; This is a PARTIAL htc file for the aero block of the
+; IEA 15 MW RWT WTG. It should be linked in a MAIN htc file
+; using the "continue_in_file" option.
+;
+begin aero ;
+  nblades  3;
+  hub_vec shaft -3 ;  rotor rotation vector wrt. shaft coor sys (z upwind)
+  link 1 mbdy_c2_def blade1;
+  link 2 mbdy_c2_def blade2;
+  link 3 mbdy_c2_def blade3;
+  ae_filename        ../IEA-15-240-RWT/IEA_15MW_RWT_ae.dat ;
+  pc_filename        ../IEA-15-240-RWT/IEA_15MW_RWT_pc_OpenFASTpolars_3dcorr.dat ;
+  induction_method   1 ;  0=none, 1=normal
+  aerocalc_method    1 ;  0=aerodynamics disabled, 1=with aerodynamics
+  aerosections       50 ;
+  ae_sets            1 1 1;
+  tiploss_method     1 ;  0=none, 1=prandtl
+  dynstall_method    2 ;  0=none, 1=stig øye method,2=mhh method
+;
+end aero ;
+exit;  continue in main file
