@@ -156,3 +156,17 @@ def base_to_turb(orig_htc, new_htc, tower_shadow=3, **kw):
     htc.output.time = [100, 700]
     # save the new file
     htc.save(new_htc)
+
+def base_to_fpm(orig_htc, new_htc):
+    """Convert the base file (NoFPM) to FPM"""
+    fname = os.path.basename(orig_htc).replace('.htc', '')
+    htc = HTCFile(orig_htc)
+    # log and results names
+    htc.simulation.logfile = f'./log/{fname}_FPM.log'
+    htc.output.filename = f'./res/{fname}_FPM'
+    # make changes and save
+    blade1 = htc.new_htc_structure.get_subsection_by_name('blade1')
+    blade1.timoschenko_input.filename = blade1.timoschenko_input.filename[0].replace('_noFPM.st', '_FPM.st')
+    blade1.timoschenko_input.FPM = 1
+    htc.save(new_htc)
+

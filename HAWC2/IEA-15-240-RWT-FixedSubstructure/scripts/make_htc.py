@@ -7,7 +7,7 @@ Default files (base and hawcstab2) are for FPM model with torsion.
 
 Requirements: Python 3.6+ and wetb package.
 """
-from _htc_conversion_fxns import base_to_hs2, base_to_step, base_to_turb
+from _htc_conversion_fxns import base_to_hs2, base_to_step, base_to_turb, base_to_fpm
 
 
 make_step = True  # make a step-wind file?
@@ -24,6 +24,10 @@ kw = dict(cut_in=3, cut_out=25, dt=39, tstart=220,  # step parameters
 
 
 if __name__ == '__main__':
+    
+    fpm_htc = base_htc.replace('.htc', '_FPM.htc')
+    print(f'  Writing FPM file to {fpm_htc}...')
+    base_to_fpm(base_htc, fpm_htc)
 
     if make_step:
         step_htc = base_htc.replace('.htc', '_step.htc')
@@ -38,7 +42,13 @@ if __name__ == '__main__':
         print('   done.')
 
     if make_hs2:
-        hs2_htc = base_htc.replace('.htc', '_hs2.htc').replace('../htc', '../')
-        print(f'  Writing hawcstab2 file to {hs2_htc}...')
-        base_to_hs2(base_htc, hs2_htc, **kw)
-        print('   done.')
+        for i in range(2):
+            if i == 0:
+                orig_htc = base_htc
+            else:
+                orig_htc = base_htc.replace('.htc', '_FPM.htc')
+                kw['oper_dat'] = kw['oper_dat'].replace('.opt', '_FPM.opt')
+            hs2_htc = orig_htc.replace('.htc', '_hs2.htc').replace('../htc', '../')
+            print(f'  Writing hawcstab2 file to {hs2_htc}...')
+            base_to_hs2(orig_htc, hs2_htc, **kw)
+            print('   done.')
