@@ -38,12 +38,12 @@ def read_elastodyn_dat(path):
 
 # TODO: Add checks for monopile and umaine models
 
-def test_of_h2_fixedbottom():
+def test_of_h2_fixedstructure():
     """Check RNA properties in OF Monopile model versus H2 fixed-bottom, UMaine, monopile
     """
 
     ed_path = os.path.join(FROOT, 'OpenFAST', 'IEA-15-240-RWT-Monopile', 'IEA-15-240-RWT-Monopile_ElastoDyn.dat')
-    h2_path = os.path.join(FROOT, 'HAWC2', 'IEA-15-240-RWT-FixedBottom', 'htc', 'IEA_15MW_RWT_FixedBottom.htc')
+    h2_path = os.path.join(FROOT, 'HAWC2', 'IEA-15-240-RWT-FixedSubstructure', 'htc', 'IEA_15MW_RWT_FixedSubstructure.htc')
     
     ed_dict = read_elastodyn_dat(ed_path)
     htc = HTCFile(h2_path)
