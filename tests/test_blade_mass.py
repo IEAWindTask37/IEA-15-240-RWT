@@ -36,23 +36,23 @@ class TestBladeMass(unittest.TestCase):
         print('\nBlade mass in BD along twist centers ', BDtw)
         self.assertAlmostEqual(BDtw/ref_blade_mass,1., places=3)
 
-    def test_blade_mass_BDc2(self):
+    # def test_blade_mass_BDc2(self):
 
-        # Check mass beamdyn defined along mid chord
-        readBD2 = InputReader_OpenFAST()
-        readBD2.FAST_directory = BDc2_path
-        readBD2.fst_vt = {}
-        readBD2.fst_vt['BeamDyn'] = {}
-        readBD2.fst_vt['BeamDynBlade'] = {}
-        readBD2.fst_vt['Fst'] = {}
-        readBD2.fst_vt['outlist'] = {}
-        readBD2.fst_vt['outlist']['BeamDyn'] = {}
-        readBD2.fst_vt['Fst']['BDBldFile(1)'] = base_name1 + '_BeamDyn_c2.dat'
-        bd_file2 = os.path.join(BDc2_path, readBD2.fst_vt['Fst']['BDBldFile(1)'])
-        readBD2.read_BeamDyn(bd_file2)
-        BDc2 = np.trapz(readBD2.fst_vt['BeamDynBlade']['beam_inertia'][:,0,0], readBD2.fst_vt['BeamDynBlade']['radial_stations']*blade_length)
-        print('\nBlade mass in BD along mid chord ', BDc2)
-        self.assertAlmostEqual(BDc2/ref_blade_mass,1., places=3)
+    #     # Check mass beamdyn defined along mid chord
+    #     readBD2 = InputReader_OpenFAST()
+    #     readBD2.FAST_directory = BDc2_path
+    #     readBD2.fst_vt = {}
+    #     readBD2.fst_vt['BeamDyn'] = {}
+    #     readBD2.fst_vt['BeamDynBlade'] = {}
+    #     readBD2.fst_vt['Fst'] = {}
+    #     readBD2.fst_vt['outlist'] = {}
+    #     readBD2.fst_vt['outlist']['BeamDyn'] = {}
+    #     readBD2.fst_vt['Fst']['BDBldFile(1)'] = base_name1 + '_BeamDyn_c2.dat'
+    #     bd_file2 = os.path.join(BDc2_path, readBD2.fst_vt['Fst']['BDBldFile(1)'])
+    #     readBD2.read_BeamDyn(bd_file2)
+    #     BDc2 = np.trapz(readBD2.fst_vt['BeamDynBlade']['beam_inertia'][:,0,0], readBD2.fst_vt['BeamDynBlade']['radial_stations']*blade_length)
+    #     print('\nBlade mass in BD along mid chord ', BDc2)
+    #     self.assertAlmostEqual(BDc2/ref_blade_mass,1., places=3)
 
     def test_blade_mass_ED(self):
         # Load elastodyn blade
@@ -71,13 +71,34 @@ class TestBladeMass(unittest.TestCase):
 
         # Load H2 FPM and no FPM
         h2FPM = np.loadtxt(h2_path_FPM, skiprows = 5)
-        h2noFPM = np.loadtxt(h2_path_noFPM, skiprows = 5)
-        H2FPM = np.trapz(h2FPM[:,1], h2FPM[:,0])
-        H2noFPM = np.trapz(h2noFPM[:,1], h2noFPM[:,0])
-        print('\nBlade mass in H2 with fully populated matrices ', H2FPM)
-        print('\nBlade mass in H2 without fully populated matrices ', H2noFPM)
-        self.assertAlmostEqual(H2FPM/ref_blade_mass,1., places=3)
-        self.assertAlmostEqual(H2noFPM/ref_blade_mass,1., places=3)
+
+        f = open(h2_path_noFPM)
+        f.readline()
+        f.readline()
+        f.readline()
+        f.readline()
+        n_pts1 = int(f.readline().split()[1])
+        h2noFPM = np.zeros((n_pts1,19))
+        for i in range(n_pts1):
+            h2noFPM[i,:] = np.array(f.readline().split(), dtype=float)
+        f.readline()
+        f.readline()
+        n_pts2 = int(f.readline().split()[1])
+        h2noFPM_rigid = np.zeros((n_pts2,19))
+        for i in range(n_pts2):
+            h2noFPM_rigid[i,:] = np.array(f.readline().split(), dtype=float)
+        
+        f.close()
+
+        blade_mass_H2FPM = np.trapz(h2FPM[:,1], h2FPM[:,0])
+        blade_mass_H2noFPM = np.trapz(h2noFPM[:,1], h2noFPM[:,0])
+        blade_mass_H2noFPMrigid = np.trapz(h2noFPM_rigid[:,1], h2noFPM_rigid[:,0])
+        print('\nBlade mass in H2 with fully populated matrices ', blade_mass_H2FPM)
+        print('\nBlade mass in H2 without fully populated matrices ', blade_mass_H2noFPM)
+        print('\nBlade mass in H2 without fully populated matrices and rigid ', blade_mass_H2noFPMrigid)
+        self.assertAlmostEqual(blade_mass_H2FPM/ref_blade_mass,1., places=3)
+        self.assertAlmostEqual(blade_mass_H2noFPM/ref_blade_mass,1., places=3)
+        self.assertAlmostEqual(blade_mass_H2noFPMrigid/ref_blade_mass,1., places=3)
 
 
 def suite():
