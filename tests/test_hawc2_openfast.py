@@ -43,10 +43,11 @@ def test_of_h2_fixedstructure():
     """
 
     ed_path = os.path.join(FROOT, 'OpenFAST', 'IEA-15-240-RWT-Monopile', 'IEA-15-240-RWT-Monopile_ElastoDyn.dat')
-    h2_path = os.path.join(FROOT, 'HAWC2', 'IEA-15-240-RWT-FixedSubstructure', 'htc', 'IEA_15MW_RWT_FixedSubstructure.htc')
+    h2_dir = os.path.join(FROOT, 'HAWC2', 'IEA-15-240-RWT-FixedSubstructure')
+    h2_path = os.path.join(h2_dir, 'htc', 'IEA_15MW_RWT_FixedSubstructure.htc')
     
     ed_dict = read_elastodyn_dat(ed_path)
-    htc = HTCFile(h2_path)
+    htc = HTCFile(h2_path, modelpath=h2_dir)
     
     htc_struc = htc.new_htc_structure
     
