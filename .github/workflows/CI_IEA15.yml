@@ -28,29 +28,29 @@ jobs:
     
 
       # Install WEIO
-      #- name: Install WEIO
-      #  shell: bash -l {0}
-      #  run: |
-      #    git clone https://github.com/ebranlard/weio
-      #    cd weio
-      #    python -m pip install -e .
+      - name: Install WEIO
+        shell: bash -l {0}
+        run: |
+          git clone https://github.com/ebranlard/weio
+          cd weio
+          python -m pip install -e .
 
       # Debugging session
       #- name: Setup tmate session
       #  uses: mxschmitt/action-tmate@v3
 
       # Run all tests
-      #- name: Run tests
-      #  shell: bash -l {0}
-      #  run: |
-      #    pytest tests
+      - name: Run tests
+        shell: bash -l {0}
+        run: |
+          pytest tests
 
       # Run WISDEM analysis script
-      #- name: Run WISDEM script
-      #  shell: bash -l {0}
-      #  run: |
-      #    cd WISDEM
-      #    python run_model.py
+      - name: Run WISDEM script
+        shell: bash -l {0}
+        run: |
+          cd WISDEM
+          python run_model.py
 
       # Run OpenFAST monopile-ROSCO
       - name: Run OpenFAST fixed-bottom with ROSCO
@@ -67,14 +67,6 @@ jobs:
           cd OpenFAST/IEA-15-240-RWT-UMaineSemi
           openfast IEA-15-240-RWT-UMaineSemi.fst
 
-      # Run OpenFAST monopile-OLAF
-      - name: Run OpenFAST fixed-bottom with OLAF
-        shell: bash -l {0}
-        run: |
-          cd OpenFAST/IEA-15-240-RWT-OLAF
-          sed --separate --in-place=BAK 's/300.0 \{1,\} TMax/10.0    TMax/' IEA-15-240-RWT_OLAF.fst
-          openfast IEA-15-240-RWT_OLAF.fst
-
       # Run OpenFAST monopile-DTU
       - name: Run OpenFAST fixed-bottom with DTU controller
         shell: bash -l {0}
@@ -82,3 +74,11 @@ jobs:
           cd OpenFAST/IEA-15-240-RWT-Monopile_wDTUcontroller
           sed --separate --in-place=BAK 's/300.0 \{1,\} TMax/10.0    TMax/' IEA-15-240-RWT-Monopile_wDTUcontroller.fst
           openfast IEA-15-240-RWT-Monopile_wDTUcontroller.fst
+
+      # Run OpenFAST monopile-OLAF
+      - name: Run OpenFAST fixed-bottom with OLAF
+        shell: bash -l {0}
+        run: |
+          cd OpenFAST/IEA-15-240-RWT-OLAF
+          sed --separate --in-place=BAK 's/300.0 \{1,\} TMax/0.25    TMax/' IEA-15-240-RWT_OLAF.fst
+          openfast IEA-15-240-RWT_OLAF.fst
