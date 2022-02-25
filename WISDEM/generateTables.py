@@ -83,7 +83,7 @@ def vabs_load(fname):
 
 
 class RWT_Tabular(object):
-    def __init__(self, finput, towDF=None, rotDF=None, bladeDF=None):
+    def __init__(self, finput, towDF=None, rotDF=None, layerDF=None, nacDF=None, overview=None):
         
         # Read ontology file into dictionary-like data structure
         f = open(finput, 'r')
@@ -99,7 +99,9 @@ class RWT_Tabular(object):
         # If provided, store blade, tower, and rotor data
         self.towDF   = towDF
         self.rotDF   = rotDF
-        self.bladeDF = bladeDF
+        self.layerDF = layerDF
+        self.nacDF   = nacDF
+        self.overview = overview
 
         # Initialize workbook object
         self.wb   = Workbook()
@@ -128,191 +130,11 @@ class RWT_Tabular(object):
         ws['B1'] = 'IEA 15 MW Reference Wind Turbine'
 
         irow = 2
-        ws.cell(row=irow, column=1, value='Power rating [MW]')
-        ws.cell(row=irow, column=2, value=1e-6*self.yaml['assembly']['global']['rating'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Turbine class')
-        ws.cell(row=irow, column=2, value='IEC Class '+
-                self.yaml['assembly']['global']['turbine_class']+
-                self.yaml['assembly']['global']['turbulence_class'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Specific rating [W/m^2]')
-        ws.cell(row=irow, column=2, value=15e6/np.pi/120.0**2.0)
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Rotor orientation')
-        ws.cell(row=irow, column=2, value=str(self.yaml['assembly']['global']['orientation']).title())
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Number of blades')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['number_of_blades'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Control')
-        ws.cell(row=irow, column=2, value='Variable speed, Collective pitch')
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Cut-in wind speed [m/s]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['Vin'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Rated wind speed [m/s]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['Vrated'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Cut-out wind speed [m/s]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['Vout'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Rotor diameter [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['rotor_diameter'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Airfoil series')
-        ws.cell(row=irow, column=2, value='FFA-W3')
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Hub height [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['hub_height'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Hub diameter [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['hubD'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Hub distance from center to blades [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['hub_blade_distance'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Hub Overhang [m]')
-        ws.cell(row=irow, column=2, value=-self.yaml['assembly']['global']['overhang'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Drive train')
-        ws.cell(row=irow, column=2, value='Low speed, Direct drive')
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Design tip speed ratio')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['tsr'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Minimum rotor speed [rpm]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['minOmega'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Maximum rotor speed [rpm]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['maxOmega'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Maximum tip speed [m/s]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['control']['maxTS'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Shaft tilt angle [deg]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['tilt_angle'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Rotor pre-cone angle [deg]')
-        ws.cell(row=irow, column=2, value=-self.yaml['assembly']['global']['cone_angle'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Tower top to nacelle (yaw bearing height) [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['tower_top_to_nacelle'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Tower top to shaft distance [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['tower_top_to_shaft'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Generator efficiency [%]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['gen_eff'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Blade pre-bend [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['tip_prebend'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Blade mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['blade'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Hub mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['hub'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Generator mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['generator'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Turret/Nose mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['turret'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Bedplate mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['bedplate'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Shaft mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['shaft'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Shaft bearing mass (SRB) [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['main_bearing_srb'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Shaft bearing mass (TDO) [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['main_bearing_tdo'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Flange mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['flange'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Yaw system mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['yaw_system'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Other nacelle mass (electronics, thermal system, etc) [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['nacelle_other'])
-        irow += 1
-
-        ws.cell(row=irow, column=1, value='Nacelle mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['nacelle'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='RNA mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['rna'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='RNA center of mass from tower top [m]')
-        ws.cell(row=irow, column=2, value=str(self.yaml['assembly']['mass']['rna_center_of_mass']))
-        irow += 1
-            
-        ws.cell(row=irow, column=1, value='Tower mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['tower'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Tower base diameter [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['tower_baseD'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Transition piece height [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['transition_height'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Monopile embedment depth [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['monopile_embedment'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Monopile base diameter [m]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['global']['monopile_baseD'])
-        irow += 1
-        
-        ws.cell(row=irow, column=1, value='Monopile mass [t]')
-        ws.cell(row=irow, column=2, value=self.yaml['assembly']['mass']['monopile'])
-        irow += 1
+        for k,v in self.overview.items():
+            myv = float(v) if type(v)==type(np.array([])) else v
+            ws.cell(row=irow, column=1, value=k)
+            ws.cell(row=irow, column=2, value=myv)
+            irow += 1
         
         # Header row style formatting
         for cell in ws["1:1"]:
@@ -433,7 +255,8 @@ class RWT_Tabular(object):
         figLDA.savefig('outputs' + os.sep + 'airfoil_data-clcd_alpha.pdf', pad_inches=0.1, bbox_inches='tight')
         figCLCD.savefig('outputs' + os.sep + 'airfoil_data-cl_cd.pdf', pad_inches=0.1, bbox_inches='tight')
         figAIR.savefig('outputs' + os.sep + 'airfoil_family.pdf', pad_inches=0.1, bbox_inches='tight')
-                
+        plt.close()
+        
     def write_blade_outer(self):
         # Sheet name
         ws = self.wb.create_sheet(title = 'Blade Geometry')
@@ -453,7 +276,11 @@ class RWT_Tabular(object):
         # Interpolation function for arbitraty grids
         mygrid = self.yaml['components']['blade']['outer_shape_bem']['chord']['grid']
         def myinterp(xgrid, val):
-            return interp1d(xgrid, val, kind='cubic', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
+            try:
+                y = interp1d(xgrid, val, kind='cubic', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
+            except:
+                y = interp1d(xgrid, val, kind='linear', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
+            return y
         
         # Create blade geometry array in pandas
         geommat = np.c_[self.yaml['components']['blade']['outer_shape_bem']['chord']['grid'],
@@ -513,7 +340,7 @@ class RWT_Tabular(object):
 
         for k in range(nlay):
             for ikey in self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k].keys():
-                if ikey in ['name', 'midpoint_nd_arc','side','web']:
+                if ikey in ['name', 'midpoint_nd_arc','start_nd_arc','end_nd_arc','side','web']:
                     continue
                 elif ikey == 'material':
                     matlist.append( self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k][ikey] )
@@ -530,7 +357,12 @@ class RWT_Tabular(object):
         
         # Interpolation function for arbitraty layers and webs
         def myinterp(xgrid, val):
-            return interp1d(xgrid, val, kind='cubic', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
+            try:
+                y = interp1d(xgrid, val, kind='cubic', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
+            except:
+                y = interp1d(xgrid, val, kind='linear', bounds_error=False, fill_value=0.0, assume_sorted=True).__call__(mygrid)
+                #y = np.interp(mygrid, xgrid, val, left=0.0, right=0.0)
+            return y
         
         # Loop over layers and store layup data in master tables for plotting and writing to Excel table
         afstack  = [[] for m in range(naf)]
@@ -538,11 +370,10 @@ class RWT_Tabular(object):
         for k in range(nlay):
             lname = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name']
             lmat  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['material']
-            
-            ithick = myinterp(self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['grid'],
-                              self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values'])
-            idir   = myinterp(self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['fiber_orientation']['grid'],
-                              self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['fiber_orientation']['values'])
+
+            iDF = self.layerDF[k]
+            ithick = myinterp(iDF['Span'], iDF['Thickness [m]'])
+            idir   = myinterp(iDF['Span'], iDF['Fiber angle [deg]'])
 
             if lname.lower().find('web') >= 0:
                 iweb   = weblist.index( self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['web'] )
@@ -552,10 +383,8 @@ class RWT_Tabular(object):
                     webstack[iaf].append([lname, lmat, iweb, 1e3*ithick[ind], idir[ind]] )
                     
             else:
-                lay_beg = myinterp(self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['grid'],
-                                   self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['values'])
-                lay_end = myinterp(self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['grid'],
-                                   self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['values'])
+                lay_beg = myinterp(iDF['Span'], iDF['Layer Start'])
+                lay_end = myinterp(iDF['Span'], iDF['Layer End'])
 
                 for iaf in range(naf):
                     ind = np.where(mygrid == self.airfoil_span[iaf])[0][0]
@@ -657,7 +486,8 @@ class RWT_Tabular(object):
             fig.subplots_adjust(bottom = 0.15, left = 0.15)
             fig.savefig('outputs' + os.sep + 'layers_'+self.airfoil_list[iaf]+'_'+str(int(np.round(1e2*self.airfoil_span[iaf])))+'.pdf',
                         pad_inches=0.1, bbox_inches='tight')
-            
+            plt.close()
+        
         # Grab shear web data for excel sheet
         web3_grid, web3_ss, web3_ps = None, None, None
         for k in range(nweb):
@@ -678,15 +508,17 @@ class RWT_Tabular(object):
 
         # Grab spar cap and LE/TE reinforcement data for excel sheet
         for k in range(nlay):
-            if self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'] == 'Spar_cap_ss':
+            if self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'].lower() == 'spar_cap_ss':
                 sparcap_ss_grid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['grid']
                 sparcap_ss_th   = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values']
+                sparcap_ss_wgrid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['grid']
                 sparcap_ss_wid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['values']
                 sparcap_ss_beg  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['values']
                 sparcap_ss_end  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['values']
-            elif self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'] == 'Spar_cap_ps':
+            elif self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'].lower() == 'spar_cap_ps':
                 sparcap_ps_grid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['grid']
                 sparcap_ps_th   = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values']
+                sparcap_ps_wgrid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['grid']
                 sparcap_ps_wid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['values']
                 sparcap_ps_beg  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['values']
                 sparcap_ps_end  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['values']
@@ -695,15 +527,16 @@ class RWT_Tabular(object):
                 reinf_le_th     = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values']
                 reinf_le_wgrid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['grid']
                 reinf_le_wid    = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['values']
-                reinf_le_beg    = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['values']
-                reinf_le_end    = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['values']
-            elif self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'] == 'TE_reinforcement':
-                reinf_te_thgrid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['grid']
-                reinf_te_th     = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values']
-                reinf_te_wgrid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['grid']
-                reinf_te_wid    = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['values']
-                reinf_te_beg    = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['values']
-                reinf_te_end    = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['values']
+            elif self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'].lower() == 'te_reinforcement_ss':
+                reinf_te_ss_thgrid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['grid']
+                reinf_te_ss_th     = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values']
+                reinf_te_ss_wgrid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['grid']
+                reinf_te_ss_wid    = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['values']
+            elif self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'].lower() == 'te_reinforcement_ps':
+                reinf_te_ps_thgrid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['grid']
+                reinf_te_ps_th     = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values']
+                reinf_te_ps_wgrid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['grid']
+                reinf_te_ps_wid    = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['values']
             else:
                 continue
 
@@ -718,15 +551,17 @@ class RWT_Tabular(object):
             crossDF['Shear web-3 SS s-coord'] = myinterp(web3_grid, web3_ss)
             crossDF['Shear web-3 PS s-coord'] = myinterp(web3_grid, web3_ps)
         crossDF['Spar cap SS begin s-coord'] = myinterp(sparcap_ss_grid, sparcap_ss_beg)
-        crossDF['Spar cap SS width [m]']     = myinterp(sparcap_ss_grid, sparcap_ss_wid)
+        crossDF['Spar cap SS width [m]']     = myinterp(sparcap_ss_wgrid, sparcap_ss_wid)
         crossDF['Spar cap SS thick [m]']     = myinterp(sparcap_ss_grid, sparcap_ss_th )
         crossDF['Spar cap PS begin s-coord'] = myinterp(sparcap_ps_grid, sparcap_ps_beg)
-        crossDF['Spar cap PS width [m]']     = myinterp(sparcap_ps_grid, sparcap_ps_wid)
+        crossDF['Spar cap PS width [m]']     = myinterp(sparcap_ps_wgrid, sparcap_ps_wid)
         crossDF['Spar cap PS thick [m]']     = myinterp(sparcap_ps_grid, sparcap_ps_th )
         crossDF['LE reinf width [m]']        = myinterp(reinf_le_wgrid, reinf_le_wid)
         crossDF['LE reinf thick [m]']        = myinterp(reinf_le_thgrid, reinf_le_th )
-        crossDF['TE reinf width [m]']        = myinterp(reinf_te_wgrid, reinf_te_wid)
-        crossDF['TE reinf thick [m]']        = myinterp(reinf_te_thgrid, reinf_te_th )
+        crossDF['TE reinf SS width [m]']     = myinterp(reinf_te_ss_wgrid, reinf_te_ss_wid)
+        crossDF['TE reinf SS thick [m]']     = myinterp(reinf_te_ss_thgrid, reinf_te_ss_th )
+        crossDF['TE reinf PS width [m]']     = myinterp(reinf_te_ps_wgrid, reinf_te_ps_wid)
+        crossDF['TE reinf PS thick [m]']     = myinterp(reinf_te_ps_thgrid, reinf_te_ps_th )
 
         # Cross section over-view sheet
         ws = self.wb.create_sheet(title = 'Blade Support Structure')
@@ -793,10 +628,11 @@ class RWT_Tabular(object):
     def write_blade_struct(self):
         
         # Load in VABS data
-        froot  = os.path.join('..','OpenFAST','IEA-15-240-RWT','VABS','IEA-15-240-RWT_vabs_beam_properties_')
-        fnames = ['mass_matrices.csv','stiff_matrices.csv','general.csv']
-        M, Mr  = vabs_load(froot+fnames[0])
-        K, Kr  = vabs_load(froot+fnames[1])
+        #froot  = os.path.join('..','OpenFAST','IEA-15-240-RWT','VABS','IEA-15-240-RWT_vabs_beam_properties_')
+        #fnames = ['mass_matrices.csv','stiff_matrices.csv','general.csv']
+        #M, Mr  = vabs_load(froot+fnames[0])
+        #K, Kr  = vabs_load(froot+fnames[1])
+        #sumDF = pd.read_csv(froot+fnames[2], header=1, index_col=0)
 
         fbeamdyn = os.path.join('..','OpenFAST','IEA-15-240-RWT','IEA-15-240-RWT_BeamDyn_blade.dat')
         M, K, r = beamdyn_load( fbeamdyn )
@@ -827,16 +663,15 @@ class RWT_Tabular(object):
                   'K_55','K_56',
                   'K_66']
 
-        sumDF = pd.read_csv(froot+fnames[2], header=1, index_col=0)
         #bladeStructDF = pd.DataFrame(data=mydata, columns=labels, index=Mr)
         bladeStructDF = pd.DataFrame(data=mydata, columns=labels, index=r)
         
         # Write to sheet
         ws = self.wb.create_sheet(title = 'Blade Structural Properties')
         ws['A1'] = 'BeamDyn Coordinate System (see https://wind.nrel.gov/nwtc/docs/BeamDyn_Manual.pdf)'
-        for r in dataframe_to_rows(sumDF, index=True, header=True):
-            ws.append(r)
-        ws['A16'] = ''
+        #for r in dataframe_to_rows(sumDF, index=True, header=True):
+        #    ws.append(r)
+        #ws['A16'] = ''
         for r in dataframe_to_rows(bladeStructDF, index=True, header=True):
             ws.append(r)
         
@@ -847,7 +682,7 @@ class RWT_Tabular(object):
             cell.style = 'Headline 2'
 
         
-            
+        '''
         # Make plot
         blade_x  = np.array(self.yaml['components']['blade']['outer_shape_bem']['chord']['grid'])
         def myinterp(xgrid, val):
@@ -875,6 +710,7 @@ class RWT_Tabular(object):
         ax.set_xlabel('Blade span r/R', size=14, weight='bold')
         ax.set_ylabel('Chordwise [m]', size=14, weight='bold')
         fig.savefig('outputs' + os.sep + 'planform.pdf', pad_inches=0.1, bbox_inches='tight')
+        '''
 
         
     def write_tower_monopile(self):
@@ -1039,37 +875,18 @@ class RWT_Tabular(object):
 
 
     def write_nacelle(self):
-        # Nacelle data
-        fnac  =  '..'+os.sep+'Documentation'+os.sep+'Nacelle_Mass_Properties.xlsx'
-        nacDF = pd.read_excel(fnac)
-        nacDF.set_index('Name', inplace=True)
-
-        # Put units in column name
-        colnames = []
-        for k in range(len(nacDF.columns)):
-            colnames.append( nacDF.columns[k] + ' ['+nacDF[ nacDF.columns[k] ].loc['Units']+']' )
-        nacDF.rename(columns=dict(zip(nacDF.columns, colnames)), inplace=True)
-        nacDF.drop(index='Units', inplace=True)
-        nacDF = nacDF.astype('float64') 
-
-        # Round off big numbers for appearances
-        for k in nacDF.columns:
-            if k in ['X_TT [m]','Z_TT [m]']: continue
-            for i in nacDF.index:
-                nacDF[k].loc[i] = np.round( nacDF[k].loc[i] )
-
-        # Write it out to sheet
-        ws = self.wb.create_sheet(title = 'Nacelle Mass Properties')
-        for r in dataframe_to_rows(nacDF, index=True, header=True):
-            ws.append(r)
+        if not self.nacDF is None:
+            ws = self.wb.create_sheet(title = 'Nacelle Mass Properties')
+            for r in dataframe_to_rows(self.nacDF, index=True, header=True):
+                ws.append(r)
         
-        # Header row style formatting
-        for cell in ws["1:1"]:
-            cell.style = 'Headline 2'
+            # Header row style formatting
+            for cell in ws["1:1"]:
+                cell.style = 'Headline 2'
 
         # Dump to latex file
-        with open('nac.tbl','w') as f:
-            nacDF.to_latex(f, index=True)
+        #with open('nac.tbl','w') as f:
+        #    self.nacDF.to_latex(f, index=True)
         
         
     def cleanup(self):

@@ -1,409 +1,60 @@
-import pandas as pd
-import numpy as np
-from scipy.interpolate import PchipInterpolator
-import matplotlib.pyplot as plt
-import openmdao.api as om
-from wisdem.towerse.tower import TowerSE
-from wisdem.commonse.utilities import assembleI, unassembleI, nodal2sectional
+#!/usr/bin/env python3
 import os
-
-# --- tower setup ------
-from wisdem.commonse.environment import PowerWind
-from wisdem.commonse.environment import LogWind
-
-# Initial guess
-h_param = np.array([5., 5., 5., 5., 5., 5., 5., 5., 5., 13.,  13.,  13.,  13.,  13.,  13.,  13.,  13.,  13., 12.58244309])
-d_param = np.array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 9.92647687, 9.44319282, 8.83283769, 8.15148167, 7.38976138, 6.90908962, 6.74803581, 6.57231775, 6.5])
-t_param = np.array([0.05534138, 0.05344902, 0.05150928, 0.04952705, 0.04751736, 0.04551709, 0.0435267, 0.04224176, 0.04105759, 0.0394965, 0.03645589, 0.03377851, 0.03219233, 0.03070819, 0.02910109, 0.02721289, 0.02400931, 0.0208264, 0.02399756])
-
-# Index for where the tower starts
-itow = 9
-
-# Output folder for figs
-folder_output = os.getcwd() + os.sep + 'outputs'
+from wisdem import run_wisdem
+import wisdem.postprocessing.compare_designs as compare_designs 
 
 
+# File management
+thisdir = os.path.dirname(os.path.realpath(__file__))
+ontology_dir = os.path.join(os.path.dirname(thisdir), "WT_Ontology")
+fname_wt_input = os.path.join(ontology_dir, "IEA-15-240-RWT.yaml")
+fname_modeling = os.path.join(thisdir, "modeling_options_monopile.yaml")
+fname_analysis_noopt = os.path.join(thisdir, "analysis_options.yaml")
+fname_analysis_opt = os.path.join(thisdir, "analysis_options_monopile.yaml")
+folder_output = os.path.join(thisdir, "outputs")
+
+# Run WISDEM tower-monopile optimization
+prob, modeling_options, analysis_noopt = run_wisdem(fname_wt_input, fname_modeling, fname_analysis_noopt)
+wt_opt, modeling_options, analysis_opt = run_wisdem(fname_wt_input, fname_modeling, fname_analysis_opt)
+
+# Produce standard comparison plots
+compare_designs.run([prob, wt_opt], ['Before','After'], modeling_options, analysis_opt)
 
 
-def set_common_params(prob):
-    # --- geometry ----
-    prob['hub_height'] = prob['wind_reference_height'] = 150.0
-    prob['tower_buckling_length'] = 15.0
-    prob['yaw'] = 0.0
+# print results from the analysis or optimization
+print("\n\nTower-monopile z-pts =", wt_opt["towerse.z_param"])
+print("Tower diameter =", wt_opt["towerse.tower_outer_diameter"])
+print("Tower thickness =", wt_opt["towerse.tower_wall_thickness"])
+print("Tower mass (kg) =", wt_opt["towerse.tower_mass"])
+print("Monopile diameter =", wt_opt["fixedse.monopile_outer_diameter"])
+print("Monopile thickness =", wt_opt["fixedse.monopile_wall_thickness"])
+print("Monopile mass (kg) =", wt_opt["fixedse.monopile_mass"])
+print("Total mass (kg) =", wt_opt["fixedse.structural_mass"])
 
-    # --- material props ---
-    prob['E'] = 210e9
-    prob['G'] = 79.3e9 #80.8e9
-    prob['material_density'] = 7850.0 #8500.0
-    prob['sigma_y'] = 345.0e6 #450.0e6
+print("\nTower Fore-aft freq (Hz) =", wt_opt["towerse.tower.fore_aft_freqs"])
+print("Tower Fore-aft mode shapes =", wt_opt["towerse.tower.fore_aft_modes"])
+print("Tower Side-side freq (Hz) =", wt_opt["towerse.tower.side_side_freqs"])
+print("Tower Side-side mode shapes =", wt_opt["towerse.tower.side_side_modes"])
+print("Monopile Fore-aft freq (Hz) =", wt_opt["fixedse.monopile.fore_aft_freqs"])
+print("Monopile Fore-aft mode shapes =", wt_opt["fixedse.monopile.fore_aft_modes"])
+print("Monopile Side-side freq (Hz) =", wt_opt["fixedse.monopile.side_side_freqs"])
+print("Monopile Side-side mode shapes =", wt_opt["fixedse.monopile.side_side_modes"])
 
-    # --- extra mass ----
-    mIxx = 3.42240948e+08
-    mIyy = 2.26926355e+08
-    mIzz = 1.74414104e+08
-    mIxy = 0.0
-    mIxz = 3.12038059e+07
-    mIyz = 0.0
-    prob['rna_mass'] = 1017574.930
-    prob['rna_I'] = np.array([mIxx, mIyy, mIzz, mIxy, mIxz, mIyz])
-    prob['rna_cg'] = np.array([-6.47601681, 0., 4.2691133])
-    prob['tower_add_gravity'] = True
-    # -----------
+print("\nwind: ", wt_opt["towerse.env.Uref"])
+print("Tower top_deflection (m) =", wt_opt["towerse.tower.top_deflection"])
+print("Tower base forces (N) =", wt_opt["towerse.tower.turbine_F"])
+print("Tower base moments (Nm) =", wt_opt["towerse.tower.turbine_M"])
+print("Tower Constraint z-pts =", wt_opt["towerse.z_full"])
+print("Tower stress =", wt_opt["towerse.post.constr_stress"].flatten())
+print("Tower GL buckling =", wt_opt["towerse.post.constr_global_buckling"].flatten())
+print("Tower Shell buckling =", wt_opt["towerse.post.constr_shell_buckling"].flatten())
+print("Tower taper ratio constraint =", wt_opt["towerse.constr_taper"])
+print("Monopile top_deflection (m) =", wt_opt["fixedse.monopile.top_deflection"])
+print("Mudline forces (N) =", wt_opt["fixedse.monopile.mudline_F"])
+print("Mudline moments (Nm) =", wt_opt["fixedse.monopile.mudline_M"])
+print("Monopile Constraint z-pts =", wt_opt["fixedse.z_full"])
+print("Monopile stress =", wt_opt["fixedse.post.constr_stress"].flatten())
+print("Monopile GL buckling =", wt_opt["fixedse.post.constr_global_buckling"].flatten())
+print("Monopile Shell buckling =", wt_opt["fixedse.post.constr_shell_buckling"].flatten())
+print("Monopile taper ratio constraint =", wt_opt["fixedse.constr_taper"])
 
-    # --- wind & wave ---
-    prob['wind_z0'] = 0.0
-    prob['air_density'] = 1.225
-    prob['air_viscosity'] = 1.7934e-5
-    prob['shearExp'] = 0.11
-    prob['wind_beta'] = prob['wave_beta'] = 0.0
-    # ---------------
-
-    # --- frame3dd knobs ---
-    prob['DC'] = 80.0
-    prob['shear'] = True
-    prob['geom'] = True
-    prob['tower_force_discretization'] = 5.0
-    prob['nM'] = 2
-    prob['Mmethod'] = 1
-    prob['lump'] = 0
-    prob['tol'] = 1e-9
-    prob['shift'] = 0.0
-    # ---------------
-
-    # --- fatigue (not used) ---
-    #prob['tower_z_DEL'] = z_DEL
-    #prob['tower_M_DEL'] = M_DEL
-    prob['life'] = 25.0
-    prob['m_SN'] = 4.0
-    # ---------------
-
-    # # --- loading case 1: max Thrust from gust case ---
-    # NOTE: The run_model.py script is currently set at rated conditions (gust_stddev=0), not extreme conditions
-    prob['wind.Uref'] = 20.00138038
-    prob['pre.rna_F'] = np.array([3569257.70891496,
-                                  -22787.83765441,
-                                  -404483.54819059])
-    prob['pre.rna_M'] = np.array([68746553.1515807,
-                                  16045443.38557568,
-                                  1811078.988995])
-    # # ---------------
-    return prob
-
-
-def postprocess(prob, towDF, spre='monopile'):
-    z,_ = nodal2sectional(prob['z_full'])
-    print('section_height [m]', prob['tower_section_height'])
-    print('section_diam [m]', prob['tower_outer_diameter'])
-    print('section_thick [m]', prob['tower_wall_thickness'])
-    print('pile depth [m]', prob['suctionpile_depth'])
-    print('zs=', z)
-    print('ds=', prob['d_full'])
-    print('ts=', prob['t_full'])
-    print('mass (kg) =', prob['tower_mass'])
-    print('cg (m) =', prob['tower_center_of_mass'])
-    print('weldability =', prob['weldability'])
-    print('manufacturability =', prob['manufacturability'])
-    print('\nwind: ', prob['wind.Uref'])
-    print('f1 (Hz) =', prob['tower.f1'])
-    print('top_deflection1 (m) =', prob['post.top_deflection'])
-    print('stress1 =', prob['post.stress'])
-    print('GL buckling =', prob['post.global_buckling'])
-    print('Shell buckling =', prob['post.shell_buckling'])
-    print(prob['tower.base_F'])
-    print(prob['tower.base_M'])
-
-    '''
-    stress1 = np.copy( prob['post.stress'] )
-    shellBuckle1 = np.copy( prob['post.shell_buckling'] )
-    globalBuckle1 = np.copy( prob['post.global_buckling'] )
-
-    import matplotlib.pyplot as plt
-    fig = plt.figure(1)
-    ax1 = fig.add_subplot(121)
-    ax2 = fig.add_subplot(122)
-    ax1.plot(stress1, z, label='stress 1')
-    ax1.plot(shellBuckle1, z, label='shell buckling 1')
-    ax1.plot(globalBuckle1, z, label='global buckling 1')
-    ax1.legend(bbox_to_anchor=(1.05, 1.0), loc=2)
-    ax1.set_xlabel('utilization')
-    ax1.set_ylabel('height along tower (m)')
-
-    ax2.plot(prob['d_full']/2.+max(prob['d_full']), prob['z_full'], 'ok')
-    ax2.plot(prob['d_full']/-2.+max(prob['d_full']), prob['z_full'], 'ok')
-    plt.show()
-    '''
-    
-    # Outputs from tower diameter-thickness schedule
-    A = 0.25*np.pi*(towDF['OD [m]']**2 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**2)
-    I = (1/64.)*np.pi*(towDF['OD [m]']**4 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**4)
-    towDF['Mass Density [kg/m]'] = prob['material_density'] * A
-    towDF['Fore-aft inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
-    towDF['Side-side inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
-    towDF['Fore-aft stiffness [N.m^2]'] = prob['E'] * I
-    towDF['Side-side stiffness [N.m^2]'] = prob['E'] * I
-    towDF['Torsional stiffness [N.m^2]'] = prob['G'] * 2*I
-    towDF['Axial stiffness [N]'] = prob['E'] * A
-    towDF.to_csv(folder_output + os.sep + spre+'_tower.csv', index=False)
-
-    def format_save(fig, fig_name):
-        plt.xticks(fontsize=12)
-        plt.yticks(fontsize=12)
-        plt.grid(color=[0.8,0.8,0.8], linestyle='--')
-        plt.subplots_adjust(bottom = 0.15, left = 0.15)
-        fig.savefig(folder_output + os.sep + fig_name+'.pdf', pad_inches=0.1, bbox_inches='tight')
-        fig.savefig(folder_output + os.sep + fig_name+'.png', pad_inches=0.1, bbox_inches='tight')
-
-    # Tower stiffness plots
-    figsize=(5.3, 4)
-    fig = plt.figure(figsize=figsize)
-    
-    fig.clf()
-    ax = fig.add_subplot(111)
-    ax.plot(towDF['Height [m]'], towDF['Mass Density [kg/m]'], linewidth=2)
-    plt.xlabel('Location [m]', fontsize=14, fontweight='bold')
-    plt.ylabel('Mass Density [kg/m]', fontsize=14, fontweight='bold')
-    fig_name = spre+'_massdens'
-    format_save(fig, fig_name)
-
-    fig.clf()
-    ax = fig.add_subplot(111)
-    ax.plot(towDF['Height [m]'], towDF['Fore-aft inertia [kg.m]'], linewidth=2)
-    plt.xlabel('Location [m]', fontsize=14, fontweight='bold')
-    plt.ylabel('Fore-aft/side-side inertia [kg.m]', fontsize=14, fontweight='bold')
-    fig_name = spre+'_foreaft_sideside-inertia'
-    format_save(fig, fig_name)
-
-    fig.clf()
-    ax = fig.add_subplot(111)
-    ax.plot(towDF['Height [m]'], towDF['Fore-aft stiffness [N.m^2]'], linewidth=2)
-    ax.plot(towDF['Height [m]'], towDF['Torsional stiffness [N.m^2]'], linewidth=2)
-    ax.legend(('Fore-aft/side-side','Torsional'), loc='best')
-    plt.xlabel('Location [m]', fontsize=14, fontweight='bold')
-    plt.ylabel('Stiffness [N.m^2]', fontsize=14, fontweight='bold')
-    fig_name = spre+'_stiffness'
-    format_save(fig, fig_name)
-
-    fig.clf()
-    ax = fig.add_subplot(111)
-    ax.plot(towDF['Height [m]'], towDF['Axial stiffness [N]'], linewidth=2)
-    plt.xlabel('Location [m]', fontsize=14, fontweight='bold')
-    plt.ylabel('Axial Stiffness [N]', fontsize=14, fontweight='bold')
-    fig_name = spre+'_axial_stiffness'
-    format_save(fig, fig_name)
-    
-    
-    
-def design_floating_tower(optFlag=False, ):
-
-    # Optimize a fixed bottom tower with the frequency range such that when placed on a floating platform, the frequencies shift to not align with 1P/3P bounds
-
-    # Set common and then customized parameters
-    nPoints = len(d_param[itow:])
-    nFull   = 5*(nPoints-1) + 1
-
-    prob = om.Problem()
-    prob.model = TowerSE(nLC=1, nPoints=nPoints, nFull=nFull, wind='PowerWind', topLevelFlag=True, monopile=False)
-    prob.driver = om.pyOptSparseDriver() #om.ScipyOptimizeDriver() # 
-    prob.driver.options['optimizer'] = 'SNOPT' #'SLSQP' #'CONMIN'
-
-    # --- Objective ---
-    prob.model.add_objective('tower_mass', scaler=1e-6)
-    # ----------------------
-
-    # --- Design Variables ---
-    prob.model.add_design_var('tower_outer_diameter', lower=3.87, upper=10.0, indices=[m for m in range(nPoints-1)])
-    prob.model.add_design_var('tower_wall_thickness', lower=4e-3, upper=2e-1)
-    # ----------------------
-
-    # --- Constraints ---
-    #prob.model.add_constraint('height_constraint',    lower=-1e-2,upper=1.e-2)
-    prob.model.add_constraint('post.stress',          upper=1.0)
-    prob.model.add_constraint('post.global_buckling', upper=1.0)
-    prob.model.add_constraint('post.shell_buckling',  upper=1.0)
-    prob.model.add_constraint('weldability',          upper=0.0)
-    prob.model.add_constraint('manufacturability',    lower=0.0)
-    prob.model.add_constraint('slope',                upper=1.0)
-    prob.model.add_constraint('tower.f1',             lower=0.4)#lower=0.09, upper=0.15)
-    # ----------------------
-
-    prob.setup()
-    
-    prob = set_common_params(prob)
-    prob['foundation_height'] = 0.0
-    prob['tower_section_height'] = h_param[itow:]
-    prob['tower_outer_diameter'] = np.array([10., 9.964, 9.967, 9.927, 9.528, 9.149, 8.945, 8.735, 8.405, 7.321, 6.5]) #d_param[itow:]
-    prob['tower_wall_thickness'] = np.array([0.082954, 0.083073, 0.082799, 0.0299, 0.027842, 0.025567, 0.022854, 0.02025, 0.018339, 0.021211]) #t_param[itow:]
-    prob['tower_outfitting_factor'] = 1.0
-    prob['suctionpile_depth'] = 0.0
-    prob['transition_piece_mass'] = 1e-3
-    prob['transition_piece_height'] = 0.0
-    prob['soil_G'] = 1e30
-    prob['soil_nu'] = 0.0
-
-    # Floating will have higher loading
-    coeff = 1.25
-    prob['pre.rna_F'][:2] *= coeff
-    prob['pre.rna_M'] *= coeff
-
-    # --- safety factors ---
-    prob['gamma_f'] = 1.2*1.35
-    prob['gamma_m'] = 1.3
-    prob['gamma_n'] = 1.0
-    prob['gamma_b'] = 1.1
-    prob['gamma_fatigue'] = 1.35*1.3*1.0
-
-    # --- constraints ---
-    prob['min_d_to_t'] = 100.0
-    prob['max_taper']  = 0.2
-    
-    # Run optimization
-    if optFlag:
-        prob.model.approx_totals()
-        prob.run_driver()
-    else:
-        prob.run_model()
-        
-    print('-----FLOATING TOWER RESULTS---------')
-
-    # CSV output
-    transition_piece_height = 15.0
-    htow = np.cumsum(np.r_[0.0, prob['tower_section_height']]) + transition_piece_height
-    towdata = np.c_[htow,
-                    prob['tower_outer_diameter'],
-                    np.r_[prob['tower_wall_thickness'][0], prob['tower_wall_thickness']]]
-    rowadd = []
-    for k in range(towdata.shape[0]):
-        if k==0: continue
-        if k+1 < towdata.shape[0]:
-            rowadd.append([towdata[k,0]+1e-3, towdata[k,1], towdata[k+1,2]])
-    towdata = np.vstack((towdata, rowadd))
-    towdata[:,-1] *= 1e3
-    towdata = np.round( towdata[towdata[:,0].argsort(),], 3)
-    colstr = ['Height [m]','OD [m]', 'Thickness [mm]']
-    towDF = pd.DataFrame(data=towdata, columns=colstr)
-    
-    postprocess(prob, towDF, spre='floating_tower')
-    return prob
-
-
-
-def design_monopile_tower(optFlag=False, floating_tower=True):
-
-    nPoints = len(d_param)
-    nFull   = 5*(nPoints-1) + 1
-
-    prob = om.Problem()
-    prob.model = TowerSE(nLC=1, nPoints=nPoints, nFull=nFull, wind='PowerWind', topLevelFlag=True, monopile=True)
-    prob.driver = om.pyOptSparseDriver() #om.ScipyOptimizeDriver() # 
-    prob.driver.options['optimizer'] = 'SNOPT' #'SLSQP' #'CONMIN'
-
-    # --- Objective ---
-    prob.model.add_objective('tower_mass', scaler=1e-6)
-    # ----------------------
-
-    # --- Design Variables ---
-    if floating_tower:
-        prob.model.add_design_var('tower_outer_diameter', lower=3.87, upper=10.0, indices=[m for m in range(itow)])
-        prob.model.add_design_var('tower_wall_thickness', lower=4e-3, upper=2e-1, indices=[m for m in range(itow)])
-    else:
-        prob.model.add_design_var('tower_outer_diameter', lower=3.87, upper=10.0, indices=[m for m in range(nPoints-1)])
-        prob.model.add_design_var('tower_wall_thickness', lower=4e-3, upper=2e-1)
-    #prob.model.add_design_var('suctionpile_depth', lower=10., upper=70.)
-    # ----------------------
-
-    # --- Constraints ---
-    #prob.model.add_constraint('height_constraint',    lower=-1e-2,upper=1.e-2)
-    prob.model.add_constraint('post.stress',          upper=1.0)
-    prob.model.add_constraint('post.global_buckling', upper=1.0)
-    prob.model.add_constraint('post.shell_buckling',  upper=1.0)
-    prob.model.add_constraint('weldability',          upper=0.0)
-    prob.model.add_constraint('manufacturability',    lower=0.0)
-    prob.model.add_constraint('slope',                upper=1.0)
-    prob.model.add_constraint('tower.f1',             lower=0.13, upper=0.24)
-    # ----------------------
-
-    prob.setup()
-    
-    # Set common and then customized parameters
-    prob = set_common_params(prob)
-    prob['foundation_height'] = -30.0
-    prob['tower_section_height'] = h_param
-    prob['tower_outer_diameter'] = d_param
-    prob['tower_wall_thickness'] = t_param
-    prob['tower_outfitting_factor'] = 1.07
-    prob['suctionpile_depth'] = 45.0
-    prob['transition_piece_mass'] = 100e3
-    prob['transition_piece_height'] = 15.0
-    prob['soil_G'] = 140e6
-    prob['soil_nu'] = 0.4
-    prob['air_viscosity'] = 1.7934e-5
-    prob['water_density'] = 1025.0
-    prob['water_viscosity'] = 1.3351e-3
-    prob['significant_wave_height'] = 4.52
-    prob['significant_wave_period'] = 9.52
-
-    # --- safety factors ---
-    prob['gamma_f'] = 1.35
-    prob['gamma_m'] = 1.3
-    prob['gamma_n'] = 1.0
-    prob['gamma_b'] = 1.1
-    prob['gamma_fatigue'] = 1.35*1.3*1.0
-
-    # --- constraints ---
-    prob['min_d_to_t'] = 120.0
-    prob['max_taper']  = 0.2
-    
-    # Keep tower suitable for floating as static design
-    if floating_tower:
-        prob0 = design_floating_tower()
-        prob['tower_outer_diameter'][itow:] = prob0['tower_outer_diameter']
-        prob['tower_wall_thickness'][itow:] = prob0['tower_wall_thickness']
-    else:
-        # Make the optimizer work a little less hard by using a better starting point
-        prob['tower_outer_diameter'] = np.array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 9.92647687, 9.44319282, 8.83283769, 8.15148167, 7.38976138, 6.90908962, 6.74803581, 6.57231775, 6.5])
-        prob['tower_wall_thickness'] = np.array([0.05534138, 0.05344902, 0.05150928, 0.04952705, 0.04751736, 0.04551709, 0.0435267, 0.04224176, 0.04105759, 0.0394965, 0.03645589, 0.03377851, 0.03219233, 0.03070819, 0.02910109, 0.02721289, 0.02400931, 0.0208264, 0.02399756])
-        
-    # Run optimization
-    if optFlag:
-        prob.model.approx_totals()
-        prob.run_driver()
-    else:
-        prob.run_model()
-        
-    print('-----MONOPILE TOWER RESULTS---------')
-
-    # CSV output
-    htow = np.cumsum(np.r_[0.0, prob['suctionpile_depth'], prob['tower_section_height']]) + (prob['foundation_height']-prob['suctionpile_depth'])
-    towdata = np.c_[htow,
-                    np.r_[prob['tower_outer_diameter'][0], prob['tower_outer_diameter']],
-                    np.r_[prob['tower_wall_thickness'][0], prob['tower_wall_thickness'][0], prob['tower_wall_thickness']]]
-    rowadd = []
-    for k in range(towdata.shape[0]):
-        if k==0: continue
-        if k+1 < towdata.shape[0]:
-            rowadd.append([towdata[k,0]+1e-3, towdata[k,1], towdata[k+1,2]])
-    towdata = np.vstack((towdata, rowadd))
-    towdata[:,-1] *= 1e3
-    towdata = np.round( towdata[towdata[:,0].argsort(),], 3)
-    colstr = ['Height [m]','OD [m]', 'Thickness [mm]']
-    towDF = pd.DataFrame(data=towdata, columns=colstr)
-    mycomments = ['']*towdata.shape[0]
-    mycomments[0] = 'Monopile start'
-    mycomments[np.where(towdata[:,0] == prob['foundation_height'])[0][0]] = 'Mud line'
-    mycomments[np.where(towdata[:,0] == 0.0)[0][0]] = 'Water line'
-    mycomments[np.where(towdata[:,0] == prob['transition_piece_height'])[0][0]] = 'Tower start'
-    mycomments[-1] = 'Tower top'
-    towDF['Location'] = mycomments
-    towDF = towDF[['Location']+colstr]
-    
-    postprocess(prob, towDF)
-     
-    return prob
-
-
-if __name__ == '__main__':
-    prob_float = design_floating_tower(optFlag=False)
-    # Determine the penalty for using a single tower as opposed to two different ones
-    #prob_float = design_monopile_tower(floating_tower=True)
-    prob_mono  = design_monopile_tower(optFlag=False, floating_tower=False)
-    #print(prob_mono['tower_mass'] - prob_float['tower_mass'])

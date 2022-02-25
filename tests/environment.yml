@@ -1,0 +1,40 @@
+name: test
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - bcrypt
+  - future
+  - cached-property
+  - chardet
+  - click
+  - coverage
+  - h5py
+  - jinja2
+  - markupsafe
+  - matplotlib
+  - mock
+  - numexpr
+  - numpy
+  - openfast
+  - openpyxl
+  - pandas
+  - paramiko
+  - pyarrow
+  - pynacl
+  - pytest
+  - pytest-cov
+  - psutil
+  - pbr
+  - pytables
+  - sshtunnel
+  - simpy
+  - tomli
+  - wisdem
+  - xlrd
+  - xlwt
+  - pip:
+    - wetb
+    - marmot-agents

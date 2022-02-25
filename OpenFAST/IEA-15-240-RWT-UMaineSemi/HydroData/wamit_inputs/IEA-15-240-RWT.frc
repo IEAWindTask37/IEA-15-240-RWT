@@ -1,0 +1,9 @@
+IEA-15-240-RWT.FRC -- NREL 15MW Ref Hull, C. Allen UMaine .ms2 file type .gdf, ILOWHI=1, IRR=1
+ 1    0    1    0    0    0    0    0    0   IOPTN(1-9)
+ 0.000000                                    VCG
+ 0.000000      .0000000      .0000000
+ .0000000      0.000000      .0000000
+ .0000000      .0000000      0.000000        XPRDCT
+ 0                                           NBETAH
+ 0                                           NFIELD
+

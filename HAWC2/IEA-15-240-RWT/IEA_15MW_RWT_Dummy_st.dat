@@ -1,0 +1,5 @@
+#1 Massless/stiff dummy connector piece. Used for towertop, connector, and hub.
+r	    		m	    	  x_cg		y_cg	    ri_x		    ri_y	       x_sh 	y_sh	E		        G        		I_x	        	I_y     		I_p		       k_x 	   k_y  		A		pitch	  x_e	  y_e
+$1	 2  Massless/stiff connector piece.
+0.0		  1.00E+00		0		0		1.36E+00	1.36E+00		0		0		2.10E+17		8.08E+17		5.52E-01		5.52E-01		1.10E+00		0.5		0.5		2.98E-01		0		0		0
+1.0 	  1.00E+00		0		0		1.36E+00	1.36E+00		0		0		2.10E+17		8.08E+17		5.52E-01		5.52E-01		1.10E+00		0.5		0.5		2.98E-01		0		0		0

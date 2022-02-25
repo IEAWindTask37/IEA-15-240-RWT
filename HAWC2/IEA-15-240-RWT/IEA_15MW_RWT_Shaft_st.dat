@@ -1,0 +1,8 @@
+#1 IEA 15 MW shaft created by rink. I_p = DTTorSpr*ShftLen/G.
+r	        m	        x_cg   	y_cg   ri_x	   ri_y 	x_sh  	y_sh	E	           G	            I_x             I_y   			  I_p           k_x  	k_y	    A	  pitch    x_e     y_e
+$1	 2  Massless, torsion-only flexion.	  
+0.0		1.00E+00		0		0		0.2		0.2		0		0		2.10E+17		7.93E+10		1.00E+00		1.00E+00	    3.9532		    0.5		0.5		10		0		0		0
+5.118	1.00E+00		0		0		0.2		0.2		0		0		2.10E+17		7.93E+10		1.00E+00		1.00E+00	    3.9532		    0.5		0.5		10		0		0		0
+$2	 2  Massless, rigid.	  
+0.0		1.00E+00		0		0		0.2		0.2		0		0		2.10E+17		8.08E+17		1.00E+00		1.00E+00		0.2036		    0.5		0.5		10		0		0		0
+5.118	1.00E+00		0		0		0.2		0.2		0		0		2.10E+17		8.08E+17		1.00E+00		1.00E+00		0.2036		    0.5		0.5		10		0		0		0

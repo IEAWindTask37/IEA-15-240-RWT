@@ -1,0 +1,4 @@
+# Generic analysis options where nothing is run
+general:
+    folder_output: outputs
+    fname_output: iea15mw_output

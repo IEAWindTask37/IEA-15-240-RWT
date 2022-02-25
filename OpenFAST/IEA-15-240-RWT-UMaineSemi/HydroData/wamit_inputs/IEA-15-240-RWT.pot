@@ -1,0 +1,10 @@
+IEA-15-240-RWT.POT -- NREL 15MW Ref Hull, C. Allen UMaine .ms2 file type .gdf, ILOWHI=1, IRR=1
+200.0 0. 0. 0. 0.               HBOT, XBODY(1-4)
+ 1           1                  IRAD, IDIFF
+ 1  1  1  1  1  1               IMODE(1-6)
+ -102                           NPER          - Number of wave periods to be analyzed {0: evaluate hydrostatics only, >0: evaluate for NPER wave periods where PER is a list, <0: evaluate for ABS(NPER) wave periods where PER(1) is the first value and PER(2) is the uniform increment} (-)
+ -0.05 0.05                     PER           - List of wave periods [IPERIO = 1] or wave frequencies [IPERIO = 2] or infinite-depth wavenumber [IPERIO = 3] or finite-depth wavenumber [IPERIO = 4] {0.0: infinite frequency, <0.0: infinite period} [1 to NPER when NPER>0 or 1 to 2 when NPER<0] (sec when IPERIO = 1, rad/s when IPERIO = 2, - when IPERIO = 3, or - when IPERIO = 4) [this line must be deleted when NPER=0]
+  1                           NBETA         - Number of wave heading angles to be analyzed {0: do not solve the diffraction problem [this is the same as IDIFF=-1], >0: evaluate for NBETA wave angles where BETA is a list, <0: evaluate for ABS(NBETA) wave periods where BETA(1) is the first value and BETA(2) is the uniform increment} (-)
+   0.0
+                           BETA          - List of wave heading angles relative to the global coordinate system [1 to NBETA when NBETA>0 or 1 to 2 when NBETA<0] (degrees)
+

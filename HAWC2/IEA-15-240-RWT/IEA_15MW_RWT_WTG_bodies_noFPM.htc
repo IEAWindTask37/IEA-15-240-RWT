@@ -1,0 +1,148 @@
+;
+; This is a PARTIAL htc file for the main bodies of the
+; IEA 15 MW RWT WTG. It should be linked in a MAIN htc file
+; using the "continue_in_file" option.
+;
+  begin main_body;  towertop
+    name        towertop ;
+    type        timoschenko ;
+    nbodies     1 ;
+    node_distribution     c2_def ;
+    damping_posdef  0.0  0.0  0.0  7.00E-04  7.00E-04  7.00E-04  ;   dummy values (stiff body)
+    concentrated_mass  1  0.00   0.00    0.00    28280   0.00          0.00           0.00    ;  yaw system
+    concentrated_mass  1  0.00  -4.720  -4.275  646895  7.674778e+06  1.055686e+07  8.127143e+06    ;  nacelle: NR+R mass; NR inertia
+    begin timoschenko_input;
+      filename ../IEA-15-240-RWT/IEA_15MW_RWT_Dummy_st.dat ;
+      set 1 1 ;
+    end timoschenko_input;
+    begin c2_def;
+      nsec 2;
+      sec 1 0.0 0.0  0.0    0.0 ; x,y,z,twist
+      sec 2 0.0 0.0 -4.349459414248071  0.0 ;
+    end c2_def ;
+  end main_body;
+;
+  begin main_body;  connector
+    name        connector ;
+    type        timoschenko ;
+    nbodies     1 ;
+    node_distribution     c2_def ;
+    damping_posdef  0.0  0.0  0.0  7.00E-04  7.00E-04  7.00E-04  ;   dummy values (stiff body)
+    begin timoschenko_input;
+      filename ../IEA-15-240-RWT/IEA_15MW_RWT_Dummy_st.dat ;
+      set 1 1 ;
+    end timoschenko_input;
+    begin c2_def;
+      nsec 2;
+      sec 1 0.0 0.0  0.0 0.0 ; x,y,z,twist
+      sec 2 0.0 0.0  5.96769163920947  0.0 ;
+    end c2_def ;
+  end main_body;
+;
+  begin main_body;  shaft
+    name        shaft ;
+    type        timoschenko ;
+    nbodies     1 ;
+    node_distribution     c2_def ;
+    damping_posdef  0.0 0.0 0.0 4.65E-04  4.65E-04  5.971406e-04 ;  Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
+    concentrated_mass  1  0.0 0.0 0.0 0.0 0.0 0.0 1836784    ;    generator inertia about shaft
+    concentrated_mass  2  0.0 0.0 0.0 69360 0.0 0.0 973520    ;    hub mass/inertia;
+    begin timoschenko_input;
+      filename ../IEA-15-240-RWT/IEA_15MW_RWT_Shaft_st.dat ;
+      set 1 1 ;
+    end timoschenko_input;
+    begin c2_def;
+      nsec 2;
+      sec 1 0.0 0.0  0.00 0.0 ; x,y,z,twist
+      sec 2 0.0 0.0  6.129880124703066 0.0 ;
+    end c2_def ;
+  end main_body;
+;
+  begin main_body;  hub
+    name        hub1 ;
+    type        timoschenko ;
+    nbodies     1 ;
+    node_distribution     c2_def ;
+    damping_posdef  0.0  0.0  0.0  3.00E-06  3.00E-06  2.00E-05;  dummy values (rigid)
+    begin timoschenko_input;
+      filename ../IEA-15-240-RWT/IEA_15MW_RWT_Dummy_st.dat ;
+      set 1 1 ;
+    end timoschenko_input;
+    begin c2_def;
+      nsec 2;
+      sec 1 0.0 0.0 0.0 0.0 ; x,y,z,twist
+      sec 2 0.0 0.0 3.97 0.0 ;
+    end c2_def ;
+  end main_body;
+;
+  begin main_body;
+    name           hub2 ;
+    copy_main_body hub1;
+  end main_body;
+;
+  begin main_body;
+    name           hub3 ;
+    copy_main_body hub1 ;
+  end main_body;
+;
+  begin main_body; blade
+    name        blade1 ;
+    type        timoschenko ;
+    nbodies     10 ;
+    node_distribution    c2_def;
+    damping_aniso  0.0 0.0 0.0 3.038e-3 2.167e-3 1.0e-8 ; NoFPM. blade damping tuned to 3% log dec flap/edge, torsion arbitrarily small
+    begin timoschenko_input ;
+      filename ../IEA-15-240-RWT/IEA_15MW_RWT_Blade_st_noFPM.st;  blade files: [IEA_15MW_RWT_Blade_st_fpm.dat] or [IEA_15MW_RWT_Blade_st_nofpm.dat]
+      FPM 0;  is blade file original beam model [0] or fully populated matrix from BECAS [1]
+      set 1 1 ;  [1 1]=flexible, [1 2]=no torsion, [1 3]=stiff
+    end timoschenko_input;
+    begin c2_def;
+      nsec 34 ;
+      sec    1     2.276630e-02    -6.354120e-03     0.000000e+00    -1.559460e+01;
+      sec    2    -1.293848e-02     1.261945e-02     1.171132e+00    -1.559122e+01;
+      sec    3    -4.864326e-02     3.159302e-02     2.342264e+00    -1.558783e+01;
+      sec    4    -9.140135e-02     5.488521e-02     3.513081e+00    -1.550433e+01;
+      sec    5    -1.344445e-01     7.835194e-02     4.683885e+00    -1.541759e+01;
+      sec    6    -1.818083e-01     1.045408e-01     5.854464e+00    -1.520195e+01;
+      sec    7    -2.295389e-01     1.309607e-01     7.025023e+00    -1.497536e+01;
+      sec    8    -2.805342e-01     1.582549e-01     8.195424e+00    -1.465029e+01;
+      sec    9    -3.319667e-01     1.856661e-01     9.365804e+00    -1.431203e+01;
+      sec   10    -3.845451e-01     2.121439e-01     1.053615e+01    -1.390311e+01;
+      sec   11    -4.373390e-01     2.384463e-01     1.170650e+01    -1.348090e+01;
+      sec   12    -4.889974e-01     2.624051e-01     1.287694e+01    -1.301398e+01;
+      sec   13    -5.403746e-01     2.857836e-01     1.404741e+01    -1.253597e+01;
+      sec   14    -6.409605e-01     3.256061e-01     1.638857e+01    -1.153475e+01;
+      sec   15    -7.386271e-01     3.567336e-01     1.872999e+01    -1.053048e+01;
+      sec   16    -8.264376e-01     3.770434e-01     2.107191e+01    -9.573236e+00;
+      sec   17    -8.987642e-01     3.851610e-01     2.341442e+01    -8.716881e+00;
+      sec   18    -9.648239e-01     3.825914e-01     2.634323e+01    -7.812203e+00;
+      sec   19    -9.987529e-01     3.719855e-01     2.927258e+01    -7.025378e+00;
+      sec   20    -1.001853e+00     3.390686e-01     3.513159e+01    -5.514682e+00;
+      sec   21    -9.655290e-01     3.025461e-01     4.099051e+01    -4.221511e+00;
+      sec   22    -9.368886e-01     2.487508e-01     4.684933e+01    -3.216668e+00;
+      sec   23    -9.106694e-01     1.328630e-01     5.270724e+01    -2.389998e+00;
+      sec   24    -8.738616e-01    -3.160201e-02     5.856396e+01    -1.686368e+00;
+      sec   25    -8.276046e-01    -2.221558e-01     6.441981e+01    -1.069373e+00;
+      sec   26    -7.743977e-01    -4.915380e-01     7.027248e+01    -5.506951e-01;
+      sec   27    -7.139438e-01    -8.150146e-01     7.612237e+01    -6.361638e-02;
+      sec   28    -6.478554e-01    -1.162822e+00     8.197081e+01     4.971755e-01;
+      sec   29    -5.806119e-01    -1.549740e+00     8.781676e+01     1.249206e+00;
+      sec   30    -5.148167e-01    -1.977418e+00     9.365990e+01     1.929809e+00;
+      sec   31    -4.459413e-01    -2.430095e+00     9.950113e+01     2.171948e+00;
+      sec   32    -3.726401e-01    -2.916233e+00     1.053396e+02     2.093051e+00;
+      sec   33    -2.989205e-01    -3.444117e+00     1.111744e+02     1.800138e+00;
+      sec   34    -6.589360e-02    -4.001430e+00     1.170000e+02     1.242390e+00;
+     end c2_def ;
+   end main_body;
+;
+  begin main_body;
+    name           blade2 ;
+    copy_main_body blade1;
+  end main_body;
+;
+  begin main_body;
+    name           blade3 ;
+    copy_main_body blade1 ;
+  end main_body;
+;
+exit;  continue in main file
