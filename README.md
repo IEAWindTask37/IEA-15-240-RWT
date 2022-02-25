@@ -19,7 +19,7 @@ Data in this repository includes:
 * NREL's Reference OpenSource Controller (ROSCO) is required.  This can be compiled [from source here](https://github.com/nrel/rosco) or precompiled binaries for all platforms are [available for download](https://github.com/NREL/ROSCO/releases/).
 
 *HAWC2*:
-* HAWC2 can be acquired from its [homepage](https://www.hawc2.dk/)
+* HAWC2 can be acquired from its [homepage](https://www.hawc2.dk/).  The DTU Basic Controller can be obtained from its [repository](https://gitlab.windenergy.dtu.dk/OpenLAC/BasicDTUController).
 
 *WISDEM*:
  * WISDEM can be installed from its Github [repository](https://github.com/WISDEM/WISDEM).

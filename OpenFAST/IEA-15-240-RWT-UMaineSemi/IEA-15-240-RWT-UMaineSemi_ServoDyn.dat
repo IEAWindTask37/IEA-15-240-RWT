@@ -67,7 +67,7 @@ True                   GenTiStp    - Method to stop the generator {T: timed usin
 0                      NumSStC     - Number of sbustructure structural controllers (integer)
 "unused"               SStCfiles   - Name of the file for sbustructure tuned mass damper (quoted string) [unused when CompNTMD is false]
 ---------------------- BLADED INTERFACE ---------------------------------------- [used only with Bladed Interface]
-"../IEA-15-240-RWT/ServoData/libdiscon.dylib" DLL_FileName - Name/location of the dynamic library {.dll [Windows] or .so [Linux]} in the Bladed-DLL format (-) [used only with Bladed Interface]
+"../IEA-15-240-RWT/ServoData/libdiscon.so" DLL_FileName - Name/location of the dynamic library {.dll [Windows] or .so [Linux]} in the Bladed-DLL format (-) [used only with Bladed Interface]
 "ServoData/DISCON-UMaineSemi.IN"   DLL_InFile  - Name of input file sent to the DLL (-) [used only with Bladed Interface]
 "DISCON"               DLL_ProcName - Name of procedure in DLL to be called (-) [case sensitive; used only with DLL Interface]
 "default"              DLL_DT      - Communication interval for dynamic library (s) (or "default") [used only with Bladed Interface]

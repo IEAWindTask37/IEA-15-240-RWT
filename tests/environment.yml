@@ -15,8 +15,10 @@ dependencies:
   - jinja2
   - markupsafe
   - matplotlib
+  - mock
   - numexpr
   - numpy
+  - openfast
   - openpyxl
   - pandas
   - paramiko
