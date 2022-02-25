@@ -28,29 +28,29 @@ jobs:
     
 
       # Install WEIO
-      - name: Install WEIO
-        shell: bash -l {0}
-        run: |
-          git clone https://github.com/ebranlard/weio
-          cd weio
-          python -m pip install -e .
+      #- name: Install WEIO
+      #  shell: bash -l {0}
+      #  run: |
+      #    git clone https://github.com/ebranlard/weio
+      #    cd weio
+      #    python -m pip install -e .
 
       # Debugging session
       #- name: Setup tmate session
       #  uses: mxschmitt/action-tmate@v3
 
       # Run all tests
-      - name: Run tests
-        shell: bash -l {0}
-        run: |
-          pytest tests
+      #- name: Run tests
+      #  shell: bash -l {0}
+      #  run: |
+      #    pytest tests
 
       # Run WISDEM analysis script
-      - name: Run WISDEM script
-        shell: bash -l {0}
-        run: |
-          cd WISDEM
-          python run_model.py
+      #- name: Run WISDEM script
+      #  shell: bash -l {0}
+      #  run: |
+      #    cd WISDEM
+      #    python run_model.py
 
       # Run OpenFAST monopile-ROSCO
       - name: Run OpenFAST fixed-bottom with ROSCO
