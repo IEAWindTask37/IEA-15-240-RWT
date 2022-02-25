@@ -17,6 +17,7 @@ dependencies:
   - matplotlib
   - numexpr
   - numpy
+  - openfast
   - openpyxl
   - pandas
   - paramiko
