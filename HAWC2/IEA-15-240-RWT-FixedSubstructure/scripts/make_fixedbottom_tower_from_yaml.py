@@ -141,13 +141,14 @@ if save_twr:
     header1 = f'#1 Tower made by automatic script on {date.today().strftime("%d-%b-%Y")}'
     header2 = '\t'.join(['r', 'm', 'x_cg', 'y_cg', 'ri_x', 'ri_y', 'x_sh', 'y_sh', 'E', 'G',
                      'I_x', 'I_y', 'I_p', 'k_x', 'k_y', 'A', 'pitch', 'x_e', 'y_e'])
-    header = '\n'.join([header1, header2, f'$1 {out_arr.shape[0]} Flexibile'])
+    header = '\n'.join([header1, header2, f'$1 {out_arr.shape[0]} Flexible'])
     fmt = ['%.3f'] + ['%.4E'] * 18
     np.savetxt(h2_st_path, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
     # flexible (no torsion)
     out_arr[:, 9] *= 1e7  # increase G
-    header = '\n'.join([header2, f'$2 {out_arr.shape[0]} Flexibile (no torsion)'])
-    np.savetxt(h2_st_path, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
+    header = '\n'.join([header2, f'$2 {out_arr.shape[0]} Flexible (no torsion)'])
+    with open(h2_st_path, 'a') as f:
+        np.savetxt(f, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
     # rigid
     out_arr[:, 8] *= 1e7  # increase E
     header = '\n'.join([header2, f'$3 {out_arr.shape[0]} Rigid'])
