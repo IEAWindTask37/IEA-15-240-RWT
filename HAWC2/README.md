@@ -37,3 +37,10 @@ Both blade models feature torsional deflections and are therefore
 equivalent to a BeamDyn model. To make an ElastoDyn equivalent, 
 increase the torsional stiffness (shear modulus) by several orders
 of magnitude.
+
+## Fixed-substructure tower models
+
+There are three tower models: (1) a fully flexible tower, (2) a 
+torsionally rigid tower, and (3) a fully rigid tower. OpenFAST
+currently cannot model tower torsion, so if you want to compare to
+OpenFAST results you should use the second option.
