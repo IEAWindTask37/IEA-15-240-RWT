@@ -48,6 +48,11 @@ True                   GenTiStp    - Method to stop the generator {T: timed usin
 9999.9                 THSSBrDp    - Time to initiate deployment of the HSS brake (s)
 9999.9                 HSSBrDT     - Time for HSS-brake to reach full deployment once initiated (sec) [used only when HSSBrMode=1]
 9999.9                 HSSBrTqF    - Fully deployed HSS-brake torque (N-m)
+---------------------- Aerodynamic Flow Control -------------------------------------
+0                      AfCmode     - Airfoil control mode {0- none, 1- cosine wave cycle, 4- user-defined from Simulink/Labview, 5- user-defined from Bladed-style DLL}
+0.0                    AfC_Mean    - Mean level for sinusoidal cycling or steady value (-) [used only with AfCmode==1]
+0.0                    AfC_Amp     - Amplitude for for cosine cycling of flap signal (AfC = AfC_Amp*cos(Azimuth+phase)+AfC_mean) (-) [used only with AfCmode==1]
+0.0                    AfC_phase   - Phase relative to the blade azimuth (0 is vertical) for for cosine cycling of flap signal (deg) [used only with AfCmode==1]
 ---------------------- NACELLE-YAW CONTROL -------------------------------------
 0                      YCMode      - Yaw control mode {0: none, 3: user-defined from routine UserYawCont, 4: user-defined from Simulink/Labview, 5: user-defined from Bladed-style DLL} (switch)
 9999.9                 TYCOn       - Time to enable active yaw control (s) [unused when YCMode=0]
@@ -66,6 +71,8 @@ True                   GenTiStp    - Method to stop the generator {T: timed usin
 "unused"               TStCfiles   - Name of the file for tower tuned mass damper (quoted string) [unused when CompNTMD is false]
 0                      NumSStC     - Number of sbustructure structural controllers (integer)
 "unused"               SStCfiles   - Name of the file for sbustructure tuned mass damper (quoted string) [unused when CompNTMD is false]
+---------------------- CABLE CONTROL ---------------------------------------- 
+0                      CCmode      - Cable control mode {0- none, 4- user-defined from Simulink/Labview, 5- user-defineAfC_phased from Bladed-style DLL}
 ---------------------- BLADED INTERFACE ---------------------------------------- [used only with Bladed Interface]
 "../IEA-15-240-RWT/ServoData/libdiscon.so"  DLL_FileName - Name/location of the dynamic library {.dll [Windows] or .so [Linux]} in the Bladed-DLL format (-) [used only with Bladed Interface]
 "DISCON-Monopile.IN"   DLL_InFile  - Name of input file sent to the DLL (-) [used only with Bladed Interface]

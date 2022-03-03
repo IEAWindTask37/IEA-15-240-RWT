@@ -2,9 +2,9 @@
 IEA 15 MW offshore reference model on UMaine VolturnUS-S semi-submersible floating platform
 False            Echo           - Echo the input file data (flag) 
 ---------------------- ENVIRONMENTAL CONDITIONS -------------------------------- 
-        1025     WtrDens        - Water density (kg/m^3) 
-         200     WtrDpth        - Water depth (meters) 
-           0     MSL2SWL        - Offset between still-water level and mean sea level (meters) [positive upward; unused when WaveMod = 6; must be zero if PotMod=1 or 2] 
+        "default"     WtrDens        - Water density (kg/m^3) 
+        "default"     WtrDpth        - Water depth (meters) 
+        "default"     MSL2SWL        - Offset between still-water level and mean sea level (meters) [positive upward; unused when WaveMod = 6; must be zero if PotMod=1 or 2] 
 ---------------------- WAVES --------------------------------------------------- 
            2     WaveMod     - Incident wave kinematics model {0: none=still water, 1: regular (periodic), 1P#: regular with user-specified phase, 2: JONSWAP/Pierson-Moskowitz spectrum (irregular), 3: White noise spectrum (irregular), 4: user-defined spectrum from routine UserWaveSpctrm (irregular), 5: Externally generated wave-elevation time series, 6: Externally generated full wave-kinematics time series [option 6 is invalid for PotMod/=0]} (switch)
            0     WaveStMod      - Model for stretching incident wave kinematics to instantaneous free surface {0: none=no stretching, 1: vertical stretching, 2: extrapolation stretching, 3: Wheeler stretching} (switch) [unused when WaveMod=0 or when PotMod/=0] 
