@@ -48,11 +48,6 @@ True                   GenTiStp    - Method to stop the generator {T: timed usin
 9999.9                 THSSBrDp    - Time to initiate deployment of the HSS brake (s)
 9999.9                 HSSBrDT     - Time for HSS-brake to reach full deployment once initiated (sec) [used only when HSSBrMode=1]
 9999.9                 HSSBrTqF    - Fully deployed HSS-brake torque (N-m)
----------------------- Aerodynamic Flow Control -------------------------------------
-0                      AfCmode     - Airfoil control mode {0- none, 1- cosine wave cycle, 4- user-defined from Simulink/Labview, 5- user-defined from Bladed-style DLL}
-0.0                    AfC_Mean    - Mean level for sinusoidal cycling or steady value (-) [used only with AfCmode==1]
-0.0                    AfC_Amp     - Amplitude for for cosine cycling of flap signal (AfC = AfC_Amp*cos(Azimuth+phase)+AfC_mean) (-) [used only with AfCmode==1]
-0.0                    AfC_phase   - Phase relative to the blade azimuth (0 is vertical) for for cosine cycling of flap signal (deg) [used only with AfCmode==1]
 ---------------------- NACELLE-YAW CONTROL -------------------------------------
 0                      YCMode      - Yaw control mode {0: none, 3: user-defined from routine UserYawCont, 4: user-defined from Simulink/Labview, 5: user-defined from Bladed-style DLL} (switch)
 9999.9                 TYCOn       - Time to enable active yaw control (s) [unused when YCMode=0]
@@ -62,6 +57,11 @@ True                   GenTiStp    - Method to stop the generator {T: timed usin
 9999.9                 TYawManS    - Time to start override yaw maneuver and end standard yaw control (s)
 0.25                   YawManRat   - Yaw maneuver rate (in absolute value) (deg/s)
 0.0                    NacYawF     - Final yaw angle for override yaw maneuvers (degrees)
+---------------------- Aerodynamic Flow Control -------------------------------------
+0                      AfCmode     - Airfoil control mode {0- none, 1- cosine wave cycle, 4- user-defined from Simulink/Labview, 5- user-defined from Bladed-style DLL}
+0.0                    AfC_Mean    - Mean level for sinusoidal cycling or steady value (-) [used only with AfCmode==1]
+0.0                    AfC_Amp     - Amplitude for for cosine cycling of flap signal (AfC = AfC_Amp*cos(Azimuth+phase)+AfC_mean) (-) [used only with AfCmode==1]
+0.0                    AfC_phase   - Phase relative to the blade azimuth (0 is vertical) for for cosine cycling of flap signal (deg) [used only with AfCmode==1]
 ---------------------- STRUCTURAL CONTROL ---------------------------------------
 0                      NumBStC     - Number of blade structural controllers (integer)
 "unused"               BStCfiles   - Name of the file for blade tuned mass damper (quoted string) [unused when CompNTMD is false]
