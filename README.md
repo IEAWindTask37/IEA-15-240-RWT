@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/213679527.svg)](https://zenodo.org/badge/latestdoi/213679527)
+
 # IEA-15-240-RWT v1.1 (Revised February 2022)
 This repository contains the model data for the 15-MW offshore reference turbine developed within IEA Wind Task 37.
 
