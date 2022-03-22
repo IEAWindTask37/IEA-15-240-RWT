@@ -16,4 +16,4 @@ The surface was created by extracting the aerofoil sections, defined in `compone
 
 The aforementioned TE corrections are applied, before a cubic B-spline is fit through each cross section. Remaining in parametric space a bi-cubic B-spline surface is then fitted through the cross sections, creating the smooth geometry, removing the inboard notch. This is then exported to `.iges` format and converted to `.step` format. 
 
-Additional help for this work was provided by Jamil Appa from Zenotech LTD, and Jamie Macleod from the University of Bristol Fluids and Aerodynamics research group (FARG).
+Additional help for this work was provided by Jamil Appa from Zenotech LTD, and Jamie Macleod from the University of Bristol Fluids and Aerodynamics Research Group (FARG).
