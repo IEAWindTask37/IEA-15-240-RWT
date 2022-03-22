@@ -11,4 +11,6 @@ This CAD geometry has been designed specifically for those wishing to perform hi
 
 The surface was created by extracting the aerofoil sections, defined in `components.blade.outer_beam_shape.airfoil_posistion`  in the ontology file, as well as sections generated using windio2cad at the very tip, to ensure the curvature is captured accurately. In this region the cross sectional geometry matches the original exactly, and the matching of the other metrics via this interpolation is shown below. 
 
+![](Cross_comparision.png)
+
 The aforementioned TE corrections are applied, before a cubic B-spline is fit through each cross section. Remaining in parametric space a bi-cubic B-spline surface is then fitted through the cross sections, creating the smooth geometry, removing the inboard notch. This is then exported to `.iges` format and converted to `.step` format. 
