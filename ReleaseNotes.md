@@ -1,5 +1,10 @@
 # IEA Wind 15-MW Release Notes
 
+## v 1.1.1
+
+ * Fix OpenFAST floating tower mode shape coefficients to avoid instability
+ * Fix incorrect OpenFAST VolturnUS-S PtfmCMzt value to WISDEM-generated value and closer to original value
+
 ## v 1.1
 
 This update to the IEA Wind 15-MW Reference Wind Turbine attempts to address some of the modeling issues that have been pointed out by users.  Larger redesign requests, such as a smaller diameter monopile, or higher specific power for the floating turbine, are not included as that would require a more significant allocation of resources and will likely be left to the broader community to generate design alternatives.  Please see the [Wiki FAQ](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)) for some extended answers to those topics.
@@ -26,7 +31,7 @@ This update to the IEA Wind 15-MW Reference Wind Turbine attempts to address som
 
  * Bug fixes and other improvements in composite material representation in the WISDEM model has resulted in a slight growth in blade mass compared to the original report (68t vs 65t). This was also called out in the [Wiki FAQ](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)).  Nevertheless, the composite material properties, especially for carbon fiber reinforced carbon (CFRC) composites, are known to be out of date and inconsistent with modern pultrusion manufacturing methods.  A future release will likely update these properties and re-optimize the spar cap thickness along the blade.
 
- * Trailing edge reinforcement was mistakenly added too close to root and tip of blade in the first release, and was not always consistent with the physical space constraints along the span.  Due to different approaches to meshing the trailing edge, this also created some inconsistencies stiffness distributions depending on model inputs. This has been corrected via this [Pull Request](https://github.com/IEAWindTask37/IEA-15-240-RWT/pull/48).
+ * Trailing edge reinforcement was mistakenly added too close to root and tip of blade in the first release, and was not always consistent with the physical space constraints along the span.  Due to different approaches to meshing the trailing edge, this also created some inconsistent stiffness distributions depending on model inputs. This has been corrected via this [Pull Request](https://github.com/IEAWindTask37/IEA-15-240-RWT/pull/48).
 
 
 **Detailed OpenFAST changes**
