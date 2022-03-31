@@ -2,10 +2,10 @@
 IEA 15 MW offshore reference model on UMaine VolturnUS-S semi-submersible floating platform
 ---------------------- TOWER PARAMETERS ----------------------------------------
 10                     NTwInpSt    - Number of input stations to specify tower geometry
-0.32                   TwrFADmp(1) - Tower 1st fore-aft mode structural damping ratio (%)
-0.32                   TwrFADmp(2) - Tower 2nd fore-aft mode structural damping ratio (%)
-0.32                   TwrSSDmp(1) - Tower 1st side-to-side mode structural damping ratio (%)
-0.32                   TwrSSDmp(2) - Tower 2nd side-to-side mode structural damping ratio (%)
+1.0                   TwrFADmp(1) - Tower 1st fore-aft mode structural damping ratio (%)
+1.0                   TwrFADmp(2) - Tower 2nd fore-aft mode structural damping ratio (%)
+1.0                   TwrSSDmp(1) - Tower 1st side-to-side mode structural damping ratio (%)
+1.0                   TwrSSDmp(2) - Tower 2nd side-to-side mode structural damping ratio (%)
 ---------------------- TOWER ADJUSTMUNT FACTORS --------------------------------
 1.0                    FAStTunr(1) - Tower fore-aft modal stiffness tuner, 1st mode (-)
 1.0                    FAStTunr(2) - Tower fore-aft modal stiffness tuner, 2nd mode (-)
@@ -28,24 +28,24 @@ IEA 15 MW offshore reference model on UMaine VolturnUS-S semi-submersible floati
  8.912274086706145e-01  2.596093483450980e+03  7.761060822822759e+11  7.761060822822759e+11
  1.000000000000000e+00  1.715031343116859e+03  3.489844253733395e+11  3.489844253733395e+11
 ---------------------- TOWER FORE-AFT MODE SHAPES ------------------------------
-0.8489695100655825     TwFAM1Sh(2) - Mode 1, coefficient of x^2 term
-0.5476944277599665     TwFAM1Sh(3) -       , coefficient of x^3 term
--1.4830106546824826    TwFAM1Sh(4) -       , coefficient of x^4 term
-1.8929003637390736     TwFAM1Sh(5) -       , coefficient of x^5 term
--0.8065536468821398    TwFAM1Sh(6) -       , coefficient of x^6 term
--42.06594241220952     TwFAM2Sh(2) - Mode 2, coefficient of x^2 term
-10.06619458342568      TwFAM2Sh(3) -       , coefficient of x^3 term
-62.34590056631219      TwFAM2Sh(4) -       , coefficient of x^4 term
--135.78383306956798    TwFAM2Sh(5) -       , coefficient of x^5 term
-106.43768033203962     TwFAM2Sh(6) -       , coefficient of x^6 term
+0.9413693374950306     TwFAM1Sh(2) - Mode 1, coefficient of x^2 term
+0.3468546636521823     TwFAM1Sh(3) -       , coefficient of x^3 term
+-1.0732425042270761    TwFAM1Sh(4) -       , coefficient of x^4 term
+1.3138921365298792     TwFAM1Sh(5) -       , coefficient of x^5 term
+-0.5288736334500164    TwFAM1Sh(6) -       , coefficient of x^6 term
+139.39115610617628     TwFAM2Sh(2) - Mode 2, coefficient of x^2 term
+111.93048260721132     TwFAM2Sh(3) -       , coefficient of x^3 term
+-656.9153343478758     TwFAM2Sh(4) -       , coefficient of x^4 term
+845.7553274809915      TwFAM2Sh(5) -       , coefficient of x^5 term
+-439.16163184650327    TwFAM2Sh(6) -       , coefficient of x^6 term
 ---------------------- TOWER SIDE-TO-SIDE MODE SHAPES --------------------------
-0.8540960227968856     TwSSM1Sh(2) - Mode 1, coefficient of x^2 term
-0.48939696652708947    TwSSM1Sh(3) -       , coefficient of x^3 term
--1.318701585637641     TwSSM1Sh(4) -       , coefficient of x^4 term
-1.701859817427052      TwSSM1Sh(5) -       , coefficient of x^5 term
--0.7266512211133862    TwSSM1Sh(6) -       , coefficient of x^6 term
--19.17457796067885     TwSSM2Sh(2) - Mode 2, coefficient of x^2 term
--253.48311651203062    TwSSM2Sh(3) -       , coefficient of x^3 term
-805.8458271871015      TwSSM2Sh(4) -       , coefficient of x^4 term
--1000.4519796134484    TwSSM2Sh(5) -       , coefficient of x^5 term
-468.26384689905655     TwSSM2Sh(6) -       , coefficient of x^6 term
+0.928651504815363      TwSSM1Sh(2) - Mode 1, coefficient of x^2 term
+0.3183110416167346     TwSSM1Sh(3) -       , coefficient of x^3 term
+-0.9597593899992671    TwSSM1Sh(4) -       , coefficient of x^4 term
+1.164027965180537      TwSSM1Sh(5) -       , coefficient of x^5 term
+-0.4512311216133674    TwSSM1Sh(6) -       , coefficient of x^6 term
+-1970.3543341226898    TwSSM2Sh(2) - Mode 2, coefficient of x^2 term
+-2284.293209902991     TwSSM2Sh(3) -       , coefficient of x^3 term
+11346.453188064506     TwSSM2Sh(4) -       , coefficient of x^4 term
+-14750.85609454158     TwSSM2Sh(5) -       , coefficient of x^5 term
+7660.050450502754      TwSSM2Sh(6) -       , coefficient of x^6 term
