@@ -33,8 +33,9 @@ Data in this repository includes:
 The IEA Wind Task 37 authors endeavor to keep the model input decks current with the latest releases and API changes.  Errors and other issues pointed out by the community are also addressed to the extent that available resources make that possible.  See the [Release Notes](blob/master/ReleaseNotes.md) for a detailed description of changes.
 
 We also encourage the broader wind community to submit design updates by forking the repository and letting us know of your design customatization.  Community contributions that we are aware of include:
-* [Bladed implementation](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#is-bladed-supported)
-* [OrcaFlex implementation](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#is-orcaflex-supported)
+* [Bladed model](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#is-bladed-supported) implemented by DNVGL, contact [William Collier](mailto:william.collier@dnv.com)
+* [OrcaFlex model](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#is-orcaflex-supported) implemented by Orcina, contact [Alan Ross](mailto:Alan.Ross@orcina.com)
+* [Detailed rotor redesign](https://data.bris.ac.uk/data/dataset/3jrb4mejp9vfd2qb3s7dreymr1) from University of Bristol described in a TORQUE 2022 [paper](https://iopscience.iop.org/article/10.1088/1742-6596/2265/3/032029/pdf), contact [Peter Greaves](mailto:peter.greaves@ore.catapult.org.uk)
 
 ## Citations
 
