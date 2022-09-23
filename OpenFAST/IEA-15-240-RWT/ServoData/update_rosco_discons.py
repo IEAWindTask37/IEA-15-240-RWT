@@ -14,8 +14,8 @@ if __name__=="__main__":
 
     # paths relative to this OpenFAST directory
     map_rel = {
-        'IEA-15-240-RWT-Monopile/ServoData/IEA15MW-Monopile.yaml': 'IEA-15-240-RWT-Monopile/ServoData/DISCON-Monopile.IN',
-        'IEA-15-240-RWT-UMaineSemi/ServoData/IEA15MW-UMaineSemi.yaml': 'IEA-15-240-RWT-UMaineSemi/ServoData/DISCON-UMaineSemi.IN',
+        'IEA-15-240-RWT-Monopile/IEA-15-240-RWT-Monopile_ROSCO.yaml': 'IEA-15-240-RWT-Monopile/IEA-15-240-RWT-Monopile_DISCON.IN',
+        'IEA-15-240-RWT-UMaineSemi/IEA-15-240-RWT-UMaineSemi_ROSCO.yaml': 'IEA-15-240-RWT-UMaineSemi/IEA-15-240-RWT-UMaineSemi_DISCON.IN',
     }
 
     # Make paths absolute
