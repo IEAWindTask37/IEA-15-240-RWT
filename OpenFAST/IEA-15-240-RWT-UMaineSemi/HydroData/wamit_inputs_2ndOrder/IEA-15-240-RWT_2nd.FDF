@@ -1,0 +1,4 @@
+IEA-15-240-RWT_2nd.FDF -- basic free surface data file for 15 MW platform - M. Hall
+  100.0   (radius of partitioning circle inside of which minimal approximations are used) 
+    -1    1   (alternative FDF form 1, scale of free surface panels relative to body waterline panels)
+    0         (setting NAL (number of subdividing annuli) to zero for now to avoid potential for gross errors)
