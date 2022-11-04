@@ -279,7 +279,7 @@ def run_15mw(fname_wt_input):
     overview['Shaft tilt angle [deg]'] = prob.get_val('nacelle.uptilt','deg')
     overview['Rotor cone angle [deg]'] = prob.get_val('hub.cone','deg')
     overview['Tower top to hub flange height [m]'] = prob['nacelle.distance_tt_hub']
-    overview['Generator rated efficiency [%]'] = prob["drivese.generator_efficiency"][-1]
+    overview['Generator rated efficiency [%]'] = prob['rotorse.rp.powercurve.rated_efficiency']
     overview['Blade pre-bend [m]'] = prob['blade.outer_shape_bem.ref_axis'][-1,0]
     overview['Blade mass [t]'] = 1e-3*prob['rotorse.re.precomp.blade_mass']
     overview['Hub mass [t]'] = 1e-3*prob['drivese.hub_mass']
