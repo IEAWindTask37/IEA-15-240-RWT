@@ -25,7 +25,8 @@ class TestConsistency(unittest.TestCase):
             self.assertAlmostEqual(ED['NacCMxn'], tabdata.loc['Above_yaw','CoM_TT_x'], 0)
             self.assertAlmostEqual(ED['NacCMyn'], 0.0, 0)
             self.assertAlmostEqual(ED['NacCMzn'], tabdata.loc['Above_yaw','CoM_TT_z'], 0)
-            self.assertAlmostEqual(ED['NacYIner'], tabdata.loc['Above_yaw','MoI_TT_zz'], 0)
+            # NacYIner should also have 1/3 of tower yaw inertia
+            self.assertGreater(ED['NacYIner'], tabdata.loc['Above_yaw','MoI_TT_zz'], 0)
             self.assertAlmostEqual(ED['YawBrMass'], tabdata.loc['yaw','Mass'], 0)
         
 
