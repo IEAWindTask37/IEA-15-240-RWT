@@ -1,8 +1,25 @@
 # IEA Wind 15-MW Release Notes
 
+## v 1.1.2
+
+ * Update OpenFAST input files for v3.3 release API changes
+ 
+ * Update ROSCO to v2.6
+ 
+ * Provide both WAMIT input and output files, with a bug fix regarding platform orientation
+ 
+ * Adjust OpenFAST ElastoDyn NacYIner and PtfmYIner according to monopile simulation best practices 
+ 
+ * Additional references to community design contributions and permutations in the README
+ 
+ * Remove deprecated BModes files
+ 
+ * Fix minor errors in the tabulated documentation data
+
 ## v 1.1.1
 
  * Fix OpenFAST floating tower mode shape coefficients to avoid instability
+ 
  * Fix incorrect OpenFAST VolturnUS-S PtfmCMzt value to WISDEM-generated value and closer to original value
 
 ## v 1.1

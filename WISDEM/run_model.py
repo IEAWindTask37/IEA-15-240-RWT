@@ -87,13 +87,13 @@ def run_15mw(fname_wt_input):
     layerDF = []
     l_s = prob.get_val("blade.internal_structure_2d_fem.s")
     lthick = prob.get_val("blade.internal_structure_2d_fem.layer_thickness", 'm')
-    lrot = prob.get_val("blade.internal_structure_2d_fem.layer_rotation", 'deg')
+    lorient = prob.get_val("blade.internal_structure_2d_fem.layer_orientation", 'deg')
     lstart = prob.get_val("blade.internal_structure_2d_fem.layer_start_nd")
     lend = prob.get_val("blade.internal_structure_2d_fem.layer_end_nd")
     nlay = lthick.shape[0]
     layer_cols = ['Span','Thickness [m]','Fiber angle [deg]','Layer Start','Layer End']
     for k in range(nlay):
-        ilay = np.c_[l_s, lthick[k,:], lrot[k,:], lstart[k,:], lend[k,:]]
+        ilay = np.c_[l_s, lthick[k,:], lorient[k,:], lstart[k,:], lend[k,:]]
         layerDF.append( pd.DataFrame(data=ilay, columns=layer_cols) )
     
     # Tabular output: Rotor Performance
@@ -279,7 +279,7 @@ def run_15mw(fname_wt_input):
     overview['Shaft tilt angle [deg]'] = prob.get_val('nacelle.uptilt','deg')
     overview['Rotor cone angle [deg]'] = prob.get_val('hub.cone','deg')
     overview['Tower top to hub flange height [m]'] = prob['nacelle.distance_tt_hub']
-    overview['Generator rated efficiency [%]'] = prob["drivese.generator_efficiency"][-1]
+    overview['Generator rated efficiency [%]'] = prob['rotorse.rp.powercurve.rated_efficiency']
     overview['Blade pre-bend [m]'] = prob['blade.outer_shape_bem.ref_axis'][-1,0]
     overview['Blade mass [t]'] = 1e-3*prob['rotorse.re.precomp.blade_mass']
     overview['Hub mass [t]'] = 1e-3*prob['drivese.hub_mass']

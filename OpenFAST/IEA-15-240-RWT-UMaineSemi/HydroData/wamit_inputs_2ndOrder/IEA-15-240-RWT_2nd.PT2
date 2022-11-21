@@ -1,0 +1,4 @@
+IEA-15-240-RWT_2nd.PT2 -- This is a basic 2nd order potential control file - M. Hall
+ -1  1         (IRAD2=-1 IDIF2=1 - Exciting force only)
+ 1 1 1 1 1 1   (MODE2            - Enable all modes)
+ 2 2           (IXSUM=2  IXDIF=2 - Compute sum- and difference-frequency solutions for all combinations of wave periods and headings)
