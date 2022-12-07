@@ -3,8 +3,8 @@ IEA 15 MW Offshore Reference Turbine
 ======  General Options  ============================================================================
 False                  Echo        - Echo the input to "<rootname>.AD.ech"?  (flag)
 default                DTAero      - Time interval for aerodynamic calculations {or "default"} (s)
-3                        WakeMod     - Type of wake/induction model (switch) {0=none, 1=BEMT, 2=DBEMT, 3=OLAF} [WakeMod cannot be 2 or 3 when linearizing]
-1                        AFAeroMod   - Type of blade airfoil aerodynamics model (switch) {1=steady model, 2=Beddoes-Leishman unsteady model} [AFAeroMod must be 1 when linearizing]
+1                      WakeMod     - Type of wake/induction model (switch) {0=none, 1=BEMT, 2=DBEMT, 3=OLAF} [WakeMod cannot be 2 or 3 when linearizing]
+2                      AFAeroMod   - Type of blade airfoil aerodynamics model (switch) {1=steady model, 2=Beddoes-Leishman unsteady model} [AFAeroMod must be 1 when linearizing]
 1                      TwrPotent   - Type tower influence on wind based on potential flow around the tower (switch) {0=none, 1=baseline potential flow, 2=potential flow with Bak correction}
 1                      TwrShadow   - Calculate tower influence on wind based on downstream tower shadow (switch) {0=none, 1=Powles model, 2=Eames model}
 True                   TwrAero     - Calculate tower aerodynamic loads? (flag)
@@ -107,14 +107,14 @@ TwrElev        TwrDiam        TwrCd         TwrTI  ! (used only with TwrShadow=2
 (m)              (m)           (-)               (-)
   15.           10.            0.5               0.1
   28.           10.            0.5               0.1
-  41.            9.926         0.5               0.1
-  54.            9.443         0.5               0.1
-  67.            8.833         0.5               0.1
-  80.            8.151         0.5               0.1
-  93.            7.39          0.5               0.1
- 106.            6.909         0.5               0.1
- 119.            6.748         0.5               0.1
- 132.            6.572         0.5               0.1
+  41.           10.            0.5               0.1
+  54.           10.            0.5               0.1
+  67.           10.            0.5               0.1
+  80.           10.            0.5               0.1
+  93.           10.            0.5               0.1
+ 106.           10.            0.5               0.1
+ 119.           10.            0.5               0.1
+ 132.           10.            0.5               0.1
  144.386         6.5           0.5               0.1
 ======  Outputs  ====================================================================================
 False                  SumPrint    - Generate a summary file listing input options and interpolated properties to "<rootname>.AD.sum"?  (flag)
