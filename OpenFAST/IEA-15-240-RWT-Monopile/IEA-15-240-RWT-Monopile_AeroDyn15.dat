@@ -32,7 +32,7 @@ default                IndToler    - Convergence tolerance for BEMT nonlinear so
 2                      DBEMT_Mod   - Type of dynamic BEMT (DBEMT) model {1=constant tau1, 2=time-dependent tau1} (-) [used only when WakeMod=2]
 29.03                  tau1_const  - Time constant for DBEMT (s) [used only when WakeMod=2 and DBEMT_Mod=1]
 ======  OLAF -- cOnvecting LAgrangian Filaments (Free Vortex Wake) Theory Options  ================== [used only when WakeMod=3]
-IEA-15-240-RWT_OLAF.dat OLAFInputFileName - Input file for OLAF [used only when WakeMod=3]
+../IEA-15-240-RWT-OLAF/IEA-15-240-RWT_OLAF.dat OLAFInputFileName - Input file for OLAF [used only when WakeMod=3]
 ======  Beddoes-Leishman Unsteady Airfoil Aerodynamics Options  ===================================== [used only when AFAeroMod=2]
 3                      UAMod       - Unsteady Aero Model Switch (switch) {1=Baseline model (Original), 2=Gonzalez's variant (changes in Cn,Cc,Cm), 3=Minnema/Pierce variant (changes in Cc and Cm)} [used only when AFAeroMod=2]
 True                   FLookup     - Flag to indicate whether a lookup for f' will be calculated (TRUE) or whether best-fit exponential equations will be used (FALSE); if FALSE S1-S4 must be provided in airfoil input files (flag) [used only when AFAeroMod=2]
@@ -46,61 +46,61 @@ True                   FLookup     - Flag to indicate whether a lookup for f' wi
 4                      InCol_Cm    - The column in the airfoil tables that contains the pitching-moment coefficient; use zero if there is no Cm column (-)
 0                      InCol_Cpmin - The column in the airfoil tables that contains the Cpmin coefficient; use zero if there is no Cpmin column (-)
 50                     NumAFfiles  - Number of airfoil files used (-)
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_00.dat"    AFNames            - Airfoil file names (NumAFfiles lines) (quoted strings)
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_01.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_02.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_03.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_04.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_05.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_06.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_07.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_08.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_09.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_10.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_11.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_12.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_13.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_14.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_15.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_16.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_17.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_18.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_19.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_20.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_21.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_22.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_23.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_24.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_25.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_26.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_27.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_28.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_29.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_30.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_31.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_32.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_33.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_34.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_35.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_36.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_37.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_38.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_39.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_40.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_41.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_42.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_43.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_44.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_45.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_46.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_47.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_48.dat"
-"Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_49.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_00.dat"    AFNames            - Airfoil file names (NumAFfiles lines) (quoted strings)
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_01.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_02.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_03.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_04.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_05.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_06.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_07.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_08.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_09.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_10.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_11.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_12.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_13.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_14.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_15.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_16.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_17.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_18.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_19.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_20.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_21.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_22.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_23.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_24.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_25.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_26.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_27.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_28.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_29.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_30.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_31.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_32.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_33.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_34.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_35.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_36.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_37.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_38.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_39.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_40.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_41.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_42.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_43.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_44.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_45.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_46.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_47.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_48.dat"
+"../IEA-15-240-RWT/Airfoils/IEA-15-240-RWT_AeroDyn15_Polar_49.dat"
 ======  Rotor/Blade Properties  =====================================================================
 True                   UseBlCm     - Include aerodynamic pitching moment in calculations?  (flag)
-"IEA-15-240-RWT_AeroDyn15_blade.dat" ADBlFile(1) - Name of file containing distributed aerodynamic properties for Blade #1 (-)
-"IEA-15-240-RWT_AeroDyn15_blade.dat" ADBlFile(2) - Name of file containing distributed aerodynamic properties for Blade #2 (-) [unused if NumBl < 2]
-"IEA-15-240-RWT_AeroDyn15_blade.dat" ADBlFile(3) - Name of file containing distributed aerodynamic properties for Blade #3 (-) [unused if NumBl < 3]
+"../IEA-15-240-RWT/IEA-15-240-RWT_AeroDyn15_blade.dat" ADBlFile(1) - Name of file containing distributed aerodynamic properties for Blade #1 (-)
+"../IEA-15-240-RWT/IEA-15-240-RWT_AeroDyn15_blade.dat" ADBlFile(2) - Name of file containing distributed aerodynamic properties for Blade #2 (-) [unused if NumBl < 2]
+"../IEA-15-240-RWT/IEA-15-240-RWT_AeroDyn15_blade.dat" ADBlFile(3) - Name of file containing distributed aerodynamic properties for Blade #3 (-) [unused if NumBl < 3]
 ======  Tower Influence and Aerodynamics ============================================================= [used only when TwrPotent/=0, TwrShadow/=0, or TwrAero=True]
 11                     NumTwrNds   - Number of tower nodes used in the analysis  (-) [used only when TwrPotent/=0, TwrShadow/=0, or TwrAero=True]
 TwrElev        TwrDiam        TwrCd         TwrTI  ! (used only with TwrShadow=2)
