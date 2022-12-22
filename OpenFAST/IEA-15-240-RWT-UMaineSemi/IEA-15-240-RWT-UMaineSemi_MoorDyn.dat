@@ -1,4 +1,4 @@
---------------------- MoorDyn Input File ------------------------------------                                           
+--------------------- MoorDyn Input File ------------------------------------
 IEA 15 MW offshore reference model on UMaine VolturnUS-S semi-submersible floating platform mooring model- C. Allen UMaine                                          
 FALSE    Echo      - echo the input file data (flag)                                            
 ----------------------- LINE TYPES ------------------------------------------                                           
@@ -28,7 +28,7 @@ Line  LineType  AttachA   AttachB UnstrLen  NumSegs  Outputs
 60.0     TmaxIC    - max time for ic gen (s)
 4.0      CdScaleIC - factor by which to scale drag coefficients during dynamic relaxation (-)
 0.001     threshIC  - threshold for IC convergence (-)                                          
------------------------- OUTPUTS --------------------------------------------                                           
+------------------------ OUTPUTS --------------------------------------------
 FairTen1                                            
 FairTen2                                            
 FairTen3                                            
