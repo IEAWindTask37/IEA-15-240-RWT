@@ -6,7 +6,7 @@ Name     Diam      MassDen       EA    BA/-zeta    EI    Cd      Ca     CdAx   C
 (-)       (m)      (kg/m)        (N)    (N-s/-)    (-)   (-)     (-)    (-)    (-)      
 main    0.333       685.00      3.27E+09 -1        0    1.11     0.82   0.2     0.27
 ---------------------- POINTS --------------------------------                                           
-Node Type      X         Y       Z       M    V   CdA   CA
+ID  Type      X         Y       Z       M    V   CdA   CA
 (-)  (-)      (m)       (m)     (m)    (kg) (m^3) (m^2) (-)
 1   Vessel  -58.000    0.000 -14.000     0    0    0    0
 2   Fixed  -837.600    0.000 -200.000    0    0    0    0
@@ -15,7 +15,7 @@ Node Type      X         Y       Z       M    V   CdA   CA
 5   Vessel   29.000  -50.229 -14.000     0    0    0    0
 6   Fixed   418.800 -725.383 -200.000    0    0    0    0
 ---------------------- LINES --------------------------------------                                           
-Line  LineType  AttachA   AttachB UnstrLen  NumSegs  Outputs 
+ID  LineType  AttachA   AttachB UnstrLen  NumSegs  Outputs 
 (-)   (-)       (-)       (-)     (m)       (-)      (-)     
 1     main        2         1     850.00    50        -      
 2     main        4         3     850.00    50        -      
