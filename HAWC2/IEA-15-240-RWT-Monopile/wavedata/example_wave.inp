@@ -1,0 +1,19 @@
+begin wkin_input ;
+wavetype 1 ; 0=regular, 1=irregular, 2=deterministic
+wdepth 30.0 ;
+;
+begin reg_airy ;
+stretching 0; 0=none, 1=wheeler
+wave 9 12.6; Hs,T
+end;
+;
+begin ireg_airy ;
+stretching 0; 0=none, 1=wheeler
+spectrum 1; (1=jonswap)
+jonswap 9 12.6 3.3 ; (Hs, Tp, gamma)
+coef 200 1 ; (coefnr, seed)
+spreading 1 2; (type(0=off 1=on), s parameter (pos. integer min 1)
+end;
+;
+end wkin_input;
+exit ;
