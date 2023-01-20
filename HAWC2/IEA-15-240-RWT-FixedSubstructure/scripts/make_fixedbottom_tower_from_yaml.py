@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """Make the HAWC2 tower files from the yaml
 
-Requirements: numpy, matplotlib, pyyaml
+Requirements: numpy, matplotlib, pandas+openpyxl, pyyaml
 """
 from datetime import date
 import os
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import yaml
 
 pi = np.pi
@@ -18,7 +19,7 @@ mydir = os.path.dirname(os.path.realpath(__file__))  # get path to this file
 yaml_path = os.path.join(mydir,'../../../WT_Ontology/IEA-15-240-RWT.yaml')  # yaml file with data
 ed_path = os.path.join(mydir,'../../../OpenFAST/IEA-15-240-RWT-Monopile/IEA-15-240-RWT-Monopile_ElastoDyn_tower.dat')  # elastodyn file
 h2_st_path = os.path.join(mydir,'../data/IEA_15MW_RWT_Tower_st.dat')  # file to write for HAWC2 model
-
+excel_path = os.path.join(mydir,'../../../Documentation/IEA-15-240-RWT_tabular.xlsx')  # excel file with summary properties. used for cross-verification
 
 # load the yaml file as nested dictionaries
 with open(yaml_path, 'r') as stream:
@@ -132,6 +133,20 @@ plt.xlabel('TwSSStif [mm]'); plt.grid('on')
 plt.tight_layout()
 plt.show()
 
+# cross-reference some of this data with the data in the excel sheet
+df = pd.read_excel(excel_path, sheet_name='Tower Properties', usecols='B:K')
+df = df[df['Height [m]'] >= 15]
+df['Height [m]'] -= 15
+if not np.allclose(df['Height [m]'], twr_stn):
+    print('!!!WARNING!!! Tower stations in tabular excel sheet do not match.')
+if not np.allclose(df['OD [m]'], out_diam):
+    print('!!!WARNING!!! Tower outer diameter in tabular excel sheet do not match.')
+if not np.allclose(df['Thickness [mm]'], t*1000):
+    print('!!!WARNING!!! Tower thickness in tabular excel sheet does not match.')
+if not np.allclose(df['Mass Density [kg/m]'], out_arr[:, 1]):
+    print('!!!WARNING!!! Tower linear density in tabular excel sheet do not match.')
+
+# save the tower to file if requested
 if save_twr:
     # flexible
     header1 = f'#1 Tower made by automatic script on {date.today().strftime("%d-%b-%Y")}'
