@@ -168,7 +168,7 @@ if save_st:
         np.savetxt(f, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
 
 # remove everything below the mudline for the fixed-at-the-mudline option
-h2_st_path = h2_st_path.replace('.dat', '_fixedmudline.dat')
+h2_st_path = h2_st_path.replace('_st.dat', '_fixedmudline_st.dat')
 mask = out_arr[:, 0] >= 45
 out_arr = out_arr[mask, :]
 out_arr[:, 0] -= out_arr[0, 0]  # restart stations from 0
