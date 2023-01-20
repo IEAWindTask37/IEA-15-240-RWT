@@ -4,11 +4,13 @@
 Requirements: numpy, matplotlib, pyyaml
 """
 from datetime import date
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
-from numpy import pi
 import yaml
-import os
+
+pi = np.pi
 
 mydir = os.path.dirname(os.path.realpath(__file__))  # get path to this file
 
@@ -24,8 +26,6 @@ with open(yaml_path, 'r') as stream:
         res = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
         print(exc)
-
-#%%
 
 # flag to save the tower file
 save_twr = 1
@@ -48,25 +48,21 @@ mat_props = [d for d in res['materials'] if d['name'] == material][0]
 E, G, rho = mat_props['E'], mat_props['G'], mat_props['rho']
 
 
-# # ------------- transition piece (15m from water line to tower transition) -------------
-# body = 'monopile'
-
-# # get dimensions
-# mon_stn = np.array(res['components'][body]['outer_shape_bem']['reference_axis']['z']['values'])
-# mon_out_diam = np.array(res['components'][body]['outer_shape_bem']['outer_diameter']['values'])
-# mon_wall = res['components'][body]['internal_structure_2d_fem']['layers'][0]
-# assert mon_wall['name'] == body + '_wall'
-# t_mon = np.array(mon_wall['thickness']['values'])
-
-# # add above-water monopile to tower
-# mask = (mon_stn >= 0) & (mon_stn < 15)
-# twr_stn = np.concatenate((mon_stn[mask], twr_stn))
-# out_diam = np.concatenate((mon_out_diam[mask], out_diam))
-# t = np.concatenate((t_mon[mask], t))
+# make values stepwise
+#   1. Repeat each element once
+twr_stn = np.repeat(twr_stn, 2)
+out_diam = np.repeat(out_diam, 2)
+t = np.repeat(t, 2)
+#   2. Add offset to every second element
+twr_stn[1::2] += 0.001
+#   3. Skip last element on x-values and first element on y-values
+twr_stn = twr_stn[:-1]
+out_diam = out_diam[1:]
+t = t[1:]
 
 print('s [m]  OD [m]    t [mm]')
 for i in range(t.size):
-    print(f'{twr_stn[i]:5.1f}   {out_diam[i]:4.1f}m   {t[i]*1000:5.1f}mm')
+    print(f'{twr_stn[i]:8.3f}   {out_diam[i]:4.1f}m   {t[i]*1000:5.1f}mm')
 
 # create the figures for the tower report
 plt.figure(1, figsize=(7, 3))
@@ -79,8 +75,7 @@ plt.plot(t*1000, twr_stn)
 plt.xlabel('Wall thickness [mm]'); plt.ylabel('Tower height [m]'); plt.grid('on')
 plt.tight_layout()
 plt.show()
-# plt.savefig(cont_dir + r'\diam_thick.png', dpi=150)
-#
+
 # intermediates
 r_out = out_diam / 2  # outer diameter [m]
 r_in = r_out - t  # inner diameter [m]
@@ -115,7 +110,7 @@ out_arr[:, 18] = 0  # elastic center, y
 
 # compare results with elastodyn
 
-ed_st = np.loadtxt(ed_path, skiprows=19, max_rows=10)
+ed_st = np.loadtxt(ed_path, skiprows=19, max_rows=20)
 h2_stn = (out_arr[:, 0] - out_arr[0, 0])/(out_arr[-1, 0] - out_arr[0, 0])
 
 # visualize the difference
@@ -136,6 +131,7 @@ plt.plot(out_arr[:, 8]*out_arr[:, 11], h2_stn, label='HAWC2')  # EIyy
 plt.xlabel('TwSSStif [mm]'); plt.grid('on')
 plt.tight_layout()
 plt.show()
+
 if save_twr:
     # flexible
     header1 = f'#1 Tower made by automatic script on {date.today().strftime("%d-%b-%Y")}'
