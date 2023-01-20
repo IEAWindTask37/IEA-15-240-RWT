@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Make the HAWC2 tower files from the yaml
+"""Make the HAWC2 tower files from the yaml. Save to FixedBottom and Monopile folders.
 
 Requirements: numpy, matplotlib, pandas+openpyxl, pyyaml
 """
@@ -18,7 +18,8 @@ mydir = os.path.dirname(os.path.realpath(__file__))  # get path to this file
 # paths
 yaml_path = os.path.join(mydir,'../../../WT_Ontology/IEA-15-240-RWT.yaml')  # yaml file with data
 ed_path = os.path.join(mydir,'../../../OpenFAST/IEA-15-240-RWT-Monopile/IEA-15-240-RWT-Monopile_ElastoDyn_tower.dat')  # elastodyn file
-h2_st_path = os.path.join(mydir,'../data/IEA_15MW_RWT_Tower_st.dat')  # file to write for HAWC2 model
+h2_st_path1 = os.path.join(mydir,'../data/IEA_15MW_RWT_Tower_st.dat')  # file to write for FixedBottom HAWC2 model
+h2_st_path2 = os.path.join(mydir,'../../IEA-15-240-RWT-Monopile/data/IEA_15MW_RWT_Tower_st.dat')  # file to write for Monopile HAWC2 model
 excel_path = os.path.join(mydir,'../../../Documentation/IEA-15-240-RWT_tabular.xlsx')  # excel file with summary properties. used for cross-verification
 
 # load the yaml file as nested dictionaries
@@ -148,20 +149,21 @@ if not np.allclose(df['Mass Density [kg/m]'], out_arr[:, 1]):
 
 # save the tower to file if requested
 if save_twr:
-    # flexible
-    header1 = f'#1 Tower made by automatic script on {date.today().strftime("%d-%b-%Y")}'
-    header2 = '\t'.join(['r', 'm', 'x_cg', 'y_cg', 'ri_x', 'ri_y', 'x_sh', 'y_sh', 'E', 'G',
-                     'I_x', 'I_y', 'I_p', 'k_x', 'k_y', 'A', 'pitch', 'x_e', 'y_e'])
-    header = '\n'.join([header1, header2, f'$1 {out_arr.shape[0]} Flexible'])
-    fmt = ['%.3f'] + ['%.4E'] * 18
-    np.savetxt(h2_st_path, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
-    # flexible (no torsion)
-    out_arr[:, 9] *= 1e7  # increase G
-    header = '\n'.join([header2, f'$2 {out_arr.shape[0]} Flexible (no torsion)'])
-    with open(h2_st_path, 'a') as f:
-        np.savetxt(f, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
-    # rigid
-    out_arr[:, 8] *= 1e7  # increase E
-    header = '\n'.join([header2, f'$3 {out_arr.shape[0]} Rigid'])
-    with open(h2_st_path, 'a') as f:
-        np.savetxt(f, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
+    for h2_st_path in [h2_st_path1, h2_st_path2]:
+        # flexible
+        header1 = f'#1 Tower made by automatic script on {date.today().strftime("%d-%b-%Y")}'
+        header2 = '\t'.join(['r', 'm', 'x_cg', 'y_cg', 'ri_x', 'ri_y', 'x_sh', 'y_sh', 'E', 'G',
+                        'I_x', 'I_y', 'I_p', 'k_x', 'k_y', 'A', 'pitch', 'x_e', 'y_e'])
+        header = '\n'.join([header1, header2, f'$1 {out_arr.shape[0]} Flexible'])
+        fmt = ['%.3f'] + ['%.4E'] * 18
+        np.savetxt(h2_st_path, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
+        # flexible (no torsion)
+        out_arr[:, 9] *= 1e7  # increase G
+        header = '\n'.join([header2, f'$2 {out_arr.shape[0]} Flexible (no torsion)'])
+        with open(h2_st_path, 'a') as f:
+            np.savetxt(f, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
+        # rigid
+        out_arr[:, 8] *= 1e7  # increase E
+        header = '\n'.join([header2, f'$3 {out_arr.shape[0]} Rigid'])
+        with open(h2_st_path, 'a') as f:
+            np.savetxt(f, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
