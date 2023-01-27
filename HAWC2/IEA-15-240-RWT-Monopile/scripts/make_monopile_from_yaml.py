@@ -89,47 +89,53 @@ shear_red = 0.5 + 0.75 * t / r_out  # shear reduction factor [-]
 
 # create the array of values to write
 nstn = 19
-out_arr = np.full((stations.size, nstn), np.nan)
-out_arr[:, 0] = stations  # tower station
-out_arr[:, 1] = rho*area*outfitting_factor  # mass/length
-out_arr[:, 2] = 0  # center of mass, x
-out_arr[:, 3] = 0  # center of mass, y
-out_arr[:, 4] = np.sqrt(mom_iner/area)  # radius gyration, x
-out_arr[:, 5] = np.sqrt(mom_iner/area)  # radius gyration, y
-out_arr[:, 6] = 0  # shear center, x
-out_arr[:, 7] = 0  # shear center, y
-out_arr[:, 8] = E  # young's modulus
-out_arr[:, 9] = G  # shear modulus
-out_arr[:, 10] = mom_iner  # area moment of inertia, x
-out_arr[:, 11] = mom_iner  # area moment of inertia, y
-out_arr[:, 12] = tors_const  # torsional stiffness constant
-out_arr[:, 13] = shear_red  # shear reduction, x
-out_arr[:, 14] = shear_red  # shear reduction, y
-out_arr[:, 15] = area  # cross-sectional area
-out_arr[:, 16] = 0  # structural pitch
-out_arr[:, 17] = 0  # elastic center, x
-out_arr[:, 18] = 0  # elastic center, y
+flex_arr = np.full((stations.size, nstn), np.nan)
+flex_arr[:, 0] = stations  # tower station
+flex_arr[:, 1] = rho*area*outfitting_factor  # mass/length
+flex_arr[:, 2] = 0  # center of mass, x
+flex_arr[:, 3] = 0  # center of mass, y
+flex_arr[:, 4] = np.sqrt(mom_iner/area)  # radius gyration, x
+flex_arr[:, 5] = np.sqrt(mom_iner/area)  # radius gyration, y
+flex_arr[:, 6] = 0  # shear center, x
+flex_arr[:, 7] = 0  # shear center, y
+flex_arr[:, 8] = E  # young's modulus
+flex_arr[:, 9] = G  # shear modulus
+flex_arr[:, 10] = mom_iner  # area moment of inertia, x
+flex_arr[:, 11] = mom_iner  # area moment of inertia, y
+flex_arr[:, 12] = tors_const  # torsional stiffness constant
+flex_arr[:, 13] = shear_red  # shear reduction, x
+flex_arr[:, 14] = shear_red  # shear reduction, y
+flex_arr[:, 15] = area  # cross-sectional area
+flex_arr[:, 16] = 0  # structural pitch
+flex_arr[:, 17] = 0  # elastic center, x
+flex_arr[:, 18] = 0  # elastic center, y
+
+# make no-torsion and rigid versions
+notors_arr = flex_arr.copy()
+notors_arr[:, 9] *= 1e7  # increase G
+rigid_arr = notors_arr.copy()
+rigid_arr[:, 8] *= 1e7  # increase E
 
 # # compare results with elastodyn
 
 # ed_st = np.loadtxt(ed_path, skiprows=19, max_rows=20)
-# h2_stn = (out_arr[:, 0] - out_arr[0, 0])/(out_arr[-1, 0] - out_arr[0, 0])
+# h2_stn = (flex_arr[:, 0] - flex_arr[0, 0])/(flex_arr[-1, 0] - flex_arr[0, 0])
 
 # # visualize the difference
 # plt.figure(2, figsize=(7, 3))
 # plt.clf()
 # plt.subplot(1, 3, 1)  # mass density
 # plt.plot(ed_st[:, 1], ed_st[:, 0], label='OpenFAST')
-# plt.plot(out_arr[:, 1], h2_stn, '--', label='HAWC2')
+# plt.plot(flex_arr[:, 1], h2_stn, '--', label='HAWC2')
 # plt.xlabel('Mass density [m]'); plt.ylabel('Tower height [m]'); plt.grid('on')
 # plt.legend()
 # plt.subplot(1, 3, 2)
 # plt.plot(ed_st[:, 2], ed_st[:, 0])
-# plt.plot(out_arr[:, 8]*out_arr[:, 10], h2_stn, label='HAWC2')  # EIxx
+# plt.plot(flex_arr[:, 8]*flex_arr[:, 10], h2_stn, label='HAWC2')  # EIxx
 # plt.xlabel('TwFAStif [mm]'); plt.grid('on')
 # plt.subplot(1, 3, 3)
 # plt.plot(ed_st[:, 3], ed_st[:, 0])
-# plt.plot(out_arr[:, 8]*out_arr[:, 11], h2_stn, label='HAWC2')  # EIyy
+# plt.plot(flex_arr[:, 8]*flex_arr[:, 11], h2_stn, label='HAWC2')  # EIyy
 # plt.xlabel('TwSSStif [mm]'); plt.grid('on')
 # plt.tight_layout()
 # plt.show()
@@ -144,7 +150,7 @@ if not np.allclose(df['OD [m]'], out_diam):
     print('!!!WARNING!!! Tower outer diameter in tabular excel sheet do not match.')
 if not np.allclose(df['Thickness [mm]'], t*1000):
     print('!!!WARNING!!! Tower thickness in tabular excel sheet does not match.')
-if not np.allclose(df['Mass Density [kg/m]'], out_arr[:, 1]):
+if not np.allclose(df['Mass Density [kg/m]'], flex_arr[:, 1]):
     print('!!!WARNING!!! Tower linear density in tabular excel sheet do not match.')
 
 # save structural data to file if requested
@@ -153,40 +159,37 @@ if save_st:
     header1 = f'#1 Structural file made by automatic script on {date.today().strftime("%d-%b-%Y")}'
     header2 = '\t'.join(['r', 'm', 'x_cg', 'y_cg', 'ri_x', 'ri_y', 'x_sh', 'y_sh', 'E', 'G',
                      'I_x', 'I_y', 'I_p', 'k_x', 'k_y', 'A', 'pitch', 'x_e', 'y_e'])
-    header = '\n'.join([header1, header2, f'$1 {out_arr.shape[0]} Flexible'])
+    header = '\n'.join([header1, header2, f'$1 {flex_arr.shape[0]} Flexible'])
     fmt = ['%.3f'] + ['%.4E'] * 18
-    np.savetxt(h2_st_path, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
+    np.savetxt(h2_st_path, flex_arr, delimiter='\t', fmt=fmt, header=header, comments='')
     # flexible (no torsion)
-    out_arr[:, 9] *= 1e7  # increase G
-    header = '\n'.join([header2, f'$2 {out_arr.shape[0]} Flexible (no torsion)'])
+    header = '\n'.join([header2, f'$2 {notors_arr.shape[0]} Flexible (no torsion)'])
     with open(h2_st_path, 'a') as f:
-        np.savetxt(f, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
+        np.savetxt(f, notors_arr, delimiter='\t', fmt=fmt, header=header, comments='')
     # rigid
-    out_arr[:, 8] *= 1e7  # increase E
-    header = '\n'.join([header2, f'$3 {out_arr.shape[0]} Rigid'])
+    header = '\n'.join([header2, f'$3 {rigid_arr.shape[0]} Rigid'])
     with open(h2_st_path, 'a') as f:
-        np.savetxt(f, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
+        np.savetxt(f, rigid_arr, delimiter='\t', fmt=fmt, header=header, comments='')
 
 # remove everything below the mudline for the fixed-at-the-mudline option
 h2_st_path = h2_st_path.replace('_st.dat', '_fixedmudline_st.dat')
-mask = out_arr[:, 0] >= 45
-out_arr = out_arr[mask, :]
-out_arr[:, 0] -= out_arr[0, 0]  # restart stations from 0
+mask = flex_arr[:, 0] >= 45
+for arr in [flex_arr, notors_arr, rigid_arr]:
+    arr = arr[mask, :]
+    arr[:, 0] -= arr[0, 0]  # restart stations from 0
 if save_st:
     # flexible
     header1 = f'#1 Structural file made by automatic script on {date.today().strftime("%d-%b-%Y")}'
     header2 = '\t'.join(['r', 'm', 'x_cg', 'y_cg', 'ri_x', 'ri_y', 'x_sh', 'y_sh', 'E', 'G',
                      'I_x', 'I_y', 'I_p', 'k_x', 'k_y', 'A', 'pitch', 'x_e', 'y_e'])
-    header = '\n'.join([header1, header2, f'$1 {out_arr.shape[0]} Flexible'])
+    header = '\n'.join([header1, header2, f'$1 {flex_arr.shape[0]} Flexible'])
     fmt = ['%.3f'] + ['%.4E'] * 18
-    np.savetxt(h2_st_path, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
+    np.savetxt(h2_st_path, flex_arr, delimiter='\t', fmt=fmt, header=header, comments='')
     # flexible (no torsion)
-    out_arr[:, 9] *= 1e7  # increase G
-    header = '\n'.join([header2, f'$2 {out_arr.shape[0]} Flexible (no torsion)'])
+    header = '\n'.join([header2, f'$2 {notors_arr.shape[0]} Flexible (no torsion)'])
     with open(h2_st_path, 'a') as f:
-        np.savetxt(f, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
+        np.savetxt(f, notors_arr, delimiter='\t', fmt=fmt, header=header, comments='')
     # rigid
-    out_arr[:, 8] *= 1e7  # increase E
-    header = '\n'.join([header2, f'$3 {out_arr.shape[0]} Rigid'])
+    header = '\n'.join([header2, f'$3 {rigid_arr.shape[0]} Rigid'])
     with open(h2_st_path, 'a') as f:
-        np.savetxt(f, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
+        np.savetxt(f, rigid_arr, delimiter='\t', fmt=fmt, header=header, comments='')
