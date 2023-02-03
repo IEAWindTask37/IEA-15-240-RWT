@@ -34,7 +34,7 @@ The IEA Wind Task 37 authors endeavor to keep the model input decks current with
 
 We also encourage the broader wind community to submit design updates by forking the repository and letting us know of your design customatization.  Community contributions that we are aware of include:
 * [Bladed model](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#is-bladed-supported) implemented by DNVGL, contact [William Collier](mailto:william.collier@dnv.com)
-* [OrcaFlex model](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#is-orcaflex-supported) implemented by Orcina, contact [Alan Ross](mailto:Alan.Ross@orcina.com)
+* [OrcaFlex model](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#is-orcaflex-supported) implemented by Orcina, contact [Orcina](mailto:orcina@orcina.com)
 * [Detailed rotor redesign](https://data.bris.ac.uk/data/dataset/3jrb4mejp9vfd2qb3s7dreymr1) from University of Bristol described in a TORQUE 2022 [paper](https://iopscience.iop.org/article/10.1088/1742-6596/2265/3/032029/pdf), contact [Peter Greaves](mailto:peter.greaves@ore.catapult.org.uk)
 * [NuMAD model](https://github.com/UTDGriffithLab/UTD-IEA15MWBlade) developed at The University of Texas at Dallas (UTD) by [Alejandra S. Escalera Mendoza](mailto:ase180001@utdallas.edu) and [Prof D. Todd Griffith](mailto:tgriffith@utdallas.edu)
 * [Jacket support structure](https://github.com/mmrocze2/IEA-15-240-RWT) The DEME Group created a 3-legged jacket for a 50m water depth, contact [Maciej Mroczek](mailto:Mroczek.Maciej@deme-group.com)
