@@ -57,6 +57,7 @@ jobs:
         shell: bash -l {0}
         run: |
           cd OpenFAST/IEA-15-240-RWT-Monopile
+          conda list | grep rosco 
           sed --separate --in-place=BAK 's/300.0 \{1,\} TMax/10.0    TMax/' IEA-15-240-RWT-Monopile.fst
           openfast IEA-15-240-RWT-Monopile.fst
 
