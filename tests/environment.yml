@@ -29,7 +29,7 @@ dependencies:
   - psutil
   - pbr
   - pytables
-  - rosco
+  - rosco=2.7
   - sshtunnel
   - simpy
   - tomli
