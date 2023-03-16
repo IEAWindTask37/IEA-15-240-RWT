@@ -1,0 +1,92 @@
+general:
+        folder_output: outputs
+        fname_output: tower_monopile_opt
+design_variables:
+
+    tower:
+        outer_diameter:
+            flag: True
+            lower_bound: 6.0
+            upper_bound: 10.0
+        layer_thickness:
+            flag: True
+            lower_bound: 4e-3
+            upper_bound: 1e-1
+    monopile:
+        outer_diameter:
+            flag: True
+            lower_bound: 6.0
+            upper_bound: 10.0
+        layer_thickness:
+            flag: True
+            lower_bound: 4e-3
+            upper_bound: 1e-1
+
+merit_figure: structural_mass
+
+constraints:
+    tower:
+        stress:
+            flag: True
+        global_buckling:
+            flag: True
+        shell_buckling:
+            flag: True
+        d_to_t:
+            flag: False
+            lower_bound: 90.0
+            upper_bound: 500.0
+        taper:
+            flag: True
+            lower_bound: 0.4
+        slope:
+            flag: True
+        frequency_1:
+            flag: True
+            lower_bound: 0.13
+            upper_bound: 0.24
+    monopile:
+        stress:
+            flag: True
+        global_buckling:
+            flag: True
+        shell_buckling:
+            flag: True
+        d_to_t:
+            flag: False
+            lower_bound: 90.0
+            upper_bound: 500.0
+        taper:
+            flag: True
+            lower_bound: 0.4
+        slope:
+            flag: True
+        frequency_1:
+            flag: True
+            lower_bound: 0.13
+            upper_bound: 0.24
+        pile_depth:
+            flag: False
+            lower_bound: 0.0
+        tower_diameter_coupling:
+            flag: True
+
+driver:
+    optimization:
+        flag: True            # Flag to enable optimization
+        tol: 1.e-6            # Optimality tolerance
+        max_major_iter: 10    # Maximum number of major design iterations (SNOPT)
+        max_minor_iter: 100   # Maximum number of minor design iterations (SNOPT)
+        max_iter: 100         # Maximum number of iterations (SLSQP)
+        solver: SLSQP #SNOPT         # Optimization solver. Other options are 'SLSQP' - 'CONMIN'
+        step_size: 1.e-5      # Step size for finite differencing
+        form: forward         # Finite differencing mode, either forward or central
+    design_of_experiments:
+        flag: False           # Flag to enable design of experiments
+        run_parallel: True    # Flag to run using parallel processing
+        generator: Uniform    # Type of input generator. (Uniform)
+        num_samples: 5        # number of samples for (Uniform only)
+
+recorder:
+    flag: False                            # Flag to activate OpenMDAO recorder
+    file_name: log_opt.sql    # Name of OpenMDAO recorder

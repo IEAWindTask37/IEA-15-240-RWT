@@ -1,0 +1,90 @@
+; UMaine-Semi-floater IEA 15 MW Reference Wind Turbine.
+;
+; Note! This file links to external htc files that contain
+; values for the WTG system.
+;
+begin simulation ;
+  time_stop    100.0 ;
+  solvertype   1 ;    (newmark)
+  on_no_convergence continue ;
+  convergence_limits 1E3 1.0 1E-7 ;
+  logfile ./log/IEA_15MW_RWT_UMaineSemi_mooring_init.log ;
+  begin newmark;
+    deltat    0.01;
+  end newmark;
+  visualization	./visualization/IEA_15MW_RWT_UMaineSemi_mooring_init.hdf5;
+end simulation;
+;
+;-------------------------------------------------------------------------------------------------------------------------------
+begin new_htc_structure;
+  ;body_output_file_name ./bodyeig/IEA_15MW_RWT_UMaineSemi_mooring_init_body.dat;  body locations correct?
+  ;body_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_UMaineSemi_mooring_init_body_eigen.dat;  damping correct?
+  ;struct_inertia_output_file_name ./bodyeig/IEA_15MW_RWT_UMaineSemi_mooring_init_struc_inertia.dat;  CM locations correct?
+  ;structure_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_UMaineSemi_mooring_init_struc_eigen.dat;  full-system frequencies?
+  ;
+  begin main_body;
+    name        ifb ;
+    type        timoschenko ;
+    nbodies       1 ;
+    node_distribution c2_def ;
+	damping_posdef 0.0 0.0 0.0 0.0 0.0 0.0 ;
+    begin  timoschenko_input ;
+      filename ../IEA-15-240-RWT/IEA_15MW_RWT_Dummy_st.dat;
+      set  1 1 ;
+    end  timoschenko_input ;
+    begin  c2_def ;
+      nsec 2 ;
+      sec  1  0.0e+00  0.0e+00 0.0e+00  0.0e+00 ;
+      sec  2  0.0e+00  0.0e+00 1.0e+00  0.0e+00 ;
+    end  c2_def ;
+  end main_body ;
+;
+;-----------------------------------------------------------------------------------------
+; mooring
+;-----------------------------------------------------------------------------------------
+  continue_in_file data/IEA_15MW_RWT_UMaineSemi_mooring_system_init.htc;
+;  continue_in_file data/IEA_15MW_RWT_UMaineSemi_mooring_system.htc;
+  ;
+  begin orientation;
+    ;
+    begin base;
+	  mbdy ifb ;
+	  inipos 0.0 0.0 -15.0 ;
+	  mbdy_eulerpar 1.0 0.0 0.0 0.0 ;
+    end base ;
+    ;
+  end orientation;
+  ;
+  begin constraint;
+    ;
+	begin fix0 ;
+	  mbdy ifb ;
+;	  disable_at 150;
+	end fix0 ;
+    ;
+    continue_in_file data/IEA_15MW_RWT_UMaineSemi_mooring_constraint.htc;
+    ;
+  end constraint;
+  ;
+end new_htc_structure;
+;
+;----------------------------------------------------------------------------------------------------------------------------------------------------------------
+begin hydro;
+	begin water_properties;
+		rho 1025 ;
+		gravity 9.80665 ;
+		mwl 0.0 ;
+		mudlevel 200.0 ;
+;		water_kinematics_dll wkin_dll.dll waves/[case].txt ;
+	end water_properties;
+end hydro;
+;
+;----------------------------------------------------------------------------------------------------------------------------------------------------------------
+begin output;
+  filename ./res/IEA_15MW_RWT_UMaineSemi_mooring_init ;
+  data_format  gtsdf;
+  buffer 9999 ;
+  time 0 100;
+  general time;
+end output;
+exit;

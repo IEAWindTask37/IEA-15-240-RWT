@@ -1,0 +1,67 @@
+;
+; This is a PARTIAL htc file for the orientations of the
+; IEA 15 MW RWT WTG. It should be linked in a MAIN htc file
+; using the "continue_in_file" option.
+;
+    begin relative;  towertop to tower
+      mbdy1  tower last;
+      mbdy2  towertop 1;
+      mbdy2_eulerang 0.0 0.0 0.0;   same as global: zTT down, yTT downwind
+    end relative;
+;
+    begin relative;  connector to towertop
+      mbdy1  towertop last;
+      mbdy2  connector 1;
+      mbdy2_eulerang 90.0 0.0 0.0;
+      mbdy2_eulerang 6.0 0.0 0.0;    6 deg tilt; zC along shaft upwind, xC horizontal
+    end relative;
+;
+    begin relative;  shaft to connector
+      mbdy1  connector last;
+      mbdy2  shaft 1;
+      mbdy2_eulerang 0.0 0.0 0.0;    same as connector; zS along shaft upwind
+    end relative;
+;
+    begin relative;  hub1 to shaft
+      mbdy1  shaft last;
+      mbdy2  hub1 1;
+      mbdy2_eulerang -90.0 0.0 0.0;
+      mbdy2_eulerang 0.0 180.0 0.0;
+      mbdy2_eulerang 4.0 0.0 0.0;      4 deg cone; zH along blade, xH towards LE
+    end relative;
+;
+    begin relative;  hub2 to shaft
+      mbdy1  shaft last;
+      mbdy2  hub2 1;
+      mbdy2_eulerang -90.0 0.0 0.0;
+      mbdy2_eulerang 0.0 60.0 0.0;
+      mbdy2_eulerang 4.0 0.0 0.0;      4 deg cone angle
+    end relative;
+;
+    begin relative;  hub3 to shaft
+      mbdy1  shaft last;
+      mbdy2  hub3 1;
+      mbdy2_eulerang -90.0 0.0 0.0;
+      mbdy2_eulerang 0.0 -60.0 0.0;
+      mbdy2_eulerang 4.0 0.0 0.0;      4 deg cone angle
+    end relative;
+;
+    begin relative;  blade1 to hub1
+      mbdy1  hub1 last;
+      mbdy2  blade1 1;
+      mbdy2_eulerang 0.0 0.0 0;         same as hub; zB towards tip, xB towards LE
+    end relative;
+;
+    begin relative;  blade2 to hub2
+      mbdy1  hub2 last;
+      mbdy2  blade2 1;
+      mbdy2_eulerang 0.0 0.0 0.0;
+    end relative;
+;
+    begin relative;  blade3 to hub3
+      mbdy1  hub3 last;
+      mbdy2  blade3 1;
+      mbdy2_eulerang 0.0 0.0 0.0;
+    end relative;
+;
+exit;  continue in main file

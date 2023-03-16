@@ -1,0 +1,51 @@
+------- ELASTODYN V1.00.* TOWER INPUT FILE -------------------------------------
+IEA 15 MW offshore reference model on UMaine VolturnUS-S semi-submersible floating platform
+---------------------- TOWER PARAMETERS ----------------------------------------
+10                     NTwInpSt    - Number of input stations to specify tower geometry
+1.0                   TwrFADmp(1) - Tower 1st fore-aft mode structural damping ratio (%)
+1.0                   TwrFADmp(2) - Tower 2nd fore-aft mode structural damping ratio (%)
+1.0                   TwrSSDmp(1) - Tower 1st side-to-side mode structural damping ratio (%)
+1.0                   TwrSSDmp(2) - Tower 2nd side-to-side mode structural damping ratio (%)
+---------------------- TOWER ADJUSTMUNT FACTORS --------------------------------
+1.0                    FAStTunr(1) - Tower fore-aft modal stiffness tuner, 1st mode (-)
+1.0                    FAStTunr(2) - Tower fore-aft modal stiffness tuner, 2nd mode (-)
+1.0                    SSStTunr(1) - Tower side-to-side stiffness tuner, 1st mode (-)
+1.0                    SSStTunr(2) - Tower side-to-side stiffness tuner, 2nd mode (-)
+1.0                    AdjTwMa     - Factor to adjust tower mass density (-)
+1.0                    AdjFASt     - Factor to adjust tower fore-aft stiffness (-)
+1.0                    AdjSSSt     - Factor to adjust tower side-to-side stiffness (-)
+---------------------- DISTRIBUTED TOWER PROPERTIES ----------------------------
+  HtFract       TMassDen         TwFAStif       TwSSStif
+   (-)           (kg/m)           (Nm^2)         (Nm^2)
+ 0.000000000000000e+00  2.300642131074250e+04  6.770513741893661e+12  6.770513741893661e+12
+ 1.114034260838268e-01  2.038926791017103e+04  6.012509438660999e+12  6.012509438660999e+12
+ 2.228068521676536e-01  1.774601273898164e+04  5.243768263364071e+12  5.243768263364071e+12
+ 3.342102782514804e-01  1.506280308193614e+04  4.460141520157670e+12  4.460141520157670e+12
+ 4.456137043353072e-01  1.234240777801470e+04  3.662296012994249e+12  3.662296012994249e+12
+ 5.570171304191340e-01  9.633099266285813e+03  2.864340844739592e+12  2.864340844739592e+12
+ 6.684205565029608e-01  7.026968999232271e+03  2.093608918221600e+12  2.093608918221600e+12
+ 7.798239825867876e-01  4.645483574127345e+03  1.386599057692824e+12  1.386599057692824e+12
+ 8.912274086706145e-01  2.596093483450980e+03  7.761060822822759e+11  7.761060822822759e+11
+ 1.000000000000000e+00  1.715031343116859e+03  3.489844253733395e+11  3.489844253733395e+11
+---------------------- TOWER FORE-AFT MODE SHAPES ------------------------------
+0.9413693374950306     TwFAM1Sh(2) - Mode 1, coefficient of x^2 term
+0.3468546636521823     TwFAM1Sh(3) -       , coefficient of x^3 term
+-1.0732425042270761    TwFAM1Sh(4) -       , coefficient of x^4 term
+1.3138921365298792     TwFAM1Sh(5) -       , coefficient of x^5 term
+-0.5288736334500164    TwFAM1Sh(6) -       , coefficient of x^6 term
+139.39115610617628     TwFAM2Sh(2) - Mode 2, coefficient of x^2 term
+111.93048260721132     TwFAM2Sh(3) -       , coefficient of x^3 term
+-656.9153343478758     TwFAM2Sh(4) -       , coefficient of x^4 term
+845.7553274809915      TwFAM2Sh(5) -       , coefficient of x^5 term
+-439.16163184650327    TwFAM2Sh(6) -       , coefficient of x^6 term
+---------------------- TOWER SIDE-TO-SIDE MODE SHAPES --------------------------
+0.928651504815363      TwSSM1Sh(2) - Mode 1, coefficient of x^2 term
+0.3183110416167346     TwSSM1Sh(3) -       , coefficient of x^3 term
+-0.9597593899992671    TwSSM1Sh(4) -       , coefficient of x^4 term
+1.164027965180537      TwSSM1Sh(5) -       , coefficient of x^5 term
+-0.4512311216133674    TwSSM1Sh(6) -       , coefficient of x^6 term
+-1970.3543341226898    TwSSM2Sh(2) - Mode 2, coefficient of x^2 term
+-2284.293209902991     TwSSM2Sh(3) -       , coefficient of x^3 term
+11346.453188064506     TwSSM2Sh(4) -       , coefficient of x^4 term
+-14750.85609454158     TwSSM2Sh(5) -       , coefficient of x^5 term
+7660.050450502754      TwSSM2Sh(6) -       , coefficient of x^6 term

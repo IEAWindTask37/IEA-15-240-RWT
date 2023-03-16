@@ -1,0 +1,103 @@
+--------- BEAMDYN with OpenFAST INPUT FILE -------------------------------------------
+IEA 15 MW Offshore Reference Turbine
+---------------------- SIMULATION CONTROL --------------------------------------
+False          Echo            - Echo input data to "<RootName>.ech" (flag)
+True          QuasiStaticInit - Use quasistatic pre-conditioning with centripetal accelerations in initialization (flag) [dynamic solve only]
+ 0            rhoinf          - Numerical damping parameter for generalized-alpha integrator
+ 2            quadrature      - Quadrature method: 1=Gaussian; 2=Trapezoidal (switch)
+ 2            refine          - Refinement factor for trapezoidal quadrature (-). DEFAULT = 1 [used only when quadrature=2]
+DEFAULT       n_fact          - Factorization frequency (-). DEFAULT = 5
+DEFAULT       DTBeam          - Time step size (s).
+DEFAULT       load_retries    - Number of factored load retries before quitting the aimulation
+DEFAULT       NRMax           - Max number of iterations in Newton-Ralphson algorithm (-). DEFAULT = 10
+DEFAULT       stop_tol        - Tolerance for stopping criterion (-)
+DEFAULT       tngt_stf_fd     - Flag to use finite differenced tangent stiffness matrix (-)
+DEFAULT       tngt_stf_comp   - Flag to compare analytical finite differenced tangent stiffness matrix  (-)
+DEFAULT       tngt_stf_pert   - perturbation size for finite differencing (-)
+DEFAULT       tngt_stf_difftol- Maximum allowable relative difference between analytical and fd tangent stiffness (-)
+True          RotStates       - Orient states in the rotating frame during linearization? (flag) [used only when linearizing]
+---------------------- GEOMETRY PARAMETER --------------------------------------
+          1   member_total    - Total number of members (-)
+         50   kp_total        - Total number of key points (-) [must be at least 3]
+     1     50                 - Member number; Number of key points in this member
+		 kp_xr 			 kp_yr 			 kp_zr 		 initial_twist
+		  (m)  			  (m)  			  (m)  		   (deg)
+	 0.00000e+00 	 0.00000e+00 	 0.00000e+00 	 1.55946e+01 
+	 1.83726e-02 	 0.00000e+00 	 2.38776e+00 	 1.55877e+01 
+	 4.22062e-02 	 0.00000e+00 	 4.77551e+00 	 1.54108e+01 
+	 7.13101e-02 	 0.00000e+00 	 7.16327e+00 	 1.49486e+01 
+	 1.03610e-01 	 0.00000e+00 	 9.55102e+00 	 1.42585e+01 
+	 1.37050e-01 	 0.00000e+00 	 1.19388e+01 	 1.33971e+01 
+	 1.69613e-01 	 0.00000e+00 	 1.43265e+01 	 1.24220e+01 
+	 1.99102e-01 	 0.00000e+00 	 1.67143e+01 	 1.13946e+01 
+	 2.23601e-01 	 0.00000e+00 	 1.91020e+01 	 1.03710e+01 
+	 2.41069e-01 	 0.00000e+00 	 2.14898e+01 	 9.40400e+00 
+	 2.49238e-01 	 0.00000e+00 	 2.38776e+01 	 8.55152e+00 
+	 2.50309e-01 	 0.00000e+00 	 2.62653e+01 	 7.83315e+00 
+	 2.49413e-01 	 0.00000e+00 	 2.86531e+01 	 7.19135e+00 
+	 2.47571e-01 	 0.00000e+00 	 3.10408e+01 	 6.55163e+00 
+	 2.44817e-01 	 0.00000e+00 	 3.34286e+01 	 5.93400e+00 
+	 2.41329e-01 	 0.00000e+00 	 3.58163e+01 	 5.34609e+00 
+	 2.36990e-01 	 0.00000e+00 	 3.82041e+01 	 4.79633e+00 
+	 2.32446e-01 	 0.00000e+00 	 4.05918e+01 	 4.29659e+00 
+	 2.25312e-01 	 0.00000e+00 	 4.29796e+01 	 3.84696e+00 
+	 2.11013e-01 	 0.00000e+00 	 4.53673e+01 	 3.44534e+00 
+	 1.86954e-01 	 0.00000e+00 	 4.77551e+01 	 3.07691e+00 
+	 1.47931e-01 	 0.00000e+00 	 5.01429e+01 	 2.73356e+00 
+	 9.91710e-02 	 0.00000e+00 	 5.25306e+01 	 2.41223e+00 
+	 4.11154e-02 	 0.00000e+00 	 5.49184e+01 	 2.11169e+00 
+	 -2.23395e-02 	 0.00000e+00 	 5.73061e+01 	 1.82840e+00 
+	 -8.88277e-02 	 0.00000e+00 	 5.96939e+01 	 1.55878e+00 
+	 -1.58920e-01 	 0.00000e+00 	 6.20816e+01 	 1.30244e+00 
+	 -2.39251e-01 	 0.00000e+00 	 6.44694e+01 	 1.06443e+00 
+	 -3.36643e-01 	 0.00000e+00 	 6.68571e+01 	 8.43446e-01 
+	 -4.46936e-01 	 0.00000e+00 	 6.92449e+01 	 6.36564e-01 
+	 -5.67957e-01 	 0.00000e+00 	 7.16327e+01 	 4.37029e-01 
+	 -6.97521e-01 	 0.00000e+00 	 7.40204e+01 	 2.39657e-01 
+	 -8.31916e-01 	 0.00000e+00 	 7.64082e+01 	 3.96777e-02 
+	 -9.69965e-01 	 0.00000e+00 	 7.87959e+01 	 -1.72828e-01 
+	 -1.10909e+00 	 0.00000e+00 	 8.11837e+01 	 -4.07084e-01 
+	 -1.25513e+00 	 0.00000e+00 	 8.35714e+01 	 -6.80378e-01 
+	 -1.41034e+00 	 0.00000e+00 	 8.59592e+01 	 -9.99294e-01 
+	 -1.57330e+00 	 0.00000e+00 	 8.83469e+01 	 -1.32053e+00 
+	 -1.74350e+00 	 0.00000e+00 	 9.07347e+01 	 -1.62330e+00 
+	 -1.91945e+00 	 0.00000e+00 	 9.31224e+01 	 -1.88437e+00 
+	 -2.10009e+00 	 0.00000e+00 	 9.55102e+01 	 -2.08623e+00 
+	 -2.28550e+00 	 0.00000e+00 	 9.78980e+01 	 -2.16400e+00 
+	 -2.47569e+00 	 0.00000e+00 	 1.00286e+02 	 -2.17584e+00 
+	 -2.67342e+00 	 0.00000e+00 	 1.02673e+02 	 -2.15530e+00 
+	 -2.87783e+00 	 0.00000e+00 	 1.05061e+02 	 -2.10291e+00 
+	 -3.09009e+00 	 0.00000e+00 	 1.07449e+02 	 -2.01840e+00 
+	 -3.30846e+00 	 0.00000e+00 	 1.09837e+02 	 -1.89674e+00 
+	 -3.53371e+00 	 0.00000e+00 	 1.12224e+02 	 -1.72433e+00 
+	 -3.76350e+00 	 0.00000e+00 	 1.14612e+02 	 -1.50813e+00 
+	 -4.00000e+00 	 0.00000e+00 	 1.17000e+02 	 -1.24239e+00 
+---------------------- MESH PARAMETER ------------------------------------------
+         10   order_elem     - Order of interpolation (basis) function (-)
+---------------------- MATERIAL PARAMETER --------------------------------------
+"IEA-15-240-RWT_BeamDyn_blade.dat"    BldFile - Name of file containing properties for blade (quoted string)
+---------------------- PITCH ACTUATOR PARAMETERS -------------------------------
+False         UsePitchAct - Whether a pitch actuator should be used (flag)
+        200   PitchJ      - Pitch actuator inertia (kg-m^2) [used only when UsePitchAct is true]
+      2E+07   PitchK      - Pitch actuator stiffness (kg-m^2/s^2) [used only when UsePitchAct is true]
+     500000   PitchC      - Pitch actuator damping (kg-m^2/s) [used only when UsePitchAct is true]
+---------------------- OUTPUTS -------------------------------------------------
+False          SumPrint       - Print summary data to "<RootName>.sum" (flag)
+"ES10.3E2"     OutFmt         - Format used for text tabular output, excluding the time channel.
+          0    NNodeOuts      - Number of nodes to output to file [0 - 9] (-)
+          0    OutNd          - Nodes whose values will be output  (-)
+          OutList            - The next line(s) contains a list of output parameters. See OutListParameters.xlsx for a listing of available output channels, (-)
+"RootFxr, RootFyr, RootFzr"
+"RootMxr, RootMyr, RootMzr"
+"TipTDxr, TipTDyr, TipTDzr"
+"TipRDxr, TipRDyr, TipRDzr"
+END of input file (the word "END" must appear in the first 3 columns of this last OutList line)
+====== Outputs for all blade stations (same ending as above for B1N1.... =========================== (optional section)
+   "All"          BldNd_BlOutNd       - Future feature will allow selecting a portion of the nodes to output.  Not implemented yet. (-)
+                  OutList             - The next line(s) contains a list of output parameters.  See OutListParameters.xlsx for a listing of available output channels, (-)
+"TDxr"
+"TDyr"
+"RDxr"
+"RDyr"
+"RDzr"
+END of input file (the word "END" must appear in the first 3 columns of this last OutList line)
