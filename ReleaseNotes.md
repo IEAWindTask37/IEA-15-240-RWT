@@ -1,5 +1,13 @@
 # IEA Wind 15-MW Release Notes
 
+## v 1.1.3
+
+ * Update OpenFAST input files for v3.4.1 release API changes
+ 
+ * Blade elastic properties originate from SONATA/ANBA4
+
+ * Cleanup of stale files and README comments
+ 
 ## v 1.1.2
 
  * Update OpenFAST input files for v3.3 release API changes
