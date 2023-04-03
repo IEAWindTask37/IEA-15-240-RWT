@@ -44,3 +44,6 @@ There are three tower models: (1) a fully flexible tower, (2) a
 torsionally rigid tower, and (3) a fully rigid tower. OpenFAST
 currently cannot model tower torsion, so if you want to compare to
 OpenFAST results you should use the second option.
+
+There is a [known discrepancy](https://github.com/IEAWindTask37/IEA-15-240-RWT/issues/116) between HAWC2 and OpenFAST/WISDEM models that will be resolved in a future update.
+

@@ -196,9 +196,9 @@ def run_15mw(fname_wt_input):
     Omega_rot_min = prob.get_val('control.minOmega', 'rpm')/60.
     Omega_rot_max = prob.get_val('control.maxOmega', 'rpm')/60.
 
-    f_1P = [0, Omega_rot_min, Omega_rot_min, Omega_rot_max, Omega_rot_max, f[-1]]
-    f_3P = [0, 3.*Omega_rot_min, 3.*Omega_rot_min, 3.*Omega_rot_max, 3.*Omega_rot_max, f[-1]]
-    NP_y = [0., 0., 1., 1., 0., 0.]
+    f_1P = np.r_[0, Omega_rot_min, Omega_rot_min, Omega_rot_max, Omega_rot_max, f[-1]]
+    f_3P = np.r_[0, 3.*Omega_rot_min, 3.*Omega_rot_min, 3.*Omega_rot_max, 3.*Omega_rot_max, f[-1]]
+    NP_y = np.r_[0., 0., 1., 1., 0., 0.]
 
     # f_1P_marg_low  = Omega_rot_min/1.1
     # f_1P_marg_high = Omega_rot_min*1.1
