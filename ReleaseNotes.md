@@ -4,7 +4,9 @@
 
  * Update OpenFAST input files for v3.4.1 release API changes
  
- * Blade elastic properties originate from SONATA/ANBA4
+ * Update ROSCO libraries and inputs to v2.7
+ 
+ * Blade elastic properties consistently originate from SONATA/ANBA4
 
  * Cleanup of stale files and README comments
  
