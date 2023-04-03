@@ -1,6 +1,6 @@
 # IEA Wind 15-MW Release Notes
 
-## v 1.1.3
+## v 1.1.4
 
  * Update OpenFAST input files for v3.4.1 release API changes
  
@@ -10,7 +10,7 @@
 
  * Cleanup of stale files and README comments
  
-## v 1.1.2
+## v 1.1.3
 
  * Update OpenFAST input files for v3.3 release API changes
  
@@ -25,6 +25,10 @@
  * Remove deprecated BModes files
  
  * Fix minor errors in the tabulated documentation data
+
+## v 1.1.2
+
+ * Update ROSCO to v2.5
 
 ## v 1.1.1
 
