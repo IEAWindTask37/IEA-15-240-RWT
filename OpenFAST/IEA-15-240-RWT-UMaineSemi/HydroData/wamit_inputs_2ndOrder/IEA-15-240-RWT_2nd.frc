@@ -1,5 +1,5 @@
 IEA-15-240-RWT_2nd.FRC -- NREL 15MW Ref Hull, C. Allen UMaine .ms2 file type .gdf, ILOWHI=1, IRR=1
- 1 0 1 0 0   0 0 0 0 0  0 1 0 0 0  0  IOPTN(1-16)
+ 1 1 1 1 0   0 0 0 0 0  0 1 0 0 0  0  IOPTN(1-16)
 1025	RHO
 0	0	-2.32	XCG
 1	IMASS
