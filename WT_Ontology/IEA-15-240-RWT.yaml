@@ -498,7 +498,7 @@ components:
             u_allow_pcent: 8.5
             y_allow_pcent: 1.0
             z_allow_deg: 0.05
-            sigma: 60e3
+            sigma: 60.e+3
 
             h_0: 0.05
             C_Cu: 4.786
@@ -723,7 +723,7 @@ materials:
       alpha: 0.0
       Xt: 74
       Xc: 87
-      S: 2.126E7
+      S: 2.126E+7
       GIc: 303
       GIIc: 3446
       alp0: 53
@@ -790,12 +790,12 @@ materials:
       source: MSU composites database 3D property tests, Engineering Mechanics of Composite Materials, Daniel, I & Ishai, O., 1994, pg. 34
       orth: 1
       rho: 1940.0
-      E: [4.46E10, 1.7E10, 1.67E10]
-      G: [3.27E9, 3.48E9, 3.5E9]
+      E: [4.46E+10, 1.7E+10, 1.67E+10]
+      G: [3.27E+9, 3.48E+9, 3.5E+9]
       nu: [0.262, 0.35, 0.264]
-      Xt: [6.092E8, 3.81E7, 1.529E7]
-      Xc: [4.7471E8, 1.1264E8, 1.1322E8]
-      S: [1.891E7, 1.724E7, 1.316E7]
+      Xt: [6.092E+8, 3.81E+7, 1.529E+7]
+      Xc: [4.7471E+8, 1.1264E+8, 1.1322E+8]
+      S: [1.891E+7, 1.724E+7, 1.316E+7]
       m: 10
       GIc: 303
       GIIc: 3446
@@ -814,8 +814,8 @@ materials:
       rho: 1220.0
       orth: 1
       nu: [0.27, 0.27, 0.27]
-      Xt: [1546.e6, 0.0, 0.0]
-      Xc: [1047.e6, 0.0, 0.0]
+      Xt: [1546.e+6, 0.0, 0.0]
+      Xc: [1047.e+6, 0.0, 0.0]
       S: [0.0, 0.0, 0.0]
       m: 16.1
       GIc: 0.0
@@ -834,12 +834,12 @@ materials:
       source: MSU composites database 3D property tests, Engineering Mechanics of Composite Materials, Daniel, I & Ishai, O., 1994, pg. 34
       orth: 1
       rho: 1940.0
-      E: [1.11E10, 1.11E10, 1.67E10]
-      G: [1.353E10, 3.49E9, 3.49E9]
+      E: [1.11E+10, 1.11E+10, 1.67E+10]
+      G: [1.353E+10, 3.49E+9, 3.49E+9]
       nu: [0.5, 0.0, 0.066]
-      Xt: [4.29E7, 4.26E7, 1.53E7]
-      Xc: [7.07E7, 7.07E7, 1.132E8]
-      S: [1.034E8, 1.72E7, 1.32E7]
+      Xt: [4.29E+7, 4.26E+7, 1.53E+7]
+      Xc: [7.07E+7, 7.07E+7, 1.132E+8]
+      S: [1.034E+8, 1.72E+7, 1.32E+7]
       m: 10
       GIc: 303
       GIIc: 3446
@@ -858,12 +858,12 @@ materials:
       source: MSU composites database 3D property tests, Engineering Mechanics of Composite Materials, Daniel, I & Ishai, O., 1994, pg. 34
       orth: 1.0
       rho: 1940.0
-      E: [2.87E10, 1.66E10, 1.67E10]
-      G: [8.4E9, 3.49E9, 3.49E9]
+      E: [2.87E+10, 1.66E+10, 1.67E+10]
+      G: [8.4E+9, 3.49E+9, 3.49E+9]
       nu: [0.5, 0.0, 0.17]
-      Xt: [3.96E8, 7.64E7, 1.53E7]
-      Xc: [4.489E8, 1.747E8, 1.132E8]
-      S: [1.034E8, 1.72E7, 1.32E7]
+      Xt: [3.96E+8, 7.64E+7, 1.53E+7]
+      Xc: [4.489E+8, 1.747E+8, 1.132E+8]
+      S: [1.034E+8, 1.72E+7, 1.32E+7]
       m: 10
       GIc: 303
       GIIc: 3446
@@ -881,8 +881,8 @@ materials:
       description: Airex C70.130 PVC Foam, source 'https://www.3accorematerials.com/uploads/documents/TDS-AIREX-C70-E_1106.pdf'
       orth: 0.0
       rho: 130.0
-      E: 1.292E8
-      G: 4.8946969696969695E7
+      E: 1.292E+8
+      G: 4.8946969696969695E+7
       nu: 0.32
       Xt: 2083000.0
       Xc: 1563000.0
@@ -956,7 +956,7 @@ environment:
     shear_exp: 0.12
     water_density: 1025.0
     water_dyn_viscosity: 1.3351e-3
-    soil_shear_modulus: 140e6
+    soil_shear_modulus: 140.e+6
     soil_poisson: 0.4
     water_depth: 30.0
     significant_wave_height: 4.52
@@ -971,13 +971,13 @@ bos:
     interconnect_voltage: 130.
     distance_to_site: 115.
     distance_to_landfall: 50.
-    port_cost_per_month: 2e6
-    site_auction_price: 100e6
-    site_assessment_plan_cost: 1e6
-    site_assessment_cost: 25e6
-    construction_operations_plan_cost: 2.5e6
+    port_cost_per_month: 2.e+6
+    site_auction_price: 100.e+6
+    site_assessment_plan_cost: 1.e+6
+    site_assessment_cost: 25.e+6
+    construction_operations_plan_cost: 2.5e+6
     boem_review_cost: 0.0
-    design_install_plan_cost: 2.5e6
+    design_install_plan_cost: 2.5e+6
 costs:
     wake_loss_factor: 0.15
     fixed_charge_rate: 0.056
@@ -1005,4 +1005,4 @@ costs:
     platforms_mass_cost_coeff: 17.1
     tower_mass_cost_coeff: 2.9
     controls_machine_rating_cost_coeff: 21.15
-    crane_cost: 12e3
+    crane_cost: 12.e+3
