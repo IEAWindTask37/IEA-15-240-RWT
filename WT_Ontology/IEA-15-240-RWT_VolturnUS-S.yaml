@@ -768,7 +768,7 @@ components:
               node_type: fixed
               joint: anchor2
               anchor_type: drag_embedment
-            - name: line+3_anchor
+            - name: line3_anchor
               node_type: fixed
               joint: anchor3
               anchor_type: drag_embedment
@@ -781,7 +781,7 @@ components:
               node_type: vessel
               joint: col2_fairlead
               fairlead_type: rigid
-            - name: line+3_vessel
+            - name: line3_vessel
               joint: col3_fairlead
               node_type: vessel
               fairlead_type: rigid
@@ -797,9 +797,9 @@ components:
               node2: line2_vessel
               line_type: main
               unstretched_length: 850.0
-            - name: line+3
-              node1: line+3_anchor
-              node2: line+3_vessel
+            - name: line3
+              node1: line3_anchor
+              node2: line3_vessel
               line_type: main
               unstretched_length: 850.0
 
