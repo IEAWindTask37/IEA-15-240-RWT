@@ -1,5 +1,13 @@
 # IEA Wind 15-MW Release Notes
 
+## v 1.1.5
+
+ * Update OpenFAST input files for v3.5.1 release API changes
+ 
+ * Floating tower damping reverted to 1.0% to resolve numerical instabilities. There is a good deal of uncertainty about the true value here as it is normally determined experimentally.  Comments to this effect have been added to the [Wiki entry](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#what-are-the-values-of-structural-damping).
+
+ * Update the second-order potential-flow wave excitation of the VolturnUS-S platform.  [PR #137](https://github.com/IEAWindTask37/IEA-15-240-RWT/pull/137).
+
 ## v 1.1.4
 
  * Update OpenFAST input files for v3.4.1 release API changes
