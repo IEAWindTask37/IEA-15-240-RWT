@@ -721,8 +721,8 @@ materials:
       G: 1.323e+009
       nu: 0.300
       alpha: 0.0
-      Xt: 74
-      Xc: 87
+      Xt: 74.e+06
+      Xc: 87.e+06
       S: 2.126E+7
       GIc: 303
       GIIc: 3446
