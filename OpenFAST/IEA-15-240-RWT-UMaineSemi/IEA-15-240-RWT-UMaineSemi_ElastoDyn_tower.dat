@@ -2,10 +2,10 @@
 IEA 15 MW offshore reference model on UMaine VolturnUS-S semi-submersible floating platform
 ---------------------- TOWER PARAMETERS ----------------------------------------
 10                     NTwInpSt    - Number of input stations to specify tower geometry
-0.32                   TwrFADmp(1) - Tower 1st fore-aft mode structural damping ratio (%)
-0.32                   TwrFADmp(2) - Tower 2nd fore-aft mode structural damping ratio (%)
-0.32                   TwrSSDmp(1) - Tower 1st side-to-side mode structural damping ratio (%)
-0.32                   TwrSSDmp(2) - Tower 2nd side-to-side mode structural damping ratio (%)
+1.0                    TwrFADmp(1) - Tower 1st fore-aft mode structural damping ratio (%)
+1.0                    TwrFADmp(2) - Tower 2nd fore-aft mode structural damping ratio (%)
+1.0                    TwrSSDmp(1) - Tower 1st side-to-side mode structural damping ratio (%)
+1.0                    TwrSSDmp(2) - Tower 2nd side-to-side mode structural damping ratio (%)
 ---------------------- TOWER ADJUSTMUNT FACTORS --------------------------------
 1.0                    FAStTunr(1) - Tower fore-aft modal stiffness tuner, 1st mode (-)
 1.0                    FAStTunr(2) - Tower fore-aft modal stiffness tuner, 2nd mode (-)
