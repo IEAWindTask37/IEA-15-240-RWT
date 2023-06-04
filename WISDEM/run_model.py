@@ -174,13 +174,17 @@ def run_15mw(fname_wt_input):
         mycomments[0] = 'Monopile start'
         mycomments[np.where(towdata[:,0] == -water_depth)[0][0]] = 'Mud line'
         mycomments[np.where(towdata[:,0] == 0.0)[0][0]] = 'Water line'
-    mycomments[np.where(towdata[:,0] == h_trans)[0][0]] = 'Tower start'
+    idx_tow = np.where(towdata[:,0] == h_trans)[0][0]
+    mycomments[idx_tow] = 'Tower start'
     mycomments[-1] = 'Tower top'
     towDF['Location'] = mycomments
     towDF = towDF[['Location']+colstr]
     A = 0.25*np.pi*(towDF['OD [m]']**2 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**2)
     I = (1/64.)*np.pi*(towDF['OD [m]']**4 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**4)
-    towDF['Mass Density [kg/m]'] = getter.get_tower_rho(prob)[0] * A
+    outfitting = np.zeros( len(A) )
+    outfitting[:idx_tow] = prob['fixedse.outfitting_factor_in']
+    outfitting[idx_tow:] = prob['towerse.outfitting_factor_in']
+    towDF['Mass Density [kg/m]'] = outfitting * getter.get_tower_rho(prob)[0] * A
     towDF['Fore-aft inertia [kg.m]'] = towDF['Side-side inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
     towDF['Fore-aft stiffness [N.m^2]'] = towDF['Side-side stiffness [N.m^2]'] = getter.get_tower_E(prob)[0] * I
     towDF['Torsional stiffness [N.m^2]'] = getter.get_tower_G(prob)[0] * 2*I
