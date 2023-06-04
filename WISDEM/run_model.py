@@ -182,7 +182,8 @@ def run_15mw(fname_wt_input):
     A = 0.25*np.pi*(towDF['OD [m]']**2 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**2)
     I = (1/64.)*np.pi*(towDF['OD [m]']**4 - (towDF['OD [m]']-2*1e-3*towDF['Thickness [mm]'])**4)
     outfitting = np.zeros( len(A) )
-    outfitting[:idx_tow] = prob['fixedse.outfitting_factor_in']
+    if not float_flag:
+        outfitting[:idx_tow] = prob['fixedse.outfitting_factor_in']
     outfitting[idx_tow:] = prob['towerse.outfitting_factor_in']
     towDF['Mass Density [kg/m]'] = outfitting * getter.get_tower_rho(prob)[0] * A
     towDF['Fore-aft inertia [kg.m]'] = towDF['Side-side inertia [kg.m]'] = towDF['Mass Density [kg/m]'] * I/A
