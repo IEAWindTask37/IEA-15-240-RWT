@@ -1,59 +1,36 @@
 # -*- coding: utf-8 -*-
-"""Run basic test to compare values from OpenFAST files with HAWC2.
+"""Check that basic RNA props in the HAWC2-OpenFAST onshore models match.
 
-Requires wetb, numpy
+Requires wetb, numpy.
+
+TODO: Add checks for monopile and umaine models
 """
-import os
 import numpy as np
 from wetb.hawc2 import HTCFile
 
-FROOT = os.path.dirname( os.path.dirname( os.path.realpath(__file__) ) )
+import _test_functions as tstf
+from _test_functions import FROOT
 
-def get_body_length(htc_struc, body):
-    """Get the length of a body from htc structure, given string name"""
-    body_contents = htc_struc.get_subsection_by_name(body).c2_def.contents
-    last_key = next(reversed(body_contents))
-    length = abs(body_contents[last_key].values[-2])
-    return length
-
-
-def read_elastodyn_dat(path):
-    """Get dictionary from an elastodyn dat file"""
-    d = {}
-    with open(path, 'r') as ed:
-        end = False
-        for line in ed:
-            contents = line.split()
-            if contents[0] == 'OutList':
-                end = True
-            if end:
-                break
-            if not line.startswith('--'):
-                try:
-                    d[contents[1]] = float(contents[0])
-                except ValueError:
-                    d[contents[1]] = contents[0]
-    return d
-
-
-# TODO: Add checks for monopile and umaine models
 
 def test_of_h2_fixedstructure():
     """Check RNA properties in OF Monopile model versus H2 fixed-bottom, UMaine, monopile
     """
 
-    ed_path = os.path.join(FROOT, 'OpenFAST', 'IEA-15-240-RWT-Monopile', 'IEA-15-240-RWT-Monopile_ElastoDyn.dat')
-    h2_dir = os.path.join(FROOT, 'HAWC2', 'IEA-15-240-RWT-FixedSubstructure')
-    h2_path = os.path.join(h2_dir, 'htc', 'IEA_15MW_RWT_FixedSubstructure.htc')
+    ed_path = FROOT / 'OpenFAST'/  'IEA-15-240-RWT-Monopile'/  'IEA-15-240-RWT-Monopile_ElastoDyn.dat'
+    h2_dir = FROOT/  'HAWC2'/  'IEA-15-240-RWT-FixedSubstructure'
+    h2_path = h2_dir/  'htc'/  'IEA_15MW_RWT_FixedSubstructure.htc'
+
+    h2_dir = h2_dir.as_posix()  # wetb requires strings, not Path objects...
+    h2_path = h2_path.as_posix()
     
-    ed_dict = read_elastodyn_dat(ed_path)
+    ed_dict = tstf.read_elastodyn_dat(ed_path)
     htc = HTCFile(h2_path, modelpath=h2_dir)
     
     htc_struc = htc.new_htc_structure
     
     # tower
     z_towerbottom = -htc_struc.orientation.base.inipos[2]  # location of tower bottom in space
-    twrht_h2 = get_body_length(htc_struc, 'tower') + z_towerbottom
+    twrht_h2 = tstf.get_body_length(htc_struc, 'tower') + z_towerbottom
     assert np.isclose(ed_dict['TowerHt'], twrht_h2)  # tower height
         
     # nacelle and yaw bearing masses and inertias
@@ -74,9 +51,9 @@ def test_of_h2_fixedstructure():
     # hub height
     tilt = 6 * np.pi / 180
     z_hub = 150
-    ttop_length = get_body_length(htc_struc, 'towertop')
-    conn_length = get_body_length(htc_struc, 'connector')
-    shaft_length = get_body_length(htc_struc, 'shaft')
+    ttop_length = tstf.get_body_length(htc_struc, 'towertop')
+    conn_length = tstf.get_body_length(htc_struc, 'connector')
+    shaft_length = tstf.get_body_length(htc_struc, 'shaft')
     z_hub_h2 = twrht_h2 + ttop_length + conn_length*np.sin(tilt) + shaft_length*np.sin(tilt)
     z_hub_of = ed_dict['TowerHt'] + ed_dict['Twr2Shft'] + -ed_dict['OverHang']*np.tan(tilt)
     assert np.isclose(z_hub_h2, z_hub, atol=1e-2)
