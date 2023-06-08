@@ -3,6 +3,8 @@
 TODO: Move this to a top-level package so it can be reused in all subfolders and
 also tests.
 """
+from datetime import date
+
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy import pi
@@ -157,4 +159,4 @@ def save_h2_st_arr(path, out_arr, bodyname, notorsion=True, rigid=True):
         with open(path, 'a', encoding='utf-8') as f:
             np.savetxt(f, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
 
-    print(f'St-file saved to "{h2_st_path}"')
+    print(f'St-file saved to "{path}"')
