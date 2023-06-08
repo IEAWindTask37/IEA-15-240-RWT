@@ -1,15 +1,17 @@
-# -*- coding: utf-8 -*-
 """Make the HAWC2 tower files from the yaml
 
 Requirements: numpy, matplotlib, pyyaml
 """
 from datetime import date
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy import pi
 import yaml
-import os
 
+
+save_twr = 1  # save the HAWC2 tower st file?
 mydir = os.path.dirname(os.path.realpath(__file__))  # get path to this file
 
 # paths
@@ -19,18 +21,12 @@ h2_st_path = os.path.join(mydir,'../data/IEA_15MW_RWT_Tower_st.dat')  # file to 
 
 
 # load the yaml file as nested dictionaries
-with open(yaml_path, 'r') as stream:
+with open(yaml_path, 'r', encoding='utf-8') as stream:
     try:
         res = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
         print(exc)
 
-#%%
-
-# flag to save the tower file
-save_twr = 1
-
-# ------------- twr -------------
 body = 'tower'
 
 # get tower dimensions
@@ -46,23 +42,6 @@ t = np.array(twr_wall['thickness']['values'])
 material = twr_wall['material']
 mat_props = [d for d in res['materials'] if d['name'] == material][0]
 E, G, rho = mat_props['E'], mat_props['G'], mat_props['rho']
-
-
-# # ------------- transition piece (15m from water line to tower transition) -------------
-# body = 'monopile'
-
-# # get dimensions
-# mon_stn = np.array(res['components'][body]['outer_shape_bem']['reference_axis']['z']['values'])
-# mon_out_diam = np.array(res['components'][body]['outer_shape_bem']['outer_diameter']['values'])
-# mon_wall = res['components'][body]['internal_structure_2d_fem']['layers'][0]
-# assert mon_wall['name'] == body + '_wall'
-# t_mon = np.array(mon_wall['thickness']['values'])
-
-# # add above-water monopile to tower
-# mask = (mon_stn >= 0) & (mon_stn < 15)
-# twr_stn = np.concatenate((mon_stn[mask], twr_stn))
-# out_diam = np.concatenate((mon_out_diam[mask], out_diam))
-# t = np.concatenate((t_mon[mask], t))
 
 print('s [m]  OD [m]    t [mm]')
 for i in range(t.size):
@@ -154,3 +133,5 @@ if save_twr:
     header = '\n'.join([header2, f'$3 {out_arr.shape[0]} Rigid'])
     with open(h2_st_path, 'a') as f:
         np.savetxt(f, out_arr, delimiter='\t', fmt=fmt, header=header, comments='')
+
+plt.show()
