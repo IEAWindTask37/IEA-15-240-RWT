@@ -13,7 +13,7 @@ from _htc_conversion_fxns import base_to_hs2, base_to_step, base_to_turb, base_t
 make_step = True  # make a step-wind file?
 make_turb = True  # make a turbulence file?
 make_hs2 = True  # make a hawcstab2 file?
-base_htc = '../htc/IEA_15MW_RWT_FixedSubstructure.htc'  # relative path to base htc file
+base_htc = '../htc/IEA_15MW_RWT_Onshore.htc'  # relative path to base htc file
 
 kw = dict(cut_in=3, cut_out=25, dt=39, tstart=220,  # step parameters
           wsp=12, tint=0.17, tb_wid=252, tb_ht=252,  # turbulence parameters
