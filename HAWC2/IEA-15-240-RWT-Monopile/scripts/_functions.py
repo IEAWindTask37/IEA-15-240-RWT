@@ -45,7 +45,8 @@ def load_body_properties(bodyname, yamldict, start_from_zero=False):
 
 
 def load_elastodyn_distprop(path):
-    """Load distributed properties in ED file."""
+    """Load distributed properties in ED file.
+    stn, mpl, EIx, EIy."""
     with open(path, 'r', encoding='utf-8') as f:
         for il, line in enumerate(f):
             if il == 3:
@@ -109,28 +110,30 @@ def make_hawc2_st_array(stn, out_diam, thick, E, G, rho, outfitting_factor):
     return out_arr
 
 
-def plot_dist_matprops_of_h2(out_arr, ed_st, bodyname):
+def plot_dist_matprops_of_h2(out_arr, bodyname, of_st=None):
     """Plot distributed material properties, OpenFAST vs HAWC2"""
     h2_stn = (out_arr[:, 0] - out_arr[0, 0])/(out_arr[-1, 0] - out_arr[0, 0])
 
     fig, (ax0, ax1, ax2) = plt.subplots(1, 3, num=2, figsize=(7, 3))
 
-    ax0.plot(ed_st[:, 1], ed_st[:, 0], label='OpenFAST')
-    ax0.plot(out_arr[:, 1], h2_stn, '--', label='HAWC2')  # mpl
+    ax0.plot(out_arr[:, 1], h2_stn, label='HAWC2')  # mpl
     ax0.set(label='Mass density [m]', ylabel='Height [m]')
     ax0.grid('on')
-    ax0.legend()
 
-    ax1.plot(ed_st[:, 2], ed_st[:, 0])
-    ax1.plot(out_arr[:, 8]*out_arr[:, 10], h2_stn, '--', label='HAWC2')  # EIxx
+    ax1.plot(out_arr[:, 8]*out_arr[:, 10], h2_stn, label='HAWC2')  # EIxx
     ax1.set(xlabel='TwFAStif [mm]')
     ax1.grid('on')
 
-    ax2.plot(ed_st[:, 3], ed_st[:, 0])
-    ax2.plot(out_arr[:, 8]*out_arr[:, 11], h2_stn, '--', label='HAWC2')  # EIyy
+    ax2.plot(out_arr[:, 8]*out_arr[:, 11], h2_stn, label='HAWC2')  # EIyy
     ax2.set(xlabel='TwSSStif [mm]')
     ax2.grid('on')
 
+    if of_st is not None:
+        ax0.plot(of_st[:, 1], of_st[:, 0], '--', label='OpenFAST')
+        ax1.plot(of_st[:, 2], of_st[:, 0], '--')
+        ax2.plot(of_st[:, 3], of_st[:, 0], '--')
+
+    ax0.legend()
     fig.suptitle(f'Distributed material properties for body "{bodyname}"')
     fig.tight_layout()
 
