@@ -5,6 +5,7 @@
 **/res/*
 **/ind/*
 **/turb/*
+**/visualization/*
 *.pwr
 *_step.htc
 *_hs2.htc
