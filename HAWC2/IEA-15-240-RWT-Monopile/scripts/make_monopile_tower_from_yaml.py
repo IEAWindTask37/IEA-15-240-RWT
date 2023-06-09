@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import _functions as myf
 
 
-save_st = 0  # save the HAWC2 tower and monopile st files?
+save_st = 1  # save the HAWC2 tower and monopile st files?
 
 # paths
 h2dir = Path(__file__).parents[1]  # directory of hawc2 model (one level above)

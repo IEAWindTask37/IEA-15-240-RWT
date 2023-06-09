@@ -140,8 +140,10 @@ def plot_dist_matprops_of_h2(out_arr, bodyname, of_st=None):
     return fig, (ax0, ax1, ax2)
 
 
-def save_h2_st_arr(path, out_arr, bodyname, notorsion=True, rigid=True):
+def save_h2_st_arr(path, out_arr, bodyname, notorsion=True, rigid=True, start_from_zero=True):
     """Save hawc2 st file from array."""
+    if start_from_zero:
+        out_arr[:, 0] -= out_arr[0, 0]
     # flexible
     header1 = f'#1 {bodyname.capitalize()} made by automatic script on {date.today().strftime("%d-%b-%Y")}'
     header2 = '\t'.join(['r', 'm', 'x_cg', 'y_cg', 'ri_x', 'ri_y', 'x_sh', 'y_sh', 'E', 'G',
