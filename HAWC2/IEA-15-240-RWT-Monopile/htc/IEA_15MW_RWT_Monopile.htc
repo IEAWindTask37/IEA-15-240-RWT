@@ -4,11 +4,12 @@
 ; values for the WTG system.
 ;
 begin simulation ;
-  time_stop    100.0 ;
+  time_stop    10.0 ;
   solvertype   1 ;    (newmark)
   on_no_convergence continue ;
   convergence_limits 1E3 1.0 1E-7 ;
   logfile ./log/IEA_15MW_RWT_Monopile.log ;
+  visualization ./visualization/IEA_15MW_RWT_Monopile.hdf5;  
   begin newmark;
     deltat    0.01;
   end newmark;
@@ -19,7 +20,58 @@ begin new_htc_structure;
   ;body_output_file_name ./bodyeig/IEA_15MW_RWT_Monopile_body.dat;  body locations correct?
   ;body_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_Monopile_body_eigen.dat;  damping correct?
   ;struct_inertia_output_file_name ./bodyeig/IEA_15MW_RWT_Monopile_struc_inertia.dat;  CM locations correct?
-  ;structure_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_Monopile_struc_eigen.dat;  full-system frequencies?
+  ;structure_eigenanalysis_file_name ./bodyeig/struceig/IEA_15MW_RWT_Monopile_struc_eigen.dat;  full-system frequencies?
+  system_eigenanalysis ./bodyeig/syseig/IEA_15MW_RWT_Monopile_sys_eigen.dat 1 8 99;  system eigenanalysis
+  ;
+  begin main_body;  embedded_monopile [-75 to -30 m]
+    name        embedded_monopile ;
+    type        timoschenko ;
+    nbodies     1 ;
+    node_distribution     c2_def ;
+    damping_posdef   0.0 0.0 0.0 0.004 0.004 0.0004 ;  dummy values
+    begin timoschenko_input;
+      filename ./data/IEA_15MW_RWT_Embeddedmonopile_st.dat;
+      set 1 1 ;
+    end timoschenko_input;
+    begin c2_def;
+      nsec 10;    x    y      z   twist
+      sec    1    0    0     0.0   0  ;
+      sec    2    0    0    -5.0   0  ;
+      sec    3    0    0   -10.0   0  ;
+      sec    4    0    0   -15.0   0  ;
+      sec    5    0    0   -20.0   0  ;
+      sec    6    0    0   -25.0   0  ;
+      sec    7    0    0   -30.0   0  ;
+      sec    8    0    0   -35.0   0  ;
+      sec    9    0    0   -40.0   0  ;
+      sec    10   0    0   -45.0   0  ;
+    end c2_def ;
+  end main_body;
+; 
+  begin main_body;  monopile [-30 m to +15 m]
+    name        monopile ;
+    type        timoschenko ;
+    nbodies     1 ;
+    node_distribution     c2_def ;
+    damping_posdef   0.0 0.0 0.0 0.004 0.004 0.0004 ;  dummy values
+    begin timoschenko_input;
+      filename ./data/IEA_15MW_RWT_Monopile_st.dat;
+      set 1 1 ;
+    end timoschenko_input;
+    begin c2_def;
+      nsec 10;    x    y      z   twist
+      sec    1    0    0     0.0   0  ;  Mudline
+      sec    2    0    0    -5.0   0  ;
+      sec    3    0    0   -10.0   0  ;
+      sec    4    0    0   -15.0   0  ;
+      sec    5    0    0   -20.0   0  ;
+      sec    6    0    0   -25.0   0  ;
+      sec    7    0    0   -30.0   0  ;  MWL, TP begins
+      sec    8    0    0   -35.0   0  ;
+      sec    9    0    0   -40.0   0  ;
+      sec    10   0    0   -45.0   0  ;  TP ends, tower begins
+    end c2_def ;
+  end main_body;
   ;
   begin main_body;  tower
     name        tower ;
@@ -51,20 +103,44 @@ begin new_htc_structure;
   begin orientation;
     ;
     begin base;  tower to ground
-      body   tower;
-      inipos        0.0 0.0 -15.0 ;  tower starts above transition piece
+      body   embedded_monopile;
+      inipos        0.0 0.0 75.0 ;  -75 m
       body_eulerang 0.0 0.0   0.0 ;  same as global: zT down, yT downwind
     end base;
     ;
+    begin relative;  monopile to embedded monopile
+      body1   embedded_monopile last;  
+      body2   monopile 1 ;           
+      body2_eulerang 0.0 0.0 0.0;  same as global: zT down, yT downwind
+    end relative;    
+    ;  
+    begin relative;  tower to monopile
+      body1  monopile last;           
+      body2  tower 1;  
+      body2_eulerang 0.0 0.0 0.0;  same as global: zT down, yT downwind  
+    end relative;  
+    ;  
     continue_in_file ../IEA-15-240-RWT/IEA_15MW_RWT_WTG_orientation.htc;
     ;
   end orientation;
   ;
   begin constraint;
     ;
-    begin fix0;  tower fixed to ground
-      body tower;
-    end fix0;
+    begin fix2;  node1 of embedded_monopile fixed in vertical translation
+      body  embedded_monopile;
+      dof 0 0 1;
+    end fix2;
+    ;  
+    begin fix1;  monopile fixed to embedded_monopile
+      body1 embedded_monopile last;  
+      body2 monopile 1;  
+    end fix1;   
+    ;  
+    begin fix1;  tower fixed to embedded_monopile
+      body1 monopile last;  
+      body2 tower 1;  
+    end fix1;  
+    ;  
     ;
     continue_in_file ../IEA-15-240-RWT/IEA_15MW_RWT_WTG_constraint.htc;
     ;
@@ -355,6 +431,40 @@ end type2_dll;
 end dll;
 ;----------------------------------------------------------------------------------------------------------------------------------------------------------------
 ;
+;----------------------------------------------------------------------------------------------------------------------------------------------------------------  
+; Soil
+;----------------------------------------------------------------------------------------------------------------------------------------------------------------
+begin soil;    
+  begin soil_element;  
+    mbdy_name  embedded_monopile;  
+    datafile  ./soil/IEA_15MW_Soil.dat;  
+    soilsections  uniform 10; number of calculation points 
+    damping_k_factor  0.00;
+    set 1;  lateral
+  end soil_element;  
+end soil;  
+;----------------------------------------------------------------------------------------------------------------------------------------------------------------  
+; Hydro
+;----------------------------------------------------------------------------------------------------------------------------------------------------------------
+;begin hydro;
+;   begin water_properties;
+;     rho 1027 ; kg/m^3
+;     gravity 9.81 ; m/s^2
+;     mwl 0.0;
+;     mudlevel 30.0 ;
+;	 water_kinematics_dll wkin_dll_64.dll ./hydro/irregular.inp;  
+; end water_properties;    
+;;
+;   begin hydro_element;
+;     body_name monopile ;
+;     hydrosections uniform 45 ; number of nodes, evenly distributed
+;	 sec_type circular;
+;     nsec 2;
+;     sec  0.0 1.0 1.0 38.48 38.48 7.0 ;  nr z Cm Cd V Vr width                 (z=afstand fra node 1 til sec)  % width changed (done) V Vr changed (done)
+;     sec 30.0 1.0 1.0 38.48 38.48 7.0 ;  nr z Cm Cd V Vr width  ; nr was 30   ????
+;   end hydro_element;
+;end hydro;
+; 
 begin output;
   filename ./res/IEA_15MW_RWT_Monopile ;
   data_format  gtsdf;

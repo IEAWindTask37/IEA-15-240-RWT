@@ -1,0 +1,32 @@
+To simulate the no-torsion model, replace the corresponding blocks in the
+controller DLL with the lines below.
+
+
+; Overall parameters
+        constant	1 15000;	Rated power [kW]
+        constant	2 0.524;	Minimum rotor (LSS) speed [rad/s]
+        constant	3 0.792;	Rated rotor (LSS) speed [rad/s]
+        constant	4 21586451.33303;	Maximum allowable generator torque [Nm]
+        constant	5 101;	Minimum pitch angle, theta_min [deg],
+; if |theta_min|>90, then a table of <wsp,theta_min> is read ;
+; from a file named 'wptable.n', where n=int(theta_min)
+        constant	6 90;	Maximum pitch angle [deg]
+        constant	7 2;	Maximum pitch velocity operation [deg/s]
+        constant	8 1.0081;	Frequency of generator speed filter [Hz]
+        constant	9 0.7;	Damping ratio of speed filter [-]
+        constant	10 1.01;	Frequency of free-free DT torsion mode [Hz], if zero no notch filter used
+; Partial load control parameters
+        constant	11 32935600;	Optimal Cp tracking K factor [Nm/(rad/s)^2], ;
+; Qg=K*Omega^2, K=eta*0.5*rho*A*Cp_opt*R^3/lambda_opt^3
+        constant	12 138355000;	Proportional gain of torque controller [Nm/(rad/s)]
+        constant	13 31046700;	Integral gain of torque controller [Nm/rad]
+        constant	14 0;	Differential gain of torque controller [Nm/(rad/s^2)]
+;     Full load control parameters
+        constant	15 0;	Generator control switch [1=constant power, 0=constant torque]
+        constant	16 0.784687;	Proportional gain of pitch controller [rad/(rad/s)]
+        constant	17 0.10565;	Integral gain of pitch controller [rad/rad]
+        constant	18 0;	Differential gain of pitch controller [rad/(rad/s^2)]
+        constant	19 4e-09;	Proportional power error gain [rad/W]
+        constant	20 4e-09;	Integral power error gain [rad/(Ws)]
+        constant	21 10.34648;	Coefficient of linear term in aerodynamic gain scheduling, KK1 [deg]
+        constant	22 464.83349;	Coefficient of quadratic term in aerodynamic gain scheduling, KK2 [deg^2] &
