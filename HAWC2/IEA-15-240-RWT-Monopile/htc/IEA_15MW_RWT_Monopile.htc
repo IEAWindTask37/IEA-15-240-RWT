@@ -4,7 +4,7 @@
 ; values for the WTG system.
 ;
 begin simulation ;
-  time_stop    10.0 ;
+  time_stop    100.0 ;
   solvertype   1 ;    (newmark)
   on_no_convergence continue ;
   convergence_limits 1E3 1.0 1E-7 ;
