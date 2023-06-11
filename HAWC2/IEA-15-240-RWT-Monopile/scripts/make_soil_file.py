@@ -1,6 +1,8 @@
 """Make soil file from prescribed parameters.
 
 We include lateral, axial, and torsional stiffness, but not rocking.
+
+TODO: Fix this to return forces, not force-per-length.
 """
 from datetime import date
 from pathlib import Path
@@ -14,8 +16,8 @@ r0 = 10/2  # outer radius of the soil [m]
 defl = 1 # deflections to put in soil file [m or rad]
 soil_path = Path(__file__).parents[1] / 'soil/IEA_15MW_Soil.dat'  # directory of hawc2 model (one level above)
 
-zGs = np.arange(-75, -29, 5)  # global z coordinates
-hs = -zGs + zGs[-1]  # depth under the soil
+zGs = np.arange(30, 76, 5)  # global z coordinates
+hs = zGs - zGs.min()  # depth under the soil
 
 # vertical distributed stiffness [N/m/m]
 eta_z = 1 + 0.6*(1 - nu_soil) * hs/r0
