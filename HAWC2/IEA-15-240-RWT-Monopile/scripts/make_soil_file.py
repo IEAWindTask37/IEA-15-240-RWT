@@ -10,8 +10,10 @@ from pathlib import Path
 import numpy as np
 
 
-G_soil = 140e6  # soil shear modulus [Pa]
+# G_soil = 140e6  # soil shear modulus [Pa]  I BELIEVE THIS IS A TYPO
 nu_soil = 0.4  # soil poisson ratio [-]
+E_soil = 140e6  # soil Young's modulus [Pa]
+G_soil = E_soil / 2 / (1 + nu_soil)  # from Young's to shear modulus
 r0 = 10/2  # outer radius of the soil [m]
 defl = 1 # deflections to put in soil file [m or rad]
 soil_path = Path(__file__).parents[1] / 'soil/IEA_15MW_Soil.dat'  # directory of hawc2 model (one level above)
@@ -30,11 +32,11 @@ k_xs = 32*(1 - nu_soil)*G_soil*r0 / (7 - 8*nu_soil) * eta_x
 # torsional stiffness [Nm/rad/m]
 k_phis = 16*G_soil*r0**3 / 3 * np.ones_like(hs)
 
-# wave the soil file
+# write the soil file
+spring_vals = (('lateral', k_xs), ('axial', k_zs), ('rotation_z', k_phis))
+defls = np.array([0, defl])
 with open(soil_path, 'w', encoding='utf-8') as f:
     f.write(f'Distributed soil stiffness for IEA 15 MW Monopile created on {date.today().strftime("%d-%b-%Y")}\n')
-    spring_vals = (('lateral', k_xs), ('axial', k_zs), ('rotation_z', k_phis))
-    defls = np.array([0, defl])
     for i_s, (stiffname, stiffs) in enumerate(spring_vals):
         # set number, type, nrow/ndefl, and defls
         f.write(f'#{i_s + 1}\n')

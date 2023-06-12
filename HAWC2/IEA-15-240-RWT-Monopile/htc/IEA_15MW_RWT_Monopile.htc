@@ -452,7 +452,7 @@ end soil;
 ;     gravity 9.81 ; m/s^2
 ;     mwl 0.0;
 ;     mudlevel 30.0 ;
-;	 water_kinematics_dll wkin_dll_64.dll ./hydro/irregular.inp;  
+;	 water_kinematics_dll wkin_dll.dll ./hydro/irregular_waves.inp;  
 ; end water_properties;    
 ;;
 ;   begin hydro_element;
