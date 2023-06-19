@@ -21,7 +21,7 @@ begin new_htc_structure;
   ;body_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_Monopile_body_eigen.dat;  damping correct?
   ;struct_inertia_output_file_name ./bodyeig/IEA_15MW_RWT_Monopile_struc_inertia.dat;  CM locations correct?
   ;structure_eigenanalysis_file_name ./bodyeig/struceig/IEA_15MW_RWT_Monopile_struc_eigen.dat;  full-system frequencies?
-  ;system_eigenanalysis ./bodyeig/syseig/IEA_15MW_RWT_Monopile_sys_eigen.dat 1 8 99;  system eigenanalysis
+  system_eigenanalysis ./bodyeig/syseig/IEA_15MW_RWT_Monopile_sys_eigen.dat 1 8 99;  system eigenanalysis
   ;
   begin main_body;  embedded_monopile [-75 to -30 m]
     name        embedded_monopile ;
@@ -452,24 +452,24 @@ end soil;
 ;----------------------------------------------------------------------------------------------------------------------------------------------------------------  
 ; Hydro
 ;----------------------------------------------------------------------------------------------------------------------------------------------------------------
-;begin hydro;
-;   begin water_properties;
-;     rho 1027 ; kg/m^3
-;     gravity 9.81 ; m/s^2
-;     mwl 0.0;
-;     mudlevel 30.0 ;
-;	 water_kinematics_dll wkin_dll.dll ./hydro/irregular_waves.inp;  
-; end water_properties;    
-;;
-;   begin hydro_element;
-;     body_name monopile ;
-;     hydrosections uniform 45 ; number of nodes, evenly distributed
-;	 sec_type circular;
-;     nsec 2;
-;     sec  0.0 1.0 1.0 38.48 38.48 7.0 ;  nr z Cm Cd V Vr width                 (z=afstand fra node 1 til sec)  % width changed (done) V Vr changed (done)
-;     sec 30.0 1.0 1.0 38.48 38.48 7.0 ;  nr z Cm Cd V Vr width  ; nr was 30   ????
-;   end hydro_element;
-;end hydro;
+begin hydro;
+  begin water_properties;
+    rho 1027 ; kg/m^3
+    gravity 9.81 ; m/s^2
+    mwl 0.0;
+    mudlevel 30.0 ;
+	water_kinematics_dll wkin_dll.dll ./hydro/irregular_waves.inp;  
+  end water_properties;    
+;
+  begin hydro_element;
+    body_name monopile ;
+    hydrosections uniform 45 ; number of nodes, evenly distributed
+    sec_type 1;
+    nsec 2;
+    sec  0.0 1.0 1.0 78.5398 78.5398 10.0 ;  z Cm Cd V Vr width
+    sec 30.0 1.0 1.0 78.5398 78.5398 10.0 ;  z Cm Cd V Vr width
+  end hydro_element;
+end hydro;
 ; 
 begin output;
   filename ./res/IEA_15MW_RWT_Monopile ;
