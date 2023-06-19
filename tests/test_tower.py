@@ -19,7 +19,8 @@ def test_tower_matches():
     # paths
     yaml_path = FROOT / 'WT_Ontology/IEA-15-240-RWT.yaml'  # yaml file with data
     ed_path = FROOT / 'OpenFAST/IEA-15-240-RWT-Monopile/IEA-15-240-RWT-Monopile_ElastoDyn_tower.dat'  # elastodyn file
-    h2_st_path = FROOT / 'HAWC2/IEA-15-240-RWT-FixedSubstructure/data/IEA_15MW_RWT_Tower_st.dat'  # hawc2 st file
+    h2_ons_path = FROOT / 'HAWC2/IEA-15-240-RWT-Onshore/data/IEA_15MW_RWT_Tower_st.dat'  # hawc2 onshore st file
+    h2_mon_path = FROOT / 'HAWC2/IEA-15-240-RWT-Monopile/data/IEA_15MW_RWT_Tower_st.dat'  # hawc2 monopile st file
     ex_path = FROOT / 'Documentation/IEA-15-240-RWT_tabular.xlsx'  # pth to excel file
 
     # load yaml values, calculate distributed properties
@@ -39,11 +40,17 @@ def test_tower_matches():
     ed_st = tstf.load_elastodyn_distprop(ed_path)
     mpl_ed, EIx_ed, EIy_ed = ed_st[:, 1:4].T
 
-    # load the hawc2 tower properties
-    h2_st = tstf.load_hawc2_st(h2_st_path)
-    mpl_h2 = h2_st[:, 1]
-    EIx_h2 = h2_st[:, 8]*h2_st[:, 10]
-    EIy_h2 = h2_st[:, 8]*h2_st[:, 11]
+    # load the hawc2 onshore tower properties
+    h2_ons = tstf.load_hawc2_st(h2_ons_path)
+    mpl_h2_ons = h2_ons[:, 1]
+    EIx_h2_ons = h2_ons[:, 8]*h2_ons[:, 10]
+    EIy_h2_ons = h2_ons[:, 8]*h2_ons[:, 11]
+
+    # load the hawc2 monopile tower properties
+    h2_mon = tstf.load_hawc2_st(h2_mon_path)
+    mpl_h2_mon = h2_mon[:, 1]
+    EIx_h2_mon = h2_mon[:, 8]*h2_mon[:, 10]
+    EIy_h2_mon = h2_mon[:, 8]*h2_mon[:, 11]
 
     # compare tower design in yaml and excel
     for (arr_yaml, arr_ex) in zip([twr_stn_yaml, out_diam_yaml, thick_yaml],
@@ -54,8 +61,10 @@ def test_tower_matches():
     yaml_vals = [mpl_yaml, EI_yaml, EI_yaml]
     ex_vals = [mpl_ex, EIx_ex, EIy_ex]
     ed_vals = [mpl_ed, EIx_ed, EIy_ed]
-    h2_vals = [mpl_h2, EIx_h2, EIy_h2]
-    for (arr_yaml, arr_ex, arr_ed, arr_h2) in zip(yaml_vals, ex_vals, ed_vals, h2_vals):
+    h2_ons_vals = [mpl_h2_ons, EIx_h2_ons, EIy_h2_ons]
+    h2_mon_vals = [mpl_h2_mon, EIx_h2_mon, EIy_h2_mon]
+    for (arr_yaml, arr_ex, arr_ed, arr_h2_ons, arr_h2_mon) in zip(yaml_vals, ex_vals, ed_vals, h2_ons_vals, h2_mon_vals):
         np.testing.assert_allclose(arr_yaml, arr_ex, rtol=1e-3)  # yaml versus excel
         np.testing.assert_allclose(arr_yaml, arr_ed, rtol=1e-3)  # yaml versus elastodyn
-        np.testing.assert_allclose(arr_yaml, arr_h2, rtol=1e-3)  # yaml versus hawc2
+        np.testing.assert_allclose(arr_yaml, arr_h2_ons, rtol=1e-3)  # yaml versus hawc2 onshore
+        np.testing.assert_allclose(arr_yaml, arr_h2_mon, rtol=1e-3)  # yaml versus hawc2 monopile
