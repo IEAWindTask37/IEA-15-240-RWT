@@ -10,10 +10,8 @@ from pathlib import Path
 import numpy as np
 
 
-# G_soil = 140e6  # soil shear modulus [Pa]  I BELIEVE THIS IS A TYPO
+G_soil = 140e6  # soil shear modulus [Pa]
 nu_soil = 0.4  # soil poisson ratio [-]
-E_soil = 140e6  # soil Young's modulus [Pa]
-G_soil = E_soil / 2 / (1 + nu_soil)  # from Young's to shear modulus
 r0 = 10/2  # outer radius of the soil [m]
 defl = 1 # deflections to put in soil file [m or rad]
 soil_path = Path(__file__).parents[1] / 'soil/IEA_15MW_Soil.dat'  # directory of hawc2 model (one level above)

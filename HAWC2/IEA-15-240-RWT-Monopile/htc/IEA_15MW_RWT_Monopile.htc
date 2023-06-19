@@ -21,7 +21,7 @@ begin new_htc_structure;
   ;body_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_Monopile_body_eigen.dat;  damping correct?
   ;struct_inertia_output_file_name ./bodyeig/IEA_15MW_RWT_Monopile_struc_inertia.dat;  CM locations correct?
   ;structure_eigenanalysis_file_name ./bodyeig/struceig/IEA_15MW_RWT_Monopile_struc_eigen.dat;  full-system frequencies?
-  system_eigenanalysis ./bodyeig/syseig/IEA_15MW_RWT_Monopile_sys_eigen.dat 1 8 99;  system eigenanalysis
+  ;system_eigenanalysis ./bodyeig/syseig/IEA_15MW_RWT_Monopile_sys_eigen.dat 1 8 99;  system eigenanalysis
   ;
   begin main_body;  embedded_monopile [-75 to -30 m]
     name        embedded_monopile ;
@@ -130,6 +130,12 @@ begin new_htc_structure;
       body  embedded_monopile;
       dof 0 0 1;
     end fix2;
+    ;  
+    ;
+    begin fix3;  node1 of embedded_monopile fixed in rotation around z
+      body  embedded_monopile 1;
+      dof 0 0 1;
+    end fix3;
     ;  
     begin fix1;  monopile fixed to embedded_monopile
       body1 embedded_monopile last;  
