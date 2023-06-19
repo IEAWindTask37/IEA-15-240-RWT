@@ -7,12 +7,14 @@ Default files (base and hawcstab2) are for FPM model with torsion.
 
 Requirements: Python 3.6+ and wetb package.
 """
-from _htc_conversion_fxns import base_to_hs2, base_to_step, base_to_turb, base_to_fpm
+from _htc_conversion_fxns import (base_to_hs2, base_to_step, base_to_turb,
+                                  base_to_fpm, base_to_full)
 
 
-make_step = True  # make a step-wind file?
-make_turb = True  # make a turbulence file?
-make_hs2 = True  # make a hawcstab2 file?
+make_full = True  # make a copy of base htc file, comines multiple files to one
+make_step = False  # make a step-wind file?
+make_turb = False  # make a turbulence file?
+make_hs2 = False  # make a hawcstab2 file?
 base_htc = '../htc/IEA_15MW_RWT_Monopile.htc'  # relative path to base htc file
 
 kw = dict(cut_in=3, cut_out=25, dt=39, tstart=220,  # step parameters
@@ -28,6 +30,13 @@ if __name__ == '__main__':
     fpm_htc = base_htc.replace('.htc', '_FPM.htc')
     print(f'  Writing FPM file to {fpm_htc}...')
     base_to_fpm(base_htc, fpm_htc)
+
+    if make_full:
+        full_htc = base_htc.replace('.htc', '_full.htc')
+        print(f' Writing full file to {full_htc}...')
+        base_to_full(base_htc, full_htc)
+        print('   done.')
+    
 
     if make_step:
         step_htc = base_htc.replace('.htc', '_step.htc')

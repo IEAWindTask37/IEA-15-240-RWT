@@ -9,6 +9,13 @@ import os
 from wetb.hawc2 import HTCFile
 
 
+def base_to_full(orig_htc, new_htc):
+    """Make a copy of base file, including extras in other files."""
+    htc = HTCFile(orig_htc)
+    # save the new file
+    htc.save(new_htc)
+    
+
 def base_to_hs2(orig_htc, new_htc, **kw):
     """Base htc file to a HAWCStab2 file
 
