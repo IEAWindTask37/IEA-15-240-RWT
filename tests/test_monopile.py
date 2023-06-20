@@ -79,3 +79,35 @@ def test_monopile_matches():
             np.testing.assert_allclose(arr_yaml, arr_ex, rtol=1e-3)  # yaml versus excel
             # np.testing.assert_allclose(arr_yaml, arr_sd, rtol=1e-3)  # yaml versus subdyn  TODO
             np.testing.assert_allclose(arr_yaml, arr_h2, rtol=1e-3)  # yaml versus hawc2
+
+def test_monopile_mass():
+    """Check that the mass of the HAWC2 monopile matches what's expected."""
+
+    # paths
+    h2_embmon_path = FROOT / 'HAWC2/IEA-15-240-RWT-Monopile/data/IEA_15MW_RWT_Embeddedmonopile_st.dat'  # embedded monopile st file
+    h2_mon_path = FROOT / 'HAWC2/IEA-15-240-RWT-Monopile/data/IEA_15MW_RWT_Monopile_st.dat'  # monopile st file
+
+    # uncomment this section to recalculate yaml mass
+    # yaml_path = FROOT / 'WT_Ontology/IEA-15-240-RWT.yaml'  # yaml file with data
+    # yamldata = tstf.load_yaml(yaml_path)
+    # twr_stn_yaml, out_diam_yaml, thick_yaml, E, G, rho, outfit = tstf.load_body_properties('monopile', yamldata)
+    # mpl_yaml = tstf.calculate_mpl(out_diam_yaml, thick_yaml, rho, outfitting_factor=outfit)
+    # mass_yaml = np.trapz(mpl_yaml, twr_stn_yaml) + 100e3
+    mass_yaml = 1309947.640745313  # from -75 m to +15 m [kg]
+
+    # load the hawc2 embedded-monopile tower properties
+    h2_emdmon = tstf.load_hawc2_st(h2_embmon_path)
+    twr_stn_embdmon = h2_emdmon[:, 0]
+    mpl_h2_embmon = h2_emdmon[:, 1]
+
+    # load the hawc2 monopile tower properties
+    h2_mon = tstf.load_hawc2_st(h2_mon_path)
+    twr_stn_mon = h2_mon[:, 0]
+    mpl_h2_mon = h2_mon[:, 1]
+
+    # calculate hawc2 mass
+    mass_embmon = np.trapz(mpl_h2_embmon, twr_stn_embdmon)
+    mass_mon = np.trapz(mpl_h2_mon, twr_stn_mon)
+    mass_h2 = mass_embmon + mass_mon + 100e3
+
+    assert abs((mass_h2 - mass_yaml) / mass_yaml) < 0.01
