@@ -21,7 +21,7 @@ begin new_htc_structure;
   ;body_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_Monopile_body_eigen.dat;  damping correct?
   ;struct_inertia_output_file_name ./bodyeig/IEA_15MW_RWT_Monopile_struc_inertia.dat;  CM locations correct?
   ;structure_eigenanalysis_file_name ./bodyeig/struceig/IEA_15MW_RWT_Monopile_struc_eigen.dat;  full-system frequencies?
-  system_eigenanalysis ./bodyeig/syseig/IEA_15MW_RWT_Monopile_sys_eigen.dat 1 8 99;  system eigenanalysis
+  ;system_eigenanalysis ./bodyeig/syseig/IEA_15MW_RWT_Monopile_sys_eigen.dat 1 8 99;  system eigenanalysis
   ;
   begin main_body;  embedded_monopile [-75 to -30 m]
     name        embedded_monopile ;
@@ -47,13 +47,14 @@ begin new_htc_structure;
       sec    10   0    0   -45.0   0  ;
     end c2_def ;
   end main_body;
-; 
+  ; 
   begin main_body;  monopile [-30 m to +15 m]
     name        monopile ;
     type        timoschenko ;
     nbodies     1 ;
     node_distribution     c2_def ;
     damping_posdef   0.0 0.0 0.0 0.004 0.004 0.0004 ;  dummy values
+	concentrated_mass 10 0 0 0 100000 0 0 0 ;  transition-piece
     begin timoschenko_input;
       filename ./data/IEA_15MW_RWT_Monopile_st.dat;
       set 1 1 ;
@@ -78,7 +79,7 @@ begin new_htc_structure;
     type        timoschenko ;
     nbodies     1 ;
     node_distribution     c2_def ;
-    damping_posdef   0.0 0.0 0.0 0.004 0.004 0.0004  ; tuned to 1% critical (approx 6% log dec) on 1st FA(0.79 Hz)/SS(0.79 Hz)/torsion(8 Hz) modes (#1, #2, #7)
+    damping_posdef   0.0 0.0 0.0 0.004 0.004 0.0004  ;  taken from onshore tower
     begin timoschenko_input;
       filename ./data/IEA_15MW_RWT_Tower_st.dat;
       set 1 1 ;
@@ -130,7 +131,6 @@ begin new_htc_structure;
       body  embedded_monopile;
       dof 0 0 1;
     end fix2;
-    ;  
     ;
     begin fix3;  node1 of embedded_monopile fixed in rotation around z
       body  embedded_monopile 1;
