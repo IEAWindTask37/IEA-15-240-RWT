@@ -47,11 +47,15 @@ def calculate_mpl(out_diam, thick, rho, outfitting_factor=1):
     return rho * area * outfitting_factor
 
 
-def load_excel_tower(path, toweronly=True):
+def load_excel_tower(path, body='tower'):
     """Load tower properties from excel doc."""
     df = pd.read_excel(path, sheet_name='Tower Properties', usecols='B:K')
-    if toweronly:
+    if body == 'tower':
         df = df[df['Height [m]'] >= 15]
+    elif body == 'monopile':
+        df = df[df['Height [m]'] <= 15]
+    else:
+        raise ValueError(f'Unknown body "{body}"!')
     return df
 
 

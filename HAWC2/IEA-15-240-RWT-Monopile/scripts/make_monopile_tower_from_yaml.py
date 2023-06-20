@@ -37,11 +37,10 @@ for bodyname in ['tower', 'embeddedmonopile', 'monopile']:
 
     if bodyname == 'monopile':
         # isolate/tweak data from yaml
-        mask = (stn > MUDLINE) & (stn <= TWR_START)  # from -30 (excl) to +15 (incl)
+        mask = (stn >= MUDLINE) & (stn <= TWR_START)  # from -30 (excl) to +15 (incl)
         stn = stn[mask]
         out_diam = out_diam[mask]
         thick = thick[mask]
-        stn[0] = MUDLINE  # correct first station from -29.999 to -30
 
     elif bodyname == 'embeddedmonopile':
         mask = (stn <= MUDLINE)   # from -75 (incl) to -30 (incl)
