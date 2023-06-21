@@ -43,8 +43,7 @@ def test_monopile_matches():
         np.testing.assert_allclose(arr_yaml, arr_ex)
 
     # # load the subdyn tower properties TODO: Add subdyn loading routine
-    # sd_st = tstf.load_subdyn_distprop(sd_path)  # TODO: Define this function
-    # mpl_sd, EIx_sd, EIy_sd = sd_st[:, 1:4].T
+    mpl_sd, EI_sd = tstf.load_subdyn_distprop(sd_path, outfit)
 
     # load the hawc2 embedded-monopile tower properties
     h2_emdmon = tstf.load_hawc2_st(h2_embmon_path)
@@ -64,20 +63,20 @@ def test_monopile_matches():
         if i == 0:  # embedded monopile
             h2_vals = [mpl_h2_embmon, EIx_h2_embmon, EIy_h2_embmon]
             mask = twr_stn_yaml <= -30
+            sd_vals = h2_vals # SubDyn only defined above mudline
         elif i == 1:  # monpile
             h2_vals = [mpl_h2_mon, EIx_h2_mon, EIy_h2_mon]
             mask = (twr_stn_yaml >= -30) & (twr_stn_yaml <= 15)
+            sd_vals = [mpl_sd, EI_sd, EI_sd]
         
         # mask the yaml, excel, and subdyn values
         yaml_vals = [mpl_yaml[mask], EI_yaml[mask], EI_yaml[mask]]
         ex_vals = [mpl_ex[mask], EIx_ex[mask], EIy_ex[mask]]
-        # sd_vals = [mpl_sd[mask], EIx_sd[mask], EIy_sd[mask]]  # TODO
 
         # compare the yaml, excel, subdyn, and hawc2 values
-        # for (arr_yaml, arr_ex, arr_sd, arr_h2) in zip(yaml_vals, ex_vals, sd_vals, h2_vals):  # TODO
-        for (arr_yaml, arr_ex, arr_h2) in zip(yaml_vals, ex_vals, h2_vals):
+        for (arr_yaml, arr_ex, arr_sd, arr_h2) in zip(yaml_vals, ex_vals, sd_vals, h2_vals):
             np.testing.assert_allclose(arr_yaml, arr_ex, rtol=1e-3)  # yaml versus excel
-            # np.testing.assert_allclose(arr_yaml, arr_sd, rtol=1e-3)  # yaml versus subdyn  TODO
+            np.testing.assert_allclose(arr_yaml, arr_sd, rtol=1e-3)  # yaml versus subdyn
             np.testing.assert_allclose(arr_yaml, arr_h2, rtol=1e-3)  # yaml versus hawc2
 
 def test_monopile_mass():
