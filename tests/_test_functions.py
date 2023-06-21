@@ -86,6 +86,7 @@ def load_subdyn_distprop(sd_path, outfit=1.0):
     sd = weio.read(str(sd_path))
     idx = np.int_( sd['Members'][:,-2] - 1 )
     idx = np.r_[0, idx]
+    print(idx)
     #z = sd_dict['Joints'][:,3]
     E = sd['BeamProp'][:,1]
     #G = sd['BeamProp'][:,2]
@@ -94,7 +95,7 @@ def load_subdyn_distprop(sd_path, outfit=1.0):
     t = sd['BeamProp'][:,5]
     mpl = calculate_mpl(D[idx], t[idx], rho[idx], outfitting_factor=outfit)
     EI = E[idx] * calculate_mom_iner(D[idx], t[idx])
-    return mpl, EI
+    return mpl, EI, D[idx], t[idx]
     
 def load_yaml(path):
     """Load the yaml file."""

@@ -43,7 +43,7 @@ def test_monopile_matches():
         np.testing.assert_allclose(arr_yaml, arr_ex)
 
     # # load the subdyn tower properties TODO: Add subdyn loading routine
-    mpl_sd, EI_sd = tstf.load_subdyn_distprop(sd_path, outfit)
+    mpl_sd, EI_sd, D, t = tstf.load_subdyn_distprop(sd_path, outfit)
 
     # load the hawc2 embedded-monopile tower properties
     h2_emdmon = tstf.load_hawc2_st(h2_embmon_path)

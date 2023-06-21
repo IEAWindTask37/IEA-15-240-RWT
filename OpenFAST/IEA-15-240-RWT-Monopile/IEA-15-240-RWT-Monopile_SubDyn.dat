@@ -80,15 +80,15 @@ IJointID   ItfTDXss    ItfTDYss    ItfTDZss    ItfRDXss    ItfRDYss    ItfRDZss 
              9   NPropSets   - Number of structurally unique x-sections (i.e. how many groups of X-sectional properties are utilized throughout all of the members)
 PropSetID     YoungE          ShearG          MatDens          XsecD           XsecT
   (-)         (N/m2)          (N/m2)          (kg/m3)           (m)             (m)
-   1        2.00000e+11       79.3e9          7850.0           10.0             0.055341
-   2        2.00000e+11       79.3e9          7850.0           10.0             0.053449
-   3        2.00000e+11       79.3e9          7850.0           10.0             0.051509
-   4        2.00000e+11       79.3e9          7850.0           10.0             0.049527
-   5        2.00000e+11       79.3e9          7850.0           10.0             0.047517
-   6        2.00000e+11       79.3e9          7850.0           10.0             0.045517
-   7        2.00000e+11       79.3e9          7850.0           10.0             0.043527
-   8        2.00000e+11       79.3e9          7850.0           10.0             0.042242
-   9        2.00000e+11       79.3e9          7850.0           10.0             0.041058
+   1        2.00000e+11       79.3e9          7800.0           10.0             0.055341
+   2        2.00000e+11       79.3e9          7800.0           10.0             0.053449
+   3        2.00000e+11       79.3e9          7800.0           10.0             0.051509
+   4        2.00000e+11       79.3e9          7800.0           10.0             0.049527
+   5        2.00000e+11       79.3e9          7800.0           10.0             0.047517
+   6        2.00000e+11       79.3e9          7800.0           10.0             0.045517
+   7        2.00000e+11       79.3e9          7800.0           10.0             0.043527
+   8        2.00000e+11       79.3e9          7800.0           10.0             0.042242
+   9        2.00000e+11       79.3e9          7800.0           10.0             0.041058
 ------------------ MEMBER X-SECTION PROPERTY data 2/2 [isotropic material for now: use this table if any section other than circular, however provide COSM(i,j) below] ------------------------
              0   NXPropSets  - Number of structurally unique non-circular x-sections (if 0 the following table is ignored)
  PropSetID    YoungE      ShearG2     MatDens      XsecA      XsecAsx     XsecAsy     XsecJxx     XsecJyy     XsecJ0   
