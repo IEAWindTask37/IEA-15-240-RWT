@@ -86,7 +86,6 @@ def load_subdyn_distprop(sd_path, outfit=1.0):
     sd = weio.read(str(sd_path))
     idx = np.int_( sd['Members'][:,-2] - 1 )
     idx = np.r_[0, idx]
-    print(idx)
     #z = sd_dict['Joints'][:,3]
     E = sd['BeamProp'][:,1]
     #G = sd['BeamProp'][:,2]
