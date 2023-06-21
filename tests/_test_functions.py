@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import yaml
-
+import weio
 
 FROOT = Path(__file__).parents[1]  # location of directory one level up (main GitHub)
 PI = np.pi  # for convenience
@@ -69,15 +69,33 @@ def calculate_mom_iner(out_diam, thick):
 
 def load_elastodyn_distprop(path):
     """Load distributed properties in ED file."""
+    ed = weio.read(str(path))
+    '''
     with open(path, 'r', encoding='utf-8') as f:
         for il, line in enumerate(f):
             if il == 3:
                 ntwinpst = int(line.split()[0])
                 break
     ed_distprop = np.loadtxt(path, skiprows=19, max_rows=ntwinpst)
-    return ed_distprop
+    '''
+    return ed['TowProp']
 
 
+def load_subdyn_distprop(sd_path, outfit=1.0):
+    """Load distributed properties in SD file."""
+    sd = weio.read(str(sd_path))
+    idx = np.int_( sd['Members'][:,-2] - 1 )
+    idx = np.r_[0, idx]
+    #z = sd_dict['Joints'][:,3]
+    E = sd['BeamProp'][:,1]
+    #G = sd['BeamProp'][:,2]
+    rho = sd['BeamProp'][:,3]
+    D = sd['BeamProp'][:,4]
+    t = sd['BeamProp'][:,5]
+    mpl = calculate_mpl(D[idx], t[idx], rho[idx], outfitting_factor=outfit)
+    EI = E[idx] * calculate_mom_iner(D[idx], t[idx])
+    return mpl, EI
+    
 def load_yaml(path):
     """Load the yaml file."""
     with open(path, 'r', encoding='utf-8') as stream:
@@ -111,13 +129,13 @@ def get_body_length(htc_struc, body):
     length = abs(body_contents[last_key].values[-2])
     return length
 
-
+'''
 def read_elastodyn_dat(path):
     """Get dictionary from an elastodyn dat file"""
-    d = {}
-    with open(path, 'r', encoding='utf-8') as ed:
+    ed = {}
+    with open(path, 'r', encoding='utf-8') as f:
         end = False
-        for line in ed:
+        for line in f:
             contents = line.split()
             if contents[0] == 'OutList':
                 end = True
@@ -125,8 +143,10 @@ def read_elastodyn_dat(path):
                 break
             if not line.startswith('--'):
                 try:
-                    d[contents[1]] = float(contents[0])
+                    ed[contents[1]] = float(contents[0])
                 except ValueError:
-                    d[contents[1]] = contents[0]
-    return d
+                    ed[contents[1]] = contents[0]
+    ed2 = weio.read(str(path))
+    return ed2
 
+'''
