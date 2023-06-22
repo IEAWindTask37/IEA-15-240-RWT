@@ -1,0 +1,14 @@
+begin wkin_input ;
+  wavetype 1 ; 0=regular, 1=irregular, 2=deterministic
+  wdepth 30 ;  water depth
+  ;
+  begin ireg_airy ;
+    stretching 1; 0=none, 1=wheeler
+    coef 200 1 ; number of coefficients, seed
+    spectrum 2; 1=jonswap, 2=Pierson Moscowitz
+    pm 1.83581651422159 7.440581338 ; Pierson Moscowitz: Hs, Tp [12 m/s wind]
+    spreading 0 2; Spreading model [0=off 1=on], Spreading parameter [pos. integer min 1]
+  end;
+  ;
+end wkin_input;
+exit ;
