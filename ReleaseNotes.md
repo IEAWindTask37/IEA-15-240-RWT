@@ -1,5 +1,13 @@
 # IEA Wind 15-MW Release Notes
 
+## v 1.1.6
+
+ * Addition of HAWC2 monopile model
+ 
+ * Alignment of tower and monopile discretizations and properties across YAML, HAWC2, and OpenFAST files
+ 
+ * Addition of SolidWorks CAD model for UMaine VolturnUS-S semisubmersible 
+
 ## v 1.1.5
 
  * Update OpenFAST input files for v3.5.1 release API changes

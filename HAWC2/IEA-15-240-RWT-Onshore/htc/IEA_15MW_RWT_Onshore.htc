@@ -1,4 +1,6 @@
-; Fixed-Substructure IEA 15 MW Reference Wind Turbine.
+; IEA 15 MW Reference Wind Turbine "onshore" model.
+;  Same as monopile, but fixed at bottom of tower
+;  (+15m above MWL) in translation and rotation.
 ;
 ; Note! This file links to external htc files that contain
 ; values for the WTG system.
@@ -8,7 +10,7 @@ begin simulation ;
   solvertype   1 ;    (newmark)
   on_no_convergence continue ;
   convergence_limits 1E3 1.0 1E-7 ;
-  logfile ./log/IEA_15MW_RWT_FixedSubstructure.log ;
+  logfile ./log/IEA_15MW_RWT_Onshore.log ;
   begin newmark;
     deltat    0.01;
   end newmark;
@@ -16,10 +18,10 @@ end simulation;
 ;
 ;-------------------------------------------------------------------------------------------------------------------------------
 begin new_htc_structure;
-  ;body_output_file_name ./bodyeig/IEA_15MW_RWT_body.dat;  body locations correct?
-  ;body_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_body_eigen.dat;  damping correct?
-  ;struct_inertia_output_file_name ./bodyeig/IEA_15MW_RWT_struc_inertia.dat;  CM locations correct?
-  ;structure_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_struc_eigen.dat;  full-system frequencies?
+  ;body_output_file_name ./bodyeig/IEA_15MW_RWT_Onshore_body.dat;  body locations correct?
+  ;body_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_Onshore_body_eigen.dat;  damping correct?
+  ;struct_inertia_output_file_name ./bodyeig/IEA_15MW_RWT_Onshore_struc_inertia.dat;  CM locations correct?
+  ;structure_eigenanalysis_file_name ./bodyeig/IEA_15MW_RWT_Onshore_struc_eigen.dat;  full-system frequencies?
   ;
   begin main_body;  tower
     name        tower ;
@@ -356,7 +358,7 @@ end dll;
 ;----------------------------------------------------------------------------------------------------------------------------------------------------------------
 ;
 begin output;
-  filename ./res/IEA_15MW_RWT_FixedSubstructure ;
+  filename ./res/IEA_15MW_RWT_Onshore ;
   data_format  gtsdf;
   buffer 9999 ;
   time 0 100;

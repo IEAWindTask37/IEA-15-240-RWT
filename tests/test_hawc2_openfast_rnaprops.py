@@ -7,23 +7,24 @@ TODO: Add checks for monopile and umaine models
 """
 import numpy as np
 from wetb.hawc2 import HTCFile
+import weio
 
 import _test_functions as tstf
 from _test_functions import FROOT
 
 
-def test_of_h2_fixedstructure():
-    """Check RNA properties in OF Monopile model versus H2 fixed-bottom, UMaine, monopile
+def test_of_h2_onshore():
+    """Check RNA properties in OF Monopile model versus H2 onshore, UMaine, monopile
     """
 
     ed_path = FROOT / 'OpenFAST'/  'IEA-15-240-RWT-Monopile'/  'IEA-15-240-RWT-Monopile_ElastoDyn.dat'
-    h2_dir = FROOT/  'HAWC2'/  'IEA-15-240-RWT-FixedSubstructure'
-    h2_path = h2_dir/  'htc'/  'IEA_15MW_RWT_FixedSubstructure.htc'
+    h2_dir = FROOT/  'HAWC2'/  'IEA-15-240-RWT-Onshore'
+    h2_path = h2_dir/  'htc'/  'IEA_15MW_RWT_Onshore.htc'
 
     h2_dir = h2_dir.as_posix()  # wetb requires strings, not Path objects...
     h2_path = h2_path.as_posix()
     
-    ed_dict = tstf.read_elastodyn_dat(ed_path)
+    ed_dict = weio.read(str(ed_path))
     htc = HTCFile(h2_path, modelpath=h2_dir)
     
     htc_struc = htc.new_htc_structure
