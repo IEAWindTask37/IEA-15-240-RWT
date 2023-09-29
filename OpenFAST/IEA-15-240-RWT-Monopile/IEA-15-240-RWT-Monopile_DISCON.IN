@@ -1,11 +1,12 @@
 ! Controller parameter input file for the IEA-15-240-RWT-Monopile wind turbine
-!    - File written using ROSCO version 2.7.0 controller tuning logic on 03/14/23
+!    - File written using ROSCO version 2.8.0 controller tuning logic on 09/29/23
 
 !------- DEBUG ------------------------------------------------------------
-1                   ! LoggingLevel		- {0: write no debug files, 1: write standard output .dbg-file, 2: LoggingLevel 1 + ROSCO LocalVars (.dbg2) 3: LoggingLevel 2 + complete avrSWAP-array (.dbg3)}
+1                   ! LoggingLevel		- (0: write no debug files, 1: write standard output .dbg-file, 2: LoggingLevel 1 + ROSCO LocalVars (.dbg2) 3: LoggingLevel 2 + complete avrSWAP-array (.dbg3))
+0                   ! Echo		        - (0 - no Echo, 1 - Echo input data to <RootName>.echo)
 
 !------- CONTROLLER FLAGS -------------------------------------------------
-2                   ! F_LPFType			- {1: first-order low-pass filter, 2: second-order low-pass filter}, [rad/s] (currently filters generator speed and pitch control signals
+2                   ! F_LPFType			- (1: first-order low-pass filter, 2: second-order low-pass filter), [rad/s] (currently filters generator speed and pitch control signals
 0                   ! F_NotchType		- Notch on the measured generator speed and/or tower fore-aft motion (for floating) {0: disable, 1: generator speed, 2: tower-top fore-aft motion, 3: generator speed and tower-top fore-aft motion}
 0                   ! IPC_ControlMode	- Turn Individual Pitch Control (IPC) for fatigue load reductions (pitch contribution) {0: off, 1: 1P reductions, 2: 1P+2P reductions}
 2                   ! VS_ControlMode	- Generator torque control mode in above rated conditions {0: constant torque, 1: constant power, 2: TSR tracking PI control with constant torque, 3: TSR tracking PI control with constant power}
@@ -21,8 +22,11 @@
 0                   ! OL_Mode           - Open loop control mode {0: no open loop control, 1: open loop control vs. time}
 0                   ! PA_Mode           - Pitch actuator mode {0 - not used, 1 - first order filter, 2 - second order filter}
 0                   ! PF_Mode           - Pitch fault mode {0 - not used, 1 - constant offset on one or more blades}
+0                   ! AWC_Mode          - Active wake control {0 - not used, 1 - complex number method, 2 - Coleman transform method}
 0                   ! Ext_Mode          - External control mode {0 - not used, 1 - call external dynamic library}
 0                   ! ZMQ_Mode          - Fuse ZeroMQ interface {0: unused, 1: Yaw Control}
+0                   ! CC_Mode           - Cable control mode [0- unused, 1- User defined, 2- Open loop control]
+0                   ! StC_Mode          - Structural control mode [0- unused, 1- User defined, 2- Open loop control]
 
 !------- FILTERS ----------------------------------------------------------
 1.00810             ! F_LPFCornerFreq	- Corner frequency (-3dB point) in the low-pass filters, [rad/s]
@@ -131,7 +135,9 @@
 0                   ! Ind_Breakpoint    - The column in OL_Filename that contains the breakpoint (time if OL_Mode = 1)
 0                   ! Ind_BldPitch      - The column in OL_Filename that contains the blade pitch input in rad
 0                   ! Ind_GenTq         - The column in OL_Filename that contains the generator torque in Nm
-0                   ! Ind_YawRate       - The column in OL_Filename that contains the generator torque in Nm
+0                   ! Ind_YawRate       - The column in OL_Filename that contains the nacelle yaw rate rad/s
+0                   ! Ind_CableControl  - The column(s) in OL_Filename that contains the cable control inputs in m [Used with CC_Mode = 2, must be the same size as CC_Group_N]
+0                   ! Ind_StructControl - The column(s) in OL_Filename that contains the structural control inputs [Used with StC_Mode = 2, must be the same size as StC_Group_N]
 
 !------- Pitch Actuator Model -----------------------------------------------------
 3.140000000000        ! PA_CornerFreq     - Pitch actuator bandwidth/cut-off frequency [rad/s]
@@ -139,6 +145,14 @@
 
 !------- Pitch Actuator Faults -----------------------------------------------------
 0.00000000 0.00000000 0.00000000                 ! PF_Offsets     - Constant blade pitch offsets for blades 1-3 [rad]
+
+!------- Active Wake Control -----------------------------------------------------
+1                     ! AWC_NumModes       - Number of user-defined AWC forcing modes 
+1                     ! AWC_n              - Azimuthal mode number(s) (i.e., the number and direction of the lobes of the wake structure)
+1                     ! AWC_harmonic       - Harmonic(s) to apply in the AWC Inverse Coleman Transformation (only used when AWC_Mode = 2)
+0.0500                ! AWC_freq           - Frequency(s) of forcing mode(s) [Hz]
+1.0000                ! AWC_amp            - Pitch amplitude(s) of individual forcing mode(s) [deg]
+0.0000                ! AWC_clockangle     - Initial angle(s) of forcing mode(s) [deg]
 
 !------- External Controller Interface -----------------------------------------------------
 "unused"            ! DLL_FileName        - Name/location of the dynamic library in the Bladed-DLL format
@@ -148,3 +162,12 @@
 !------- ZeroMQ Interface ---------------------------------------------------------
 "tcp://localhost:5555"            ! ZMQ_CommAddress     - Communication address for ZMQ server, (e.g. "tcp://localhost:5555") 
 2                   ! ZMQ_UpdatePeriod    - Call ZeroMQ every [x] seconds, [s]
+
+!------- Cable Control ---------------------------------------------------------
+1                   ! CC_Group_N        - Number of cable control groups
+  0                 ! CC_GroupIndex     - First index for cable control group, should correspond to deltaL
+20.000000           ! CC_ActTau         - Time constant for line actuator [s]
+
+!------- Structural Controllers ---------------------------------------------------------
+1                   ! StC_Group_N       - Number of cable control groups
+  0                 ! StC_GroupIndex    - First index for structural control group, options specified in ServoDyn summary output
