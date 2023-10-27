@@ -805,7 +805,7 @@ components:
 
         line_types:
             - name: main
-              diameter: 0.185
+              diameter: 0.333 # volume-equivalent
               type: chain
               transverse_added_mass: 1.0
               tangential_added_mass: 0.0
