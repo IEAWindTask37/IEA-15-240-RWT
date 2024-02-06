@@ -125,9 +125,9 @@ def run_15mw(fname_wt_input):
     #              'MoI_cm_xx', 'MoI_cm_yy', 'MoI_cm_zz', 'MoI_cm_xy', 'MoI_cm_xz', 'MoI_cm_yz',
     #              'MoI_TT_xx', 'MoI_TT_yy', 'MoI_TT_zz', 'MoI_TT_xy', 'MoI_TT_xz', 'MoI_TT_yz']
     nacDF = prob.model.wt.drivese.nac._mass_table
-    hub_cm = float(prob["drivese.hub_system_cm"])
-    L_drive = float(prob["drivese.L_drive"])
-    tilt = float(prob.get_val('nacelle.uptilt', 'rad'))
+    hub_cm = prob["drivese.hub_system_cm"][0]
+    L_drive = prob["drivese.L_drive"][0]
+    tilt = prob.get_val('nacelle.uptilt', 'rad')[0]
     shaft0 = prob["drivese.shaft_start"]
     Cup = -1.0
     hub_cm = R = shaft0 + (L_drive + hub_cm) * np.array([Cup * np.cos(tilt), 0.0, np.sin(tilt)])
@@ -286,7 +286,7 @@ def run_15mw(fname_wt_input):
     overview['Tower top to hub flange height [m]'] = prob['nacelle.distance_tt_hub']
     overview['Generator rated efficiency [%]'] = prob['rotorse.rp.powercurve.rated_efficiency']
     overview['Blade pre-bend [m]'] = prob['blade.outer_shape_bem.ref_axis'][-1,0]
-    overview['Blade mass [t]'] = 1e-3*prob['rotorse.re.precomp.blade_mass']
+    overview['Blade mass [t]'] = 1e-3*prob['rotorse.blade_mass']
     overview['Hub mass [t]'] = 1e-3*prob['drivese.hub_mass']
     overview['Generator mass [t]'] = 1e-3*prob['drivese.generator_mass']
     overview['Nacelle mass [t]'] = 1e-3*prob['drivese.nacelle_mass']

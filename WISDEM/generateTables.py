@@ -1,11 +1,4 @@
 import os
-try:
-    import ruamel.yaml as yaml
-except:
-    try:
-        import ruamel_yaml as yaml
-    except:
-        raise ImportError('No YAML package found')
 import pandas as pd
 import csv
 import numpy as np
@@ -15,6 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.patches import Rectangle
 from scipy.interpolate import interp1d
+from wisdem.inputs.validation import load_yaml
 
 def find_nearest(array, value):
     return (np.abs(array - value)).argmin() 
@@ -86,9 +80,7 @@ class RWT_Tabular(object):
     def __init__(self, finput, towDF=None, rotDF=None, layerDF=None, nacDF=None, overview=None):
         
         # Read ontology file into dictionary-like data structure
-        f = open(finput, 'r')
-        self.yaml = yaml.safe_load( f )
-        f.close()
+        self.yaml = load_yaml( finput )
         
         # Store output file name
         folder_output = os.getcwd() + os.sep + 'outputs'
@@ -335,16 +327,18 @@ class RWT_Tabular(object):
                     weblist.append( self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k][ikey] )
                 elif ikey == 'material':
                     matlist.append( self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k][ikey] )
-                else:
+                elif ikey == 'offset_plane':
+                    mygrid = np.r_[mygrid, self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k][ikey]['offset']['grid']]
+                elif 'grid' in self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k][ikey]:
                     mygrid = np.r_[mygrid, self.yaml['components']['blade']['internal_structure_2d_fem']['webs'][k][ikey]['grid']]
 
         for k in range(nlay):
             for ikey in self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k].keys():
-                if ikey in ['name', 'midpoint_nd_arc','start_nd_arc','end_nd_arc','side','web']:
-                    continue
-                elif ikey == 'material':
+                if ikey == 'material':
                     matlist.append( self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k][ikey] )
-                else:
+                elif ikey == 'offset_plane':
+                    mygrid = np.r_[mygrid, self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k][ikey]['offset']['grid']]
+                elif 'grid' in self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k][ikey]:
                     mygrid = np.r_[mygrid, self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k][ikey]['grid']]
         mygrid  = np.unique( mygrid )
 
@@ -522,7 +516,7 @@ class RWT_Tabular(object):
                 sparcap_ps_wid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['values']
                 sparcap_ps_beg  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['start_nd_arc']['values']
                 sparcap_ps_end  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['end_nd_arc']['values']
-            elif self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'] == 'LE_reinforcement':
+            elif self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['name'].lower() == 'le_reinforcement':
                 reinf_le_thgrid = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['grid']
                 reinf_le_th     = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['thickness']['values']
                 reinf_le_wgrid  = self.yaml['components']['blade']['internal_structure_2d_fem']['layers'][k]['width']['grid']
@@ -832,9 +826,7 @@ class RWT_Tabular(object):
         # Use OpenFAST output if it is available
         foutput = '..'+os.sep+'OpenFAST'+os.sep+'outputs'+os.sep+'IEA-15-240-RWT_steady.yaml'
         if os.path.exists(foutput):
-            f = open(foutput, 'r')
-            fastout = yaml.safe_load( f )
-            f.close()
+            fastout = load_yaml(foutput)
 
             rotmat = np.c_[fastout['Wind1VelX']['mean'],
                            fastout['BldPitch1']['mean'],
