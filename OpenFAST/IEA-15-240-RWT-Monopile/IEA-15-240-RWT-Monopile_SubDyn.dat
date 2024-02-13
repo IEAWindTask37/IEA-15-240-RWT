@@ -54,7 +54,7 @@ IJointID   ItfTDXss    ItfTDYss    ItfTDZss    ItfRDXss    ItfRDYss    ItfRDZss 
   (-)       (flag)      (flag)      (flag)      (flag)      (flag)      (flag)
   18           1           1           1           1           1           1
 ----------------------------------- MEMBERS --------------------------------------
-             18   NMembers    - Number of frame members
+             17   NMembers    - Number of frame members
  MemberID    MJointID1   MJointID2  MPropSetID1 MPropSetID2    MType      COSMID
     (-)         (-)         (-)         (-)         (-)         (-)         (-)
      1           1           2           1           1           1
