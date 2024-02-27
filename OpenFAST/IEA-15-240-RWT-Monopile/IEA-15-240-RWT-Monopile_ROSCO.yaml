@@ -45,3 +45,6 @@ controller_params:
   # Optional - these can be defined, but do not need to be
   min_pitch:          0.0                   # Minimum pitch angle [rad], {default = 0 degrees}
   vs_minspd:          0.523598775           # Minimum rotor speed [rad/s], {default = 0 rad/s}
+  twr_freq:           3.355 # for semi only!
+  ptfm_freq:          0.213 # for semi only!
+ 
