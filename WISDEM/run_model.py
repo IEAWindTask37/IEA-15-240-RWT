@@ -149,6 +149,7 @@ def run_15mw(fname_wt_input):
     nacDF.loc['Blades'] = np.r_[blades_mass, hub_cm, blades_I, blades_I_TT].tolist()
     nacDF.loc['Hub_System'] = np.r_[hub_mass, hub_cm, hub_I, hub_I_TT].tolist()
     nacDF.loc['RNA'] = np.r_[rna_mass, rna_cm, rna_I, rna_I_TT].tolist()
+    print(nacDF)
 
     # Tabular output: Tower
     water_depth = prob['env.water_depth']
