@@ -29,17 +29,5 @@ class TestConsistency(unittest.TestCase):
             self.assertGreater(ED['NacYIner'], tabdata.loc['Above_yaw','MoI_TT_zz'], 0)
             self.assertAlmostEqual(ED['YawBrMass'], tabdata.loc['yaw','Mass'], 0)
         
-
-def suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestConsistency))
-    return suite
-
-
 if __name__ == "__main__":
-    result = unittest.TextTestRunner().run(suite())
-
-    if result.wasSuccessful():
-        exit(0)
-    else:
-        exit(1)
+    unittest.main()

@@ -6,7 +6,7 @@ assembly:
     rotor_orientation: Upwind
     number_of_blades: 3
     hub_height: 150.
-    rotor_diameter: 242.23775645
+    rotor_diameter: 241.94
     rated_power: 15.e+6
     lifetime: 25.0
 components:
@@ -416,8 +416,8 @@ components:
             distance_tt_hub: 5.614
             overhang: 12.0313
             drag_coefficient: 0.5
-            distance_hub2mb: 1.0
-            distance_mb2mb: 1.2
+            distance_hub_mb: 1.0
+            distance_mb_mb: 1.2
             lss_diameter: [3.0, 3.0]
             lss_wall_thickness: [0.1, 0.1]
             nose_diameter: [2.2, 2.2]
@@ -1001,6 +1001,7 @@ materials:
       S: 0
       Xy: 345.e+6
       m: 3
+      A: 3.5534648443719767e10 #DOI 10.1016/j.proeng.2013.12.061 eqn 5
       unit_cost: 0.7
    -  name: steel_drive
       description: Steel of the drivetrain ASTM 4140 40Cr1Mo28
@@ -1019,6 +1020,7 @@ materials:
       S: 0
       Xy: 485.e+6
       m: 3
+      A: 3.5534648443719767e10 #DOI 10.1016/j.proeng.2013.12.061 eqn 5
       unit_cost: 0.9
    -  name: cast_iron
       description: Cast iron for hub and nacelle components
