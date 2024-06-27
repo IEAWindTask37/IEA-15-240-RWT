@@ -44,9 +44,9 @@ IEA 15 MW offshore reference model on UMaine VolturnUS-S semi-submersible floati
 -0.958499163           TwSSM1Sh(4) -       , coefficient of x^4 term
 1.16248810             TwSSM1Sh(5) -       , coefficient of x^5 term
 -0.450518366           TwSSM1Sh(6) -       , coefficient of x^6 term
--205.804355            TwSSM2Sh(2) - Mode 2, coefficient of x^2 term
--238.132551            TwSSM2Sh(3) -       , coefficient of x^3 term
-1184.36489             TwSSM2Sh(4) -       , coefficient of x^4 term
--1539.83060            TwSSM2Sh(5) -       , coefficient of x^5 term
-799.673147             TwSSM2Sh(6) -       , coefficient of x^6 term
+-760.74222548          TwSSM2Sh(2) - Mode 2, coefficient of x^2 term
+-880.24126995          TwSSM2Sh(3) -       , coefficient of x^3 term
+4377.92670711          TwSSM2Sh(4) -       , coefficient of x^4 term
+-5691.88226118         TwSSM2Sh(5) -       , coefficient of x^5 term
+2955.9390495           TwSSM2Sh(6) -       , coefficient of x^6 term
 
