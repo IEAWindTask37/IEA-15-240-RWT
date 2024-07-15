@@ -65,19 +65,18 @@ IEA 15 MW Offshore Reference Turbine
  9.795918367346939e-01  3.600890296396286e-01 -1.508125114401624e+00  2.157201084316552e+01  1.296677095760643e+07  6.715371720843673e+07
  1.000000000000000e+00  3.681818181818181e-01 -1.242387706272970e+00  5.767382468564499e+00  1.862011072702549e+05  1.663313892259768e+06
 ---------------------- BLADE MODE SHAPES ---------------------------------------
-0.369085029            BldFl1Sh(2) - Flap mode 1, coeff of x^2
--1.17519817            BldFl1Sh(3) -            , coeff of x^3
-3.50694494             BldFl1Sh(4) -            , coeff of x^4
--1.77020024            BldFl1Sh(5) -            , coeff of x^5
-0.0693684388           BldFl1Sh(6) -            , coeff of x^6
--0.0152065892          BldFl2Sh(2) - Flap mode 2, coeff of x^2
-2.42097694             BldFl2Sh(3) -            , coeff of x^3
--2.62066455            BldFl2Sh(4) -            , coeff of x^4
-1.87075906             BldFl2Sh(5) -            , coeff of x^5
--0.655864859           BldFl2Sh(6) -            , coeff of x^6
-0.00200737012          BldEdgSh(2) - Edge mode 1, coeff of x^2
-4.76561913             BldEdgSh(3) -            , coeff of x^3
--9.51015617            BldEdgSh(4) -            , coeff of x^4
-8.71930821             BldEdgSh(5) -            , coeff of x^5
--2.97677854            BldEdgSh(6) -            , coeff of x^6
-
+-0.01520658920198625   BldFl1Sh(2) - Flap mode 1, coeff of x^2
+2.420976935410554      BldFl1Sh(3) -            , coeff of x^3
+-2.620664545616402     BldFl1Sh(4) -            , coeff of x^4
+1.870759058733083      BldFl1Sh(5) -            , coeff of x^5
+-0.6558648593252485    BldFl1Sh(6) -            , coeff of x^6
+-0.497369434907339     BldFl2Sh(2) - Flap mode 2, coeff of x^2
+0.4581607963285442     BldFl2Sh(3) -            , coeff of x^3
+-6.977722016292546     BldFl2Sh(4) -            , coeff of x^4
+14.7914425072341       BldFl2Sh(5) -            , coeff of x^5
+-6.774511852362759     BldFl2Sh(6) -            , coeff of x^6
+0.002007370120810502   BldEdgSh(2) - Edge mode 1, coeff of x^2
+4.765619129587991      BldEdgSh(3) -            , coeff of x^3
+-9.510156169792296     BldEdgSh(4) -            , coeff of x^4
+8.719308207111032      BldEdgSh(5) -            , coeff of x^5
+-2.9767785370275366    BldEdgSh(6) -            , coeff of x^6
