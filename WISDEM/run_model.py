@@ -124,7 +124,7 @@ def run_15mw(fname_wt_input):
     # Columns are ['Mass', 'CoM_x', 'CoM_y', 'CoM_z',
     #              'MoI_cm_xx', 'MoI_cm_yy', 'MoI_cm_zz', 'MoI_cm_xy', 'MoI_cm_xz', 'MoI_cm_yz',
     #              'MoI_TT_xx', 'MoI_TT_yy', 'MoI_TT_zz', 'MoI_TT_xy', 'MoI_TT_xz', 'MoI_TT_yz']
-    nacDF = prob.model.wt.drivese.nac._mass_table
+    nacDF = prob.model.wt.wt_rna.drivese.nac._mass_table
     hub_cm = prob["drivese.hub_system_cm"][0]
     L_drive = prob["drivese.L_drive"][0]
     tilt = prob.get_val('nacelle.uptilt', 'rad')[0]
