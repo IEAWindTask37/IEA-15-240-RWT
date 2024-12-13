@@ -37,6 +37,7 @@ controller_params:
   SD_Mode:            0                     # Shutdown mode {0: no shutdown procedure, 1: pitch to max pitch at shutdown}
   Fl_Mode:            0                     # Floating specific feedback mode {0: no nacelle velocity feedback, 1: nacelle velocity feedback}
   Flp_Mode:           0                     # Flap control mode {0: no flap control, 1: steady state flap angle, 2: Proportional flap control}
+  ps_percent:         0.8
   # Controller parameters       
   zeta_pc:            1.0                   # Pitch controller desired damping ratio [-]
   omega_pc:           0.2                  # Pitch controller desired natural frequency [rad/s]
