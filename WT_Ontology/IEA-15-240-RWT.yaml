@@ -932,7 +932,7 @@ control:
     pitch:
         PC_zeta: 1.0                      # Pitch controller desired damping ratio [-]
         PC_omega: 0.2                     # Pitch controller desired natural frequency [rad/s]
-        ps_percent: 0.8                   # Percent peak shaving  [%, <= 1 ], {default = 80%}
+        ps_percent: 1.0                   # Percent peak shaving  [%, <= 1 ], {default = 80%}
         max_pitch: 1.57                     # Maximum pitch angle [rad], {default = 90 degrees}
         max_pitch_rate: 0.03490658503988659 # 2 deg/s
         min_pitch: 0.                     # Minimum pitch angle [rad], {default = 0 degrees}
@@ -966,20 +966,22 @@ environment:
 bos:
     plant_turbine_spacing: 7
     plant_row_spacing: 7
-    commissioning_pct: 0.01
-    decommissioning_pct: 0.15
+    commissioning_cost_kW: 44.0
+    decommissioning_cost_kW: 58.0
     distance_to_substation: 1.0
     distance_to_interconnection: 8.5
     interconnect_voltage: 130.
     distance_to_site: 115.
     distance_to_landfall: 50.
-    port_cost_per_month: 2.e+6
-    site_auction_price: 100.e+6
-    site_assessment_plan_cost: 1.e+6
-    site_assessment_cost: 25.e+6
-    construction_operations_plan_cost: 2.5e+6
+    port_cost_per_month: 2e6
     boem_review_cost: 0.0
-    design_install_plan_cost: 2.5e+6
+    construction_insurance: 44.0
+    construction_financing: 183.0
+    contingency: 316.0
+    site_auction_price: 100e6
+    site_assessment_cost: 50e6
+    construction_plan_cost: 2.5e5
+    installation_plan_cost: 1e6
 costs:
     wake_loss_factor: 0.15
     fixed_charge_rate: 0.056
