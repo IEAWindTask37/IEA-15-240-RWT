@@ -1,5 +1,5 @@
 ! Controller parameter input file for the IEA-15-240-RWT-Monopile wind turbine
-!    - File written using ROSCO version 2.9.4 controller tuning logic on 12/13/24
+!    - File written using ROSCO version 2.9.4 controller tuning logic on 12/16/24
 
 !------- SIMULATION CONTROL ------------------------------------------------------------
 1                   ! LoggingLevel		- {0: write no debug files, 1: write standard output .dbg-file, 2: LoggingLevel 1 + ROSCO LocalVars (.dbg2) 3: LoggingLevel 2 + complete avrSWAP-array (.dbg3)}
@@ -135,7 +135,7 @@
 !------- MINIMUM PITCH SATURATION -------------------------------------------
 60                  ! PS_BldPitchMin_N  - Number of values in minimum blade pitch lookup table (should equal number of values in PS_WindSpeeds and PS_BldPitchMin)
 3.000 3.262 3.523 3.785 4.047 4.309 4.570 4.832 5.094 5.356 5.617 5.879 6.141 6.402 6.664 6.926 7.188 7.449 7.711 7.973 8.234 8.496 8.758 9.020 9.281 9.543 9.805 10.067 10.328 10.590 11.070 11.551 12.031 12.511 12.992 13.472 13.952 14.433 14.913 15.393 15.874 16.354 16.834 17.315 17.795 18.275 18.756 19.236 19.716 20.197 20.677 21.157 21.638 22.118 22.598 23.079 23.559 24.039 24.520 25.000               ! PS_WindSpeeds     - Wind speeds corresponding to minimum blade pitch angles [m/s]
-0.060      0.060      0.060      0.060      0.060      0.060      0.057      0.053      0.048      0.042      0.037      0.030      0.024      0.017      0.010      0.003      0.000      0.000      0.000      0.000      0.000      0.000      0.000      0.000      0.000      0.003      0.018      0.031      0.042      0.053      0.064      0.074      0.084      0.094      0.103      0.112      0.121      0.130      0.139      0.148      0.156      0.164      0.173      0.181      0.189      0.197      0.205      0.213      0.221      0.229      0.236      0.244      0.252      0.259      0.267      0.274      0.282      0.289      0.297      0.304                    ! PS_BldPitchMin    - Minimum blade pitch angles [rad]
+0.060      0.060      0.060      0.060      0.060      0.060      0.057      0.053      0.048      0.042      0.037      0.030      0.024      0.017      0.010      0.003      0.000      0.000      0.000      0.000      0.000      0.000      0.000      0.000      0.000      0.000      0.000      0.000      0.000      0.000      0.014      0.027      0.038      0.049      0.059      0.069      0.078      0.088      0.097      0.106      0.114      0.123      0.131      0.140      0.148      0.156      0.164      0.172      0.180      0.188      0.196      0.204      0.211      0.219      0.227      0.234      0.242      0.249      0.257      0.264                    ! PS_BldPitchMin    - Minimum blade pitch angles [rad]
 
 !------- SHUTDOWN -----------------------------------------------------------
 0.698100000000      ! SD_MaxPit         - Maximum blade pitch angle to initiate shutdown, [rad]
