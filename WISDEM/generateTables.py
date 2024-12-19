@@ -865,6 +865,10 @@ class RWT_Tabular(object):
         for cell in ws["1:1"]:
             cell.style = 'Headline 2'
 
+        # Caveat text
+        nrow = 3 + len(self.rotDF)
+        ws[f'A{nrow}'].value = 'NOTE: This data is auto-generated from WISDEM, which uses idealized steady-state conditions and maximizes the power production at each velocity subject to constraints on min or max rpm, torque, etc.  See the GitHub FAQ for additional comments'
+
 
     def write_nacelle(self):
         if not self.nacDF is None:
