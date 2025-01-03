@@ -1,12 +1,12 @@
 --------------------------- OLAF (cOnvecting LAgrangian Filaments) INPUT FILE -----------------
 Free wake input file for the Helix test case
 --------------------------- GENERAL OPTIONS ---------------------------------------------------
-default IntMethod          Integration method {5: Forward Euler 1st order, default: 5} (switch)
+default IntMethod          - Integration method {1: RK4, 5: Forward Euler 1st order, default: 5} (switch) 
 default DTfvw              Time interval for wake propagation. {default: dtaero} (s)
 0.0     FreeWakeStart      Time when wake is free. (-) value = always free. {default: 0.0} (s)
 5.0     FullCircStart      Time at which full circulation is reached. {default: 0.0} (s)
 --------------------------- CIRCULATION SPECIFICATIONS ----------------------------------------
-default CircSolvingMethod  Circulation solving method {1: Cl-Based, 2: No-Flow Through, 3: Prescribed, default: 1 }(switch)
+default CircSolvMethod  Circulation solving method {1: Cl-Based, 2: No-Flow Through, 3: Prescribed, default: 1 }(switch)
 default CircSolvConvCrit   Convergence criteria {default: 0.001} [only if CircSolvingMethod=1] (-)
 default CircSolvRelaxation Relaxation factor {default: 0.1} [only if CircSolvingMethod=1] (-)
 default CircSolvMaxIter    Maximum number of iterations for circulation solving {default: 30} (-)

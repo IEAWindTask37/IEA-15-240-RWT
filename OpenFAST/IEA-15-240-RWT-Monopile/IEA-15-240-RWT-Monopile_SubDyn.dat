@@ -5,13 +5,11 @@ True             Echo        - Echo input data to "<rootname>.SD.ech" (flag)
 "DEFAULT"        SDdeltaT    - Local Integration Step. If "default", the glue-code integration step will be used.
              3   IntMethod   - Integration Method [1/2/3/4 = RK4/AB4/ABM4/AM2].
 True             SttcSolve   - Solve dynamics about static equilibrium point
-False            GuyanLoadCorrection - Include extra moment from lever arm at interface and rotate FEM for floating.
 -------------------- FEA and CRAIG-BAMPTON PARAMETERS---------------------------
-             3   FEMMod      - FEM switch: element model in the FEM. [1= Euler-Bernoulli(E-B);  2=Tapered E-B (unavailable);  3= 2-node Timoshenko;  4= 2-node tapered Timoshenko (unavailable)]
-             1   NDiv        - Number of sub-elements per member
-True             CBMod       - [T/F] If True perform C-B reduction, else full FEM dofs will be retained. If True, select Nmodes to retain in C-B reduced system.
-             0   Nmodes      - Number of internal modes to retain (ignored if CBMod=False). If Nmodes=0 --> Guyan Reduction.
-             1   JDampings   - Damping Ratios for each retained mode (% of critical) If Nmodes>0, list Nmodes structural damping ratios for each retained mode (% of critical), or a single damping ratio to be applied to all retained modes. (last entered value will be used for all remaining modes).
+3                      FEMMod      - FEM switch: element model in the FEM. [1= Euler-Bernoulli(E-B);  2=Tapered E-B (unavailable);  3= 2-node Timoshenko;  4= 2-node tapered Timoshenko (unavailable)]
+1                      NDiv        - Number of sub-elements per member
+0                      Nmodes      - Number of internal modes to retain. If Nmodes=0 --> Guyan Reduction. If Nmodes<0 --> retain all modes.
+1.000000               JDampings   - Damping Ratios for each retained mode (% of critical) If Nmodes>0, list Nmodes structural damping ratios for each retained mode (% of critical), or a single damping ratio to be applied to all retained modes. (last entered value will be used for all remaining modes).
 0                      GuyanDampMod - Guyan damping {0=none, 1=Rayleigh Damping, 2=user specified 6x6 matrix}.
 0.0       , 0.0        RayleighDamp - Mass and stiffness proportional damping  coefficients (Rayleigh Damping) [only if GuyanDampMod=1].
 6                      GuyanDampSize - Guyan damping matrix (6x6) [only if GuyanDampMod=2].
@@ -21,9 +19,9 @@ True             CBMod       - [T/F] If True perform C-B reduction, else full FE
            0.0            0.0            0.0            0.0            0.0            0.0
            0.0            0.0            0.0            0.0            0.0            0.0
            0.0            0.0            0.0            0.0            0.0            0.0
----- STRUCTURE JOINTS: joints connect structure members (~Hydrodyn Input File)---
+---- STRUCTURE JOINTS: joints connect structure members (~Hydrodyn Input File) --------
              19   NJoints     - Number of joints (-)
-  JointID    JointXss    JointYss    JointZss    JointType   JointDirX   JointDirY   JointDirZ  JointStiff
+  JointID    JointXss    JointYss    JointZss    JointType   JointDirX   JointDirY   JointDirZ  JointStiff      ![Coordinates of Member joints in SS-Coordinate System][JointType={1:cantilever, 2:universal joint, 3:revolute joint, 4:spherical joint}]
     (-)         (m)         (m)         (m)         (-)         (-)         (-)         (-)      (Nm/rad)
      1      0.00000     0.00000    -30.0000          1          0.0         0.0         0.0        0.0
      2      0.00000     0.00000    -29.999           1          0.0         0.0         0.0        0.0
@@ -56,7 +54,7 @@ IJointID   ItfTDXss    ItfTDYss    ItfTDZss    ItfRDXss    ItfRDYss    ItfRDZss 
   19           1           1           1           1           1           1
 ----------------------------------- MEMBERS --------------------------------------
              18   NMembers    - Number of frame members
- MemberID    MJointID1   MJointID2  MPropSetID1 MPropSetID2    MType      COSMID
+ MemberID    MJointID1   MJointID2  MPropSetID1 MPropSetID2    MType      COSMID   ![MType={1:beam circ., 2:cable, 3:rigid, 4:beam arb.}. COMSID={-1:none}]
     (-)         (-)         (-)         (-)         (-)         (-)         (-)
      1           1           2           1           1           1
      2           2           3           1           1           1
@@ -76,8 +74,8 @@ IJointID   ItfTDXss    ItfTDYss    ItfTDZss    ItfRDXss    ItfRDYss    ItfRDZss 
     16          16          17           8           8           1
     17          17          18           8           9           1
     18          18          19           9           9           1
------------------- MEMBER X-SECTION PROPERTY data 1/2 [isotropic material for now: use this table for circular-tubular elements] ------------------------
-             9   NPropSets   - Number of structurally unique x-sections (i.e. how many groups of X-sectional properties are utilized throughout all of the members)
+------------------ CIRCULAR BEAM CROSS-SECTION PROPERTIES -----------------------------
+             9   NPropSets   - Number of structurally unique cross-sections
 PropSetID     YoungE          ShearG          MatDens          XsecD           XsecT
   (-)         (N/m2)          (N/m2)          (kg/m3)           (m)             (m)
    1        2.00000e+11       79.3e9          7800.0           10.0             0.055341
@@ -89,7 +87,7 @@ PropSetID     YoungE          ShearG          MatDens          XsecD           X
    7        2.00000e+11       79.3e9          7800.0           10.0             0.043527
    8        2.00000e+11       79.3e9          7800.0           10.0             0.042242
    9        2.00000e+11       79.3e9          7800.0           10.0             0.041058
------------------- MEMBER X-SECTION PROPERTY data 2/2 [isotropic material for now: use this table if any section other than circular, however provide COSM(i,j) below] ------------------------
+----------------- ARBITRARY BEAM CROSS-SECTION PROPERTIES -----------------------------
              0   NXPropSets  - Number of structurally unique non-circular x-sections (if 0 the following table is ignored)
  PropSetID    YoungE      ShearG2     MatDens      XsecA      XsecAsx     XsecAsy     XsecJxx     XsecJyy     XsecJ0
     (-)       (N/m2)      (N/m2)      (kg/m3)      (m2)        (m2)        (m2)        (m4)        (m4)        (m4)
@@ -101,7 +99,11 @@ PropSetID     YoungE          ShearG          MatDens          XsecD           X
 0                      NRigidPropSets - Number of rigid link properties
  PropSetID    MatDens
     (-)       (kg/m)
----------------------- MEMBER COSINE MATRICES COSM(i,j) ------------------------
+----------------------- SPRING ELEMENT PROPERTIES -------------------------------------
+             0   NSpringPropSets - Number of spring properties
+PropSetID   k11     k12     k13     k14     k15     k16     k22     k23     k24     k25     k26     k33     k34     k35     k36     k44      k45      k46      k55      k56      k66    
+  (-)      (N/m)   (N/m)   (N/m)  (N/rad) (N/rad) (N/rad)  (N/m)   (N/m)  (N/rad) (N/rad) (N/rad)  (N/m)  (N/rad) (N/rad) (N/rad) (Nm/rad) (Nm/rad) (Nm/rad) (Nm/rad) (Nm/rad) (Nm/rad)
+---------------------- MEMBER COSINE MATRICES COSM(i,j) -------------------------------
              0   NCOSMs      - Number of unique cosine matrices (i.e., of unique member alignments including principal axis rotations); ignored if NXPropSets=0   or 9999 in any element below
 COSMID    COSM11    COSM12    COSM13    COSM21    COSM22    COSM23    COSM31    COSM32    COSM33
  (-)       (-)       (-)       (-)       (-)       (-)       (-)       (-)       (-)       (-)

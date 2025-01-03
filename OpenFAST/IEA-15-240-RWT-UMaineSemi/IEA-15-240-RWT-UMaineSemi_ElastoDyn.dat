@@ -3,7 +3,7 @@ IEA 15 MW offshore reference model on UMaine VolturnUS-S semi-submersible floati
 ---------------------- SIMULATION CONTROL --------------------------------------
 False         Echo        - Echo input data to "<RootName>.ech" (flag)
           3   Method      - Integration method: {1: RK4, 2: AB4, or 3: ABM4} (-)
-"default"     DT          Integration time step (s)
+"default"     DT          - Integration time step (s)
 ---------------------- DEGREES OF FREEDOM --------------------------------------
 True          FlapDOF1    - First flapwise blade mode DOF (flag)
 True          FlapDOF2    - Second flapwise blade mode DOF (flag)
@@ -61,12 +61,12 @@ True          PtfmYDOF    - Platform yaw rotation DOF (flag)
         0.0   NcIMUyn     - Lateral  distance from the tower-top to the nacelle IMU (meters)
         0.0   NcIMUzn     - Vertical distance from the tower-top to the nacelle IMU (meters)
      4.3495   Twr2Shft    - Vertical distance from the tower-top to the rotor shaft (meters)
-    144.386   TowerHt     - Height of tower above ground level [onshore] or MSL [offshore] (meters)
-         15   TowerBsHt   - Height of tower base above ground level [onshore] or MSL [offshore] (meters)
-          0   PtfmCMxt    - Downwind distance from the ground level [onshore] or MSL [offshore] to the platform CM (meters)
-          0   PtfmCMyt    - Lateral distance from the ground level [onshore] or MSL [offshore] to the platform CM (meters)
-    -14.400   PtfmCMzt    - Vertical distance from the ground level [onshore] or MSL [offshore] to the platform CM (meters)
-          0   PtfmRefzt   - Vertical distance from the ground level [onshore] or MSL [offshore] to the platform reference point (meters)
+    144.386   TowerHt     - Height of tower relative to ground level [onshore], MSL [offshore wind or floating MHK], or seabed [fixed MHK] (meters)
+         15   TowerBsHt   - Height of tower base relative to ground level [onshore], MSL [offshore wind or floating MHK], or seabed [fixed MHK] (meters)
+          0   PtfmCMxt    - Downwind distance from the ground level [onshore], MSL [offshore wind or floating MHK], or seabed [fixed MHK] to the platform CM (meters)
+          0   PtfmCMyt    - Lateral distance from the ground level [onshore], MSL [offshore wind or floating MHK], or seabed [fixed MHK] to the platform CM (meters)
+    -14.400   PtfmCMzt    - Vertical distance from the ground level [onshore], MSL [offshore wind or floating MHK], or seabed [fixed MHK] to the platform CM (meters)
+          0   PtfmRefzt   - Vertical distance from the ground level [onshore], MSL [offshore wind or floating MHK], or seabed [fixed MHK] to the platform reference point (meters)
 ---------------------- MASS AND INERTIA ----------------------------------------
           0   TipMass(1)  - Tip-brake mass, blade 1 (kg)
           0   TipMass(2)  - Tip-brake mass, blade 2 (kg)
@@ -81,6 +81,9 @@ True          PtfmYDOF    - Platform yaw rotation DOF (flag)
 1.2507E+10    PtfmRIner   - Platform inertia for roll tilt rotation about the platform CM (kg m^2)
 1.2507E+10    PtfmPIner   - Platform inertia for pitch tilt rotation about the platform CM (kg m^2)
 2.3667E+10    PtfmYIner   - Platform inertia for yaw rotation about the platform CM (kg m^2)
+0.0                    PtfmXYIner  - Platform xy moment of inertia about the platform CM (=-int(xydm)) (kg m^2)
+0.0                    PtfmYZIner  - Platform yz moment of inertia about the platform CM (=-int(yzdm)) (kg m^2)
+0.0                    PtfmXZIner  - Platform xz moment of inertia about the platform CM (=-int(xzdm)) (kg m^2)
 ---------------------- BLADE ---------------------------------------------------
          50   BldNodes    - Number of blade nodes (per blade) used for analysis (-)
 "../IEA-15-240-RWT/IEA-15-240-RWT_ElastoDyn_blade.dat"    BldFile1    - Name of file containing properties for blade 1 (quoted string)
@@ -95,6 +98,17 @@ True          PtfmYDOF    - Platform yaw rotation DOF (flag)
           0   TeetHStP    - Rotor-teeter hard-stop position (degrees) [used only for 2 blades and when TeetMod=1]
           0   TeetSSSp    - Rotor-teeter soft-stop linear-spring constant (N-m/rad) [used only for 2 blades and when TeetMod=1]
           0   TeetHSSp    - Rotor-teeter hard-stop linear-spring constant (N-m/rad) [used only for 2 blades and when TeetMod=1]
+---------------------- YAW-FRICTION --------------------------------------------
+          0   YawFrctMod  - Yaw-friction model {0: none, 1: friction independent of yaw-bearing force and bending moment, 2: friction with Coulomb terms depending on yaw-bearing force and bending moment, 3: user defined model} (switch)
+        300   M_CSmax     - Maximum static Coulomb friction torque (N-m) [M_CSmax when YawFrctMod=1; |Fz|*M_CSmax when YawFrctMod=2 and Fz<0]
+          0   M_FCSmax    - Maximum static Coulomb friction torque proportional to yaw bearing shear force (N-m) [sqrt(Fx^2+Fy^2)*M_FCSmax; only used when YawFrctMod=2]
+          0   M_MCSmax    - Maximum static Coulomb friction torque proportional to yaw bearing bending moment (N-m) [sqrt(Mx^2+My^2)*M_MCSmax; only used when YawFrctMod=2]
+         40   M_CD        - Dynamic Coulomb friction moment (N-m) [M_CD when YawFrctMod=1; |Fz|*M_CD when YawFrctMod=2 and Fz<0]
+          0   M_FCD       - Dynamic Coulomb friction moment proportional to yaw bearing shear force (N-m) [sqrt(Fx^2+Fy^2)*M_FCD; only used when YawFrctMod=2]
+          0   M_MCD       - Dynamic Coulomb friction moment proportional to yaw bearing bending moment (N-m) [sqrt(Mx^2+My^2)*M_MCD; only used when YawFrctMod=2]
+          0   sig_v       - Linear viscous friction coefficient (N-m/(rad/s))
+          0   sig_v2      - Quadratic viscous friction coefficient (N-m/(rad/s)^2)
+          0   OmgCut      - Yaw angular velocity cutoff below which viscous friction is linearized (rad/s)
 ---------------------- DRIVETRAIN ----------------------------------------------
         100   GBoxEff     - Gearbox efficiency (%)
           1   GBRatio     - Gearbox ratio (-)

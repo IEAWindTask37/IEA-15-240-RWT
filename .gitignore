@@ -4,6 +4,7 @@
 *.out
 *.outb
 *.sum
+*.sum.yaml
 *.ech
 *.bts
 *.dbg
