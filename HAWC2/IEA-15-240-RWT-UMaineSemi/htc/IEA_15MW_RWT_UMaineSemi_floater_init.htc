@@ -44,7 +44,7 @@ begin new_htc_structure;
     type        timoschenko ;
     nbodies     1 ;
     node_distribution     c2_def ;
-    damping_posdef   0.0 0.0 0.0 1.12E-02 1.10E-02 1.194E-04  ; tuned to 0.95% damping ratio on 1st FA/SS (tower root fixed)
+    damping_posdef   0.0 0.0 0.0 0.004 0.004 0.0004  ; tuned to 1% critical (approx 6% log dec) on 1st FA(0.79 Hz)/SS(0.79 Hz)/torsion(8 Hz) modes (#1, #2, #7)
     begin timoschenko_input;
       filename data/IEA_15MW_RWT_UMaineSemi_Tower_st.dat;
       set 1 1 ;

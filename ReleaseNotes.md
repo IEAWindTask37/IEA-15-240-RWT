@@ -1,6 +1,32 @@
 # IEA Wind 15-MW Release Notes
 
-## v 1.1.2
+## v 1.1.6
+
+ * Addition of HAWC2 monopile model
+ 
+ * Alignment of tower and monopile discretizations and properties across YAML, HAWC2, and OpenFAST files
+ 
+ * Addition of SolidWorks CAD model for UMaine VolturnUS-S semisubmersible 
+
+## v 1.1.5
+
+ * Update OpenFAST input files for v3.5.1 release API changes
+ 
+ * Floating tower damping reverted to 1.0% to resolve numerical instabilities. There is a good deal of uncertainty about the true value here as it is normally determined experimentally.  Comments to this effect have been added to the [Wiki entry](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#what-are-the-values-of-structural-damping).
+
+ * Update the second-order potential-flow wave excitation of the VolturnUS-S platform.  [PR #137](https://github.com/IEAWindTask37/IEA-15-240-RWT/pull/137).
+
+## v 1.1.4
+
+ * Update OpenFAST input files for v3.4.1 release API changes
+ 
+ * Update ROSCO libraries and inputs to v2.7
+ 
+ * Blade elastic properties consistently originate from SONATA/ANBA4
+
+ * Cleanup of stale files and README comments
+ 
+## v 1.1.3
 
  * Update OpenFAST input files for v3.3 release API changes
  
@@ -15,6 +41,10 @@
  * Remove deprecated BModes files
  
  * Fix minor errors in the tabulated documentation data
+
+## v 1.1.2
+
+ * Update ROSCO to v2.5
 
 ## v 1.1.1
 

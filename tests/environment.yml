@@ -1,5 +1,6 @@
 name: test
 
+
 channels:
   - conda-forge
   - defaults
@@ -29,6 +30,7 @@ dependencies:
   - psutil
   - pbr
   - pytables
+  - rosco ==2.9.0
   - sshtunnel
   - simpy
   - tomli

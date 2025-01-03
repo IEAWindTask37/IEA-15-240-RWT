@@ -1,6 +1,6 @@
 [![DOI](https://zenodo.org/badge/213679527.svg)](https://zenodo.org/badge/latestdoi/213679527)
 
-# IEA-15-240-RWT v1.1 (Revised February 2022)
+# IEA-15-240-RWT v1.1
 This repository contains the model data for the 15-MW offshore reference turbine developed within IEA Wind Task 37.
 
 The documentation for the turbine is accessible here: https://www.nrel.gov/docs/fy20osti/75698.pdf
@@ -17,8 +17,8 @@ Data in this repository includes:
 ## Requirements
 
 *OpenFAST*:
-* The OpenFAST input files are compatable with OpenFAST-v3.0.  This can be compiled [from source here](https://github.com/OpenFAST/openfast.git) or precompiled Windows binaries are [available for download](https://github.com/OpenFAST/openfast/releases/latest/download/windows_openfast_binaries.zip). More information on installing and running OpenFAST is available in [OpenFAST documention](https://openfast.readthedocs.io/en/master/).
-* NREL's Reference OpenSource Controller (ROSCO) is required.  This can be compiled [from source here](https://github.com/nrel/rosco) or precompiled binaries for all platforms are [available for download](https://github.com/NREL/ROSCO/releases/).
+* Please check the release notes for OpenFAST version compatability.  OpenFAST can be compiled [from source here](https://github.com/OpenFAST/openfast.git) or precompiled Windows binaries are [available for download](https://github.com/OpenFAST/openfast/releases/latest/download/windows_openfast_binaries.zip). More information on installing and running OpenFAST is available in [OpenFAST documention](https://openfast.readthedocs.io/en/master/).
+* NREL's Reference OpenSource Controller (ROSCO) is required.  This can be compiled [from source here](https://github.com/nrel/rosco) or precompiled binaries for all platforms are [available for download](https://github.com/NREL/ROSCO/releases/).  The version of the ROSCO controller can be found in the header of the [DISCON.IN](https://github.com/IEAWindTask37/IEA-15-240-RWT/blob/3a00f7f38a6373f6b026aef5878b671ca7af3605/OpenFAST/IEA-15-240-RWT-UMaineSemi/IEA-15-240-RWT-UMaineSemi_DISCON.IN#L2)
 
 *HAWC2*:
 * HAWC2 can be acquired from its [homepage](https://www.hawc2.dk/).  The DTU Basic Controller can be obtained from its [repository](https://gitlab.windenergy.dtu.dk/OpenLAC/BasicDTUController).
@@ -33,9 +33,10 @@ Data in this repository includes:
 The IEA Wind Task 37 authors endeavor to keep the model input decks current with the latest releases and API changes.  Errors and other issues pointed out by the community are also addressed to the extent that available resources make that possible.  See the [Release Notes](blob/master/ReleaseNotes.md) for a detailed description of changes.
 
 We also encourage the broader wind community to submit design updates by forking the repository and letting us know of your design customatization.  Community contributions that we are aware of include:
-* [Bladed model](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#is-bladed-supported) implemented by DNVGL, contact [William Collier](mailto:william.collier@dnv.com)
-* [OrcaFlex model](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#is-orcaflex-supported) implemented by Orcina, contact [Alan Ross](mailto:Alan.Ross@orcina.com)
+* [Bladed model](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#is-bladed-supported) implemented by [DNV](mailto:renewables.support@dnv.com)
+* [OrcaFlex model](https://github.com/IEAWindTask37/IEA-15-240-RWT/wiki/Frequently-Asked-Questions-(FAQ)#is-orcaflex-supported) implemented by Orcina, contact [Orcina](mailto:orcina@orcina.com)
 * [Detailed rotor redesign](https://data.bris.ac.uk/data/dataset/3jrb4mejp9vfd2qb3s7dreymr1) from University of Bristol described in a TORQUE 2022 [paper](https://iopscience.iop.org/article/10.1088/1742-6596/2265/3/032029/pdf), contact [Peter Greaves](mailto:peter.greaves@ore.catapult.org.uk)
+* [NuMAD model](https://github.com/UTDGriffithLab/UTD-IEA15MWBlade) developed at The University of Texas at Dallas (UTD) by [Alejandra S. Escalera Mendoza](mailto:ase180001@utdallas.edu) and [Prof D. Todd Griffith](mailto:tgriffith@utdallas.edu)
 * [Jacket support structure](https://github.com/mmrocze2/IEA-15-240-RWT) The DEME Group created a 3-legged jacket for a 50m water depth, contact [Maciej Mroczek](mailto:Mroczek.Maciej@deme-group.com)
 
 ## Citations

@@ -9,8 +9,8 @@
     nbodies     1 ;
     node_distribution     c2_def ;
     damping_posdef  0.0  0.0  0.0  7.00E-04  7.00E-04  7.00E-04  ;   dummy values (stiff body)
-    concentrated_mass  1  0.00   0.00    0.00    28280   0.00          0.00           0.00    ;  yaw system
-    concentrated_mass  1  0.00  -4.720  -4.275  646895  7.674778e+06  1.055686e+07  8.127143e+06    ;  nacelle: NR+R mass; NR inertia
+    concentrated_mass  1  0.00   0.00    0.00    28249   0.00          0.00           0.00    ;  yaw system
+    concentrated_mass  1  0.00  -5.125  -4.315  644857  7.674778e+06  1.055686e+07  8.127143e+06    ;  nacelle: NR+R mass; NR inertia
     begin timoschenko_input;
       filename ../IEA-15-240-RWT/IEA_15MW_RWT_Dummy_st.dat ;
       set 1 1 ;
@@ -46,7 +46,7 @@
     node_distribution     c2_def ;
     damping_posdef  0.0 0.0 0.0 4.65E-04  4.65E-04  5.971406e-04 ;  Kx=Ky=dummy; Kz tuned to 5% critical for free-free Ig, Ir
     concentrated_mass  1  0.0 0.0 0.0 0.0 0.0 0.0 1836784    ;    generator inertia about shaft
-    concentrated_mass  2  0.0 0.0 0.0 69360 0.0 0.0 973520    ;    hub mass/inertia;
+    concentrated_mass  2  0.0 0.0 0.0 69131 0.0 0.0 969952    ;    hub mass/inertia;
     begin timoschenko_input;
       filename ../IEA-15-240-RWT/IEA_15MW_RWT_Shaft_st.dat ;
       set 1 1 ;

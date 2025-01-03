@@ -5,24 +5,26 @@
 The HAWC2 models are organized into folders:  
  * **IEA-15-240-RWT**: Contains partial htc files that are
    loaded/reused in the different models.  
- * **IEA-15-240-RWT-FixedSubstructure**: The model is fixed
-   in translation and rotation at the bottom of the tower.
- * **IEA-15-240-RWT-Monopile**: Model with updated RNA not
-   yet implemented in HAWC2.
- * **IEA-15-240-RWT-UMaineSemi**: Model with updated RNA not
-   yet implemented in HAWC2.
+ * **IEA-15-240-RWT-Onshore**: The model is fixed
+   in translation and rotation at the bottom of the tower,
+   15 m above the mean water level.
+ * **IEA-15-240-RWT-Monopile**: IEA 15 MW in 30-m water depth
+   with a monopile foundation. Same tower as Onshore model.
+ * **IEA-15-240-RWT-UMaineSemi**: IEA 15 MW mounted on a
+   semisubmersible foundation. Different tower than
+   Onshore/monopile models.
 
 ## HTC file(s)
 
-Only one htc file is provided in the model folder: a 100s,
+Only one htc file is provided in each model folder: a 100s,
 steady-wind simulation with constant shear, no FPM (equivalent
 to a BeamDyn model). See "Blade Models" below for more
 information on the options for blade modeling.
 
-For convenience, we have provided helper Python scripts in `make_htc`
-to create three types of htc files from the base file: (1) a HAWC2 step-wind
-from cut-in to cut-out, (2) a HAWC2 turbulence simulation, and (3) a 
-HAWCStab2/HAWC2S input file. The Python scripts require Python 
+For convenience, we have provided helper Python scripts in 
+`scripts/make_htc.py` that make multiple types of htc files
+from the base file, including HAWCStab2 files. The Python
+scripts require Python
 >= 3.6 and the Wind Energy Toolbox, which can be installed with
 `pip install wetb`.
 
@@ -38,9 +40,18 @@ equivalent to a BeamDyn model. To make an ElastoDyn equivalent,
 increase the torsional stiffness (shear modulus) by several orders
 of magnitude.
 
-## Fixed-substructure tower models
+## Tower properties
 
-There are three tower models: (1) a fully flexible tower, (2) a 
-torsionally rigid tower, and (3) a fully rigid tower. OpenFAST
-currently cannot model tower torsion, so if you want to compare to
-OpenFAST results you should use the second option.
+The Onshore and Monopile models have the same tower. The UMaine
+semisub model has a different tower, which was redesigned to
+avoid resonance on the floating platform.
+
+Each HAWC2 model has three sets of tower structural properties:
+(1) a fully flexible tower, (2) a torsionally rigid tower, and
+(3) a fully rigid tower. OpenFAST currently cannot model tower
+torsion, so if you want to compare to OpenFAST results you should
+use the second option.
+
+The tower models use a single body, i.e., assume linear deflections.
+This is to allow easy comparisons with OpenFAST, but it should be
+noted that towers of this size have nonlinear deflections.
