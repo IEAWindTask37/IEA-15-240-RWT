@@ -3,7 +3,7 @@ IEA 15 MW Offshore Reference Turbine
 ---------------------------------------------------------------------------------------------------------------
 False                  Echo        - Echo input data to <RootName>.ech (flag)
 1                      WindType    - switch for wind file type (1=steady; 2=uniform; 3=binary TurbSim FF; 4=binary Bladed-style FF; 5=HAWC format; 6=User defined; 7=native Bladed FF)
-0.0                    PropagationDir - Direction of wind propagation (meteoroligical rotation from aligned with X (positive rotates towards -Y) -- degrees)
+0.0                    PropagationDir - Direction of wind propagation (meteorological rotation from aligned with X (positive rotates towards -Y) -- degrees) (not used for native Bladed format WindType=7)
 0.0                    VFlowAng    - Upflow angle (degrees) (not used for native Bladed format WindType=7)
 False                  VelInterpCubic - Use cubic interpolation for velocity in time (false=linear, true=cubic) [Used with WindType=2,3,4,5,7]
 1                      NWindVel    - Number of points to output the wind velocity    (0 to 9)
@@ -20,9 +20,9 @@ False                  VelInterpCubic - Use cubic interpolation for velocity in 
 240.0                  RefLength   - Reference length for linear horizontal and vertical sheer (-)
 ================== Parameters for Binary TurbSim Full-Field files   [used only for WindType = 3] ==============
 "none"                 FileName_BTS - Name of the Full field wind file to use (.bts)
-================== Parameters for Binary Bladed-style Full-Field files   [used only for WindType = 4] =========
-"none"                 FilenameRoot - Rootname of the full-field wind file to use (.wnd, .sum)
-False                  TowerFile   - Have tower file (.twr) (flag)
+================== Parameters for Binary Bladed-style Full-Field files   [used only for WindType = 4 or WindType = 7] =========
+"none"                 FilenameRoot - WindType=4: Rootname of the full-field wind file to use (.wnd, .sum); WindType=7: name of the intermediate file with wind scaling values
+False                  TowerFile   - Have tower file (.twr) (flag) ignored when WindType = 7
 ================== Parameters for HAWC-format binary files  [Only used with WindType = 5] =====================
 "none"                 FileName_u  - name of the file containing the u-component fluctuating wind (.bin)
 "none"                 FileName_v  - name of the file containing the v-component fluctuating wind (.bin)
