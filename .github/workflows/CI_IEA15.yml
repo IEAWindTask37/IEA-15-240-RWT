@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: conda-incubator/setup-miniconda@v3
         # https://github.com/marketplace/actions/setup-miniconda
         with:
           miniconda-version: "latest"
@@ -28,16 +28,16 @@ jobs:
     
 
       # Install WEIO
-      - name: Install WEIO
-        shell: bash -l {0}
-        run: |
-          git clone https://github.com/ebranlard/weio
-          cd weio
-          python -m pip install -e .
+      #- name: Install WEIO
+      #  shell: bash -l {0}
+      #  run: |
+      #    git clone https://github.com/ebranlard/weio
+      #    cd weio
+      #    python -m pip install -e .
 
       # Debugging session
-      #- name: Setup tmate session
-      #  uses: mxschmitt/action-tmate@v3
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
 
       # Run all tests
       - name: Run tests

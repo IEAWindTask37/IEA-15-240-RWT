@@ -23,6 +23,7 @@ dependencies:
   - openpyxl
   - pandas
   - paramiko
+  - pip
   - pyarrow
   - pynacl
   - pytest
