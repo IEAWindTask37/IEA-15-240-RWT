@@ -57,24 +57,24 @@ True                   GenTiStp    - Method to stop the generator {T: timed usin
 9999.9                 TYawManS    - Time to start override yaw maneuver and end standard yaw control (s)
 0.25                   YawManRat   - Yaw maneuver rate (in absolute value) (deg/s)
 0.0                    NacYawF     - Final yaw angle for override yaw maneuvers (degrees)
----------------------- Aerodynamic Flow Control -------------------------------------
-0                      AfCmode     - Airfoil control mode {0- none, 1- cosine wave cycle, 4- user-defined from Simulink/Labview, 5- user-defined from Bladed-style DLL}
-0.0                    AfC_Mean    - Mean level for sinusoidal cycling or steady value (-) [used only with AfCmode==1]
-0.0                    AfC_Amp     - Amplitude for for cosine cycling of flap signal (AfC = AfC_Amp*cos(Azimuth+phase)+AfC_mean) (-) [used only with AfCmode==1]
+---------------------- AERODYNAMIC FLOW CONTROL --------------------------------
+0                      AfCmode     - Airfoil control mode {0: none, 1: cosine wave cycle, 4: user-defined from Simulink/Labview, 5: user-defined from Bladed-style DLL} (switch)
+0.0                    AfC_Mean    - Mean level for cosine cycling or steady value (-) [used only with AfCmode==1]
+0.0                    AfC_Amp     - Amplitude for for cosine cycling of flap signal (-) [used only with AfCmode==1]
 0.0                    AfC_phase   - Phase relative to the blade azimuth (0 is vertical) for for cosine cycling of flap signal (deg) [used only with AfCmode==1]
----------------------- STRUCTURAL CONTROL ---------------------------------------
-0                      NumBStC     - Number of blade structural controllers (integer)
-"unused"               BStCfiles   - Name of the file for blade tuned mass damper (quoted string) [unused when CompNTMD is false]
+---------------------- STRUCTURAL CONTROL --------------------------------------
+ 0                     NumBStC     - Number of blade structural controllers (integer)
+"unused"               BStCfiles   - Name of the files for blade structural controllers (quoted strings) [unused when NumBStC==0]
 0                      NumNStC     - Number of nacelle structural controllers (integer)
-"unused"               NStCfiles   - Name of the file for nacelle tuned mass damper (quoted string) [unused when CompNTMD is false]
+"unused"               NStCfiles   - Name of the files for nacelle structural controllers (quoted strings) [unused when NumNStC==0]
 0                      NumTStC     - Number of tower structural controllers (integer)
-"unused"               TStCfiles   - Name of the file for tower tuned mass damper (quoted string) [unused when CompNTMD is false]
-0                      NumSStC     - Number of sbustructure structural controllers (integer)
-"unused"               SStCfiles   - Name of the file for sbustructure tuned mass damper (quoted string) [unused when CompNTMD is false]
----------------------- CABLE CONTROL ---------------------------------------- 
-0                      CCmode      - Cable control mode {0- none, 4- user-defined from Simulink/Labview, 5- user-defineAfC_phased from Bladed-style DLL}
+"unused"               TStCfiles   - Name of the files for tower structural controllers (quoted strings) [unused when NumTStC==0]
+0                      NumSStC     - Number of substructure structural controllers (integer)
+"unused"               SStCfiles   - Name of the files for substructure structural controllers (quoted strings) [unused when NumSStC==0]
+---------------------- CABLE CONTROL -------------------------------------------
+0                      CCmode      - Cable control mode {0: none, 4: user-defined from Simulink/Labview, 5: user-defined from Bladed-style DLL} (switch)
 ---------------------- BLADED INTERFACE ---------------------------------------- [used only with Bladed Interface]
-"/usr/share/miniconda3/envs/test/lib/libdiscon.so"  DLL_FileName - Name/location of the dynamic library {.dll [Windows] or .so [Linux]} in the Bladed-DLL format (-) [used only with Bladed Interface]
+"/home/runner/miniconda3/envs/test/lib/libdiscon.so"  DLL_FileName - Name/location of the dynamic library {.dll [Windows] or .so [Linux]} in the Bladed-DLL format (-) [used only with Bladed Interface]
 "IEA-15-240-RWT-UMaineSemi_DISCON.IN"   DLL_InFile  - Name of input file sent to the DLL (-) [used only with Bladed Interface]
 "DISCON"               DLL_ProcName - Name of procedure in DLL to be called (-) [case sensitive; used only with DLL Interface]
 "default"              DLL_DT      - Communication interval for dynamic library (s) (or "default") [used only with Bladed Interface]

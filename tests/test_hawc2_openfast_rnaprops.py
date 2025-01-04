@@ -7,7 +7,8 @@ TODO: Add checks for monopile and umaine models
 """
 import numpy as np
 from wetb.hawc2 import HTCFile
-import weio
+#import weio
+import util.FAST_reader as ofio
 
 import _test_functions as tstf
 from _test_functions import FROOT
@@ -26,7 +27,10 @@ class TestConsistency(unittest.TestCase):
         h2_dir = h2_dir.as_posix()  # wetb requires strings, not Path objects...
         h2_path = h2_path.as_posix()
 
-        ed_dict = weio.read(str(ed_path))
+        myobj = ofio.InputReader_OpenFAST()
+        myobj.read_ElastoDyn( str(ed_path) )
+        ed_dict = myobj.fst_vt['ElastoDyn']
+        #ed_dict = weio.read(str(ed_path))
         htc = HTCFile(h2_path, modelpath=h2_dir)
 
         htc_struc = htc.new_htc_structure

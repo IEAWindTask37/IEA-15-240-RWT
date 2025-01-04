@@ -5,7 +5,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import yaml
-import weio
+#import weio
+import util.FAST_reader as ofio
 
 FROOT = Path(__file__).parents[1]  # location of directory one level up (main GitHub)
 PI = np.pi  # for convenience
@@ -69,7 +70,11 @@ def calculate_mom_iner(out_diam, thick):
 
 def load_elastodyn_distprop(path):
     """Load distributed properties in ED file."""
-    ed = weio.read(str(path))
+    #fst = str(path).replace('_ElastoDyn.dat','.fst')
+    myobj = ofio.InputReader_OpenFAST()
+    myobj.read_ElastoDynTower(str(path))
+    ed = myobj.fst_vt['ElastoDynTower']
+    #ed = weio.read(str(path))
     '''
     with open(path, 'r', encoding='utf-8') as f:
         for il, line in enumerate(f):
@@ -78,23 +83,30 @@ def load_elastodyn_distprop(path):
                 break
     ed_distprop = np.loadtxt(path, skiprows=19, max_rows=ntwinpst)
     '''
-    return ed['TowProp']
+    towprop = np.c_[ed['HtFract'], ed['TMassDen'], ed['TwFAStif'], ed['TwSSStif']]
+    #return ed['TowProp']
+    return towprop
 
 
 def load_subdyn_distprop(sd_path, outfit=1.0):
     """Load distributed properties in SD file."""
-    sd = weio.read(str(sd_path))
-    idx = np.int_( sd['Members'][:,-2] - 1 )
-    idx = np.r_[0, idx]
-    #z = sd_dict['Joints'][:,3]
-    E = sd['BeamProp'][:,1]
-    #G = sd['BeamProp'][:,2]
-    rho = sd['BeamProp'][:,3]
-    D = sd['BeamProp'][:,4]
-    t = sd['BeamProp'][:,5]
+    myobj = ofio.InputReader_OpenFAST()
+    myobj.read_SubDyn(str(sd_path))
+    sd = myobj.fst_vt['SubDyn']
+    #sd = weio.read(str(sd_path))
+    #idx = np.int_( sd['Members'][:,-2] - 1 )
+    #idx = np.r_[0, idx]
+    ##z = sd_dict['Joints'][:,3]
+    idx = np.r_[1, sd['MPropSetID2']] - 1
+    E = np.array( sd['YoungE1'] )#sd['BeamProp'][:,1]
+    ##G = sd['BeamProp'][:,2]
+    rho = np.array( sd['MatDens1'] ) #sd['BeamProp'][:,3]
+    D = np.array( sd['XsecD'] ) #sd['BeamProp'][:,4]
+    t = np.array( sd['XsecT'] ) #sd['BeamProp'][:,5]
     mpl = calculate_mpl(D[idx], t[idx], rho[idx], outfitting_factor=outfit)
     EI = E[idx] * calculate_mom_iner(D[idx], t[idx])
     return mpl, EI, D[idx], t[idx]
+
     
 def load_yaml(path):
     """Load the yaml file."""
