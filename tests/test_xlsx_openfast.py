@@ -1,4 +1,5 @@
-import weio
+#import weio
+import util.FAST_reader as ofio
 import os
 import pandas as pd
 import unittest
@@ -8,8 +9,13 @@ FROOT = os.path.dirname( os.path.dirname( os.path.realpath(__file__) ) )
 class TestConsistency(unittest.TestCase):
     def test_nacelle_mass(self):
         # ElastoDyn vals
-        ED_mono = weio.read( os.path.join(FROOT, 'OpenFAST', 'IEA-15-240-RWT-Monopile', 'IEA-15-240-RWT-Monopile_ElastoDyn.dat') )
-        ED_semi = weio.read( os.path.join(FROOT, 'OpenFAST', 'IEA-15-240-RWT-UMaineSemi', 'IEA-15-240-RWT-UMaineSemi_ElastoDyn.dat') )
+        #ED_mono = weio.read( os.path.join(FROOT, 'OpenFAST', 'IEA-15-240-RWT-Monopile', 'IEA-15-240-RWT-Monopile_ElastoDyn.dat') )
+        #ED_semi = weio.read( os.path.join(FROOT, 'OpenFAST', 'IEA-15-240-RWT-UMaineSemi', 'IEA-15-240-RWT-UMaineSemi_ElastoDyn.dat') )
+        myobj = ofio.InputReader_OpenFAST()
+        myobj.read_ElastoDyn( os.path.join(FROOT, 'OpenFAST', 'IEA-15-240-RWT-Monopile', 'IEA-15-240-RWT-Monopile_ElastoDyn.dat') )
+        ED_mono = myobj.fst_vt['ElastoDyn'].copy()
+        myobj.read_ElastoDyn( os.path.join(FROOT, 'OpenFAST', 'IEA-15-240-RWT-UMaineSemi', 'IEA-15-240-RWT-UMaineSemi_ElastoDyn.dat') )
+        ED_semi = myobj.fst_vt['ElastoDyn'].copy()
 
         # Excel tabular data
         tabdata = pd.read_excel( os.path.join(FROOT, 'Documentation', 'IEA-15-240-RWT_tabular.xlsx'),

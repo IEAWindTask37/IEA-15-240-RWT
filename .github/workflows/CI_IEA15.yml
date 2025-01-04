@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: conda-incubator/setup-miniconda@v3
         # https://github.com/marketplace/actions/setup-miniconda
         with:
           miniconda-version: "latest"
