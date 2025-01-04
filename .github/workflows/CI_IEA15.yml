@@ -36,9 +36,13 @@ jobs:
       #    python -m pip install -e .
 
       # Debugging session
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-
+      #- name: Setup tmate session
+      #  uses: mxschmitt/action-tmate@v3
+      - name: Debugging output
+        run: |
+            conda list
+            printenv
+            
       # Run all tests
       - name: Run tests
         shell: bash -l {0}
