@@ -861,7 +861,7 @@ if __name__ == '__main__':
 
     # Ontology file as input
     ontology_dir  = os.path.dirname( os.path.dirname( os.path.realpath(__file__)) ) + os.sep + 'WT_Ontology'
-    fontology     = ontology_dir + os.sep + 'IEA-15-240-RWT_FineGrid.yaml'
+    fontology     = ontology_dir + os.sep + 'IEA-15-240-RWT.yaml'
     
     myobj = RWT_Tabular(fontology)
     myobj.write_all()

@@ -93,16 +93,6 @@ class TestBladeMass(unittest.TestCase):
         self.assertAlmostEqual(blade_mass_H2noFPMrigid/ref_blade_mass,1., places=3)
 
 
-def suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestBladeMass))
-    return suite
-
 
 if __name__ == "__main__":
-    result = unittest.TextTestRunner().run(suite())
-
-    if result.wasSuccessful():
-        exit(0)
-    else:
-        exit(1)
+    unittest.main()
